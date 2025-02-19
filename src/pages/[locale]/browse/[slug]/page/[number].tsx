@@ -141,7 +141,7 @@ export default function TagPagePaginated({
 
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           <ContentHub contentCount={contentCount} />

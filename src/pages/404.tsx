@@ -80,7 +80,7 @@ const Custom404 = (props: IndexPageProps) => {
    return (
     <GlobalDataProvider
       data={props?.categories}
-      featuredTags={homeSettings.featuredTags}
+      featuredTags={homeSettings?.featuredTags}
       homeSettings={homeSettings}
     >
     

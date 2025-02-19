@@ -145,7 +145,7 @@ const PressReleasePage = ({
           jsonLD={jsonLD}
           contentType={pressRelease?.contentType}
         />
-      <GlobalDataProvider data={categories} featuredTags={homeSettings.featuredTags}>
+      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
         <Layout>
           <MainImageSection enableDate={true} post={pressRelease} />
           <Section className="justify-center !pt-24 !pb-12">
