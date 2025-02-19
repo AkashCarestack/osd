@@ -71,7 +71,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getCategories(client),
     getPostsByLimit(client, startLimit, cardsPerPage,region),
     getPosts(client,undefined,region),
-    getSiteSettings(client,region),
+    getSiteSettings(client),
     getPodcastsCount(client,region),
     getWebinarsCount(client,region),
     getArticlesCount(client,region),
