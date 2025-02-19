@@ -139,7 +139,7 @@ export default function Card({
         <Anchor href={linkUrl} className="h-full">
           <AnimatingWrapper transitionType="slide-in" delay={0.8}>
             <div
-              className={`flex ${ alignCard ? '!flex-row' : `flex-col`} w-full h-full gap-1 overflow-hidden ${reverse ? 'flex-col-reverse ' : ''}  group rounded-lg text-white`}
+              className={`flex ${ alignCard ? 'md:!flex-row flex-col'  : `flex-col`} w-full h-full gap-1 overflow-hidden ${reverse ? 'flex-col-reverse ' : ''}  group rounded-lg text-white`}
             >
               <div
                 className={`flex w-full h-full overflow-hidden`}
