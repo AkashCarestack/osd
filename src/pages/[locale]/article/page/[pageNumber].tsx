@@ -126,7 +126,7 @@ const PaginatedArticlesPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {customMetaTag('article', false, currentPageUrl)}

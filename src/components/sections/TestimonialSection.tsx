@@ -22,6 +22,7 @@ interface TestimonialSectionProps {
 }
 
 const TestimonialSection = ({ testimonials }: TestimonialSectionProps) => {
+  if(!testimonials || !testimonials.length) return null
 
   return (
     <Section className="bg-zinc-100 justify-center">

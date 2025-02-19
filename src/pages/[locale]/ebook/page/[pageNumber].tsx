@@ -100,7 +100,7 @@ const PaginatedEbookPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {ebooks?.map((e, i) => {

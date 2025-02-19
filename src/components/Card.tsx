@@ -55,6 +55,7 @@ interface CardProps {
   | 'case-study'
   | 'press-release'
   minHeight?: number
+  alignCard?: any
 }
 
 export default function Card({
@@ -69,6 +70,7 @@ export default function Card({
   index,
   baseUrl,
   minHeight,
+  alignCard,
 }: CardProps) {
   const [linkUrl, setLinkUrl] = useState<string | null>(null)
   const [isOpen, setIsOpen] = useState(false)
@@ -137,7 +139,7 @@ export default function Card({
         <Anchor href={linkUrl} className="h-full">
           <AnimatingWrapper transitionType="slide-in" delay={0.8}>
             <div
-              className={`flex flex-col w-full h-full gap-1 overflow-hidden ${reverse ? 'flex-col-reverse ' : ''}  group rounded-lg text-white`}
+              className={`flex ${ alignCard ? '!flex-row' : `flex-col`} w-full h-full gap-1 overflow-hidden ${reverse ? 'flex-col-reverse ' : ''}  group rounded-lg text-white`}
             >
               <div
                 className={`flex w-full h-full overflow-hidden`}
@@ -167,7 +169,7 @@ export default function Card({
                 style={{
                   backgroundColor: `${color && color ? color : '#18181B'}`,
                 }}
-                className={`flex w-full h-full ${reverse ? 'rounded-t-lg' : 'rounded-b-lg'} p-6 md:p-9  flex-col items-start gap-10 flex-1 `}
+                className={`flex w-full h-full ${reverse ? 'rounded-t-lg' : 'rounded-b-lg'} ${ alignCard &&  'rounded-tl-none rounded-bl-none'  } p-6 md:p-9  flex-col items-start gap-10 ${!alignCard && 'flex-1'} `}
               >
                 <div className="flex flex-col gap-3">
                   <SubText className="!text-white">

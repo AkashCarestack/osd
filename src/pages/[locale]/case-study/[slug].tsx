@@ -126,7 +126,7 @@ const CaseStudyPage = ({
 
   return (
     <>
-      <GlobalDataProvider data={categories} featuredTags={homeSettings.featuredTags}>
+      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
         <SEOHead
           title={seoTitle}
           description={seoDescription}

@@ -11,9 +11,7 @@ interface BannerBlockProps {
 }
 
 const SliderSection: React.FC<BannerBlockProps> = ({ items }) => {
-  if (!items) {
-    return null
-  }
+  if (!items || items.length === 0)  return null
   return (
     <div className={` flex w-full justify-center px-4 `}>
       <section className="my-9 max-w-7xl w-full">

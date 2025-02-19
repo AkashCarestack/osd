@@ -37,7 +37,7 @@ const DynamicPages = ({
 }: DynamicProps) => {
   const featuredBlog = homeSettings?.FeaturedBlog || posts[0]
   const customBrowseContent = homeSettings?.customBrowseContent || posts[0]
-  const featuredBlogs = homeSettings?.popularBlogs || posts
+  const featuredBlogs = homeSettings?.popularBlogs || []
 
   const featuredContents = [...featuredBlogs, ...posts].slice(0, 4)
 

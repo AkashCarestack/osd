@@ -110,7 +110,6 @@ export const getStaticPaths = async () => {
 };
 
 
-
 export default function TagPagePaginated({
   tag,
   posts,
@@ -131,7 +130,7 @@ export default function TagPagePaginated({
 
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
         <ContentHub categories={categories} contentCount={contentCount}   />

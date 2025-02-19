@@ -117,7 +117,7 @@ export default function IndexPage(props: IndexPageProps) {
   return (
     <GlobalDataProvider
       data={props?.categories}
-      featuredTags={homeSettings.featuredTags}
+      featuredTags={homeSettings?.featuredTags}
       homeSettings={homeSettings}
     >
       <Layout>
