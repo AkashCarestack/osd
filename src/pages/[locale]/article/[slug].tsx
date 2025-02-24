@@ -6,6 +6,7 @@ import {
   getArticle,
   getArticles,
   getCategories,
+  getFooterData,
   getHomeSettings,
   getTagRelatedContents,
   getTags,
@@ -38,6 +39,7 @@ interface Props {
   tags: any
   homeSettings: any
   categories: any
+  footerData: any
 }
 
 
@@ -86,6 +88,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
+  const footerData = await getFooterData(client, region)
 
 
   
@@ -99,6 +102,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
       tags,
       homeSettings,
       categories,
+      footerData
     },
   }
 }
@@ -110,7 +114,8 @@ const ArticlePage = ({
   homeSettings,
   draftMode,
   token,
-  categories
+  categories,
+  footerData
 }: Props) => {
   if (!articles) {
     return
@@ -127,7 +132,7 @@ const ArticlePage = ({
 
   return (
     <>
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
      <SEOHead
           title={seoTitle}
           description={seoDescription}

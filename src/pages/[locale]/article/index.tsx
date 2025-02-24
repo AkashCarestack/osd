@@ -6,6 +6,7 @@ import {
   getArticles,
   getArticlesCount,
   getCategories,
+  getFooterData,
   getHomeSettings,
   getTags,
 } from '~/lib/sanity.queries'
@@ -53,12 +54,13 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
   const totalPages = Math.ceil(totalArticles / itemsPerPage)
   
 
-  const [articles, latestArticles, tags, homeSettings,categories] = await Promise.all([
+  const [articles, latestArticles, tags, homeSettings,categories,footerData] = await Promise.all([
     getArticles(client, 0, itemsPerPage,locale),
     getArticles(client, 0, 5,locale),
     getTags(client),
     getHomeSettings(client,locale),
-    getCategories(client)
+    getCategories(client),
+    getFooterData(client, locale)
   ])
   return {
     props: {
@@ -69,7 +71,8 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
       totalPages,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
@@ -80,7 +83,8 @@ const ArticlesPage = ({
   totalPages,
   tags,
   homeSettings,
-  categories
+  categories,
+  footerData
 }: {
   articles: Articles[]
   latestArticles: Articles[]
@@ -88,6 +92,7 @@ const ArticlesPage = ({
   tags: any
   homeSettings?: any
   categories?: any
+  footerData?: any
 }) => {
   const router = useRouter()
   const baseUrl = `/${siteConfig.pageURLs.article}`
@@ -108,7 +113,7 @@ const ArticlesPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           <CustomHead props={articles} type="articleExpanded" />

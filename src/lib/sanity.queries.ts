@@ -1695,11 +1695,12 @@ export async function getSitemapData(client: SanityClient): Promise<Post[]> {
   }
 }
 
+export const Footerquery = groq ` *[_type == "footer" && language == $region][0]{
+  ...,
+}`
+
 export async function getFooterData(client:SanityClient, region: string = 'en') {
-  const query = groq ` *[_type == "footer" && language == $region][0]{
-    ...,
-  }`
-  return await client.fetch(query, { region })
+  return await client.fetch(Footerquery, { region })
 }
 
 // queries for static path generation **
