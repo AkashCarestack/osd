@@ -43,7 +43,6 @@ export const getStaticProps: GetStaticProps<
   if (!author) {
     return {
       notFound: true,
-      revalidate: 60,
     }
   }
   const authorId = author?._id

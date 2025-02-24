@@ -70,7 +70,6 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   if (!caseStudy) {
     return {
       notFound: true,
-      revalidate: 60,
     }
   }
   const tagIds = caseStudy.tags?.map((tag: any) => tag?._id) || []

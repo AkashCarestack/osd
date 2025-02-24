@@ -75,7 +75,6 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   if (!webinar) {
     return {
       notFound: true,
-      revalidate: 60,
     }
   }
   const allWebinars = await getWebinars(client,0,undefined,region)

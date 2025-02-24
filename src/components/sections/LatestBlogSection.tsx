@@ -113,13 +113,12 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
     )
 
 
-
   }
   
 
   return (
     <React.Fragment>
-      <Section className="justify-center  md:pb-24  bg-zinc-900 text-white md:pt-headerSpacer pt-headerSpacerMob">
+      <Section className="justify-center  md:pb-24  bg-zinc-900 text-white">
         <Wrapper
           className={`md:flex-row md:pt-16 pt-8 flex-col ${reverse ? 'md:flex-row-reverse' : ''} gap-8 md:gap-12 xl:gap-36`}
         >

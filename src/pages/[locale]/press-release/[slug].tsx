@@ -73,7 +73,6 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   if (!pressRelease) {
     return {
       notFound: true,
-      revalidate: 60,
     }
   }
   const tagIds = pressRelease.tags?.map((tag: any) => tag?._id) || []
@@ -92,7 +91,6 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   if (!pressRelease) {
     return {
       notFound: true,
-      revalidate: 60,
     }
   }
 
