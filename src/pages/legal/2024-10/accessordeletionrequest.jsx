@@ -1,5 +1,5 @@
 
-import HubspotFormLegal from '~/components/common/HubspotLegalForm'
+import HubspotFormLegal from '~/components/commonSections/HubspotLegalForm'
 import Section from '~/components/Section'
 
 function UsAccessOrDeletionRequest() {
