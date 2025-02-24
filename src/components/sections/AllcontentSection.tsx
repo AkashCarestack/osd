@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { ArrowTopRightIcon } from '@sanity/icons'
 import siteConfig from 'config/siteConfig'
 import Wrapper from '~/layout/Wrapper'
@@ -90,9 +89,10 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
   let categoryName =  revampClass ? catName : 'All Content'
   let categoryUrl = `/${categoryName ? `${siteConfig.categoryBaseUrls.base}/${catUrl} `: siteConfig.paginationBaseUrls.base}`
 
+  const isBrowsePath = router.pathname.includes('/browse/')
+
   useEffect(() => {
     const updateSelectedTag = () => {
-      const isBrowsePath = router.pathname.includes('/browse/')
 
       if (isBrowsePath) {
         const pathParts = router.asPath.split('/')
@@ -132,7 +132,7 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
     updateSelectedTag()
   }, [router.pathname, router.asPath])
 
-  if((allContent?.length <= 2)) return null
+  if((allContent?.length <= 2) && !isBrowsePath ) return null
 
 
   const renderPosts = () => {
