@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { getCssSelectorShort } from '~/helpers/createCSSSelector'
 import { getParams, getQueryParamFromLink } from '~/helpers/getQueryParams'
+import { generateId } from '~/utils/common'
 import { getCookie } from '~/utils/tracker/cookie'
 import { useTrackUser } from '~/utils/tracker/intitialize'
 
@@ -80,7 +81,7 @@ const Anchor: React.FunctionComponent<LinkProps> = ({
 
 
     return (
-      <Link id='anchor+prints' 
+      <Link id={generateId(href)}
       onClick={(e) => {
         const element = getCssSelectorShort(e.target as Element);
         let e_name = "";
@@ -108,7 +109,7 @@ const Anchor: React.FunctionComponent<LinkProps> = ({
           e_name,
           e_time: new Date(),
           element,
-          element_id: '',
+          element_id: generateId(href),
           current_path: window.location.href,
           utm_campaign,
           utm_content,

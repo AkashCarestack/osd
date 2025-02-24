@@ -7,16 +7,18 @@ export const GlobalDataProvider = ({
   featuredTags,
   eventCards,
   homeSettings,
+  footerData,
   children,
 }: {
   data?: any
   featuredTags?: any
   eventCards?: any
   homeSettings?: any
+  footerData?: any
   children: ReactNode
 }) => {
   return (
-    <GlobalDataContext.Provider value={{ data, featuredTags, eventCards, homeSettings }}>
+    <GlobalDataContext.Provider value={{ data, featuredTags, eventCards, homeSettings,footerData }}>
       {children}
     </GlobalDataContext.Provider>
   )

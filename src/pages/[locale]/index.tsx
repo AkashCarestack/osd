@@ -6,6 +6,7 @@ import {
   getCategories,
   getEbooks,
   getEventCards,
+  getFooterData,
   getHomeSettings,
   getPosts,
   getSiteSettings,
@@ -24,6 +25,7 @@ import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import siteConfig from 'config/siteConfig'
 
 interface IndexPageProps {
+  footerData: any
   categories: any
   allEventCards: any
   tagsByOrder: any
@@ -64,7 +66,7 @@ export const getStaticProps: GetStaticProps<
   SharedPageProps & { posts: Post[] }
 > = async ({ draftMode = false, params  }:any) => {
   
-  const region:any = params.locale || 'en'; 
+  const region:any = params?.locale || 'en'; 
   const client = getClient(draftMode ? { token: readToken } : undefined)
   if (!siteConfig.locales.includes(region)) {
     return {
@@ -85,6 +87,7 @@ export const getStaticProps: GetStaticProps<
       webinars,
       allEventCards,
       categories,
+      footerData
     ] = await Promise.all([
       getPosts(client, 5,region),
       getPosts(client,undefined,region),
@@ -96,7 +99,8 @@ export const getStaticProps: GetStaticProps<
       getEbooks(client,region),
       getWebinars(client,region),
       getEventCards(client),
-      getCategories(client)
+      getCategories(client),
+      getFooterData(client, region)
     ])
 
     return {
@@ -113,7 +117,8 @@ export const getStaticProps: GetStaticProps<
         ebooks,
         webinars,
         allEventCards,
-        categories
+        categories,
+        footerData
       },
     }
   } catch (error) {
@@ -128,6 +133,7 @@ export const getStaticProps: GetStaticProps<
         homeSettings: [],
         ebooks: [],
         webinars: [],
+        footerData: [],
         error: true,
       },
     }
@@ -146,6 +152,7 @@ export default function IndexPage(props: IndexPageProps) {
       data={props?.categories}
       featuredTags={homeSettings?.featuredTags}
       homeSettings={homeSettings}
+      footerData={props?.footerData}
     >
       <Layout>
         {siteSettings?.map((e: any) => {

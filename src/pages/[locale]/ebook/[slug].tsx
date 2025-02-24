@@ -68,7 +68,6 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   if (!ebook) {
     return {
       notFound: true,
-      revalidate: 60,
     }
   }
   const tagIds = ebook.tags?.map((tag: any) => tag?._id) || []
