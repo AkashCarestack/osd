@@ -2,6 +2,10 @@ import siteConfig from 'config/siteConfig'
 import { Post } from '~/interfaces/post'
 import post from '~/schemas/post'
 import { average, prominent } from '~/utils/color'
+import enGb from '../../public/assets/countryFlags/EN-GB.png'
+import en from '../../public/assets/countryFlags/EN-usa.png'
+import enAu from '../../public/assets/countryFlags/EN-AU.png'
+
 
 export const fetchAuthor = (post) => {
   let authorData: any = []
@@ -256,3 +260,14 @@ export const cookieSelector = (consentString, field) => {
   const match = consentString && consentString.match(regex);
   return match && match[1] ? match[1] : "false";
 };
+
+export const  showCountryFlag = (region: string)=> {
+  if(!region) return en.src
+  if (region === 'en') {
+    return en.src
+  } else if (region === 'en-GB') {
+    return enGb.src
+  } else if (region === 'en-AU') {
+    return enAu.src
+  }
+}

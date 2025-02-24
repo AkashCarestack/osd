@@ -14,7 +14,7 @@ import {
 } from 'sanity-plugin-iframe-pane'
 import { previewUrl } from 'sanity-plugin-iframe-pane/preview-url'
 import { table } from '@sanity/table'
-import { CogIcon, ControlsIcon, DesktopIcon, HomeIcon } from '@sanity/icons'
+import { CogIcon, ControlsIcon, DesktopIcon, HomeIcon,GroqIcon } from '@sanity/icons'
 // see https://www.sanity.io/docs/api-versioning for how versioning works
 import {
   apiVersion,
@@ -85,6 +85,7 @@ export default defineConfig({
             "eventCard",
             "category",
             'testimonial',
+            'footer'
       ],
     }),
 
@@ -158,6 +159,7 @@ export default defineConfig({
             S.documentTypeListItem('videos').title('Video'),
             S.documentTypeListItem('eventCard').title('Events Card'),
             S.documentTypeListItem('homeSettings').title('Home Page').icon(HomeIcon),
+            S.documentTypeListItem('footer').title('Footer').icon(GroqIcon),
             S.listItem()
               .title('Site Configuration')
               .icon(ControlsIcon)

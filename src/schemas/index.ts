@@ -21,6 +21,7 @@ import siteSetting from './siteSetting'
 import customContent from './customContent'
 import eventCard from './eventCard'
 import category from './category'
+import footer from './footer'
 
 export const schemaTypes = [
   post,
@@ -44,7 +45,8 @@ export const schemaTypes = [
   siteSetting,
   customContent,
   eventCard,
-  category
+  category,
+  footer
 ]
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -69,6 +71,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     siteSetting,
     customContent,
     eventCard,
-    category
+    category,
+    footer
   ],
 }

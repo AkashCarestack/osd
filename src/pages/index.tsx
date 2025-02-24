@@ -5,6 +5,7 @@ import {
   getCategories,
   getEbooks,
   getEventCards,
+  getFooterData,
   getHomeSettings,
   getPosts,
   getSiteSettings,
@@ -22,6 +23,7 @@ import { defaultMetaTag } from '~/utils/customHead'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 
 interface IndexPageProps {
+  footerData: unknown
   categories: any
   allEventCards: any
   tagsByOrder: any
@@ -41,9 +43,9 @@ interface IndexPageProps {
 
 export const getStaticProps: GetStaticProps<
   SharedPageProps & { posts: Post[] }
-> = async ({ draftMode = false }) => {
+> = async ({ draftMode = false}) => {
   const client = getClient(draftMode ? { token: readToken } : undefined)
-
+  const region:any = 'en'; 
 
   try {
     const [
@@ -58,6 +60,7 @@ export const getStaticProps: GetStaticProps<
       webinars,
       allEventCards,
       categories,
+      footerData
     ] = await Promise.all([
       getPosts(client, 5),
       getPosts(client),
@@ -69,7 +72,8 @@ export const getStaticProps: GetStaticProps<
       getEbooks(client),
       getWebinars(client),
       getEventCards(client),
-      getCategories(client)
+      getCategories(client),
+      getFooterData(client, region)
     ])
 
     return {
@@ -86,7 +90,8 @@ export const getStaticProps: GetStaticProps<
         ebooks,
         webinars,
         allEventCards,
-        categories
+        categories,
+        footerData
       },
     }
   } catch (error) {
@@ -101,6 +106,7 @@ export const getStaticProps: GetStaticProps<
         homeSettings: [],
         ebooks: [],
         webinars: [],
+        footerData: [],
         error: true,
       },
     }
@@ -112,13 +118,14 @@ export default function IndexPage(props: IndexPageProps) {
   const latestPosts = props?.latestPosts
   const siteSettings = props?.siteSettings
   const eventCards = props?.allEventCards
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL4
 
   return (
     <GlobalDataProvider
       data={props?.categories}
       featuredTags={homeSettings?.featuredTags}
       homeSettings={homeSettings}
+      footerData={props?.footerData}
     >
       <Layout>
         {siteSettings?.map((e: any) => {

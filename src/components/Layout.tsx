@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Footer from '~/layout/Footer'
 import Header from '~/layout/Header'
 import { useGlobalData } from './Context/GlobalDataContext'
+import VSfooter from '~/layout/VSfooter'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -24,7 +25,7 @@ export default function Layout({
       <Header />
       <main className="w-full flex flex-col">
       {children}</main>
-      <Footer className={`w-full flex `} />
+      <VSfooter className={`w-full flex content-center `} />
     </div>
   )
 }
