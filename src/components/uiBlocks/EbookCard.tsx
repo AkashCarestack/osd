@@ -16,7 +16,7 @@ const EbookCard = ({ ebook }) => {
           />
         )}
       </div>
-      <div className="p-14 bg-cs-zinc-900 flex flex-col gap-2">
+      <div className="p-14 bg-zinc-900 flex flex-col gap-2">
         <div className="flex flex-col ">
           <h3 className="text-2xl gap-2 font-extrabold flex items-center text-white">
             {`CS Growth Digest`}
