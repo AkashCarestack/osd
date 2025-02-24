@@ -245,7 +245,11 @@ export function generateHref(locale: any, linkHref: string): string {
 }
 export const removeNumberPrefix = (id: any) => id.replace(/^\d+\.\s*/, '');
 
-
+export const generateId = (...args) => {
+  if (!args.length) return '';
+  const id = Date.now().toString(36);
+  return `${args[0]?.split('/').pop()}-${id}`;
+};
 
 export const cookieSelector = (consentString, field) => {
   const regex = new RegExp(`${field}:(\\w+)`);

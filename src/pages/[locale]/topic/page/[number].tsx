@@ -73,7 +73,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         ebooks: totalEbooks,
       },
     },
-    revalidate: 60, // Revalidate every 60 seconds
+    
   };
 };
 

@@ -113,7 +113,6 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
     )
 
 
-
   }
   
 

@@ -75,7 +75,6 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   if (!podcast) {
     return {
       notFound: true,
-      revalidate: 60,
     }
   }
   const currentSlug: any = params?.slug
