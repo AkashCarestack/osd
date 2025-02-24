@@ -1,4 +1,4 @@
-import Section from "~/components/structure/Section";
+import Section from "~/components/Section";
 
 
 {/* <script>
