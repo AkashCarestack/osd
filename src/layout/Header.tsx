@@ -117,7 +117,7 @@ const Header = () => {
                     </Link> */}
                     {navPopoverId && <ShortNavPopover navPopoverId={navPopoverId}   showMenu={showMenu} setShowMenu={setShowMenu} className='z-10 group-hover:block group-hover:visible group-hover:opacity-100 ' />}
                     </div>}
-                    <div className={`lg:flex-row top-[110px] hidden right-0 px-4 pt-4 pb-8 lg:p-0 bg-cs-zinc lg:bg-transparent left-0 lg:static flex-col gap-2 justify-between lg:items-center lg:flex`}>
+                    <div className={`lg:flex-row top-[110px] hidden right-0 px-4 pt-4 pb-8 lg:p-0 bg-zinc-900 lg:bg-transparent left-0 lg:static flex-col gap-2 justify-between lg:items-center lg:flex`}>
                       <nav className="flex flex-col lg:flex-row lg:gap-10 flex-wrap ">
                         {navigationLinks && navigationLinks?.map((link, i) => {                                                    
                           return(
