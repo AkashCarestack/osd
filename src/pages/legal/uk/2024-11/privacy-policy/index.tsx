@@ -346,6 +346,7 @@ function UkPrivacyPolicy() {
             </span>
           </p>
           <table>
+          <tbody>
             <tr className="c24">
               <td className="c25" colSpan={1} rowSpan={1}>
                 <p>
@@ -364,6 +365,7 @@ function UkPrivacyPolicy() {
                 </div>
               </td>
             </tr>
+            </tbody>
           </table>
           <p className="c14">
             <span className="c19"></span>
