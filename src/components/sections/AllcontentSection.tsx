@@ -130,7 +130,7 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
     }
 
     updateSelectedTag()
-  }, [router.pathname, router.asPath])
+  }, [router.pathname, router.asPath,isBrowsePath])
 
   if((allContent?.length <= 2) && !isBrowsePath ) return null
 
