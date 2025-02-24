@@ -7,6 +7,7 @@ import {
   getArticles,
   getArticlesCount,
   getCategories,
+  getFooterData,
   getHomeSettings,
   getSiteSettings,
   getTags,
@@ -52,13 +53,14 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
   const skip = (pageNumber - 1) * itemsPerPage
 
   try {
-    const [articles, totalArticles, tags, homeSettings,siteSettings,categories] = await Promise.all([
+    const [articles, totalArticles, tags, homeSettings,siteSettings,categories,footerData] = await Promise.all([
       getArticles(client, skip, itemsPerPage,locale),
       getArticlesCount(client,locale),
       getTags(client),
       getHomeSettings(client),
       getSiteSettings(client),
-      getCategories(client)
+      getCategories(client),
+      getFooterData(client, locale)
     ])
 
     const totalPages = Math.ceil(totalArticles / itemsPerPage)
@@ -101,7 +103,8 @@ const PaginatedArticlesPage = ({
   pageNumber,
   totalPages,
   siteSettings,
-  categories
+  categories,
+  footerData
 }: {
   articles: Articles[]
   tags: any
@@ -110,6 +113,7 @@ const PaginatedArticlesPage = ({
   totalPages: number
   siteSettings: any
   categories: any
+  footerData: any
 }) => {
   const router = useRouter()
   const baseUrl = `/${siteConfig.pageURLs.article}`
@@ -126,7 +130,7 @@ const PaginatedArticlesPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {customMetaTag('article', false, currentPageUrl)}
