@@ -20,7 +20,7 @@ export default function Layout({
 
   return (
     <div
-      className={`flex flex-col w-full items-center`}
+      className={`flex flex-col w-full h-full items-center`}
     >
       <Header />
       <main className="w-full flex flex-col">

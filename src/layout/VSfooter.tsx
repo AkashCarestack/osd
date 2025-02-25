@@ -25,9 +25,9 @@ const Footer = ({className}:any) => {
   },[router.locale])
 
   return (
-    <Section  className={`bg-zinc-900 justify-center ${className}`}>
+    <Section  className={`bg-zinc-900 justify-center md:pt-0 ${className}`}>
       <Wrapper className="flex justify-center">
-        <div className="w-full pt-8 md:pt-16">
+        <div className="w-full ">
           <div className='flex justify-between items-center w-full pb-6'>
             <div>
               {/* Logo */}
