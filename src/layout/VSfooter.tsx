@@ -28,7 +28,7 @@ const Footer = ({className}:any) => {
     <Section  className={`bg-zinc-900 justify-center flex-1  md:pt-12 ${className}`}>
       <Wrapper className="flex justify-center self-end">
         <div className="w-full ">
-          <div className='flex justify-between items-center w-full pb-6'>
+          <div className='md:flex-row flex-col items-center flex md:justify-between w-full pb-6'>
             <div>
               {/* Logo */}
               <Anchor elementId='footer-logo' href="/" className="xl:flex-1 flex-shrink-0 text-2xl font-extrabold bg-gradient-text bg-clip-text text-transparent font-monrope tracking-tighterText">
@@ -36,7 +36,7 @@ const Footer = ({className}:any) => {
               </Anchor>
             </div>
             {/* Social media   */}
-            <div className="mt-6 self-end">
+            <div className="mt-6 md:self-end">
               <ul className="flex gap-6 items-center">
                 <li>
                   <a
