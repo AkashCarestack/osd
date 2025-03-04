@@ -1,11 +1,8 @@
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { getClient } from '~/lib/sanity.client'
 import {
-  getTag,
   getPostsByTag,
-  tagsSlugsQuery,
   getTags,
-  getPostsByTagAndLimit,
   getArticlesCount,
   getEbooksCount,
   getPodcastsCount,
@@ -16,6 +13,7 @@ import {
   getPostsByCategoryAndLimit,
   getCategories,
   catsSlugsQuery,
+  getFooterData,
 } from '~/lib/sanity.queries'
 import Layout from '~/components/Layout'
 import TagSelect from '~/contentUtils/TagSelector'
@@ -58,6 +56,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     totalEbooks,
     allTags,
     categories,
+    footerData
   ] = await Promise.all([
     getPostsByCategoryAndLimit(client, category?._id, 0, cardsPerPage,region),
     getPostsByTag(client, category._id,region),
@@ -67,6 +66,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getEbooksCount(client,region),
     getTags(client),
     getCategories(client),
+    getFooterData(client, region)
   ]);
 
   const totalPages = Math.ceil(allPostsForTag.length / cardsPerPage);
@@ -95,6 +95,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       },
       siteSettings,
       homeSettings,
+      footerData,
     },
   };
 };
@@ -130,6 +131,7 @@ export default function TagPage({
   totalPostCount,
   siteSettings,
   homeSettings,
+  footerData
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   if(!categoryPosts || !category) return null
   
@@ -146,7 +148,7 @@ export default function TagPage({
 
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {siteSettingWithImage ? defaultMetaTag(siteSettingWithImage) : <></>}

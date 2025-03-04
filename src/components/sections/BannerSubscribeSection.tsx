@@ -112,7 +112,7 @@ function BannerSubscribeSection({ isSmall }: BannerSubscribeSectionProps) {
         <p className="mt-3 md:mt-6 text-xs md:text-base font-medium text-zinc-500 leading-[1.2]">
           You can unsubscribe at any time, no hard feelings.{' '}
           <Anchor
-            href="https://carestack.com/legal/2024-1/privacypolicy"
+            href="https://resources.voicestack.com/legal/2025-01/privacy-policy"
             target="_blank"
             className="underline underline-offset-2"
           >

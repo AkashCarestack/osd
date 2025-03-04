@@ -4,6 +4,7 @@ import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
+  getFooterData,
   getHomeSettings,
   getPressReleases,
   getPressReleasesCount,
@@ -13,7 +14,6 @@ import { SharedPageProps } from '../../_app'
 import Layout from '~/components/Layout'
 import LatestBlogs from '~/components/sections/LatestBlogSection'
 import AllcontentSection from '~/components/sections/AllcontentSection'
-import { useRouter } from 'next/router'
 import siteConfig from '../../../../config/siteConfig'
 import React, { useRef } from 'react'
 import Pagination from '~/components/commonSections/Pagination'
@@ -56,6 +56,12 @@ export const getStaticProps: GetStaticProps<
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
+  const footerData = await getFooterData(client, region)
+
+  
+  if (!pressReleases || pressReleases.length === 0) {
+    return { notFound: true };
+  }
 
   return {
     props: {
@@ -66,7 +72,8 @@ export const getStaticProps: GetStaticProps<
       totalPages,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
@@ -77,7 +84,8 @@ const PressReleasePage = ({
   totalPages,
   tags,
   homeSettings,
-  categories
+  categories,
+  footerData
 }: {
   pressReleases: Podcasts[]
   latestPressReleases: Podcasts[]
@@ -85,6 +93,7 @@ const PressReleasePage = ({
   tags: any
   homeSettings: any
   categories: any
+  footerData: any
 }) => {
   const baseUrl = `/${siteConfig.pageURLs.pressRelease}`;
   if (!pressReleases) return null
@@ -105,7 +114,7 @@ const PressReleasePage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         {pressReleases?.map((e, i) => {
           return <CustomHead props={e} type="pressRelease" key={i} />

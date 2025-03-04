@@ -11,6 +11,7 @@ import {
   getHomeSettings,
   getCategories,
   getCategory,
+  getFooterData,
 } from '~/lib/sanity.queries'
 import { getClient } from '~/lib/sanity.client'
 import siteConfig from 'config/siteConfig'
@@ -49,7 +50,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const startLimit = (pageNumber - 1) * cardsPerPage;
   const endLimit = startLimit + cardsPerPage;
 
-  const [posts, allPostsForTag, totalPodcasts, totalWebinars, totalArticles, totalEbooks, homeSettings, categories] = await Promise.all([
+  const [posts, allPostsForTag, totalPodcasts, totalWebinars, totalArticles, totalEbooks, homeSettings, categories,footerData] = await Promise.all([
     getPostsByTagAndLimit(client, category._id, startLimit, endLimit, region),
     getPostsByTag(client, category._id, region),
     getPodcastsCount(client, region),
@@ -57,7 +58,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getArticlesCount(client, region),
     getEbooksCount(client, region),
     getHomeSettings(client, region),
-    getCategories(client)
+    getCategories(client),
+    getFooterData(client, region)
   ]);
 
   return {
@@ -72,6 +74,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       token: null,
       homeSettings,
       categories,
+      footerData,
       contentCount: {
         podcasts: totalPodcasts,
         webinars: totalWebinars,
@@ -119,7 +122,8 @@ export default function TagPagePaginated({
   contentCount,
   totalPostCount,
   homeSettings,
-  categories
+  categories,
+  footerData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const handlePageChange = (page: number) => {
     console.log(`Navigating to page: ${page}`)
@@ -130,7 +134,7 @@ export default function TagPagePaginated({
 
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
         <ContentHub categories={categories} contentCount={contentCount}   />

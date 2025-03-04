@@ -96,7 +96,7 @@ const EventCarousel = ({ allEventCards,bgColor }: { allEventCards?: any, bgColor
                       </div>
                       <div className='self-auto'>
                         <div className='self-start md:self-center flex justify-center'>
-                          <Button className='bg-zinc-900 transition-all duration-300 ease-in-out hover:bg-zinc-700 !no-underline' target='_blank' link={events?.registrationLink ? events?.registrationLink : 'https://carestack.com/demo'}>
+                          <Button className='bg-zinc-900 transition-all duration-300 ease-in-out hover:bg-zinc-700 !no-underline' target='_blank' link={events?.registrationLink ? events?.registrationLink : 'https://voicestack.com/?refer=carestack '}>
                             <span className='text-base font-medium'>{events.registerBtnTxt ? events.registerBtnTxt : 'Register Now'}</span>
                           </Button>
                         </div>

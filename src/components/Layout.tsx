@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Footer from '~/layout/Footer'
 import Header from '~/layout/Header'
 import { useGlobalData } from './Context/GlobalDataContext'
 import VSfooter from '~/layout/VSfooter'

@@ -13,6 +13,7 @@ import {
   getSiteSettings,
   getHomeSettings,
   getCategories,
+  getFooterData,
 } from '~/lib/sanity.queries'
 import Layout from '~/components/Layout'
 import { Tag, Post } from '~/interfaces/post'
@@ -44,6 +45,7 @@ export const getStaticProps: GetStaticProps<
     siteSettings: any[]
     homeSettings: any
     categories: any
+    footerData: any
   }
 > = async ({ params }) => {
   const client = getClient()
@@ -68,7 +70,8 @@ export const getStaticProps: GetStaticProps<
       totalEbooks,
       siteSettings,
       homeSettings,
-      categories
+      categories,
+      footerData
     ] = await Promise.all([
       getTags(client),
       getPostsByTagAndLimit(client, tag._id, 0, cardsPerPage, region),
@@ -79,7 +82,8 @@ export const getStaticProps: GetStaticProps<
       getEbooksCount(client, region),
       getSiteSettings(client),
       getHomeSettings(client, region),
-      getCategories(client)
+      getCategories(client),
+      getFooterData(client, region)
     ])
 
     const totalPages = Math.ceil(allPostsForTag.length / cardsPerPage)
@@ -101,7 +105,8 @@ export const getStaticProps: GetStaticProps<
         },
         siteSettings,
         homeSettings,
-        categories
+        categories,
+        footerData
       },
     }
   } catch (error) {
@@ -147,7 +152,8 @@ export default function TagPage({
   totalPostCount,
   siteSettings,
   homeSettings,
-  categories
+  categories,
+  footerData
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const handlePageChange = (page: number) => {
     console.log(`Navigating to page: ${page}`)
@@ -160,7 +166,7 @@ export default function TagPage({
   const pageUrl = process.env.NEXT_PUBLIC_BASE_URL+baseUrl
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {siteSettingWithImage ? defaultMetaTag(siteSettingWithImage,pageUrl) : <></>}

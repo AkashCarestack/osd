@@ -7,6 +7,7 @@ import {
   getCategories,
   getEbooks,
   getEbooksCount,
+  getFooterData,
   getHomeSettings,
   getTags,
 } from '~/lib/sanity.queries'
@@ -56,6 +57,7 @@ export const getStaticProps: GetStaticProps<
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
+  const footerData = await getFooterData(client, region)
 
   return {
     props: {
@@ -66,18 +68,19 @@ export const getStaticProps: GetStaticProps<
       totalPages,
       homeSettings,
       tags,
-      categories
+      categories,
+      footerData
     },
   }
 }
 
 const PaginatedEbookPage = ({
   ebooks,
-  tags,
   homeSettings,
   pageNumber,
   totalPages,
-  categories
+  categories,
+  footerData,
 }: {
   ebooks: Ebooks[]
   tags: any
@@ -85,6 +88,7 @@ const PaginatedEbookPage = ({
   homeSettings: any
   totalPages: number
   categories: any
+  footerData: any
 }) => {
   const router = useRouter()
   const baseUrl = `/${siteConfig.pageURLs.ebook}`
@@ -100,7 +104,7 @@ const PaginatedEbookPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {ebooks?.map((e, i) => {

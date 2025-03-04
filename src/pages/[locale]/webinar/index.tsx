@@ -4,6 +4,7 @@ import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
+  getFooterData,
   getHomeSettings,
   getTags,
   getWebinars,
@@ -23,6 +24,7 @@ import { BaseUrlProvider } from '~/components/Context/UrlContext'
 import TagSelect from '~/contentUtils/TagSelector'
 import { mergeAndRemoveDuplicates } from '~/utils/common'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { Logger } from 'sass'
 
 
 
@@ -52,16 +54,21 @@ export const getStaticProps: GetStaticProps<
   const region:any = context.params.locale || 'en'; 
   const itemsPerPage = siteConfig.pagination.childItemsPerPage
 
-  const [webinars, latestWebinars, totalWebinars, tags, homeSettings,categories] = await Promise.all([
+  const [webinars, latestWebinars, totalWebinars, tags, homeSettings,categories,footerData] = await Promise.all([
     getWebinars(client, 0, itemsPerPage,region),
     getWebinars(client, 0, 5,region),
     getWebinarsCount(client,region),
     getTags(client),
     getHomeSettings(client,region),
-    getCategories(client)
+    getCategories(client),
+    getFooterData(client, region)
   ])
 
   const totalPages = Math.ceil(totalWebinars / itemsPerPage)
+
+  if (!webinars || webinars.length === 0) {
+    return { notFound: true };
+  }
 
   return {
     props: {
@@ -72,7 +79,8 @@ export const getStaticProps: GetStaticProps<
       totalPages,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
@@ -84,7 +92,8 @@ const WebinarsPage = ({
   homeSettings,
   totalPages,
   tags,
-  categories
+  categories,
+  footerData
 }: {
   webinars: Webinars[]
   latestWebinars: Webinars[]
@@ -92,6 +101,7 @@ const WebinarsPage = ({
   tags: any
   homeSettings: any
   categories: any
+  footerData: any
 }) => {
   const router = useRouter()
   const baseUrl = `/${siteConfig.pageURLs.webinar}`
@@ -112,7 +122,7 @@ const WebinarsPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           <CustomHead props={webinars} type="webinar" />

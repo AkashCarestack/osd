@@ -3,6 +3,7 @@ import { getClient } from '~/lib/sanity.client'
 import {
   getAllPodcastSlugs,
   getCategories,
+  getFooterData,
   getHomeSettings,
   getPodcast,
   getTagRelatedContents,
@@ -23,8 +24,7 @@ import AuthorInfo from '~/components/commonSections/AuthorInfo'
 import ShareableLinks from '~/components/commonSections/ShareableLinks'
 import PodcastNavigator from '~/contentUtils/PodcastNavigator'
 import Section from '~/components/Section'
-import { CustomHead, generateMetaData } from '~/utils/customHead'
-import SidebarTitle from '~/components/typography/SidebarTitle'
+import { generateMetaData } from '~/utils/customHead'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import siteConfig from 'config/siteConfig'
 import RelatedTag from '~/components/commonSections/RelatedTag'
@@ -42,6 +42,7 @@ interface Props {
   tags?: any
   homeSettings?: any
   categories?: any
+  footerData?: any
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {  
@@ -96,6 +97,8 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
+  const footerData = await getFooterData(client, region)
+
 
   return {
     props: {
@@ -109,7 +112,8 @@ export const getStaticProps: GetStaticProps<Props> = async ({
       relatedContents,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
@@ -124,7 +128,8 @@ const PodcastPage = ({
   totalPodcasts,
   draftMode,
   token,
-  categories
+  categories,
+  footerData
 }: Props) => {
   if (!podcast) {
     return <div>Podcast not found</div>
@@ -154,7 +159,7 @@ const PodcastPage = ({
         contentType={podcast?.contentType}
       />
       {generateMetaData(podcast,seoCanonical)}
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
         <Layout>
           <MainImageSection
             isAudio={true}

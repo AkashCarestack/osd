@@ -12,6 +12,7 @@ import React, { useRef } from 'react'
 import Pagination from '~/components/commonSections/Pagination'
 import {
   getCategories,
+  getFooterData,
   getHomeSettings,
   getPressReleases,
   getPressReleasesCount,
@@ -63,6 +64,11 @@ export const getStaticProps: GetStaticProps<
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
+  const footerData = await getFooterData(client, region)
+  
+  if (!pressReleases || pressReleases.length === 0) {
+    return { notFound: true };
+  }
 
   return {
     props: {
@@ -73,7 +79,8 @@ export const getStaticProps: GetStaticProps<
       totalPages,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
@@ -84,7 +91,8 @@ const PaginatedPressReleasePage = ({
   homeSettings,
   pageNumber,
   totalPages,
-  categories
+  categories,
+  footerData
 }: {
   pressReleases: Podcasts[]
   tags?: any
@@ -92,6 +100,7 @@ const PaginatedPressReleasePage = ({
   pageNumber: number
   totalPages: number
   categories?: any
+  footerData?: any
 }) => {
   const router = useRouter()
   const baseUrl = `/${siteConfig.pageURLs.pressRelease}`
@@ -107,7 +116,7 @@ const PaginatedPressReleasePage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {pressReleases?.map((e, i) => {

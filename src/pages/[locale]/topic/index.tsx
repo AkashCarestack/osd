@@ -5,6 +5,7 @@ import {
   getArticlesCount,
   getCategories,
   getEbooksCount,
+  getFooterData,
   getHomeSettings,
   getPodcastsCount,
   getPosts,
@@ -17,7 +18,7 @@ import {
 import AllcontentSection from '~/components/sections/AllcontentSection'
 import siteConfig from 'config/siteConfig'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
-import router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import ContentHub from '~/contentUtils/ContentHub'
 import { BaseUrlProvider } from '~/components/Context/UrlContext'
 import { defaultMetaTag } from '~/utils/customHead'
@@ -66,6 +67,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     totalArticles,
     totalEbooks,
     homeSettings,
+    footerData
   ] = await Promise.all([
     getTags(client),
     getCategories(client),
@@ -77,6 +79,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getArticlesCount(client,region),
     getEbooksCount(client,region),
     getHomeSettings(client,region),
+    getFooterData(client, region)
   ])
 
   const categoryPosts = await Promise.all( 
@@ -104,6 +107,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       },
       siteSettings: siteSettings,
       homeSettings: homeSettings,
+      footerData: footerData
     },
   }
 }
@@ -120,9 +124,6 @@ export default function ProjectSlugRoute(
   const router = useRouter()
 
   const {
-    posts,
-    totalPages,
-    tags,
     contentCount,
     totalPosts,
     siteSettings,
@@ -130,20 +131,15 @@ export default function ProjectSlugRoute(
     categories,
     categoryPosts
   } = props
-  const totalCount: any = totalPosts.length ?? 0
 
   const baseUrl = `/${siteConfig.paginationBaseUrls.base}`
 
   const siteSettingWithImage = siteSettings?.find((e: any) => e?.openGraphImage)
 
-  // const featuredBlog = homeSettings?.FeaturedBlog || posts[0]
-  // const featuredBlogs = homeSettings?.popularBlogs || posts
-
-  // const featuredContents = [...featuredBlogs, ...posts].slice(0, 4)
 
   return (
     <>
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={props?.footerData}>
         <BaseUrlProvider baseUrl={baseUrl}>
           <Layout>
             {siteSettingWithImage ? (

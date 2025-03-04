@@ -2,17 +2,16 @@ import React from 'react';
 // import { GlobalDataProvider } from '../context/GlobalDataProvider';
 import Header from '../layout/Header';
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext';
-import Footer from '~/layout/Footer';
 import { readToken } from '~/lib/sanity.api'
 import {
   getCategories,
+  getFooterData,
   getHomeSettings,
   getSiteSettings,
   getTags,
   getTagsByOrder,
 } from '~/lib/sanity.queries'
 import type { SharedPageProps } from '~/pages/_app'
-import { Post } from '~/interfaces/post'
 import { getClient } from '~/lib/sanity.client'
 import { GetStaticProps } from 'next';
 import Section from '~/components/Section';
@@ -21,6 +20,7 @@ import Layout from '~/components/Layout';
 import Button from '~/components/commonSections/Button';
 
 interface IndexPageProps {
+  footerData: unknown;
   categories: any;
   tags: Array<any>
   homeSettings: any
@@ -37,13 +37,15 @@ export const getStaticProps: GetStaticProps<
       tagsByOrder,
       homeSettings,
       siteSettings,
-      categories
+      categories,
+      footerData
     ] = await Promise.all([
       getTags(client),
       getTagsByOrder(client),
       getHomeSettings(client),
       getSiteSettings(client),
-      getCategories(client)
+      getCategories(client),
+      getFooterData(client)
     ])
 
     return {
@@ -54,7 +56,8 @@ export const getStaticProps: GetStaticProps<
         tagsByOrder,
         homeSettings,
         siteSettings,
-        categories
+        categories,
+        footerData
       },
     }
   } catch (error) {
@@ -82,12 +85,13 @@ const Custom404 = (props: IndexPageProps) => {
       data={props?.categories}
       featuredTags={homeSettings?.featuredTags}
       homeSettings={homeSettings}
+      footerData={props?.footerData}
     >
     
-      <Layout>
-        <Section className="justify-center">
-          <Wrapper className={`flex-col`}>
-          <div className='min-h-[40vh] flex flex-col justify-center items-center text-center gap-10'>
+      <Layout >
+        <Section className="justify-center ">
+          <Wrapper className={`flex-col `}>
+          <div className='min-h-[40vh] flex flex-col justify-center  items-center text-center gap-10'>
               <h1 className='text-xl md:text-2xl text-zinc-800'><span className='font-bold md:text-3xl'>404</span> - This page could not be found.</h1>
               <div className='self-center flex justify-center'>
                 <Button className='bg-zinc-900  hover:bg-zinc-700 !no-underline' link="/">

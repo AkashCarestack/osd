@@ -251,7 +251,7 @@ export const metaTagDataForAuthor = (props: any, pageUrl: string) => {
       {props?.name && (
         <>
           <meta property="og:title" content={props.name}></meta>
-          <title>{`${props.name} | Author Profile | CareStack®`}</title>
+          <title>{`${props.name} | Author Profile | VoiceStack`}</title>
           <meta property="twitter:title" content={props?.name} />
         </>
       )}

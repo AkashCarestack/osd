@@ -1,21 +1,19 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 import { useRouter } from 'next/router'
 import Layout from '~/components/Layout'
-import Wrapper from '~/layout/Wrapper'
 import AllcontentSection from '~/components/sections/AllcontentSection'
 import { getClient } from '~/lib/sanity.client'
 import {
-  getArticles,
-  getArticlesCount,
   getCaseStudies,
   getCaseStudiesCount,
   getCategories,
+  getFooterData,
   getHomeSettings,
   getTags,
 } from '~/lib/sanity.queries'
 import { readToken } from '~/lib/sanity.api'
-import { Articles, CaseStudies } from '~/interfaces/post'
-import React, { useRef } from 'react'
+import { CaseStudies } from '~/interfaces/post'
+import React from 'react'
 import Pagination from '~/components/commonSections/Pagination'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
 import { BaseUrlProvider } from '~/components/Context/UrlContext'
@@ -64,7 +62,7 @@ export const getStaticProps: GetStaticProps<
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,locale)
   const categories = await getCategories(client)
-
+  const footerData = await getFooterData(client, locale)
 
   return {
     props: {
@@ -75,18 +73,19 @@ export const getStaticProps: GetStaticProps<
       totalPages,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
 
 const PaginatedCaseStudyPage = ({
   caseStudies,
-  tags,
   homeSettings,
   pageNumber,
   totalPages,
-  categories
+  categories,
+  footerData
 }: {
   caseStudies: CaseStudies[]
   tags: any
@@ -94,6 +93,7 @@ const PaginatedCaseStudyPage = ({
   pageNumber: number
   totalPages: number
   categories: any
+  footerData : any
 }) => {
   const router = useRouter()
   const baseUrl = `/${siteConfig.pageURLs.caseStudy}`
@@ -109,7 +109,7 @@ const PaginatedCaseStudyPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {customMetaTag('caseStudy', false, currentPageUrl)}

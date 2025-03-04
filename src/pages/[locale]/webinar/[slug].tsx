@@ -1,17 +1,13 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
-import { useRouter } from 'next/router'
 import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
+  getFooterData,
   getHomeSettings,
-  getPodcast,
-  getPodcasts,
-  getRelatedContents,
   getTagRelatedContents,
   getTags,
   getWebinar,
   getWebinars,
-  podcastSlugsQuery,
   webinarSlugsQuery,
 } from '~/lib/sanity.queries'
 import { Podcasts } from '~/interfaces/post'
@@ -42,6 +38,7 @@ interface Props {
   tags: any
   homeSettings: any
   categories: any
+  footerData?: any
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -90,6 +87,11 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
+  const footerData = await getFooterData(client, region)
+
+  if (!webinar || webinar.length === 0) {
+    return { notFound: true };
+  }
 
   return {
     props: {
@@ -112,7 +114,8 @@ const WebinarPage = ({
   tags,
   homeSettings,
   token,
-  categories
+  categories,
+  footerData
 }: Props) => {
   if(!webinar) {
     return null 
@@ -143,7 +146,7 @@ const WebinarPage = ({
         />
         {/* {CustomHead} */}
       {generateMetaData(webinar,seoCanonical)}
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
         <Layout>
           <MainImageSection
             isAuthor={true}

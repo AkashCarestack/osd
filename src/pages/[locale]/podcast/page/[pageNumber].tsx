@@ -5,6 +5,7 @@ import AllcontentSection from '~/components/sections/AllcontentSection'
 import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
+  getFooterData,
   getHomeSettings,
   getPodcasts,
   getPodcastsCount,
@@ -59,6 +60,13 @@ export const getStaticProps: GetStaticProps<
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
+  const footerData = await getFooterData(client, region)
+
+    
+  if (!podcasts || podcasts.length === 0) {
+    return { notFound: true };
+  }
+
 
   return {
     props: {
@@ -80,7 +88,8 @@ const PaginatedEbookPage = ({
   pageNumber,
   homeSettings,
   totalPages,
-  categories
+  categories,
+  footerData
 }: {
   podcasts: Podcasts[]
   tags: any
@@ -88,6 +97,7 @@ const PaginatedEbookPage = ({
   pageNumber: number
   totalPages: number
   categories: any
+  footerData: any
 }) => {
   const router = useRouter()
   const baseUrl = `/${siteConfig.pageURLs.podcast}`
@@ -103,7 +113,7 @@ const PaginatedEbookPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {podcasts?.map((e, i) => {

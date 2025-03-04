@@ -2,14 +2,12 @@ import { GetStaticProps, GetStaticPaths } from 'next'
 import { getClient } from '~/lib/sanity.client'
 import {
   pressReleaseSlugsQuery,
-  getCaseStudy,
   getPressRelease,
-  getRelatedContents,
-  getPressReleases,
   getTagRelatedContents,
   getHomeSettings,
   getTags,
   getCategories,
+  getFooterData,
 } from '~/lib/sanity.queries'
 import { PressRelease } from '~/interfaces/post'
 import Wrapper from '~/layout/Wrapper'
@@ -39,6 +37,7 @@ interface Props {
   tags?: any
   homeSettings?: any
   categories?: any
+  footerData?: any
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -87,12 +86,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
-
-  if (!pressRelease) {
-    return {
-      notFound: true,
-    }
-  }
+  const footerData = await getFooterData(client, region)
 
   return {
     props: {
@@ -102,7 +96,8 @@ export const getStaticProps: GetStaticProps<Props> = async ({
       relatedContents,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
@@ -114,7 +109,8 @@ const PressReleasePage = ({
   homeSettings,
   draftMode,
   token,
-  categories
+  categories,
+  footerData
 }: Props) => {
 
   if(!pressRelease) return null
@@ -143,7 +139,7 @@ const PressReleasePage = ({
           jsonLD={jsonLD}
           contentType={pressRelease?.contentType}
         />
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
         <Layout>
           <MainImageSection enableDate={true} post={pressRelease} />
           <Section className="justify-center !pt-24 !pb-12">
