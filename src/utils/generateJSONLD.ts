@@ -21,9 +21,9 @@ export function generateJSONLD(post: any) {
           '@type': 'BlogPosting',
           mainEntityOfPage: {
             '@type': 'WebPage',
-            '@id': `https://carestack.com${post.slug}`,
+            '@id': `https://resources.voicestack.com${post.slug}`,
             isPartOf: {
-              '@id': 'https://carestack.com/#website',
+              '@id': 'https://resources.voicestack.com/#website',
             },
           },
           headline: post.title,
@@ -135,9 +135,9 @@ export function generateJSONLD(post: any) {
     '@type': 'BlogPosting',
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://carestack.com${post.slug}`,
+      '@id': `https://resources.voicestack.com${post.slug}`,
       isPartOf: {
-        '@id': 'https://carestack.com/#website',
+        '@id': 'https://resources.voicestack.com/#website',
       },
     },
     headline: post.title,

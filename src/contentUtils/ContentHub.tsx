@@ -51,7 +51,7 @@ export default function ContentHub({ contentCount, categories, featuredDescripti
 
 
   return (
-    <Section className={`bg-zinc-900 relative h-full justify-center ${categoriesData ? 'md:pt-24 pb-16' : 'md:pt-12 pb-6'}`}>
+    <Section className={`bg-zinc-900 relative h-full justify-center ${categoriesData ? 'md:pt-24 pb-16' : 'md:pt-12 pb-6'} md:pt-headerSpacer pt-headerSpacerMob`}>
       {categoriesData && <div className='absolute top-0 right-0 h-full 2xl:visible invisible   '>
       <TrapezIcon/>
       </div>}

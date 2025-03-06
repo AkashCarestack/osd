@@ -32,15 +32,15 @@ function generateSiteMap(posts: any[]) {
 
   locales.forEach((locale) => {
     const staticPages = [
-      `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.caseStudy)}`,
-      `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.article)}`,
-      `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.podcast)}`,
-      `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.ebook)}`,
-      `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.webinar)}`,
-      `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.pressRelease)}`,
+      // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.caseStudy)}`,
+      // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.article)}`,
+      // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.podcast)}`,
+      // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.ebook)}`,
+      // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.webinar)}`,
+      // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.pressRelease)}`,
     ];
 
-    staticPages.forEach((page) => {
+    staticPages && staticPages.forEach((page) => {
       const cleanedUrl = cleanUrl(page);
       const urlKey = cleanedUrl.replace(BASE_URL, '').replace(/^\/(en-[A-Z]{2}\/)?/, '');
       

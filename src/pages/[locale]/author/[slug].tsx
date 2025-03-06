@@ -5,6 +5,7 @@ import {
   getAuthor,
   getauthorRelatedContents,
   getCategories,
+  getFooterData,
   getHomeSettings,
   getTags,
 } from '~/lib/sanity.queries'
@@ -34,6 +35,7 @@ export const getStaticProps: GetStaticProps<
     tags: any
     homeSettings: any
     categories: any
+    footerData: any
   },
   Query
 > = async ({ draftMode = false, params = {} }) => {
@@ -50,6 +52,12 @@ export const getStaticProps: GetStaticProps<
   const homeSettings = await getHomeSettings(client,region)
   const relatedContents = await getauthorRelatedContents(client, authorId, undefined,region)  
   const categories = await getCategories(client)
+  const footerData = await getFooterData(client, region)
+
+  if (!author || author.length === 0) {
+    return { notFound: true };
+  }
+
 
   return {
     props: {
@@ -59,7 +67,8 @@ export const getStaticProps: GetStaticProps<
       relatedContents,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
@@ -89,7 +98,8 @@ export default function AuthorPage({
   relatedContents,
   tags,
   homeSettings,
-  categories
+  categories,
+  footerData
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   if(!author) return null
   const baseUrl = `/${siteConfig.pageURLs.author}`
@@ -97,7 +107,7 @@ export default function AuthorPage({
   
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           <CustomHead props={author} type="author" />

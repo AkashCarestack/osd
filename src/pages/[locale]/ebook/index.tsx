@@ -1,17 +1,17 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { CaseStudies, Ebooks } from '~/interfaces/post'
+import { Ebooks } from '~/interfaces/post'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
   getEbooks,
   getEbooksCount,
+  getFooterData,
   getHomeSettings,
   getTags,
 } from '~/lib/sanity.queries'
 import { SharedPageProps } from '../../_app'
 import Layout from '~/components/Layout'
-import Wrapper from '~/layout/Wrapper'
 import LatestBlogs from '~/components/sections/LatestBlogSection'
 import AllcontentSection from '~/components/sections/AllcontentSection'
 import { useRouter } from 'next/router'
@@ -58,7 +58,12 @@ export const getStaticProps: GetStaticProps<
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
+  const footerData = await getFooterData(client, region)
 
+
+  if (!ebooks || ebooks.length === 0) {
+    return { notFound: true };
+  }
 
   return {
     props: {
@@ -69,7 +74,8 @@ export const getStaticProps: GetStaticProps<
       totalPages,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
@@ -80,7 +86,8 @@ const EbooksPage = ({
   totalPages,
   tags,
   homeSettings,
-  categories
+  categories,
+  footerData
 }: {
   ebooks: Ebooks[]
   latestEbooks: Ebooks[]
@@ -88,6 +95,7 @@ const EbooksPage = ({
   tags: any
   homeSettings: any
   categories: any
+  footerData: any
 }) => {
   const router = useRouter()
   const baseUrl = useRef(`/${siteConfig.pageURLs.ebook}`).current
@@ -105,7 +113,7 @@ const EbooksPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {ebooks?.map((e, i) => {

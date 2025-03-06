@@ -89,7 +89,8 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
   let categoryName =  revampClass ? catName : 'All Content'
   let categoryUrl = `/${categoryName ? `${siteConfig.categoryBaseUrls.base}/${catUrl} `: siteConfig.paginationBaseUrls.base}`
 
-  const isBrowsePath = router.pathname.includes('/browse/')
+  const isBrowsePath = router.pathname.includes('browse/') || router.pathname.startsWith('/[locale]/browse')
+  
 
   useEffect(() => {
     const updateSelectedTag = () => {
@@ -130,7 +131,7 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
     }
 
     updateSelectedTag()
-  }, [router.pathname, router.asPath,isBrowsePath])
+  }, [router.pathname, router.asPath,isBrowsePath])  
 
   if((allContent?.length <= 2) && !isBrowsePath ) return null
 

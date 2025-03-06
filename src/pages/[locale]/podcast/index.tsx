@@ -4,6 +4,7 @@ import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
+  getFooterData,
   getHomeSettings,
   getPodcasts,
   getPodcastsCount,
@@ -50,16 +51,22 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (conte
   const locale:any = context.params.locale || 'en'; 
   const itemsPerPage = siteConfig.pagination.childItemsPerPage
 
-  const [podcasts, latestPodcasts, totalPodcasts, tags, homeSettings,categories] = await Promise.all([
+  const [podcasts, latestPodcasts, totalPodcasts, tags, homeSettings,categories,footerData] = await Promise.all([
     getPodcasts(client, 0, itemsPerPage, locale),
     getPodcasts(client, 0, 5,locale),
     getPodcastsCount(client,locale),
     getTags(client),
     getHomeSettings(client,locale),
-    getCategories(client)
+    getCategories(client),
+    getFooterData(client, locale)
   ])
 
   const totalPages = Math.ceil(totalPodcasts / itemsPerPage)
+
+    
+  if (!podcasts || podcasts.length === 0) {
+    return { notFound: true };
+  }
 
   return {
     props: {
@@ -70,7 +77,8 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (conte
       totalPages,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
@@ -82,7 +90,8 @@ const PodcastsPage = ({
   totalPages,
   tags,
   homeSettings,
-  categories
+  categories,
+  footerData
 }: {
   podcasts: Podcasts[]
   latestPodcasts: Podcasts[]
@@ -90,6 +99,7 @@ const PodcastsPage = ({
   tags: any
   homeSettings: any
   categories: any
+  footerData: any
 }) => {
   const router = useRouter()
   const baseUrl = `/${siteConfig.pageURLs.podcast}`;
@@ -109,7 +119,7 @@ const PodcastsPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {podcasts?.map((e, i) => {

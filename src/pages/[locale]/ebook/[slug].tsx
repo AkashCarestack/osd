@@ -4,6 +4,7 @@ import {
   ebookSlugsQuery,
   getCategories,
   getEbook,
+  getFooterData,
   getHomeSettings,
   getTagRelatedContents,
   getTags,
@@ -18,7 +19,6 @@ import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
 import DownloadEbook from '~/contentUtils/EbookDownloader'
 import SEOHead from '~/layout/SeoHead'
 import { generateJSONLD } from '~/utils/generateJSONLD'
-import EbookCard from '~/components/uiBlocks/EbookCard'
 import Section from '~/components/Section'
 import { CustomHead, generateMetaData } from '~/utils/customHead'
 import SidebarTitle from '~/components/typography/SidebarTitle'
@@ -27,7 +27,7 @@ import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import siteConfig from 'config/siteConfig'
 import RelatedTag from '~/components/commonSections/RelatedTag'
 
-interface Props {
+export interface EbookProps {
   ebook: Ebooks
   limitedEbooks?: any
   draftMode: boolean
@@ -36,6 +36,7 @@ interface Props {
   tags: any
   homeSettings: any
   categories: any
+  footerData: any
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -58,7 +59,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-export const getStaticProps: GetStaticProps<Props> = async ({
+export const getStaticProps: GetStaticProps<EbookProps> = async ({
   draftMode = false,
   params = {},
 }) => {
@@ -82,6 +83,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
+  const footerData = await getFooterData(client, region)
 
   return {
     props: {
@@ -91,7 +93,8 @@ export const getStaticProps: GetStaticProps<Props> = async ({
       relatedContents,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
@@ -99,12 +102,12 @@ export const getStaticProps: GetStaticProps<Props> = async ({
 const EbookPage = ({
   ebook,
   relatedContents,
-  tags,
   homeSettings,
   draftMode,
   token,
-  categories
-}: Props) => {
+  categories,
+  footerData
+}: EbookProps) => {
   if(!ebook) return null
   const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
 
@@ -119,7 +122,7 @@ const EbookPage = ({
 
   return (
     <>
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
         <SEOHead
           title={seoTitle}
           description={seoDescription}

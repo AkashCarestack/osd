@@ -4,6 +4,7 @@ import {
   caseStudySlugsQuery,
   getCaseStudy,
   getCategories,
+  getFooterData,
   getHomeSettings,
   getTagRelatedContents,
   getTags,
@@ -38,6 +39,7 @@ interface Props {
   tags: any
   homeSettings: any
   categories: any
+  footerData: any
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -84,7 +86,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
-
+  const footerData = await getFooterData(client, region)
   
 
   return {
@@ -95,7 +97,8 @@ export const getStaticProps: GetStaticProps<Props> = async ({
       relatedContents,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
@@ -107,7 +110,8 @@ const CaseStudyPage = ({
   homeSettings,
   draftMode,
   token,
-  categories
+  categories,
+  footerData
 }: Props) => {
   if (!caseStudy) {
     return null
@@ -125,7 +129,7 @@ const CaseStudyPage = ({
 
   return (
     <>
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
         <SEOHead
           title={seoTitle}
           description={seoDescription}

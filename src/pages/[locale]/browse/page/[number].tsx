@@ -10,6 +10,7 @@ import {
   getWebinarsCount,
   getHomeSettings,
   getCategories,
+  getFooterData,
 } from '~/lib/sanity.queries'
 import { getClient } from '~/lib/sanity.client'
 import siteConfig from 'config/siteConfig'
@@ -41,7 +42,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     totalArticles,
     totalEbooks,
     homeSettings,
-    categories
+    categories,
+    footerData
   ] = await Promise.all([
     getPostsByLimit(client, startLimit, endLimit, undefined, region),
     getPosts(client, undefined, region),
@@ -51,7 +53,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getArticlesCount(client, region),
     getEbooksCount(client, region),
     getHomeSettings(client, region),
-    getCategories(client)
+    getCategories(client),
+    getFooterData(client, region)
   ]);
 
   return {
@@ -62,6 +65,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       totalPosts,
       currentPage: pageNumber,
       categories,
+      footerData,
       homeSettings,
       contentCount: {
         podcasts: totalPodcasts,
@@ -102,7 +106,8 @@ export default function TagPagePaginated({
   contentCount,
   totalPosts,
   homeSettings,
-  categories
+  categories,
+  footerData
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const router = useRouter()
   const totalCount: any = totalPosts?.length ?? 0
@@ -117,7 +122,7 @@ export default function TagPagePaginated({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           <ContentHub contentCount={contentCount} />

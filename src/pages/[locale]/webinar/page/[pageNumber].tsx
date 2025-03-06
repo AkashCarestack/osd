@@ -60,6 +60,10 @@ export const getStaticProps: GetStaticProps<
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
 
+  if (!webinars || webinars.length === 0) {
+    return { notFound: true };
+  }
+
   return {
     props: {
       draftMode,

@@ -32,7 +32,7 @@ const BannerBlock: React.FC<BannerBlockProps> = ({ bannerBlock }) => {
           link={
             bannerBlock?.buttonLink
               ? bannerBlock?.buttonLink
-              : 'https://carestack.com/demo'
+              : 'https://voicestack.com/?refer=carestack'
           }
         >
           <span className="text-base font-medium">

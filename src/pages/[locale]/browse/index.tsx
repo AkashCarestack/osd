@@ -5,6 +5,7 @@ import {
   getArticlesCount,
   getCategories,
   getEbooksCount,
+  getFooterData,
   getHomeSettings,
   getPodcastsCount,
   getPosts,
@@ -67,7 +68,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     totalArticles,
     totalEbooks,
     homeSettings,
-    categories
+    categories,
+    footerData
   ] = await Promise.all([
     getTags(client),
     getPostsByLimit(client, startLimit, cardsPerPage,undefined,region),
@@ -78,7 +80,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getArticlesCount(client,region),
     getEbooksCount(client,region),
     getHomeSettings(client,region),
-    getCategories(client)
+    getCategories(client),
+    getFooterData(client, region)
   ])
   
 
@@ -91,6 +94,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       totalPages,
       totalPosts,
       categories,
+      footerData,
       currentPage: pageNumber,
       contentCount: {
         podcasts: totalPodcasts,
@@ -121,7 +125,8 @@ export default function ProjectSlugRoute(
     totalPosts,
     siteSettings,
     homeSettings,
-    categories
+    categories,
+    footerData
   } = props
   const totalCount: any = totalPosts.length ?? 0
 
@@ -140,7 +145,7 @@ export default function ProjectSlugRoute(
 
   return (
     <>
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
         <BaseUrlProvider baseUrl={baseUrl}>
           <Layout>
             {siteSettingWithImage ? (

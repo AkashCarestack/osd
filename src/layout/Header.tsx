@@ -86,7 +86,7 @@ const Header = () => {
         <header
           className={`fixed w-full top-0 left-0 z-20 transition-all duration-300 ease-linear ${headerFixed && `!fixed w-full ${homeSettings?.demoBanner ? '!top-[-44px]' : '!top-0'}  left-0`}`}      >
           {homeSettings?.demoBanner && <div className={`bg-cs-primary group hover:bg-[#42dd88] transition-all duration-200 px-4 h-[44px]`}>
-            <Anchor href="https://carestack.com/demo" className="flex justify-center py-3">
+            <Anchor href="https://voicestack.com/?refer=carestack " className="flex justify-center py-3">
               <div className="max-w-7xl flex justify-center gap-3 w-full items-center">
                 <div className="text-xs md:text-sm text-zinc-900">
                   {` Book a Demo with us - It's free!`}

@@ -6,6 +6,7 @@ import {
   getCaseStudies,
   getCaseStudiesCount,
   getCategories,
+  getFooterData,
   getHomeSettings,
   getTags,
   getTestiMonials,
@@ -15,7 +16,7 @@ import Layout from '~/components/Layout'
 import AllcontentSection from '~/components/sections/AllcontentSection'
 import { useRouter } from 'next/router'
 import siteConfig from '../../../../config/siteConfig'
-import React, { useRef } from 'react'
+import React from 'react'
 import Pagination from '~/components/commonSections/Pagination'
 import { CustomHead, customMetaTag } from '~/utils/customHead'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
@@ -61,6 +62,11 @@ export const getStaticProps: GetStaticProps<
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client,region)
   const categories = await getCategories(client)
+  const footerData = await getFooterData(client, region)
+  
+  if (!caseStudies || caseStudies.length === 0) {
+    return { notFound: true };
+  }
 
   return {
     props: {
@@ -72,7 +78,8 @@ export const getStaticProps: GetStaticProps<
       testimonials,
       tags,
       homeSettings,
-      categories
+      categories,
+      footerData
     },
   }
 }
@@ -84,7 +91,8 @@ const CaseStudiesPage = ({
   totalPages,
   testimonials,
   tags,
-  categories
+  categories,
+  footerData
 }: {
   caseStudies: CaseStudies[]
   latestCaseStudies: CaseStudies[]
@@ -93,6 +101,7 @@ const CaseStudiesPage = ({
   tags: any
   homeSettings: any
   categories: any
+  footerData: any
 }) => {
   const router = useRouter()
   const baseUrl = `/${siteConfig.pageURLs.caseStudy}`
@@ -101,7 +110,7 @@ const CaseStudiesPage = ({
     tagName: 'CUSTOMER STORIES',
     title: 'Learn from the Best: Dental Practice Success Stories',
     description:
-      'From small, solo practices to large, multi-location clinics, these case studies demonstrate the versatility and value of CareStack in improving the patient experience and driving practice growth.',
+      'From small, solo practices to large, multi-location clinics, these case studies demonstrate the versatility and value of VoiceStack in improving the patient experience and driving practice growth.',
     mainImage:
       'https://cdn.sanity.io/images/bbmnn1wc/production/e2d855bb29dd80923c85acec6ddcaaabeb50248c-1724x990.png',
   }
@@ -127,7 +136,7 @@ const CaseStudiesPage = ({
   )
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags}>
+    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           <TagSelect tags={tags} tagLimit={7}  />
