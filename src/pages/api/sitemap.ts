@@ -1,8 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-import { getClient } from '~/lib/sanity.client'
-import { readToken } from '~/lib/sanity.api'
-import { getSitemapData } from '~/lib/sanity.queries'
 import siteConfig from 'config/siteConfig'
+import { NextApiRequest, NextApiResponse } from 'next'
+
+import { readToken } from '~/lib/sanity.api'
+import { getClient } from '~/lib/sanity.client'
+import { getSitemapData } from '~/lib/sanity.queries'
 import { generateHref } from '~/utils/common'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
@@ -33,7 +34,7 @@ function generateSiteMap(posts: any[]) {
   locales.forEach((locale) => {
     const staticPages = [
       // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.caseStudy)}`,
-      // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.article)}`,
+      `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.article)}`,
       // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.podcast)}`,
       // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.ebook)}`,
       // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.webinar)}`,

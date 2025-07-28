@@ -1,6 +1,7 @@
 import { Post } from '~/interfaces/post'
-import { fetchAuthor } from './common'
 import { urlForImage } from '~/lib/sanity.image'
+
+import { fetchAuthor } from './common'
 
 export function generateJSONLD(post: any) {
   const {

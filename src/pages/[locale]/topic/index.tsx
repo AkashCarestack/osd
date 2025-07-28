@@ -1,5 +1,13 @@
+import siteConfig from 'config/siteConfig'
 import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
+import { useRouter } from 'next/router'
+
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { BaseUrlProvider } from '~/components/Context/UrlContext'
 import Layout from '~/components/Layout'
+import AllcontentSection from '~/components/sections/AllcontentSection'
+import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
+import ContentHub from '~/contentUtils/ContentHub'
 import { getClient } from '~/lib/sanity.client'
 import {
   getArticlesCount,
@@ -15,14 +23,7 @@ import {
   getTags,
   getWebinarsCount,
 } from '~/lib/sanity.queries'
-import AllcontentSection from '~/components/sections/AllcontentSection'
-import siteConfig from 'config/siteConfig'
-import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
-import { useRouter } from 'next/router'
-import ContentHub from '~/contentUtils/ContentHub'
-import { BaseUrlProvider } from '~/components/Context/UrlContext'
 import { defaultMetaTag } from '~/utils/customHead'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 
 interface Query {
   [key: string]: string

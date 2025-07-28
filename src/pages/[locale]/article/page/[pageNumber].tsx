@@ -1,7 +1,15 @@
-import { GetStaticProps, GetStaticPaths } from 'next'
+import { GetStaticPaths,GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
+import React, { useContext, useRef } from 'react'
+
+import Pagination from '~/components/commonSections/Pagination'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { BaseUrlProvider } from '~/components/Context/UrlContext'
 import Layout from '~/components/Layout'
 import AllcontentSection from '~/components/sections/AllcontentSection'
+import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
+import { Articles } from '~/interfaces/post'
+import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
   getArticles,
@@ -12,16 +20,10 @@ import {
   getSiteSettings,
   getTags,
 } from '~/lib/sanity.queries'
-import { readToken } from '~/lib/sanity.api'
-import { SharedPageProps } from '../../../_app'
-import { Articles } from '~/interfaces/post'
-import siteConfig from '../../../../../config/siteConfig'
-import React, { useContext, useRef } from 'react'
-import Pagination from '~/components/commonSections/Pagination'
-import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
-import { BaseUrlProvider } from '~/components/Context/UrlContext'
 import { CustomHead, customMetaTag } from '~/utils/customHead'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+
+import siteConfig from '../../../../../config/siteConfig'
+import { SharedPageProps } from '../../../_app'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient();

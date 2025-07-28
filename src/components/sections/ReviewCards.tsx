@@ -1,12 +1,14 @@
-import React from 'react'
-import Card from '../Card'
-import Wrapper from '~/layout/Wrapper'
-import Section from '../Section'
-import Link from 'next/link'
 import { ArrowTopRightIcon } from '@sanity/icons'
 import siteConfig from 'config/siteConfig'
-import H2Large from '../typography/H2Large'
+import Link from 'next/link'
+import React from 'react'
+
+import Wrapper from '~/layout/Wrapper'
+
+import Card from '../Card'
 import Anchor from '../commonSections/Anchor'
+import Section from '../Section'
+import H2Large from '../typography/H2Large'
 
 interface LatestBlogsProps {
   testimonials?: any[]

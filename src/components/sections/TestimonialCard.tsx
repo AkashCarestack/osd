@@ -1,8 +1,10 @@
 import React from 'react'
+
+import ChordIcon from '~/assets/reactiveAssets/ChordIcon'
+
 import AuthorInfo from '../commonSections/AuthorInfo'
 import DescriptionText from '../typography/DescriptionText'
 import H3Medium from '../typography/H3Medium'
-import ChordIcon from '~/assets/reactiveAssets/ChordIcon'
 
 interface TestimonialCardProps {
   testimonial: any

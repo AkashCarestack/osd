@@ -1,16 +1,19 @@
-import React, { useRef, useEffect, useMemo } from 'react'
-import { Post } from '~/interfaces/post'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import Link from 'next/link'
+
 import { ChevronLeftIcon } from '@sanity/icons'
 import { ChevronRightIcon } from '@sanity/icons'
-import { useRouter } from 'next/router'
 import siteConfig from 'config/siteConfig'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useEffect, useMemo,useRef } from 'react'
+import { Navigation, Pagination } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+import { Post } from '~/interfaces/post'
 import { generateHref } from '~/utils/common'
+
 import Anchor from '../commonSections/Anchor'
 
 interface TagsCarouselProps {

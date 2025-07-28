@@ -2,6 +2,7 @@ import { useTracking } from 'cs-tracker'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+
 import { getCssSelectorShort } from '~/helpers/createCSSSelector'
 import { getParams, getQueryParamFromLink } from '~/helpers/getQueryParams'
 import { generateId } from '~/utils/common'

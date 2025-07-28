@@ -1,20 +1,23 @@
-import Wrapper from '~/layout/Wrapper';
-import React, { useEffect, useRef, useState } from 'react'; // Added useState
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, EffectFade } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
-import ImageLoader from './commonSections/ImageLoader';
-import Section from './Section';
-import SubText from './typography/SubText';
-import H4Large from './typography/H4Large';
-import Button from './commonSections/Button';
+
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc'; 
 import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc'; 
+import React, { useEffect, useRef, useState } from 'react'; // Added useState
+import { EffectFade,Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import Wrapper from '~/layout/Wrapper';
+
+import Button from './commonSections/Button';
+import ImageLoader from './commonSections/ImageLoader';
 import { useGlobalData } from './Context/GlobalDataContext';
+import Section from './Section';
+import H4Large from './typography/H4Large';
+import SubText from './typography/SubText';
 
 dayjs.extend(utc); 
 dayjs.extend(timezone); 

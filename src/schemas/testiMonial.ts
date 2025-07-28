@@ -1,5 +1,5 @@
-import { defineField, defineType } from 'sanity'
 import {DashboardIcon} from '@sanity/icons'
+import { defineField, defineType } from 'sanity'
 export default defineType({
   name: 'testimonial',
   title: 'Testimonial',

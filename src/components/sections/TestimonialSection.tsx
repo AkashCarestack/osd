@@ -1,14 +1,16 @@
-import React from 'react'
-import { Post } from '~/interfaces/post'
-import Card from '../Card'
-import { urlForImage } from '~/lib/sanity.image'
 import Image from 'next/image'
-import Wrapper from '../../layout/Wrapper'
 import Link from 'next/link'
-import useMediaQuery from '~/utils/useMediaQueryHook'
-import Section from '../Section'
-import ImageLoader from '../commonSections/ImageLoader'
+import React from 'react'
+
+import { Post } from '~/interfaces/post'
+import { urlForImage } from '~/lib/sanity.image'
 import { capitalizeFirst } from '~/utils/common'
+import useMediaQuery from '~/utils/useMediaQueryHook'
+
+import Wrapper from '../../layout/Wrapper'
+import Card from '../Card'
+import ImageLoader from '../commonSections/ImageLoader'
+import Section from '../Section'
 
 interface TestimonialSectionProps {
   testimonials: {

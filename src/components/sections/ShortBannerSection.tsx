@@ -1,10 +1,11 @@
-import React from 'react'
-import Wrapper from '../../layout/Wrapper'
-import Link from 'next/link'
-import icLogo from '../../assets/inner-circle.svg'
-import Image from 'next/image'
 import { ArrowTopRightIcon } from '@sanity/icons'
+import Image from 'next/image'
+import Link from 'next/link'
+import React from 'react'
+
 import eventBanner from '../../assets/event-banner.svg'
+import icLogo from '../../assets/inner-circle.svg'
+import Wrapper from '../../layout/Wrapper'
 import Anchor from '../commonSections/Anchor'
 
 function ShortBannerSection() {

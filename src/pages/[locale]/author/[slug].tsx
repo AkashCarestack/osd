@@ -1,4 +1,17 @@
+import siteConfig from 'config/siteConfig'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
+import { useRef } from 'react'
+
+import ImageLoader from '~/components/commonSections/ImageLoader'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { BaseUrlProvider } from '~/components/Context/UrlContext'
+import Layout from '~/components/Layout'
+import Section from '~/components/Section'
+import AllcontentSection from '~/components/sections/AllcontentSection'
+import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
+import { Author, Post } from '~/interfaces/post'
+import Wrapper from '~/layout/Wrapper'
+import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
   authorSlugsQuery,
@@ -9,20 +22,9 @@ import {
   getHomeSettings,
   getTags,
 } from '~/lib/sanity.queries'
-import Layout from '~/components/Layout'
-import Wrapper from '~/layout/Wrapper'
-import { readToken } from '~/lib/sanity.api'
-import { Author, Post } from '~/interfaces/post'
-import { SharedPageProps } from '../../_app'
-import AllcontentSection from '~/components/sections/AllcontentSection'
-import siteConfig from 'config/siteConfig'
-import Section from '~/components/Section'
-import { useRef } from 'react'
-import { BaseUrlProvider } from '~/components/Context/UrlContext'
-import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
-import ImageLoader from '~/components/commonSections/ImageLoader'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import { CustomHead, metaTagDataForAuthor } from '~/utils/customHead'
+
+import { SharedPageProps } from '../../_app'
 
 interface Query {
   [key: string]: string

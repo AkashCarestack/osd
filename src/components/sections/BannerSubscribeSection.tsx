@@ -1,11 +1,13 @@
+import Link from 'next/link'
 import React, { use, useEffect, useState } from 'react'
+
+import Wrapper from '~/layout/Wrapper'
+
+import Anchor from '../commonSections/Anchor'
 import Button from '../commonSections/Button'
 import Section from '../Section'
-import Wrapper from '~/layout/Wrapper'
 import H3XL from '../typography/H3XL'
-import Link from 'next/link'
 import H34XL from '../typography/H34XL'
-import Anchor from '../commonSections/Anchor'
 
 interface BannerSubscribeSectionProps {
   isSmall?: boolean

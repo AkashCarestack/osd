@@ -1,7 +1,9 @@
 import Link from 'next/link'
+
 import Header from '~/layout/Header'
-import { useGlobalData } from './Context/GlobalDataContext'
 import VSfooter from '~/layout/VSfooter'
+
+import { useGlobalData } from './Context/GlobalDataContext'
 
 interface LayoutProps {
   children: React.ReactNode

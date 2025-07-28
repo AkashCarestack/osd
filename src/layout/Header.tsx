@@ -1,32 +1,34 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import ProgressBar from '~/utils/progressBar/progressBar';
 import { ArrowRightIcon, ChevronDownIcon } from '@sanity/icons'
-import { useRouter } from 'next/router';
 import { CloseIcon } from '@sanity/icons'
-import useMediaQuery from '~/utils/useMediaQueryHook';
-import GrowthClubLogo from '~/assets/reactiveAssets/GrowthClubLogo';
-import { NavPopover } from './overlaynav/NavPopover';
-import { useGlobalData } from '~/components/Context/GlobalDataContext';
 import { MenuIcon } from '@sanity/icons';
+import siteConfig from 'config/siteConfig';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation'
+import { useRouter } from 'next/router';
+import React, { useEffect, useRef, useState } from 'react';
+
+import GrowthClubLogo from '~/assets/reactiveAssets/GrowthClubLogo';
 import { CaseStudiesIcon } from '~/assets/reactiveAssets/svgs';
 import { ArticlesIcon } from '~/assets/reactiveAssets/svgs';
 import { PodcastsIcon } from '~/assets/reactiveAssets/svgs';
 import { EbooksIcon } from '~/assets/reactiveAssets/svgs';
 import { WebinarsIcon } from '~/assets/reactiveAssets/svgs';
 import { PressIcon } from '~/assets/reactiveAssets/svgs';
-import { usePathname } from 'next/navigation'
-import siteConfig from 'config/siteConfig';
-import  {ShortNavPopover}  from './overlaynav/ShortNavPopover';
-import RegionSwitcher from '~/components/RegionSwitcher';
-import { generateHref, normalizePath } from '~/utils/common';
 import VoiceStackResources from '~/assets/reactiveAssets/VoiceStackResources';
 import Anchor from '~/components/commonSections/Anchor';
+import { useGlobalData } from '~/components/Context/GlobalDataContext';
+import RegionSwitcher from '~/components/RegionSwitcher';
+import { generateHref, normalizePath } from '~/utils/common';
+import ProgressBar from '~/utils/progressBar/progressBar';
+import useMediaQuery from '~/utils/useMediaQueryHook';
+
+import { NavPopover } from './overlaynav/NavPopover';
+import  {ShortNavPopover}  from './overlaynav/ShortNavPopover';
 
 
 export const navigationLinks = [
   // { href: siteConfig.pageURLs.caseStudy, label: "Case Studies", icon: CaseStudiesIcon },
-  // { href: siteConfig.pageURLs.article, label: "Articles", icon: ArticlesIcon },
+  { href: siteConfig.pageURLs.article, label: "Articles", icon: ArticlesIcon },
   // { href: siteConfig.pageURLs.podcast, label: "Podcasts", icon: PodcastsIcon },
   // { href: siteConfig.pageURLs.ebook, label: "Ebooks", icon: EbooksIcon },
   // { href: siteConfig.pageURLs.webinar, label: "Webinars", icon: WebinarsIcon },

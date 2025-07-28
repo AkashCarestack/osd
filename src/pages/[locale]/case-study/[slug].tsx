@@ -1,5 +1,24 @@
-import { GetStaticProps, GetStaticPaths } from 'next'
+import siteConfig from 'config/siteConfig'
+import { GetStaticPaths,GetStaticProps } from 'next'
+
+import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
+import AuthorInfo from '~/components/commonSections/AuthorInfo'
+import RelatedTag from '~/components/commonSections/RelatedTag'
+import ShareableLinks from '~/components/commonSections/ShareableLinks'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import Layout from '~/components/Layout'
+import MainImageSection from '~/components/MainImageSection'
+import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
+import Section from '~/components/Section'
+import AsideBannerBlock from '~/components/sections/asideBannerBlock'
+import PracticeProfile from '~/contentUtils/PracticeProfile'
+import { Toc } from '~/contentUtils/sanity-toc'
+import { CaseStudies } from '~/interfaces/post'
+import SEOHead from '~/layout/SeoHead'
+import Wrapper from '~/layout/Wrapper'
+import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
+import { urlForImage } from '~/lib/sanity.image'
 import {
   caseStudySlugsQuery,
   getCaseStudy,
@@ -9,27 +28,9 @@ import {
   getTagRelatedContents,
   getTags,
 } from '~/lib/sanity.queries'
-import { CaseStudies } from '~/interfaces/post'
-import Wrapper from '~/layout/Wrapper'
-import { readToken } from '~/lib/sanity.api'
-import MainImageSection from '~/components/MainImageSection'
-import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
-import Layout from '~/components/Layout'
-import AsideBannerBlock from '~/components/sections/asideBannerBlock'
-import PracticeProfile from '~/contentUtils/PracticeProfile'
-import SEOHead from '~/layout/SeoHead'
-import { generateJSONLD } from '~/utils/generateJSONLD'
-import { urlForImage } from '~/lib/sanity.image'
-import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
-import { Toc } from '~/contentUtils/sanity-toc'
-import ShareableLinks from '~/components/commonSections/ShareableLinks'
-import Section from '~/components/Section'
-import { CustomHead, customMetaTag, generateMetaData } from '~/utils/customHead'
-import AuthorInfo from '~/components/commonSections/AuthorInfo'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import homeSettings from '~/schemas/homeSettings'
-import siteConfig from 'config/siteConfig'
-import RelatedTag from '~/components/commonSections/RelatedTag'
+import { CustomHead, customMetaTag, generateMetaData } from '~/utils/customHead'
+import { generateJSONLD } from '~/utils/generateJSONLD'
 
 interface Props {
   caseStudy: CaseStudies

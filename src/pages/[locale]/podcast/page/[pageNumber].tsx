@@ -1,7 +1,15 @@
-import { GetStaticProps, GetStaticPaths } from 'next'
+import siteConfig from 'config/siteConfig'
+import { GetStaticPaths,GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
+import React, { useRef } from 'react'
+
+import Pagination from '~/components/commonSections/Pagination'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { BaseUrlProvider } from '~/components/Context/UrlContext'
 import Layout from '~/components/Layout'
 import AllcontentSection from '~/components/sections/AllcontentSection'
+import {  Podcasts } from '~/interfaces/post'
+import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
@@ -11,15 +19,8 @@ import {
   getPodcastsCount,
   getTags,
 } from '~/lib/sanity.queries'
-import { readToken } from '~/lib/sanity.api'
-import {  Podcasts } from '~/interfaces/post'
-import React, { useRef } from 'react'
-import Pagination from '~/components/commonSections/Pagination'
-import { BaseUrlProvider } from '~/components/Context/UrlContext'
-import { CustomHead, customMetaTag } from '~/utils/customHead'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import { SharedPageProps } from '~/pages/_app'
-import siteConfig from 'config/siteConfig'
+import { CustomHead, customMetaTag } from '~/utils/customHead'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient();

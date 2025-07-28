@@ -1,8 +1,9 @@
+import { DownloadIcon } from '@sanity/icons'
 import React from 'react'
+
 import Breadcrumb from '~/components/commonSections/BreadCrumb'
 import Button from '~/components/commonSections/Button'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
-import { DownloadIcon } from '@sanity/icons'
 
 const DownloadEbook = ({ ebook }) => {
   if (!ebook) {

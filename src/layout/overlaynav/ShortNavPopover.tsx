@@ -1,17 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react'
-import Wrapper from '../Wrapper'
-import { useGlobalData } from '~/components/Context/GlobalDataContext'
-import Link from 'next/link'
 import {
-  CloseIcon,
-  ChevronRightIcon,
   ChevronLeftIcon,
+  ChevronRightIcon,
+  CloseIcon,
 } from '@sanity/icons'
-import { useRouter } from 'next/router'
-import GrowthClubLogo from '~/assets/reactiveAssets/GrowthClubLogo'
 import siteConfig from 'config/siteConfig'
-import { generateHref, normalizePath } from '~/utils/common'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useEffect,useRef, useState } from 'react'
+
+import GrowthClubLogo from '~/assets/reactiveAssets/GrowthClubLogo'
 import Anchor from '~/components/commonSections/Anchor'
+import { useGlobalData } from '~/components/Context/GlobalDataContext'
+import { generateHref, normalizePath } from '~/utils/common'
+
+import Wrapper from '../Wrapper'
 
 interface ShortNavPopoverProps {
   className?: string

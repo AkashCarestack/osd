@@ -1,9 +1,11 @@
+import siteConfig from 'config/siteConfig'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+
+import { generateHref } from '~/utils/common'
+
 import Section from '../Section'
 import DescriptionText from '../typography/DescriptionText'
-import siteConfig from 'config/siteConfig'
-import { useRouter } from 'next/router'
-import { generateHref } from '~/utils/common'
 import Anchor from './Anchor'
 
 interface RelatedTagProps {

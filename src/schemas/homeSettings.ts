@@ -1,6 +1,7 @@
-import { HomeIcon, DocumentIcon, TagIcon } from '@sanity/icons';
-import { defineField } from 'sanity';
+import { DocumentIcon, HomeIcon, TagIcon } from '@sanity/icons';
 import {ProjectsIcon} from '@sanity/icons'
+import { defineField } from 'sanity';
+
 import { uniqueTestimonialsValidation } from '~/utils/customValidation';
 export default {
   name: 'homeSettings',

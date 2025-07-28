@@ -1,16 +1,18 @@
-import React from 'react'
 import Link from 'next/link'
-import { Post } from '~/interfaces/post'
-import { getRelatedFeatures } from '~/utils/common'
-import ShareableLinks from './commonSections/ShareableLinks'
 import { useRouter } from 'next/router'
-import { getBasePath } from '~/utils/getBasePath'
-import post from '~/schemas/post'
-import H3Large from './typography/H3Large'
-import AllcontentSection from './sections/AllcontentSection'
-import Section from './Section'
+import React from 'react'
+
+import { Post } from '~/interfaces/post'
 import Wrapper from '~/layout/Wrapper'
+import post from '~/schemas/post'
+import { getRelatedFeatures } from '~/utils/common'
+import { getBasePath } from '~/utils/getBasePath'
+
+import ShareableLinks from './commonSections/ShareableLinks'
+import Section from './Section'
+import AllcontentSection from './sections/AllcontentSection'
 import BannerSubscribeSection from './sections/BannerSubscribeSection'
+import H3Large from './typography/H3Large'
 
 interface RelatedFeaturesSectionProps {
   allPosts: any[]

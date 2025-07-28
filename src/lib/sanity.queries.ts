@@ -2,6 +2,7 @@ import type { PortableTextBlock } from '@portabletext/types'
 import type { ImageAsset, Slug } from '@sanity/types'
 import groq from 'groq'
 import { type SanityClient } from 'next-sanity'
+
 import { Author, Post, Tag } from '~/interfaces/post'
 
 // Common Body query  for $portableText  update the dynamic component query here

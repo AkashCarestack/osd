@@ -1,9 +1,10 @@
 // FeaturedAndPopularBlogs.tsx
 import { Post } from '~/interfaces/post'
+
 import Wrapper from '../../layout/Wrapper'
 import Card from '../Card'
-import H2Large from '../typography/H2Large'
 import Section from '../Section'
+import H2Large from '../typography/H2Large'
 
 interface FeaturedAndPopularBlogsProps {
   featuredBlog: Post

@@ -1,12 +1,14 @@
-import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react";
-import { getInitialSession, getSession, storePracticeName, storeSession } from "./session";
-import { IUser, generateUserData, getLocationByIP, getUser, storeUser } from "./user";
 import { useDevice, useTracking } from "cs-tracker";
-import { createObservableObject, proxyDecode } from "./observer";
-import { useRouter } from "next/router";
 import { getDeviceData } from "cs-tracker";
-import { eraseCookie, getCookie } from "./cookie";
+import { useRouter } from "next/router";
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
+
 import { getParams } from "~/helpers/getQueryParams";
+
+import { eraseCookie, getCookie } from "./cookie";
+import { createObservableObject, proxyDecode } from "./observer";
+import { getInitialSession, getSession, storePracticeName, storeSession } from "./session";
+import { generateUserData, getLocationByIP, getUser, IUser, storeUser } from "./user";
 
 export const createSession = async () => {
 

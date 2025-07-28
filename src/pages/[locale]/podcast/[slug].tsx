@@ -1,5 +1,22 @@
-import { GetStaticProps, GetStaticPaths } from 'next'
+import siteConfig from 'config/siteConfig'
+import { GetStaticPaths,GetStaticProps } from 'next'
+
+import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
+import AuthorInfo from '~/components/commonSections/AuthorInfo'
+import RelatedTag from '~/components/commonSections/RelatedTag'
+import ShareableLinks from '~/components/commonSections/ShareableLinks'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import Layout from '~/components/Layout'
+import MainImageSection from '~/components/MainImageSection'
+import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
+import Section from '~/components/Section'
+import PodcastNavigator from '~/contentUtils/PodcastNavigator'
+import { Podcasts } from '~/interfaces/post'
+import SEOHead from '~/layout/SeoHead'
+import Wrapper from '~/layout/Wrapper'
+import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
+import { urlForImage } from '~/lib/sanity.image'
 import {
   getAllPodcastSlugs,
   getCategories,
@@ -10,24 +27,8 @@ import {
   getTags,
   podcastSlugsQuery,
 } from '~/lib/sanity.queries'
-import { Podcasts } from '~/interfaces/post'
-import Wrapper from '~/layout/Wrapper'
-import { readToken } from '~/lib/sanity.api'
-import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
-import Layout from '~/components/Layout'
-import MainImageSection from '~/components/MainImageSection'
-import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
-import { generateJSONLD } from '~/utils/generateJSONLD'
-import SEOHead from '~/layout/SeoHead'
-import { urlForImage } from '~/lib/sanity.image'
-import AuthorInfo from '~/components/commonSections/AuthorInfo'
-import ShareableLinks from '~/components/commonSections/ShareableLinks'
-import PodcastNavigator from '~/contentUtils/PodcastNavigator'
-import Section from '~/components/Section'
 import { generateMetaData } from '~/utils/customHead'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
-import siteConfig from 'config/siteConfig'
-import RelatedTag from '~/components/commonSections/RelatedTag'
+import { generateJSONLD } from '~/utils/generateJSONLD'
 
 interface Props {
   podcast: Podcasts

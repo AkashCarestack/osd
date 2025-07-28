@@ -1,6 +1,12 @@
 import type { GetStaticProps } from 'next'
+import Head from 'next/head'
+
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import Layout from '~/components/Layout'
+import { Post } from '~/interfaces/post'
+import DynamicPages from '~/layout/DynamicPages'
 import { readToken } from '~/lib/sanity.api'
+import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
   getEbooks,
@@ -15,12 +21,7 @@ import {
   getWebinars,
 } from '~/lib/sanity.queries'
 import type { SharedPageProps } from '~/pages/_app'
-import { Post } from '~/interfaces/post'
-import { getClient } from '~/lib/sanity.client'
-import DynamicPages from '~/layout/DynamicPages'
-import Head from 'next/head'
 import { defaultMetaTag } from '~/utils/customHead'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 
 interface IndexPageProps {
   footerData: unknown

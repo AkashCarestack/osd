@@ -1,4 +1,14 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
+import React, { useRef } from 'react'
+
+import Pagination from '~/components/commonSections/Pagination'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { BaseUrlProvider } from '~/components/Context/UrlContext'
+import Layout from '~/components/Layout'
+import AllcontentSection from '~/components/sections/AllcontentSection'
+import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
+import LatestBlogs from '~/components/sections/LatestBlogSection'
+import TagSelect from '~/contentUtils/TagSelector'
 import { Podcasts, PressRelease } from '~/interfaces/post'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
@@ -10,19 +20,11 @@ import {
   getPressReleasesCount,
   getTags,
 } from '~/lib/sanity.queries'
-import { SharedPageProps } from '../../_app'
-import Layout from '~/components/Layout'
-import LatestBlogs from '~/components/sections/LatestBlogSection'
-import AllcontentSection from '~/components/sections/AllcontentSection'
-import siteConfig from '../../../../config/siteConfig'
-import React, { useRef } from 'react'
-import Pagination from '~/components/commonSections/Pagination'
-import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
-import { BaseUrlProvider } from '~/components/Context/UrlContext'
-import { customMetaTag, CustomHead } from '~/utils/customHead'
-import TagSelect from '~/contentUtils/TagSelector'
 import { mergeAndRemoveDuplicates } from '~/utils/common'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { CustomHead,customMetaTag } from '~/utils/customHead'
+
+import siteConfig from '../../../../config/siteConfig'
+import { SharedPageProps } from '../../_app'
 
 export const getStaticPaths: GetStaticPaths = async () => {
 

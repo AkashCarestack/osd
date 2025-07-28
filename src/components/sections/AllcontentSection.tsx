@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react'
 import { ArrowTopRightIcon } from '@sanity/icons'
 import siteConfig from 'config/siteConfig'
-import Wrapper from '~/layout/Wrapper'
-import Card from '../Card'
-import Section from '../Section'
-import H2Large from '../typography/H2Large'
-import { useBaseUrl } from '../Context/UrlContext'
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
+
+import Wrapper from '~/layout/Wrapper'
 import { generateHref, removeUnwantedCharacters } from '~/utils/common'
-import DescriptionText from '../typography/DescriptionText'
-import { useGlobalData } from '../Context/GlobalDataContext'
+
+import Card from '../Card'
 import Anchor from '../commonSections/Anchor'
+import { useGlobalData } from '../Context/GlobalDataContext'
+import { useBaseUrl } from '../Context/UrlContext'
+import Section from '../Section'
+import DescriptionText from '../typography/DescriptionText'
+import H2Large from '../typography/H2Large'
 
 interface LatestBlogsProps {
   allContent: any[]

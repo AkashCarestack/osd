@@ -1,5 +1,6 @@
 import Image from 'next/image'
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef,useState } from 'react'
+
 import { urlForImage } from '~/lib/sanity.image'
 import useBoundingWidth, { DeviceType } from '~/utils/boundingWIdthHook'
 import { average } from '~/utils/color'

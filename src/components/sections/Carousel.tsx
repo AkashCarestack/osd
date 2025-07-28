@@ -1,13 +1,16 @@
-import React, { useRef, useEffect } from 'react'
-import { Post } from '~/interfaces/post'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import Card from '../Card'
+
 import { ArrowRightIcon } from '@sanity/icons'
 import { ArrowLeftIcon } from '@sanity/icons'
+import React, { useEffect,useRef } from 'react'
+import { Navigation, Pagination } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+import { Post } from '~/interfaces/post'
+
+import Card from '../Card'
 
 interface CarouselProps {
   items: Post[]
