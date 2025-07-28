@@ -1,5 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
 import siteConfig from 'config/siteConfig'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 interface WebhookBody {
   _type: string
