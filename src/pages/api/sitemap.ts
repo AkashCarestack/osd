@@ -34,7 +34,7 @@ function generateSiteMap(posts: any[]) {
   locales.forEach((locale) => {
     const staticPages = [
       // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.caseStudy)}`,
-      // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.article)}`,
+      `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.article)}`,
       // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.podcast)}`,
       // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.ebook)}`,
       // `${BASE_URL}${generateHref(locale, siteConfig.pageURLs.webinar)}`,
