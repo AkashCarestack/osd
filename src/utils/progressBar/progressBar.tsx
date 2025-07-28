@@ -1,6 +1,7 @@
-import { useEffect, useState, useRef } from 'react'
-import styles from './progressBar.module.scss'
 import Router from 'next/router'
+import { useEffect, useRef,useState } from 'react'
+
+import styles from './progressBar.module.scss'
 
 export default function Progress() {
   const timerRef: any = useRef(null)

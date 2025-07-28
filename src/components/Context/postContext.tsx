@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react'
+
 import { Post } from '~/interfaces/post'
 
 interface PostContextProps {

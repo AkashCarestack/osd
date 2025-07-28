@@ -1,16 +1,18 @@
-import React from 'react'
 import {
   PortableText,
   PortableTextReactComponents,
   toPlainText,
 } from '@portabletext/react'
-import { getClient } from '~/lib/sanity.client'
-import DecoratorTable from '~/components/DecoratorTable'
-import DynamicComponent from '~/layout/DynamicComponent'
-import ListItem from '~/components/typography/ListItem'
-import { VideoModal } from '../commonSections/VideoModal'
+import React from 'react'
 import slugify from 'slugify'
+
+import DecoratorTable from '~/components/DecoratorTable'
+import ListItem from '~/components/typography/ListItem'
+import DynamicComponent from '~/layout/DynamicComponent'
+import { getClient } from '~/lib/sanity.client'
+
 import ImageLoader from '../commonSections/ImageLoader'
+import { VideoModal } from '../commonSections/VideoModal'
 
 interface SanityPortableTextProps {
   content: any

@@ -1,4 +1,20 @@
-import { GetStaticProps, GetStaticPaths } from 'next'
+import siteConfig from 'config/siteConfig'
+import { GetStaticPaths,GetStaticProps } from 'next'
+
+import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
+import RelatedTag from '~/components/commonSections/RelatedTag'
+import ShareableLinks from '~/components/commonSections/ShareableLinks'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import Layout from '~/components/Layout'
+import MainImageSection from '~/components/MainImageSection'
+import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
+import Section from '~/components/Section'
+import SidebarTitle from '~/components/typography/SidebarTitle'
+import DownloadEbook from '~/contentUtils/EbookDownloader'
+import { Ebooks } from '~/interfaces/post'
+import SEOHead from '~/layout/SeoHead'
+import Wrapper from '~/layout/Wrapper'
+import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
   ebookSlugsQuery,
@@ -9,23 +25,8 @@ import {
   getTagRelatedContents,
   getTags,
 } from '~/lib/sanity.queries'
-import { Ebooks } from '~/interfaces/post'
-import Wrapper from '~/layout/Wrapper'
-import { readToken } from '~/lib/sanity.api'
-import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
-import Layout from '~/components/Layout'
-import MainImageSection from '~/components/MainImageSection'
-import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
-import DownloadEbook from '~/contentUtils/EbookDownloader'
-import SEOHead from '~/layout/SeoHead'
-import { generateJSONLD } from '~/utils/generateJSONLD'
-import Section from '~/components/Section'
 import { CustomHead, generateMetaData } from '~/utils/customHead'
-import SidebarTitle from '~/components/typography/SidebarTitle'
-import ShareableLinks from '~/components/commonSections/ShareableLinks'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
-import siteConfig from 'config/siteConfig'
-import RelatedTag from '~/components/commonSections/RelatedTag'
+import { generateJSONLD } from '~/utils/generateJSONLD'
 
 export interface EbookProps {
   ebook: Ebooks

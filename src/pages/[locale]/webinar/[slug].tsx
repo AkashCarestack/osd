@@ -1,4 +1,21 @@
-import { GetStaticProps, GetStaticPaths } from 'next'
+import siteConfig from 'config/siteConfig'
+import { GetStaticPaths,GetStaticProps } from 'next'
+
+import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
+import AuthorInfo from '~/components/commonSections/AuthorInfo'
+import RelatedTag from '~/components/commonSections/RelatedTag'
+import ShareableLinks from '~/components/commonSections/ShareableLinks'
+import { VideoModal } from '~/components/commonSections/VideoModal'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import Layout from '~/components/Layout'
+import MainImageSection from '~/components/MainImageSection'
+import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
+import Section from '~/components/Section'
+import SidebarTitle from '~/components/typography/SidebarTitle'
+import { Podcasts } from '~/interfaces/post'
+import SEOHead from '~/layout/SeoHead'
+import Wrapper from '~/layout/Wrapper'
+import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
@@ -10,24 +27,8 @@ import {
   getWebinars,
   webinarSlugsQuery,
 } from '~/lib/sanity.queries'
-import { Podcasts } from '~/interfaces/post'
-import Wrapper from '~/layout/Wrapper'
-import { readToken } from '~/lib/sanity.api'
-import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
-import Layout from '~/components/Layout'
-import MainImageSection from '~/components/MainImageSection'
-import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
-import { generateJSONLD } from '~/utils/generateJSONLD'
-import { VideoModal } from '~/components/commonSections/VideoModal'
-import Section from '~/components/Section'
 import { CustomHead, generateMetaData } from '~/utils/customHead'
-import AuthorInfo from '~/components/commonSections/AuthorInfo'
-import ShareableLinks from '~/components/commonSections/ShareableLinks'
-import SidebarTitle from '~/components/typography/SidebarTitle'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
-import siteConfig from 'config/siteConfig'
-import RelatedTag from '~/components/commonSections/RelatedTag'
-import SEOHead from '~/layout/SeoHead'
+import { generateJSONLD } from '~/utils/generateJSONLD'
 
 interface Props {
   webinar: Podcasts

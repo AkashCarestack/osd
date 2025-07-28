@@ -1,5 +1,5 @@
-import React from 'react'
 import dynamic from 'next/dynamic'
+import React from 'react'
 
 const componentMap = {
   bannerBlock: dynamic(() => import('../components/sections/BannerBlock')),

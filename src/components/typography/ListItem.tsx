@@ -1,5 +1,5 @@
-import React from 'react'
 import { PortableText } from '@portabletext/react'
+import React from 'react'
 
 const ListItem = ({ node, index, isOrdered }) => {
   const listItemStyle = {

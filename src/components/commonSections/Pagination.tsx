@@ -1,12 +1,14 @@
-import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
-import Link from 'next/link'
-import Section from '../Section'
-import Wrapper from '~/layout/Wrapper'
 import { ArrowRightIcon } from '@sanity/icons'
 import { ArrowLeftIcon } from '@sanity/icons'
-import { useBaseUrl } from '../Context/UrlContext'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useEffect } from 'react'
+
+import Wrapper from '~/layout/Wrapper'
 import { generateHref } from '~/utils/common'
+
+import { useBaseUrl } from '../Context/UrlContext'
+import Section from '../Section'
 import Anchor from './Anchor'
 
 const Pagination = ({

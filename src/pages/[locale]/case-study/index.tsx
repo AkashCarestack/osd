@@ -1,4 +1,16 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
+import { useRouter } from 'next/router'
+import React from 'react'
+
+import Pagination from '~/components/commonSections/Pagination'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { BaseUrlProvider } from '~/components/Context/UrlContext'
+import Layout from '~/components/Layout'
+import MainImageSection from '~/components/MainImageSection'
+import AllcontentSection from '~/components/sections/AllcontentSection'
+import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
+import ReviewsGrid from '~/components/sections/ReviewCards'
+import TagSelect from '~/contentUtils/TagSelector'
 import { CaseStudies } from '~/interfaces/post'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
@@ -11,21 +23,11 @@ import {
   getTags,
   getTestiMonials,
 } from '~/lib/sanity.queries'
-import { SharedPageProps } from '../../_app'
-import Layout from '~/components/Layout'
-import AllcontentSection from '~/components/sections/AllcontentSection'
-import { useRouter } from 'next/router'
-import siteConfig from '../../../../config/siteConfig'
-import React from 'react'
-import Pagination from '~/components/commonSections/Pagination'
-import { CustomHead, customMetaTag } from '~/utils/customHead'
-import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
-import { BaseUrlProvider } from '~/components/Context/UrlContext'
-import ReviewsGrid from '~/components/sections/ReviewCards'
-import TagSelect from '~/contentUtils/TagSelector'
-import MainImageSection from '~/components/MainImageSection'
 import { getUniqueData, mergeAndRemoveDuplicates } from '~/utils/common'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { CustomHead, customMetaTag } from '~/utils/customHead'
+
+import siteConfig from '../../../../config/siteConfig'
+import { SharedPageProps } from '../../_app'
 
 
 export const getStaticPaths: GetStaticPaths = async () => {

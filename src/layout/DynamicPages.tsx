@@ -1,14 +1,15 @@
+import siteConfig from 'config/siteConfig'
+
+import { BaseUrlProvider } from '~/components/Context/UrlContext'
+import EventCarousel from '~/components/eventCarousel'
+import AllcontentSection from '~/components/sections/AllcontentSection'
+import FeaturedAndPopularBlogs from '~/components/sections/FeaturedAndPopularBlogsSection'
+import LatestBlogs from '~/components/sections/LatestBlogSection'
+import SliderSection from '~/components/sections/SliderSection'
+import TestimonialSection from '~/components/sections/TestimonialSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Tag } from '~/interfaces/post'
-import LatestBlogs from '~/components/sections/LatestBlogSection'
-import FeaturedAndPopularBlogs from '~/components/sections/FeaturedAndPopularBlogsSection'
-import TestimonialSection from '~/components/sections/TestimonialSection'
-import AllcontentSection from '~/components/sections/AllcontentSection'
-import SliderSection from '~/components/sections/SliderSection'
-import siteConfig from 'config/siteConfig'
-import { BaseUrlProvider } from '~/components/Context/UrlContext'
 import { getUniqueData, getUniqueReorderedCarouselItems } from '~/utils/common'
-import EventCarousel from '~/components/eventCarousel'
 
 interface DynamicProps {
   children?: React.ReactNode

@@ -1,10 +1,12 @@
 import siteConfig from 'config/siteConfig'
+
 import { Post } from '~/interfaces/post'
 import post from '~/schemas/post'
 import { average, prominent } from '~/utils/color'
+
+import enAu from '../../public/assets/countryFlags/EN-AU.png'
 import enGb from '../../public/assets/countryFlags/EN-GB.png'
 import en from '../../public/assets/countryFlags/EN-usa.png'
-import enAu from '../../public/assets/countryFlags/EN-AU.png'
 
 
 export const fetchAuthor = (post) => {

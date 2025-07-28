@@ -1,31 +1,32 @@
+import siteConfig from 'config/siteConfig'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
+
+import Pagination from '~/components/commonSections/Pagination'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { BaseUrlProvider } from '~/components/Context/UrlContext'
+import Layout from '~/components/Layout'
+import AllcontentSection from '~/components/sections/AllcontentSection'
+import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
+import ContentHub from '~/contentUtils/ContentHub'
+import TagSelect from '~/contentUtils/TagSelector'
 import { getClient } from '~/lib/sanity.client'
 import {
-  getPostsByTag,
-  getTags,
-  getArticlesCount,
-  getEbooksCount,
-  getPodcastsCount,
-  getWebinarsCount,
-  getSiteSettings,
-  getHomeSettings,
-  getCategory,
-  getPostsByCategoryAndLimit,
-  getCategories,
   catsSlugsQuery,
+  getArticlesCount,
+  getCategories,
+  getCategory,
+  getEbooksCount,
   getFooterData,
+  getHomeSettings,
+  getPodcastsCount,
+  getPostsByCategoryAndLimit,
+  getPostsByTag,
+  getSiteSettings,
+  getTags,
+  getWebinarsCount,
 } from '~/lib/sanity.queries'
-import Layout from '~/components/Layout'
-import TagSelect from '~/contentUtils/TagSelector'
-import AllcontentSection from '~/components/sections/AllcontentSection'
-import Pagination from '~/components/commonSections/Pagination'
-import siteConfig from 'config/siteConfig'
-import ContentHub from '~/contentUtils/ContentHub'
-import { BaseUrlProvider } from '~/components/Context/UrlContext'
-import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
-import { defaultMetaTag } from '~/utils/customHead'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import { slugToCapitalized } from '~/utils/common'
+import { defaultMetaTag } from '~/utils/customHead'
 
 interface Query {
   slug: string

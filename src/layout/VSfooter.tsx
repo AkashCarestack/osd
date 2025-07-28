@@ -1,10 +1,12 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import Anchor from '~/components/commonSections/Anchor';
-import Section from '~/components/Section';
-import Wrapper from './Wrapper';
+
 import VoiceStackResources from '~/assets/reactiveAssets/VoiceStackResources';
+import Anchor from '~/components/commonSections/Anchor';
 import { useGlobalData } from '~/components/Context/GlobalDataContext';
+import Section from '~/components/Section';
+
+import Wrapper from './Wrapper';
 
 const Footer = ({className}:any) => {
 

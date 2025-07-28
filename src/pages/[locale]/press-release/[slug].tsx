@@ -1,33 +1,34 @@
-import { GetStaticProps, GetStaticPaths } from 'next'
-import { getClient } from '~/lib/sanity.client'
-import {
-  pressReleaseSlugsQuery,
-  getPressRelease,
-  getTagRelatedContents,
-  getHomeSettings,
-  getTags,
-  getCategories,
-  getFooterData,
-} from '~/lib/sanity.queries'
-import { PressRelease } from '~/interfaces/post'
-import Wrapper from '~/layout/Wrapper'
-import { readToken } from '~/lib/sanity.api'
-import MainImageSection from '~/components/MainImageSection'
-import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
-import Layout from '~/components/Layout'
+import { DocumentTextIcon } from '@sanity/icons'
+import siteConfig from 'config/siteConfig'
+import { GetStaticPaths,GetStaticProps } from 'next'
+
 import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
 import AuthorInfo from '~/components/commonSections/AuthorInfo'
+import Button from '~/components/commonSections/Button'
+import RelatedTag from '~/components/commonSections/RelatedTag'
+import ShareableLinks from '~/components/commonSections/ShareableLinks'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import Layout from '~/components/Layout'
+import MainImageSection from '~/components/MainImageSection'
+import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
 import Section from '~/components/Section'
 import SidebarTitle from '~/components/typography/SidebarTitle'
-import ShareableLinks from '~/components/commonSections/ShareableLinks'
-import Button from '~/components/commonSections/Button'
-import { DocumentTextIcon } from '@sanity/icons'
-import { CustomHead, generateMetaData } from '~/utils/customHead'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { PressRelease } from '~/interfaces/post'
 import SEOHead from '~/layout/SeoHead'
+import Wrapper from '~/layout/Wrapper'
+import { readToken } from '~/lib/sanity.api'
+import { getClient } from '~/lib/sanity.client'
+import {
+  getCategories,
+  getFooterData,
+  getHomeSettings,
+  getPressRelease,
+  getTagRelatedContents,
+  getTags,
+  pressReleaseSlugsQuery,
+} from '~/lib/sanity.queries'
+import { CustomHead, generateMetaData } from '~/utils/customHead'
 import { generateJSONLD } from '~/utils/generateJSONLD'
-import siteConfig from 'config/siteConfig'
-import RelatedTag from '~/components/commonSections/RelatedTag'
 
 interface Props {
   pressRelease: PressRelease

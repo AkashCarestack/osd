@@ -1,17 +1,19 @@
-import Breadcrumb from './commonSections/BreadCrumb'
-import ImageLoader from './commonSections/ImageLoader'
-import { getClient } from '~/lib/sanity.client'
-import Wrapper from '../layout/Wrapper'
-import DurationSection from './commonSections/DurationSection'
-import Section from './Section'
-import { useMemo } from 'react'
-import SubText from './typography/SubText'
-import React from 'react'
-import Link from 'next/link'
 import siteConfig from 'config/siteConfig'
-import { generateHref } from '~/utils/common'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useMemo } from 'react'
+import React from 'react'
+
+import { getClient } from '~/lib/sanity.client'
+import { generateHref } from '~/utils/common'
+
+import Wrapper from '../layout/Wrapper'
 import Anchor from './commonSections/Anchor'
+import Breadcrumb from './commonSections/BreadCrumb'
+import DurationSection from './commonSections/DurationSection'
+import ImageLoader from './commonSections/ImageLoader'
+import Section from './Section'
+import SubText from './typography/SubText'
 
 interface Props {
   post?: any

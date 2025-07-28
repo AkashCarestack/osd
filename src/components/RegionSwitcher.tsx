@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
-import ImageLoader from './commonSections/ImageLoader'
 import { useRouter } from 'next/router'
+import React, { useEffect, useRef, useState } from 'react'
+
 import ChevronDown from '~/assets/reactiveAssets/ChevronUp'
+
+import ImageLoader from './commonSections/ImageLoader'
 
 interface RegionSwitcherProps {
   className?: string

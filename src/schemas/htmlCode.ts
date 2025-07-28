@@ -1,5 +1,5 @@
-import { defineArrayMember, defineType } from 'sanity'
 import { CodeIcon } from '@sanity/icons'
+import { defineArrayMember, defineType } from 'sanity'
 
 export default defineType({
   name: 'htmlCode',

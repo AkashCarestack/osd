@@ -1,16 +1,17 @@
-import Link from 'next/link'
-import Section from '~/components/Section'
-import Wrapper from '~/layout/Wrapper'
 import { ArrowTopRightIcon } from '@sanity/icons'
-import H2Large from '~/components/typography/H2Large'
 import siteConfig from 'config/siteConfig'
-import { useState, useEffect, useMemo } from 'react'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import DescriptionText from '~/components/typography/DescriptionText'
-import TrapezIcon from '~/assets/reactiveAssets/trapezIcon'
 import { useRouter } from 'next/router'
-import { generateHref } from '~/utils/common'
+import { useEffect, useMemo,useState } from 'react'
+
+import TrapezIcon from '~/assets/reactiveAssets/trapezIcon'
 import Anchor from '~/components/commonSections/Anchor'
+import Section from '~/components/Section'
+import DescriptionText from '~/components/typography/DescriptionText'
+import H2Large from '~/components/typography/H2Large'
+import Wrapper from '~/layout/Wrapper'
+import { generateHref } from '~/utils/common'
 
 
 interface ContentHubProps {

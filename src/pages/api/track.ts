@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+
 import { supabase } from "../../utils/tracker/supabase";
 
 export default async function trackEvents(

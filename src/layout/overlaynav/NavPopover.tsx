@@ -1,24 +1,26 @@
-import React, { useState, useRef, useEffect } from 'react'
-import Wrapper from '../Wrapper'
-import Section from '~/components/Section'
-import { useGlobalData } from '~/components/Context/GlobalDataContext'
-import Link from 'next/link'
 import {
+  ArrowTopRightIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   CloseIcon,
   TruncateIcon,
-  ChevronRightIcon,
-  ChevronLeftIcon,
-  ArrowTopRightIcon,
 } from '@sanity/icons'
-import { navigationLinks } from '../Header'
-import { useRouter } from 'next/router'
-import GrowthClubLogo from '~/assets/reactiveAssets/GrowthClubLogo'
 import siteConfig from 'config/siteConfig'
-import { generateHref, normalizePath } from '~/utils/common'
-import ImageLoader from '~/components/commonSections/ImageLoader'
-import { regions } from '~/components/RegionSwitcher'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useEffect,useRef, useState } from 'react'
+
+import GrowthClubLogo from '~/assets/reactiveAssets/GrowthClubLogo'
 import VoiceStackResources from '~/assets/reactiveAssets/VoiceStackResources'
 import Anchor from '~/components/commonSections/Anchor'
+import ImageLoader from '~/components/commonSections/ImageLoader'
+import { useGlobalData } from '~/components/Context/GlobalDataContext'
+import { regions } from '~/components/RegionSwitcher'
+import Section from '~/components/Section'
+import { generateHref, normalizePath } from '~/utils/common'
+
+import { navigationLinks } from '../Header'
+import Wrapper from '../Wrapper'
 
 interface NavProps {
   className?: string

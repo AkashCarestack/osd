@@ -1,28 +1,29 @@
-import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import {
-  getTags,
-  getPostsByLimit,
-  getPosts,
-  postSlugsQuery,
-  getArticlesCount,
-  getEbooksCount,
-  getPodcastsCount,
-  getWebinarsCount,
-  getHomeSettings,
-  getCategories,
-  getFooterData,
-} from '~/lib/sanity.queries';
-import { getClient } from '~/lib/sanity.client';
 import siteConfig from 'config/siteConfig';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { useRouter } from 'next/router';
+
+import Pagination from '~/components/commonSections/Pagination';
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext';
+import { BaseUrlProvider } from '~/components/Context/UrlContext';
 import Layout from '~/components/Layout';
 import AllcontentSection from '~/components/sections/AllcontentSection';
-import TagSelect from '~/contentUtils/TagSelector';
-import Pagination from '~/components/commonSections/Pagination';
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection';
-import { useRouter } from 'next/router';
 import ContentHub from '~/contentUtils/ContentHub';
-import { BaseUrlProvider } from '~/components/Context/UrlContext';
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext';
+import TagSelect from '~/contentUtils/TagSelector';
+import { getClient } from '~/lib/sanity.client';
+import {
+  getArticlesCount,
+  getCategories,
+  getEbooksCount,
+  getFooterData,
+  getHomeSettings,
+  getPodcastsCount,
+  getPosts,
+  getPostsByLimit,
+  getTags,
+  getWebinarsCount,
+  postSlugsQuery,
+} from '~/lib/sanity.queries';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const client = getClient();

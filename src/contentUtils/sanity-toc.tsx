@@ -1,7 +1,8 @@
-import slugify from 'slugify'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
+import slugify from 'slugify'
+
 import { removeNumberPrefix } from '~/utils/common'
 
 // Define the type for the Table of Contents (ToC)

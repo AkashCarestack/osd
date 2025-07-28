@@ -1,10 +1,12 @@
-import { useState, useEffect, Fragment, useMemo, useRef } from 'react'
+import { ArrowRightIcon } from '@sanity/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { breadCrumbJsonLd } from '~/utils/generateJSONLD'
-import { CustomHead } from '~/utils/customHead'
-import { ArrowRightIcon } from '@sanity/icons'
+import { Fragment, useEffect, useMemo, useRef,useState } from 'react'
+
 import { removeUnwantedCharacters } from '~/utils/common'
+import { CustomHead } from '~/utils/customHead'
+import { breadCrumbJsonLd } from '~/utils/generateJSONLD'
+
 import Anchor from './Anchor'
 
 interface BreadCrumbProps {

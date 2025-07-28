@@ -1,8 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-import { getClient } from '~/lib/sanity.client'
-import { readToken } from '~/lib/sanity.api'
-import { getSitemapData } from '~/lib/sanity.queries'
 import siteConfig from 'config/siteConfig'
+import { NextApiRequest, NextApiResponse } from 'next'
+
+import { readToken } from '~/lib/sanity.api'
+import { getClient } from '~/lib/sanity.client'
+import { getSitemapData } from '~/lib/sanity.queries'
 import { generateHref } from '~/utils/common'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL

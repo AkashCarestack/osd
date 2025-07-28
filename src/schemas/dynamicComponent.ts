@@ -1,5 +1,6 @@
-import demoBannerBlock from './sections/demoBannerBlock'
 import { InsertBelowIcon } from '@sanity/icons'
+
+import demoBannerBlock from './sections/demoBannerBlock'
 
 export default {
   name: 'dynamicComponent',

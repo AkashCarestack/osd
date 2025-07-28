@@ -1,10 +1,11 @@
-import Link from 'next/link'
-import React, { useRef, useState } from 'react'
-import Carousel from './Carousel'
-import H3XL from '../typography/H3XL'
 import { ArrowRightIcon } from '@sanity/icons'
 import { ArrowLeftIcon } from '@sanity/icons'
+import Link from 'next/link'
+import React, { useRef, useState } from 'react'
+
 import H2Large from '../typography/H2Large'
+import H3XL from '../typography/H3XL'
+import Carousel from './Carousel'
 
 interface BannerBlockProps {
   items?: any

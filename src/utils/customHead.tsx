@@ -1,12 +1,14 @@
-import React, { useId } from 'react'
-import { breadCrumbJsonLd, generateJSONLD } from './generateJSONLD'
+import siteConfig from 'config/siteConfig'
 import Head from 'next/head'
-import { urlForImage } from '~/lib/sanity.image'
+import React, { useId } from 'react'
+
 import { getIframeUrl } from '~/components/commonSections/VideoModal'
-import { slugToCapitalized } from './common'
+import { urlForImage } from '~/lib/sanity.image'
+
 import ogMetaData from '../../public/ogData.json'
 import organizationSchema from '../../public/organizationSchema.json'
-import siteConfig from 'config/siteConfig'
+import { slugToCapitalized } from './common'
+import { breadCrumbJsonLd, generateJSONLD } from './generateJSONLD'
 
 const head = (data: any, i: string, id: string = '') => {
   return (

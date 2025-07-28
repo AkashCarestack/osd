@@ -1,11 +1,12 @@
-import { defineArrayMember, defineField, defineType } from 'sanity'
-import HighlightDecorator from '../components/HighlightDecorator'
-import DynamicComponent from '../../src/schemas/dynamicComponent'
 import { ImageIcon } from '@sanity/icons'
 import { ThLargeIcon } from '@sanity/icons'
 import { InsertBelowIcon } from '@sanity/icons'
-import htmlCode from './htmlCode'
+import { defineArrayMember, defineField, defineType } from 'sanity'
+
+import DynamicComponent from '../../src/schemas/dynamicComponent'
 import dynamicComponent from '../../src/schemas/dynamicComponent'
+import HighlightDecorator from '../components/HighlightDecorator'
+import htmlCode from './htmlCode'
 
 export default defineType({
   title: 'Block Content',

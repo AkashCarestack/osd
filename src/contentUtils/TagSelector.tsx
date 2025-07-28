@@ -1,10 +1,11 @@
+import { UlistIcon } from '@sanity/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect, useRef, useState } from 'react'
+
 import Section from '~/components/Section'
 import TagsCarousel from '~/components/sections/TagsCarousel'
 import Wrapper from '~/layout/Wrapper'
-import { UlistIcon } from '@sanity/icons'
 
 interface TagSelectProps {
   tags: any[]

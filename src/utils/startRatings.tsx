@@ -1,7 +1,8 @@
+import Image from 'next/image'
+
+import emptyStar from '../assets/emptyStar.svg'
 import fullStar from '../assets/fullStar.svg'
 import halfStar from '../assets/halfStar.svg'
-import emptyStar from '../assets/emptyStar.svg'
-import Image from 'next/image'
 
 export const setImage = (ratingString: string) => {
   if (!ratingString) return null

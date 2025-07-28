@@ -1,6 +1,24 @@
-import { GetStaticProps, GetStaticPaths } from 'next'
+import siteConfig from 'config/siteConfig'
+import { GetStaticPaths,GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
+
+import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
+import AuthorInfo from '~/components/commonSections/AuthorInfo'
+import RelatedTag from '~/components/commonSections/RelatedTag'
+import ShareableLinks from '~/components/commonSections/ShareableLinks'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import Layout from '~/components/Layout'
+import MainImageSection from '~/components/MainImageSection'
+import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
+import Section from '~/components/Section'
+import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
+import { Toc } from '~/contentUtils/sanity-toc'
+import { Articles } from '~/interfaces/post'
+import SEOHead from '~/layout/SeoHead'
+import Wrapper from '~/layout/Wrapper'
+import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
+import { urlForImage } from '~/lib/sanity.image'
 import {
   articleSlugsQuery,
   getArticle,
@@ -11,25 +29,8 @@ import {
   getTagRelatedContents,
   getTags,
 } from '~/lib/sanity.queries'
-import { Articles } from '~/interfaces/post'
-import Wrapper from '~/layout/Wrapper'
-import { readToken } from '~/lib/sanity.api'
-import { urlForImage } from '~/lib/sanity.image'
-import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
-import Layout from '~/components/Layout'
-import MainImageSection from '~/components/MainImageSection'
-import RelatedFeaturesSection from '~/components/RelatedFeaturesSection'
-import { Toc } from '~/contentUtils/sanity-toc'
-import AuthorInfo from '~/components/commonSections/AuthorInfo'
-import ShareableLinks from '~/components/commonSections/ShareableLinks'
 import { CustomHead, generateMetaData } from '~/utils/customHead'
-import Section from '~/components/Section'
-import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import { generateJSONLD } from '~/utils/generateJSONLD'
-import SEOHead from '~/layout/SeoHead'
-import siteConfig from 'config/siteConfig'
-import RelatedTag from '~/components/commonSections/RelatedTag'
 
 interface Props {
   articles: Articles

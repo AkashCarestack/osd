@@ -1,4 +1,5 @@
 import React from 'react'
+
 import ImageLoader from '../commonSections/ImageLoader'
 
 const EbookCard = ({ ebook }) => {

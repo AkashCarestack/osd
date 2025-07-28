@@ -1,8 +1,13 @@
+import { GetStaticProps } from 'next';
 import React from 'react';
-// import { GlobalDataProvider } from '../context/GlobalDataProvider';
-import Header from '../layout/Header';
+
+import Button from '~/components/commonSections/Button';
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext';
+import Layout from '~/components/Layout';
+import Section from '~/components/Section';
+import Wrapper from '~/layout/Wrapper';
 import { readToken } from '~/lib/sanity.api'
+import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
   getFooterData,
@@ -12,12 +17,9 @@ import {
   getTagsByOrder,
 } from '~/lib/sanity.queries'
 import type { SharedPageProps } from '~/pages/_app'
-import { getClient } from '~/lib/sanity.client'
-import { GetStaticProps } from 'next';
-import Section from '~/components/Section';
-import Wrapper from '~/layout/Wrapper';
-import Layout from '~/components/Layout';
-import Button from '~/components/commonSections/Button';
+
+// import { GlobalDataProvider } from '../context/GlobalDataProvider';
+import Header from '../layout/Header';
 
 interface IndexPageProps {
   footerData: unknown;

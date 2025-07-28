@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import React from 'react'
+
 import Button from '../commonSections/Button'
-import H3Medium from '../typography/H3Medium'
 import DescriptionText from '../typography/DescriptionText'
+import H3Medium from '../typography/H3Medium'
 
 interface BannerBlockProps {
   bannerBlock?: {

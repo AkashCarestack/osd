@@ -1,8 +1,9 @@
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import { formatDateShort } from '~/utils/formateDate'
 import { ClockIcon } from '@sanity/icons'
 import { DotIcon } from '@sanity/icons'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
+
+import { formatDateShort } from '~/utils/formateDate'
 
 interface DurationProps {
   author?: any

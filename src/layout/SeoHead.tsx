@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Script from 'next/script'
+
 import { slugToCapitalized } from '~/utils/common'
 
 interface SEOHeadProps {

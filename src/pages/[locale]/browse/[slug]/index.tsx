@@ -1,33 +1,34 @@
+import siteConfig from 'config/siteConfig'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
+
+import Pagination from '~/components/commonSections/Pagination'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { BaseUrlProvider } from '~/components/Context/UrlContext'
+import Layout from '~/components/Layout'
+import AllcontentSection from '~/components/sections/AllcontentSection'
+import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
+import ContentHub from '~/contentUtils/ContentHub'
+import TagSelect from '~/contentUtils/TagSelector'
+import { Post,Tag } from '~/interfaces/post'
 import { getClient } from '~/lib/sanity.client'
 import {
-  getTag,
-  getPostsByTag,
-  tagsSlugsQuery,
-  getTags,
-  getPostsByTagAndLimit,
   getArticlesCount,
-  getEbooksCount,
-  getPodcastsCount,
-  getWebinarsCount,
-  getSiteSettings,
-  getHomeSettings,
   getCategories,
+  getEbooksCount,
   getFooterData,
+  getHomeSettings,
+  getPodcastsCount,
+  getPostsByTag,
+  getPostsByTagAndLimit,
+  getSiteSettings,
+  getTag,
+  getTags,
+  getWebinarsCount,
+  tagsSlugsQuery,
 } from '~/lib/sanity.queries'
-import Layout from '~/components/Layout'
-import { Tag, Post } from '~/interfaces/post'
-import TagSelect from '~/contentUtils/TagSelector'
-import AllcontentSection from '~/components/sections/AllcontentSection'
-import Pagination from '~/components/commonSections/Pagination'
-import siteConfig from 'config/siteConfig'
-import ContentHub from '~/contentUtils/ContentHub'
-import { BaseUrlProvider } from '~/components/Context/UrlContext'
-import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
-import { defaultMetaTag } from '~/utils/customHead'
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
-import { slugToCapitalized } from '~/utils/common'
 import { SharedPageProps } from '~/pages/_app'
+import { slugToCapitalized } from '~/utils/common'
+import { defaultMetaTag } from '~/utils/customHead'
 
 interface Query {
   slug: string
@@ -122,8 +123,8 @@ export const getStaticPaths = async () => {
   try {
     const slugsPromises = locales.map(locale => 
       client.fetch(tagsSlugsQuery, { locale })
-        .then(data => data.map((slug: string) => ({
-          params: { slug, locale }
+        .then(data => data.map((item: { slug: string; locale: string }) => ({
+          params: { slug: item.slug, locale: item.locale }
         })))
     )
 

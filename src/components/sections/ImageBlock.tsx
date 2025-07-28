@@ -1,6 +1,8 @@
-import React from 'react'
 import Image from 'next/image'
+import React from 'react'
+
 import { urlForImage } from '~/lib/sanity.image'
+
 import ImageLoader from '../commonSections/ImageLoader'
 
 const ImageBlock = ({ image }: any) => {

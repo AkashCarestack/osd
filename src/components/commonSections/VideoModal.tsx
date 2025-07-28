@@ -1,5 +1,5 @@
-import * as React from 'react'
 import { CloseIcon } from '@sanity/icons'
+import * as React from 'react'
 
 type VideoPlatform = 'vimeo' | 'vidyard' | 'youtube'
 

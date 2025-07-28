@@ -1,4 +1,5 @@
 import { DocumentIcon } from '@sanity/icons'
+
 import link from './link'
 
 export default {

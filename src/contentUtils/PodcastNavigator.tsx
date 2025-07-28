@@ -1,9 +1,10 @@
+import { ArrowLeftIcon,ArrowRightIcon } from '@sanity/icons'
+import siteConfig from 'config/siteConfig'
 import Link from 'next/link'
-import { ArrowRightIcon, ArrowLeftIcon } from '@sanity/icons'
+
+import Anchor from '~/components/commonSections/Anchor'
 import Section from '~/components/Section'
 import Wrapper from '~/layout/Wrapper'
-import siteConfig from 'config/siteConfig'
-import Anchor from '~/components/commonSections/Anchor'
 
 interface PodcastNavigatorProps {
   nextSlug: string

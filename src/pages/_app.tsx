@@ -1,17 +1,19 @@
 import '~/styles/global.scss'
-import type { AppProps } from 'next/app'
-import { lazy } from 'react'
-import Head from 'next/head'
-import { orgSchema, siteLinkSchema } from '~/utils/customHead'
-import { usePathname } from 'next/navigation'
-import { cookieSelector, slugToCapitalized } from '~/utils/common'
-import { createObservedUser, createSession, createUser, getUserData, TrackUserProvider } from '~/utils/tracker/intitialize'
+
 import track, { getDeviceData } from 'cs-tracker'
-import { getCookie, checkCookie, eraseCookie } from '~/utils/tracker/cookie'
+import type { AppProps } from 'next/app'
+import Head from 'next/head'
+import { usePathname } from 'next/navigation'
+import Script from 'next/script'
+import { lazy } from 'react'
+
+import { cookieSelector, slugToCapitalized } from '~/utils/common'
+import { orgSchema, siteLinkSchema } from '~/utils/customHead'
+import { checkCookie, eraseCookie,getCookie } from '~/utils/tracker/cookie'
 import { addEvent } from '~/utils/tracker/events'
+import { createObservedUser, createSession, createUser, getUserData, TrackUserProvider } from '~/utils/tracker/intitialize'
 import { getSession } from '~/utils/tracker/session'
 import { getUser } from '~/utils/tracker/user'
-import Script from 'next/script'
 
 export interface SharedPageProps {
   draftMode?: boolean

@@ -1,10 +1,11 @@
 import React from 'react'
-import Card from '../Card'
+
 import Wrapper from '../../layout/Wrapper'
-import H2Large from '../typography/H2Large'
-import Section from '../Section'
-import { useBaseUrl } from '../Context/UrlContext'
+import Card from '../Card'
 import { useGlobalData } from '../Context/GlobalDataContext'
+import { useBaseUrl } from '../Context/UrlContext'
+import Section from '../Section'
+import H2Large from '../typography/H2Large'
 
 interface LatestBlogsProps {
   contents: any[]
