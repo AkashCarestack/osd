@@ -68,12 +68,18 @@ const SanityPortableText: React.FC<SanityPortableTextProps> = ({
     },
     types: {
       image: ({ value }) => {
+        // Add null checks for the asset
+        if (!value?.asset) {
+          console.warn('SanityBlockEditor: image asset is null or undefined')
+          return null
+        }
+        
         return (
           <ImageLoader
             image={value.asset}
             priority={true}
             altText={value?.asset?.altText || 'Post image'}
-            title={value.asset.title || 'Post image'}
+            title={value?.asset?.title || 'Post image'}
             imageClassName="w-full"
             fixed={false}
             client={getClient(draftMode ? { token } : undefined)}

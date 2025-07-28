@@ -121,7 +121,7 @@ export default function Card({
 
       const newLinkUrl = varyingIndex
         ? `${locale === 'en' ? '' : `/${locale}`}/${contentTypePath}`
-        : `${locale === 'en' ? '' : `/${locale}`}/${contentTypePath}/${post.slug.current}`;
+        : `${locale === 'en' ? '' : `/${locale}`}/${contentTypePath}/${post?.slug?.current || ''}`;
 
       setLinkUrl(newLinkUrl);
     }

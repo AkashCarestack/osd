@@ -70,7 +70,7 @@ export default function ContentHub({ contentCount, categories, featuredDescripti
             {categoriesData.map((category, index) => {
               let hrefTemplate = `/${category?.categoryName === 'All Topics'
                  ? `${siteConfig.categoryBaseUrls.base}` : category?.categoryName 
-                 ? `${siteConfig.categoryBaseUrls.base}/${category?.slug.current} ` 
+                 ? `${siteConfig.categoryBaseUrls.base}/${category?.slug?.current || ''} ` 
                  : siteConfig.categoryBaseUrls.base}`
             return (
               <Anchor

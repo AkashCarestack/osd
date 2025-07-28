@@ -1646,7 +1646,7 @@ export async function getArticle(
 ): Promise<any> {
   const article = await client.fetch(articleBySlugQuery, { slug, region })
   if (!article) {
-    null
+    return null
   }
   return article
 }
@@ -1657,7 +1657,7 @@ export async function getWebinar(
 ): Promise<any> {
   const webinar = await client.fetch(webinarBySlugQuery, { slug ,region})
   if (!webinar) {
-    null
+    return null
   }
   return webinar
 }
@@ -1668,7 +1668,7 @@ export async function getEbook(
 ): Promise<any> {
   const ebook = await client.fetch(ebookBySlugQuery, { slug ,region})
   if (!ebook) {
-    null
+    return null
   }
   return ebook
 }
@@ -1679,7 +1679,7 @@ export async function getPressRelease(
 ): Promise<any> {
   const pressRelease = await client.fetch(pressReleaseBySlugQuery, { slug,region })
   if (!pressRelease) {
-    null
+    return null
   }
   return pressRelease
 }
