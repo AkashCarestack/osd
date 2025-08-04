@@ -92,15 +92,17 @@ const MainImageSection = ({
             </div>
           </div>
           <div className="md:absolute left-1/2 right-0 top-0 bottom-0 w-full md:w-auto pb-8 md:pb-0 min-h-[250px]">
-            <ImageLoader
-              image={post.mainImage}
-              priority={true}
-              useClientWidth={true}
-              // useDefaultSize={true}
-              alt={post.title || 'Post image'}
-              client={client}
-              imageClassName="w-full h-full object-cover"
-            />
+            {post.mainImage && (
+              <ImageLoader
+                image={post.mainImage}
+                priority={true}
+                useClientWidth={true}
+                // useDefaultSize={true}
+                alt={post.title || 'Post image'}
+                client={client}
+                imageClassName="w-full h-full object-cover"
+              />
+            )}
           </div>
         </Wrapper>
       </Section>

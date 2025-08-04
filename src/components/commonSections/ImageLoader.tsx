@@ -63,6 +63,12 @@ const ImageLoader: React.FC<ImageLoaderProps> = ({
         return
       }
 
+      // Add null check for image object
+      if (!image) {
+        console.warn('ImageLoader: image prop is null or undefined')
+        return
+      }
+
       const imageWidthFromCdn = image?.metadata?.dimensions?.width
       const imageRatio = image?.metadata?.dimensions?.aspectRatio
 
@@ -130,6 +136,10 @@ const ImageLoader: React.FC<ImageLoaderProps> = ({
     return null
   }
 
+  // Safe access to image properties with null checks
+  const safeAlt = alt || (image?.altText ?? '') || ''
+  const safeTitle = title || (image?.title ?? '') || ''
+
   if (fixed) {
     return (
       <div
@@ -139,8 +149,8 @@ const ImageLoader: React.FC<ImageLoaderProps> = ({
         <Image
           priority={priority}
           src={imageData.url}
-          alt={alt || (image?.altText ?? '') || ''}
-          title={title || (image?.title ?? '') || ''}
+          alt={safeAlt}
+          title={safeTitle}
           className={`object-cover object-center ${imageClassName}`}
           fill
           sizes={sizes}
@@ -157,8 +167,8 @@ const ImageLoader: React.FC<ImageLoaderProps> = ({
       <Image
         className={`!m-0 ${imageClassName}`}
         src={imageData.url}
-        alt={alt || (image?.altText ?? '') || ''}
-        title={title || (image?.title ?? '') || ''}
+        alt={safeAlt}
+        title={safeTitle}
         width={imageData.width || clientWidth}
         height={imageData.height || clientHeight}
         priority={priority}

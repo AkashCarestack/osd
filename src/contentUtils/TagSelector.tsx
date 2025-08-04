@@ -42,7 +42,7 @@ export default function TagSelect({
   }, [selectedTag])
 
   const onTagChanges = (tag: any) => {
-    setSelectedTag(tag.slug.current)
+    setSelectedTag(tag?.slug?.current || '')
     if (onTagChange) {
       onTagChange(tag)
     }

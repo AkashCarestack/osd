@@ -119,16 +119,17 @@ const ArticlePage = ({
   footerData
 }: Props) => {
   if (!articles) {
-    return
+    return null
   }
+  
   const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
-  const seoTitle = articles.seoTitle || articles.title
-  const seoDescription = articles.seoDescription || articles.excerpt
-  const seoKeywords = articles.seoKeywords || ''
-  const seoRobots = articles.seoRobots || 'index,follow'
+  const seoTitle = articles?.seoTitle || articles?.title || 'Article'
+  const seoDescription = articles?.seoDescription || articles?.excerpt || ''
+  const seoKeywords = articles?.seoKeywords || ''
+  const seoRobots = articles?.seoRobots || 'index,follow'
   const seoCanonical =
-    articles.seoCanonical ||
-    `${prodUrl}/${siteConfig.pageURLs.article}/${articles.slug.current}`
+    articles?.seoCanonical ||
+    `${prodUrl}/${siteConfig.pageURLs.article}/${articles?.slug?.current || ''}`
   const jsonLD: any = generateJSONLD(articles)
 
   return (
@@ -177,7 +178,7 @@ const ArticlePage = ({
               {articles?.tags && <RelatedTag tags={articles?.tags}/>}
             </Wrapper>
           </Section>
-          {relatedContents.length > 0 && (
+          {relatedContents && relatedContents.length > 0 && (
             <RelatedFeaturesSection
               contentType={articles?.contentType}
               allPosts={relatedContents}
