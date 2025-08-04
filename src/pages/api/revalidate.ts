@@ -147,6 +147,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(200).json({ message: 'Content not published' })
     }
 
+    // Check if this is a draft/preview request
+    const userAgent = req.headers['user-agent'] || ''
+    const referer = req.headers['referer'] || ''
+    
+    if (userAgent.includes('sanity') || referer.includes('preview') || referer.includes('draft')) {
+      console.log('Draft/preview request detected, skipping revalidation')
+      return res.status(200).json({ message: 'Draft mode - skipping revalidation' })
+    }
+
     console.log(`🔄 Revalidation requested for ${_type} (${contentType}): ${slug?.current}`)
     console.log(`🌍 Language: ${language}`)
 

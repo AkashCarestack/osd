@@ -118,7 +118,7 @@ export const getStaticPaths = async () => {
     paths:slugs.flat().map((item:any) => ({
       params: { slug:item.slug, locale:item.locale },
     })),
-    fallback: 'blocking',
+    fallback: false, // Changed from 'blocking' to prevent auto-generation
   }
 }
 
