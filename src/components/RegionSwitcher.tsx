@@ -32,7 +32,7 @@ export const regions = [
   },
   {
     "flag": {
-      "url": "https://cdn.sanity.io/images/76tr0pyh/develop/b5c24305b7dedfaf1197c61f6f7a0b5fa991b48f-44x44.png",
+      "url": "/assets/countryFlags/EN-AU.png",
       "title": "AU"
     },
     "url": "/en-AU",
@@ -93,7 +93,7 @@ const RegionSwitcher: React.FC<RegionSwitcherProps> = ({
                   image={matchedRegion.flag.url}
                   alt={matchedRegion.flag.title}
                   title={matchedRegion.flag.title}
-                  className="transform duration-300 group-hover:scale-105 !w-[23px] !h-[23px]"
+                  className="transform duration-300 group-hover:scale-105 !w-[23px] !h-[23px] rounded-full"
                 />
               )}
               <div className={`${openSwitcher ? '-rotate-180' : ''} transition-transform linear duration-300`}>
@@ -112,7 +112,7 @@ const RegionSwitcher: React.FC<RegionSwitcherProps> = ({
                     title={region.flag.title}
                     width={23}
                     height={23}
-                    className="transform duration-300 group-hover:scale-105 !w-[23px] !h-[23px]"
+                    className="transform duration-300 group-hover:scale-105 !w-[23px] !h-[23px] rounded-full"
                   />
                   <span className='text-gray-900 text-sm font-medium'>{region.title}</span>
                 </div>
@@ -128,7 +128,7 @@ const RegionSwitcher: React.FC<RegionSwitcherProps> = ({
                     title={region.flag.title}
                     width={23}
                     height={23}
-                    className="transform duration-300 group-hover:scale-105 !w-[23px] !h-[23px]"
+                    className="transform duration-300 group-hover:scale-105 !w-[23px] !h-[23px] rounded-full"
                   />
                   <span className='text-gray-900 text-sm font-medium'>{region.title}</span>
                 </a>
