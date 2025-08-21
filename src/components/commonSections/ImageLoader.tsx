@@ -151,7 +151,7 @@ const ImageLoader: React.FC<ImageLoaderProps> = ({
           src={imageData.url}
           alt={safeAlt}
           title={safeTitle}
-          className={`object-cover object-center ${imageClassName}`}
+          className={`object-cover object-center ${className} ${imageClassName}`}
           fill
           sizes={sizes}
         />
@@ -165,7 +165,7 @@ const ImageLoader: React.FC<ImageLoaderProps> = ({
       className={`w-full h-auto relative ${className}`}
     >
       <Image
-        className={`!m-0 ${imageClassName}`}
+        className={`!m-0 ${className} ${imageClassName}`}
         src={imageData.url}
         alt={safeAlt}
         title={safeTitle}

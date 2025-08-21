@@ -37,7 +37,7 @@ const DynamicPages = ({
   eventCards,
 }: DynamicProps) => {
   const featuredBlog = homeSettings?.FeaturedBlog || posts[0]
-  const customBrowseContent = homeSettings?.customBrowseContent || posts[0]
+  const customBrowseContent = homeSettings?.customBrowseContent 
   const featuredBlogs = homeSettings?.popularBlogs || []
 
   const featuredContents = [...featuredBlogs, ...posts].slice(0, 4)
@@ -76,11 +76,12 @@ const DynamicPages = ({
         <SliderSection items={reorderedCarouselItems} />
         <TestimonialSection testimonials={testimonialList} />
           <AllcontentSection
-          customBrowseContent={customBrowseContent}
-          allContent={posts}
-          itemsPerPage={siteConfig.pagination.itemsHomePage}
-          redirect={true}
-        />
+            customBrowseContent={customBrowseContent}
+            allContent={posts}
+            itemsPerPage={siteConfig.pagination.itemsHomePage}
+            redirect={true}
+          />
+        )
         <EventCarousel bgColor={'white'} allEventCards={uniqueEventCards} />
         {/* <ShortBannerSection /> */}
       </BaseUrlProvider>
