@@ -30,10 +30,11 @@ const BannerBlock: React.FC<BannerBlockProps> = ({ bannerBlock }) => {
       <div className="self-start md:self-center flex justify-center">
         <Button
           className="hover:!bg-zinc-200 !bg-white !no-underline mx-auto"
+          target="_blank"
           link={
             bannerBlock?.buttonLink
               ? bannerBlock?.buttonLink
-              : 'https://voicestack.com'
+              : 'https://voicestack.com/#demo'
           }
         >
           <span className="text-base font-medium">
