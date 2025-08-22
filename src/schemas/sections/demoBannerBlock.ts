@@ -31,7 +31,7 @@ export default {
       title: 'Button Link',
       type: 'url',
       description: 'The URL the button should link to',
-      initialValue: 'https://voicestack.com/?refer=carestack ',
+      initialValue: 'https://voicestack.com/#demo',
     },
   ],
   preview: {
