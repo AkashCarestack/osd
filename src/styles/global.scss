@@ -69,6 +69,14 @@
 
   .post__content {
     @apply prose prose-sm md:prose-base lg:prose-lg prose-h2:font-manrope prose-h3:font-manrope;
+    
+    // Custom h2 spacing for desktop
+    @media (min-width: 768px) {
+      h2 {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+      }
+    }
   }
 
   .post__content blockquote {
