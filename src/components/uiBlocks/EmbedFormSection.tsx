@@ -31,6 +31,10 @@ const EmbedFormSection: React.FC<EmbedFormSectionProps> = ({ ...props }: any) =>
   const meetingLink = embedFormdata?.meetingLink || embedFormdata?.embedForm?.meetingLink
   const eventName = embedFormdata?.eventName || embedFormdata?.embedForm?.eventName
   const videoLink = embedFormdata?.videoLink || embedFormdata?.embedForm?.videoLink
+  const sidebarTitle = embedFormdata?.sidebarTitle || embedFormdata?.embedForm?.sidebarTitle
+  const schemaPdfUrl = embedFormdata?.pdfUrl || embedFormdata?.embedForm?.pdfUrl
+  
+
   
   
   const [formData, setIsOpen] = useState(false)
@@ -58,7 +62,9 @@ const EmbedFormSection: React.FC<EmbedFormSectionProps> = ({ ...props }: any) =>
               formId,
               meetingLink,
               eventName,
-              videoLink
+              videoLink,
+              sidebarTitle,
+              pdfUrl: schemaPdfUrl || pdfUrl
             },
             ...isDemoPopUpShown
           }}

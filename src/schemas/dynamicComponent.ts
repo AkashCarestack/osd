@@ -96,6 +96,18 @@ export default {
           type: 'url',
           description: 'Video URL to open in new tab after form submission (optional)',
         },
+        {
+          name: 'sidebarTitle',
+          title: 'Sidebar Title',
+          type: 'string',
+          description: 'Title to display in the sidebar (optional)',
+        },
+        {
+          name: 'pdfUrl',
+          title: 'PDF Download URL',
+          type: 'url',
+          description: 'PDF URL to download when form is submitted (optional)',
+        },
       ],
       hidden: ({ parent }) => parent?.componentType !== 'embedForm',
     },

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { getCookie } from '~/utils/tracker/cookie'
 import useMediaQuery from '~/utils/useMediaQueryHook';
+import { downloadPDF } from '~/utils/downloadHelper';
 
 declare global {
   interface Window {
@@ -19,7 +20,9 @@ const HubSpotForm = ({
   meetingLink,
   videoLink,
   type,
-  title = 'Download the Full Report for Free'
+  title = 'Download the Full Report for Free',
+  sidebarTitle,
+  pdfUrl
 }: {
   onSubmitSuccess?: () => void
   id?: string
@@ -28,11 +31,16 @@ const HubSpotForm = ({
   videoLink?: string
   type?: string
   title?: string
+  sidebarTitle?: string
+  pdfUrl?: string
 }) => {
   const { trackEvent } = useTracking({}, {});  
   const router = useRouter();
   const isMobile = useMediaQuery(767);
   const [isFormLoaded, setIsFormLoaded] = useState(false);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+  
+
   useEffect(() => {
     const window2 = window
    const loadHubSpotScript = async () => {
@@ -51,6 +59,7 @@ const HubSpotForm = ({
 
         // Wait for the script to load
         scriptEl.onload = () => {
+          setIsScriptLoaded(true);
           if (window?.hbspt) {
             // Create the form
             window.hbspt.forms.create({
@@ -73,7 +82,7 @@ const HubSpotForm = ({
                       </clipPath>
                     </defs>
                   </svg>
-                      <span style="font-size: 14px">Thank you for!</span>
+                      <span style="font-size: 14px">Thank you</span>
               </div>
             `,
               onFormReady: function ($form, ctx) {
@@ -86,6 +95,11 @@ const HubSpotForm = ({
                     emailInput.focus()
                   }
                 }
+                
+                // Add a small delay to ensure form is fully rendered
+                setTimeout(() => {
+                  setIsFormLoaded(true);
+                }, 100);
               },
               onFormSubmit: function (form) {
                 const formData = new FormData(form); 
@@ -133,26 +147,54 @@ const HubSpotForm = ({
                 }
 
                 const urlParams = new URLSearchParams(window.location.search);
-                const query = new URLSearchParams({
-                  email: email,
-                  source: urlParams.get("utm_source") || '',
-                  campaign: urlParams.get("utm_campaign") || '',
-                  medium: urlParams.get("utm_medium") || '',
-                  term: urlParams.get("utm_term") || '',
-                  lead_source: urlParams.get("lead_source") || '',
-                  page_url: window.location.href,
-                  video_link: videoLink || ''
-                });
+
+                
+                // Only include video_link if sidebar title indicates playbook download
+                const isPlaybookDownload = sidebarTitle && sidebarTitle.toLowerCase().includes('download this resource for free');
+                
+                let query;
+                if (isPlaybookDownload) {
+                  // For playbook downloads, only send essential parameters
+                  query = new URLSearchParams({
+                    email: email,
+                    page_url: window.location.href,
+                    video_link: videoLink || '',
+                    sidebar_title: sidebarTitle || ''
+                  });
+                } else {
+                  // For regular forms, send all tracking parameters
+                  query = new URLSearchParams({
+                    email: email,
+                    source: urlParams.get("utm_source") || '',
+                    campaign: urlParams.get("utm_campaign") || '',
+                    medium: urlParams.get("utm_medium") || '',
+                    term: urlParams.get("utm_term") || '',
+                    lead_source: urlParams.get("lead_source") || '',
+                    page_url: window.location.href
+                  });
+                }
+                
+
                 
                 setTimeout(async () => {
                   try {
                     const response = await fetch(`/api/hs?${query.toString()}`);
+                    const responseData = await response.json();
+                    
+                    // Handle meeting link redirect
                     if (meetingLink) {
                       const meetingUrl = `${meetingLink}?${params.toString()}`;
                       router.push(meetingUrl);
                     }
-                    if (videoLink) {
+                    
+                    // Handle video link - only for non-playbook downloads
+                    if (videoLink && !isPlaybookDownload) {
                       window.open(videoLink, '_blank');
+                    }
+                    
+                    // Handle PDF download for playbook downloads
+                    if (responseData.downloadInfo && responseData.downloadInfo.shouldDownload) {
+                      downloadPDF(responseData.downloadInfo.pdfUrl, responseData.downloadInfo.filename);
                     }
                   } catch (error) {
                     console.error('Failed to send HubSpot data:', error);
@@ -161,7 +203,6 @@ const HubSpotForm = ({
               },
               
             } as any)
-            setIsFormLoaded(true);
           }
         }
       }
@@ -176,7 +217,7 @@ const HubSpotForm = ({
       )
       if (hubspotScript) hubspotScript.remove()
     }
-  }, [id, eventName, router, trackEvent, meetingLink, videoLink, onSubmitSuccess])
+  }, [id, eventName, router, trackEvent, meetingLink, videoLink, sidebarTitle, onSubmitSuccess])
 
   return (
     <>
@@ -186,8 +227,18 @@ const HubSpotForm = ({
           {title}
         </h2>
         
-        {/* HubSpot Form Target */}
-        <div id="hubspotForm" className={`hubspot-form-wrapper ${!isFormLoaded ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}></div>
+        {/* Loading Indicator */}
+        {!isFormLoaded && (
+          <div className="flex justify-center items-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+            <span className="ml-3 text-gray-600">Loading form...</span>
+          </div>
+        )}
+        
+        {/* HubSpot Form Target - Only render when script is loaded */}
+        {isScriptLoaded && (
+          <div id="hubspotForm" className={`hubspot-form-wrapper ${!isFormLoaded ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100 h-auto transition-all duration-500 ease-in-out'}`}></div>
+        )}
         
         {/* Success Message */}
         <div id="successMessage" style={{display: 'none', marginTop: '20px'}}>

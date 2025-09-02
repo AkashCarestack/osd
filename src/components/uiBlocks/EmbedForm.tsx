@@ -27,7 +27,11 @@ export const EmbedForm: React.FC<EmbedFormProps> = ({
     const formId = data?.embedForm?.formId || data?.formId || (siteSettings && siteSettings[0]?.demoMainFormId ? siteSettings[0]?.demoMainFormId : '6b2d6906-028e-4d65-9cd1-34d528e0d5c0')
     const meetingLink = data?.embedForm?.meetingLink || data?.meetingLink || (siteSettings && siteSettings[0]?.demoMeetingLink ? siteSettings[0]?.demoMeetingLink : undefined);    
     const eventName = data?.embedForm?.eventName || data?.eventName || (siteSettings && siteSettings[0]?.dmeoFormEventName ? siteSettings[0]?.dmeoFormEventName : undefined);
-    const videoLink = data?.embedForm?.videoLink || data?.videoLink;    
+    const videoLink = data?.embedForm?.videoLink || data?.videoLink;
+    const sidebarTitle = data?.embedForm?.sidebarTitle || data?.sidebarTitle;
+    const pdfUrl = data?.embedForm?.pdfUrl || data?.pdfUrl;
+    
+    
 
 
   
@@ -58,7 +62,7 @@ export const EmbedForm: React.FC<EmbedFormProps> = ({
             <div className="sm-3 sm:mt-0 sm:text-left w-full flex flex-col gap-8"
             >
               <div className="mt-2 w-full mb-8">
-                <HubSpotForm type={type} onSubmitSuccess={onSubmitSuccess} id={formId} eventName={eventName} meetingLink={meetingLink} videoLink={videoLink}/>
+                <HubSpotForm type={type} onSubmitSuccess={onSubmitSuccess} id={formId} eventName={eventName} meetingLink={meetingLink} videoLink={videoLink} sidebarTitle={sidebarTitle} pdfUrl={pdfUrl}/>
               </div>
             </div>
           </div>
