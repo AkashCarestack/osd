@@ -18,12 +18,14 @@ interface SanityPortableTextProps {
   content: any
   draftMode?: boolean
   token?: string
+  siteSettings?: any
 }
 
 const SanityPortableText: React.FC<SanityPortableTextProps> = ({
   content,
   draftMode = false,
   token = '',
+  siteSettings,
 }) => {
   const portableTextComponents: Partial<PortableTextReactComponents> = {
     marks: {
@@ -110,6 +112,7 @@ const SanityPortableText: React.FC<SanityPortableTextProps> = ({
         return (
           <DynamicComponent
             {...value}
+            siteSettings={siteSettings}
             client={getClient(draftMode ? { token } : undefined)}
           />
         )

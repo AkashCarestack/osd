@@ -253,8 +253,17 @@ export const removeNumberPrefix = (id: any) => id.replace(/^\d+\.\s*/, '');
 
 export const generateId = (...args) => {
   if (!args.length) return '';
-  const id = Date.now().toString(36);
-  return `${args[0]?.split('/').pop()}-${id}`;
+  // Use a deterministic ID based on the href to avoid hydration mismatches
+  const href = args[0] || '';
+  const pathPart = href?.split('/').pop() || 'link';
+  // Create a simple hash from the href for consistent IDs
+  let hash = 0;
+  for (let i = 0; i < href.length; i++) {
+    const char = href.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return `${pathPart}-${Math.abs(hash).toString(36)}`;
 };
 
 export const cookieSelector = (consentString, field) => {
@@ -272,4 +281,23 @@ export const  showCountryFlag = (region: string)=> {
   } else if (region === 'en-AU') {
     return enAu.src
   }
+}
+
+
+export function download_file(fileURL, fileName) {
+  fetch(fileURL)
+    .then(response => response.blob())
+    .then(blob => {
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = fileName || 'ebook.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl); 
+    })
+    .catch(error => {
+      console.error('Download failed:', error);
+    });
 }

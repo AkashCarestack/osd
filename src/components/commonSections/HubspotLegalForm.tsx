@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 
 declare global {
   interface Window {
-    hbspt: any;
+    hbspt?: any;
   }
 }
 
