@@ -14,6 +14,7 @@ import { addEvent } from '~/utils/tracker/events'
 import { createObservedUser, createSession, createUser, getUserData, TrackUserProvider } from '~/utils/tracker/intitialize'
 import { getSession } from '~/utils/tracker/session'
 import { getUser } from '~/utils/tracker/user'
+import BookDemoContextProvider from '~/components/Context/BookDemoProvider'
 
 export interface SharedPageProps {
   draftMode?: boolean
@@ -37,6 +38,7 @@ function App({
   return (
     <>
       <TrackUserProvider>
+      <BookDemoContextProvider>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-YY0CHYH7EY"
           strategy="afterInteractive"
@@ -88,6 +90,7 @@ function App({
         ) : (
           <Component {...pageProps} />
         )}
+      </BookDemoContextProvider>
       </TrackUserProvider>
     </>
   )

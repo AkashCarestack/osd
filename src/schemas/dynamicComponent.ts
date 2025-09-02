@@ -16,6 +16,7 @@ export default {
         list: [
           { title: 'Book Free Demo Banner', value: 'bannerBlock' },
           { title: 'Testimonial Card', value: 'testimonialCard' },
+          { title: 'Embed Form', value: 'embedForm' },
           //add the component name
         ],
       },
@@ -53,6 +54,62 @@ export default {
       title: 'Testimonial Card',
       type: 'testimonialCard',
       hidden: ({ parent }) => parent?.componentType !== 'testimonialCard',
+    },
+    {
+      name: 'embedForm',
+      title: 'Embed Form',
+      type: 'object',
+      fields: [
+        {
+          name: 'formId',
+          title: 'Form ID',
+          type: 'string',
+          description: 'HubSpot form ID (optional - will use site default if not provided)',
+        },
+        {
+          name: 'meetingLink',
+          title: 'Meeting Link',
+          type: 'url',
+          description: 'Meeting link to redirect to after form submission (optional)',
+        },
+        {
+          name: 'eventName',
+          title: 'Event Name',
+          type: 'string',
+          description: 'Custom event name for tracking (optional)',
+        },
+        {
+          name: 'type',
+          title: 'Form Type',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'Default', value: 'default' },
+              { title: 'Embed Form', value: 'embedForm' },
+            ],
+          },
+          description: 'Form display type',
+        },
+        {
+          name: 'videoLink',
+          title: 'Video Link',
+          type: 'url',
+          description: 'Video URL to open in new tab after form submission (optional)',
+        },
+        {
+          name: 'sidebarTitle',
+          title: 'Sidebar Title',
+          type: 'string',
+          description: 'Title to display in the sidebar (optional)',
+        },
+        {
+          name: 'pdfUrl',
+          title: 'PDF Download URL',
+          type: 'url',
+          description: 'PDF URL to download when form is submitted (optional)',
+        },
+      ],
+      hidden: ({ parent }) => parent?.componentType !== 'embedForm',
     },
   ],
   preview: {

@@ -6,6 +6,7 @@ const componentMap = {
   testimonialCard: dynamic(
     () => import('../components/sections/TestimonialCard'),
   ),
+  embedForm: dynamic(() => import('../components/uiBlocks/EmbedFormSection')),
 }
 
 const DynamicComponent = ({ componentType, ...props }) => {
