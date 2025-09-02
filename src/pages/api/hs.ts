@@ -97,7 +97,7 @@ export default async function handler(
 
       // Update contact with new video_watched value
       const response2 = await fetch(
-        `https://api.hubapi.com/crm/v3/objects/contacts/${email}`,
+        `https://api.hubapi.com/crm/v3/objects/contacts/${email}?idProperty=email`,
         requestOptionsPOST
       );
 
