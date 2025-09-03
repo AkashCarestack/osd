@@ -48,7 +48,7 @@ const MainImageSection = ({
  let hrefTemplate = tag?.slug?.current ? `/${siteConfig.paginationBaseUrls.base}/${tag?.slug?.current} `: ''
 
   return (
-    <div className="w-full flex gap-1 items-center bg-zinc-900 relative overflow-hidden md:pt-headerSpacer pt-headerSpacerMob">
+    <div className="w-full flex gap-1 items-center bg-zinc-900 relative overflow-hidden pt-headerSpacerMob">
       <Section className={`justify-center w-full !py-0 relative`}>
         <Wrapper className="z-10 flex h-auto flex-col md:flex-row">
           <div className="flex flex-col items-start  gap-32 text-white md:max-w-[46%] max-w-lg h-full justify-center py-8 md:py-12 md:min-h-[550px]">
