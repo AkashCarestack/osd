@@ -27,14 +27,19 @@ export default function ContentHub({ contentCount, categories, featuredDescripti
   const pathname = usePathname()
   const categoriesCopy = useMemo(() => categories && [...categories], [categories]);
   const router = useRouter();
-  const { locale } = router.query;  
+  const { locale } = router.query;
 
   useEffect(() => {
     const allTopic = { 'slug': `${siteConfig.categoryBaseUrls.base}`, 'categoryName': 'All Topics' }
-    if (!categoriesCopy || !categoriesCopy?.find(category => category.categoryName === 'All Topics')) {
-      categoriesCopy && categoriesCopy.unshift(allTopic);
+    let finalCategories = categoriesCopy;
+    
+    // Always add "All Topics" button if it doesn't exist
+    if (!finalCategories || !finalCategories?.find(category => category.categoryName === 'All Topics')) {
+      finalCategories = finalCategories || [];
+      finalCategories.unshift(allTopic);
     }
-    setCategories(categoriesCopy);
+    
+    setCategories(finalCategories);
   }, [categories, categoriesCopy]);
 
   useEffect(() => {

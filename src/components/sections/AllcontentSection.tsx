@@ -135,7 +135,7 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
     updateSelectedTag()
   }, [router.pathname, router.asPath,isBrowsePath])  
 
-  if((allContent?.length <= 2) && !isBrowsePath ) return null
+  if((allContent?.length <= 2) && !isBrowsePath && uiType !== 'category' ) return null
 
 
   const renderPosts = () => {

@@ -139,7 +139,7 @@ export default function Card({
     <React.Fragment>
       {cardType === 'top-image-card' ? (
         <Anchor href={linkUrl} className="h-full">
-          <AnimatingWrapper transitionType="slide-in" delay={0.8}>
+          <AnimatingWrapper transitionType="slide-in" delay={0.8} immediate={index < 2}>
             <div
               className={`flex ${ alignCard ? 'md:!flex-row flex-col'  : `flex-col`} w-full h-full gap-1 overflow-hidden ${reverse ? 'flex-col-reverse ' : ''}  group rounded-lg text-white`}
             >
@@ -198,7 +198,7 @@ export default function Card({
         </Anchor>
       ) : cardType === 'left-image-card' ? (
         <Anchor href={linkUrl} className='w-full'>
-          <AnimatingWrapper transitionType="slide-in" delay={0.2}>
+          <AnimatingWrapper transitionType="slide-in" delay={0.2} immediate={index < 2}>
             <div
               className={`flex flex-col md:flex-row gap-3 xl:gap-6 relative group hover:transition duration-500 ${className}`}
             >
@@ -269,7 +269,7 @@ export default function Card({
           className={`flex flex-col flex-1 w-full group hover:scale-100 transform duration-300 ${className} `}
         >
           <Anchor href={linkUrl}>
-            <AnimatingWrapper transitionType="slide-in" delay={0.8}>
+            <AnimatingWrapper transitionType="slide-in" delay={0.8} immediate={index < 2}>
               <div
                 className={`${!isLast && `border-b-2`} pb-6 flex flex-col gap-3  border-zinc-800`}
               >
@@ -462,7 +462,7 @@ export default function Card({
           // default card
           <div className={`flex flex-col relative h-full`}>
             <Anchor href={linkUrl} className="flex flex-col h-full group">
-              <AnimatingWrapper transitionType="slide-in" delay={0.8}>
+              <AnimatingWrapper transitionType="slide-in" delay={0.8} immediate={index < 2}>
                 {(post.mainImage || post.customImage) && (
                   <div
                     className={`overflow-hidden ${varyingIndex ? 'rounded-t-lg  flex-1' : 'rounded-lg'} relative min-h-[234px]  w-full`}

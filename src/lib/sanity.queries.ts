@@ -516,7 +516,7 @@ export async function getAuthors(client: SanityClient): Promise<Author[]> {
 export async function getTags(client: SanityClient): Promise<Tag[]> {
   return await client.fetch(tagsQuery)
 }
-export async function getCategories(client: SanityClient,): Promise<Tag[]> {
+export async function getCategories(client: SanityClient,): Promise<any[]> {
   return await client.fetch(categoriesQuery,)
 }
 export async function getTagsByOrder(client: SanityClient): Promise<Tag[]> {
@@ -1289,7 +1289,7 @@ export const tagBySlugQuery = groq`
   }
 `
 export const getCategoryBySlugQuery = groq`
-  *[_type == "category"  && slug.current == $slug][0] {
+  *[_type == "category" && slug.current == $slug][0] {
     _id,
     categoryName,
     categoryDescription,
@@ -1727,9 +1727,9 @@ export const tagsSlugsQuery = groq`
     }
 `
 export const catsSlugsQuery = groq`
-  *[_type == "category" && language == $locale && defined(slug.current)] {
+  *[_type == "category" && defined(slug.current)] {
       "slug": slug.current,
-      "locale": language
+      "locale": $locale
     }
 `
 export const testimonialSlugsQuery = groq`

@@ -35,16 +35,29 @@ interface Query {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const client = getClient();
   const slug = params?.slug as string;
-  const region = params?.locale as string
+  const region = params?.locale as string || 'en';
+  
+  if (!slug) {
+    return {
+      notFound: true,
+    };
+  }
+
   const categoryPromise = getCategory(client, slug);
   const siteSettingsPromise = getSiteSettings(client);
-  const homeSettingsPromise = getHomeSettings(client,region);
+  const homeSettingsPromise = getHomeSettings(client, region);
 
   const [category, siteSettings, homeSettings] = await Promise.all([
     categoryPromise,
     siteSettingsPromise,
     homeSettingsPromise,
   ]);
+  
+  if (!category) {
+    return {
+      notFound: true,
+    };
+  }
   
   const cardsPerPage = siteConfig.pagination.childItemsPerPage || 5;
 
@@ -59,29 +72,32 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     categories,
     footerData
   ] = await Promise.all([
-    getPostsByCategoryAndLimit(client, category?._id, 0, cardsPerPage,region),
-    getPostsByTag(client, category._id,region),
-    getPodcastsCount(client,region),
-    getWebinarsCount(client,region),
-    getArticlesCount(client,region),
-    getEbooksCount(client,region),
+    getPostsByCategoryAndLimit(client, category._id, 0, cardsPerPage, region),
+    getPostsByTag(client, category._id, region),
+    getPodcastsCount(client, region),
+    getWebinarsCount(client, region),
+    getArticlesCount(client, region),
+    getEbooksCount(client, region),
     getTags(client),
     getCategories(client),
     getFooterData(client, region)
   ]);
 
-  const totalPages = Math.ceil(allPostsForTag.length / cardsPerPage);
+  // Filter out categories with no posts for ContentHub
+  const allCategoryPosts = await Promise.all(
+    categories.map((cat) => getPostsByCategoryAndLimit(client, cat._id, 0, 3, region))
+  );
+  const categoriesWithPosts = categories.filter((cat, index) => {
+    return allCategoryPosts[index] && allCategoryPosts[index].length > 0;
+  });
 
-  if (!category || !categoryPosts) {
-    return {
-      notFound: true,
-    };
-  }
+  const totalPages = Math.ceil(allPostsForTag.length / cardsPerPage);
 
   return {
     props: {
       category,
       categories,
+      categoriesWithPosts,
       allTags,
       totalPages,
       categoryPosts,
@@ -102,29 +118,31 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths = async () => {
-
   const client = getClient()
   const locales = siteConfig.locales
 
-    const slugs = await Promise.all(
-      locales.map(async (locale) => {
-        const data = await client.fetch(catsSlugsQuery, { locale });
-        return data as string[]; 
-      })
-    );
-  
+  const slugs = await Promise.all(
+    locales.map(async (locale) => {
+      const data = await client.fetch(catsSlugsQuery, { locale });
+      return data.map((item: any) => ({
+        slug: item.slug,
+        locale: item.locale
+      }));
+    })
+  );
 
   return {
-    paths:slugs.flat().map((item:any) => ({
-      params: { slug:item.slug, locale:item.locale },
+    paths: slugs.flat().map((item: any) => ({
+      params: { slug: item.slug, locale: item.locale },
     })),
-    fallback: false, // Changed from 'blocking' to prevent auto-generation
+    fallback: 'blocking', // Allow dynamic generation for new categories
   }
 }
 
 export default function TagPage({
   category,
   categories,
+  categoriesWithPosts,
   categoryPosts,
   allTags,
   totalPages,
@@ -149,17 +167,17 @@ export default function TagPage({
 
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider data={categoriesWithPosts} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {siteSettingWithImage ? defaultMetaTag(siteSettingWithImage) : <></>}
-          <ContentHub categories={categories} contentCount={contentCount}   />
+          <ContentHub categories={categoriesWithPosts} contentCount={contentCount}   />
           <TagSelect
             tags={allTags}
             tagLimit={5}
             className="mt-12"
           />
-          <AllcontentSection  sectionType='category' allItemCount={totalPostCount} allContent={categoryPosts} />
+          <AllcontentSection  uiType='category' allItemCount={totalPostCount} allContent={categoryPosts} />
           <Pagination
             totalPages={totalPages}
             onPageChange={handlePageChange}

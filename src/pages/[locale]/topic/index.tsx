@@ -88,6 +88,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       return getPostsByCategoryAndLimit(client, category._id, 0, 3,region)
     })
   )
+
+  // Filter out categories with no posts for ContentHub
+  const categoriesWithPosts = categories.filter((category, index) => {
+    return categoryPosts[index] && categoryPosts[index].length > 0;
+  });
+  
   
   const totalPages = Math.ceil(totalPosts.length / cardsPerPage)
 
@@ -96,6 +102,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       posts,
       tags,
       categories,
+      categoriesWithPosts,
       categoryPosts,
       totalPages,
       totalPosts,
@@ -120,6 +127,7 @@ export default function ProjectSlugRoute(
     totalPages: any
     tags: any
     categories: any
+    categoriesWithPosts: any
   },
 ) {
   const router = useRouter()
@@ -130,6 +138,7 @@ export default function ProjectSlugRoute(
     siteSettings,
     homeSettings,
     categories,
+    categoriesWithPosts,
     categoryPosts
   } = props
 
@@ -140,7 +149,7 @@ export default function ProjectSlugRoute(
 
   return (
     <>
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={props?.footerData}>
+      <GlobalDataProvider data={categoriesWithPosts} featuredTags={homeSettings?.featuredTags} footerData={props?.footerData}>
         <BaseUrlProvider baseUrl={baseUrl}>
           <Layout>
             {siteSettingWithImage ? (
@@ -148,7 +157,7 @@ export default function ProjectSlugRoute(
             ) : (
               <></>
             )}
-            <ContentHub featuredDescription={homeSettings?.topicDescription} categories={categories} contentCount={contentCount} />
+            <ContentHub featuredDescription={homeSettings?.topicDescription} categories={categoriesWithPosts} contentCount={contentCount} />
             {categoryPosts && categoryPosts.length > 0 && categoryPosts.map((post: any, index: number) => {
               return post?.length > 0 && (
                 <div key={index + 1}>

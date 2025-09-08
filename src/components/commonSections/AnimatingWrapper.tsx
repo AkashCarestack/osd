@@ -52,23 +52,31 @@ function AnimatingWrapper({
   index = 0,
   children,
   transitionType = "fade-in",
+  immediate = false,
   ...props
 }) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(immediate);
   const elementRef = useRef(null);
 
   useEffect(() => {
     const element = elementRef.current; 
+    
+    // If immediate is true, set visible immediately
+    if (immediate) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(entry.isIntersecting);
+          setIsVisible(true);
         }
       },
       {
         root: null,
-        rootMargin: "0px",
-        threshold: 0.2,
+        rootMargin: "-10% 0px -10% 0px", // Trigger when element is 10% into viewport
+        threshold: 0.1, // Trigger when 10% of element is visible
       }
     );
 
@@ -81,24 +89,38 @@ function AnimatingWrapper({
         observer.unobserve(element);
       }
     };
-  }, []);
+  }, [immediate]);
+
+  const getInitialTransform = () => {
+    const baseOffset = index * 50 + 50;
+    switch (transitionType) {
+      case "fade-in":
+        return `translateY(${baseOffset}px)`;
+      case "slide-in":
+        return `translateY(${baseOffset}px)`;
+      case "scale-in":
+        return `scale(0.9)`;
+      case "rotate-in":
+        return `rotate(-10deg)`;
+      case "slide-from-right":
+        return `translateX(100px)`;
+      case "slide-from-left":
+        return `translateX(-100px)`;
+      case "zoom-in":
+        return `scale(0.6)`;
+      case "reveal-from-top":
+        return `translateY(${baseOffset}px)`;
+      case "expand-from-top":
+        return `scaleY(0)`;
+      default:
+        return `translateY(${baseOffset}px)`;
+    }
+  };
 
   const style = {
     ...transitionStyles[transitionType],
     opacity: isVisible ? 1 : 0,
-    transform: isVisible
-      ? "translateX(0)"
-      : {
-          "fade-in": `translateY(${index * 50 + 50}px)`,
-          "slide-in": `translateY(${index * 50 + 50}px)`,
-          "scale-in": `scale(0.9)`,
-          "rotate-in": `rotate(-10deg)`,
-          "slide-from-right": `translateX(100px)`,
-          "slide-from-left": `translateX(-100px)`,
-          "zoom-in": `scale(0.6)`,
-          "reveal-from-top": `translateY(${index * 50 + 50}px)`,
-          "expand-from-top": `scaleY(${index * 50 + 50}px)`,
-        }[transitionType],
+    transform: isVisible ? "translateX(0) translateY(0) scale(1) rotate(0deg)" : getInitialTransform(),
   };
 
   const NewChild = React.Children.map(children, (child) => {
