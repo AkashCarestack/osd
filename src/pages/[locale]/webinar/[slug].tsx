@@ -146,6 +146,7 @@ const WebinarPage = ({
           canonical={seoCanonical}
           jsonLD={jsonLD}
           contentType={webinar?.contentType}
+          ogImage={webinar?.mainImage?._id ? urlForImage(webinar.mainImage._id) : undefined}
         />
         {/* {CustomHead} */}
       <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>

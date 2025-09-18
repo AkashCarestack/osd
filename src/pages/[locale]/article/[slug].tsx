@@ -137,7 +137,7 @@ const ArticlePage = ({
   return (
     <>
       <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
-     <SEOHead
+        <SEOHead
           title={seoTitle}
           description={seoDescription}
           keywords={seoKeywords}
@@ -145,6 +145,7 @@ const ArticlePage = ({
           canonical={seoCanonical}
           jsonLD={jsonLD}
           contentType={articles?.contentType}
+          ogImage={articles?.mainImage?._id ? urlForImage(articles.mainImage._id) : undefined}
         />
         <CustomHead props={articles} type="articleExpanded" />
 

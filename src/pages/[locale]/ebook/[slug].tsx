@@ -134,6 +134,7 @@ const EbookPage = ({
           canonical={seoCanonical}
           jsonLD={jsonLD}
           contentType={ebook?.contentType}
+          ogImage={ebook?.mainImage?._id ? urlForImage(ebook.mainImage._id) : undefined}
         />
         
         <CustomHead props={ebook} type="articleExpanded" />

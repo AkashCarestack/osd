@@ -140,6 +140,7 @@ const PressReleasePage = ({
           canonical={seoCanonical}
           jsonLD={jsonLD}
           contentType={pressRelease?.contentType}
+          ogImage={pressRelease?.mainImage?._id ? urlForImage(pressRelease.mainImage._id) : undefined}
         />
       <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
         <Layout>

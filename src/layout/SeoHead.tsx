@@ -50,14 +50,12 @@ export default function SEOHead({
             dangerouslySetInnerHTML={{ __html: jsonLD }}
           />
         )}
-        {ogImage && (
-          <meta
-            id="ogImage"
-            property="og:image"
-            content={ogImage}
-            key="ogImage"
-          />
-        )}
+        <meta
+          id="ogImage"
+          property="og:image"
+          content={ogImage || "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg"}
+          key="ogImage"
+        />
       </Head>
     </>
   )
