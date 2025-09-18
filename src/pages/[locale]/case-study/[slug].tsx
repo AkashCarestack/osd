@@ -120,7 +120,9 @@ const CaseStudyPage = ({
 
   const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
   const seoTitle = caseStudy.seoTitle || caseStudy.title
-  const seoDescription = caseStudy.seoDescription || caseStudy.excerpt
+  const seoDescription = (caseStudy?.seoDescription && !caseStudy.seoDescription.includes('Test titlw')) 
+    ? caseStudy.seoDescription 
+    : caseStudy?.excerpt || ''
   const seoKeywords = caseStudy.seoKeywords || ''
   const seoRobots = caseStudy.seoRobots || 'index,follow'
   const seoCanonical =
@@ -142,7 +144,6 @@ const CaseStudyPage = ({
           contentType={caseStudy?.contentType}
         />
         {/* {customMetaTag('caseStudy')} */}
-        {generateMetaData(caseStudy,seoCanonical)}
         <Layout>
           <MainImageSection
             isAuthor={true}

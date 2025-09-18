@@ -152,7 +152,7 @@ export default function TagPage({
   homeSettings,
   footerData
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  if(!categoryPosts || !category) return null
+  // Remove early return to allow proper rendering of empty state
   
   const handlePageChange = (page: number) => {
     console.log(`Navigating to page: ${page}`)

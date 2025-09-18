@@ -119,7 +119,9 @@ const PressReleasePage = ({
   const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
 
   const seoTitle = pressRelease.seoTitle || pressRelease.title
-  const seoDescription = pressRelease.seoDescription || pressRelease.excerpt
+  const seoDescription = (pressRelease?.seoDescription && !pressRelease.seoDescription.includes('Test titlw')) 
+    ? pressRelease.seoDescription 
+    : pressRelease?.excerpt || ''
   const seoKeywords = pressRelease.seoKeywords || ''
   const seoRobots = pressRelease.seoRobots || 'index,follow'
   const seoCanonical =
@@ -129,7 +131,6 @@ const PressReleasePage = ({
 
   return (
     <>
-      {generateMetaData(pressRelease)}
       <CustomHead props={pressRelease} type="pressRelease" />
       <SEOHead
           title={seoTitle}

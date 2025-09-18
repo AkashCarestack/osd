@@ -121,7 +121,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths, 
-    fallback: false, 
+    fallback: 'blocking', // Allow dynamic generation for tags that exist but weren't pre-generated
   };
 }
 

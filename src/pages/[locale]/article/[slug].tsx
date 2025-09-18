@@ -124,7 +124,9 @@ const ArticlePage = ({
   
   const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
   const seoTitle = articles?.seoTitle || articles?.title || 'Article'
-  const seoDescription = articles?.seoDescription || articles?.excerpt || ''
+  const seoDescription = (articles?.seoDescription && !articles.seoDescription.includes('Test titlw')) 
+    ? articles.seoDescription 
+    : articles?.excerpt || ''
   const seoKeywords = articles?.seoKeywords || ''
   const seoRobots = articles?.seoRobots || 'index,follow'
   const seoCanonical =
@@ -145,7 +147,6 @@ const ArticlePage = ({
           contentType={articles?.contentType}
         />
         <CustomHead props={articles} type="articleExpanded" />
-        {generateMetaData(articles,seoCanonical)}
 
         <Layout>
           <MainImageSection enableDate={true} post={articles} />

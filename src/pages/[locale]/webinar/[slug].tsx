@@ -125,7 +125,9 @@ const WebinarPage = ({
   const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
 
   const seoTitle = webinar.seoTitle || webinar.title
-  const seoDescription = webinar.seoDescription || webinar.excerpt
+  const seoDescription = (webinar?.seoDescription && !webinar.seoDescription.includes('Test titlw')) 
+    ? webinar.seoDescription 
+    : webinar?.excerpt || ''
   const seoKeywords = webinar.seoKeywords || ''
   const seoRobots = webinar.seoRobots || 'index,follow'
   const seoCanonical =
@@ -146,7 +148,6 @@ const WebinarPage = ({
           contentType={webinar?.contentType}
         />
         {/* {CustomHead} */}
-      {generateMetaData(webinar,seoCanonical)}
       <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
         <Layout>
           <MainImageSection

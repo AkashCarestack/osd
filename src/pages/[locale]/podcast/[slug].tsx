@@ -139,7 +139,9 @@ const PodcastPage = ({
   const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com/'
 
   const seoTitle = podcast.seoTitle || podcast.title
-  const seoDescription = podcast.seoDescription || podcast.excerpt
+  const seoDescription = (podcast?.seoDescription && !podcast.seoDescription.includes('Test titlw')) 
+    ? podcast.seoDescription 
+    : podcast?.excerpt || ''
   const seoKeywords = podcast.seoKeywords || ''
   const seoRobots = podcast.seoRobots || 'index,follow'
   const seoCanonical =
@@ -159,7 +161,6 @@ const PodcastPage = ({
         ogImage={urlForImage(podcast?.mainImage)}
         contentType={podcast?.contentType}
       />
-      {generateMetaData(podcast,seoCanonical)}
       <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
         <Layout>
           <MainImageSection

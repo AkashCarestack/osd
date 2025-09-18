@@ -23,11 +23,14 @@ import {
   getPodcastsCount,
   getPostsByTag,
   getPostsByTagAndLimit,
+  getSiteSettings,
   getTag,
   getTags,
   getWebinarsCount,
 } from '~/lib/sanity.queries'
 import { SharedPageProps } from '~/pages/_app'
+import SEOHead from '~/layout/SeoHead'
+import { urlForImage } from '~/lib/sanity.image'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const client = getClient();
@@ -41,7 +44,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getTags(client)
   ]);
 
-  if (!tag) {
+  if (!category) {
     return {
       notFound: true,
     };
@@ -51,7 +54,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const startLimit = (pageNumber - 1) * cardsPerPage;
   const endLimit = startLimit + cardsPerPage;
 
-  const [posts, allPostsForTag, totalPodcasts, totalWebinars, totalArticles, totalEbooks, homeSettings, categories,footerData] = await Promise.all([
+  const [posts, allPostsForTag, totalPodcasts, totalWebinars, totalArticles, totalEbooks, homeSettings, categories, footerData, siteSettings] = await Promise.all([
     getPostsByTagAndLimit(client, category._id, startLimit, endLimit, region),
     getPostsByTag(client, category._id, region),
     getPodcastsCount(client, region),
@@ -60,12 +63,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getEbooksCount(client, region),
     getHomeSettings(client, region),
     getCategories(client),
-    getFooterData(client, region)
+    getFooterData(client, region),
+    getSiteSettings(client)
   ]);
 
   return {
     props: {
-      tag,
+      tag: category,
       allTags,
       totalPages: Math.ceil(allPostsForTag.length / cardsPerPage),
       totalPostCount: allPostsForTag.length,
@@ -76,6 +80,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       homeSettings,
       categories,
       footerData,
+      siteSettings,
       contentCount: {
         podcasts: totalPodcasts,
         webinars: totalWebinars,
@@ -109,7 +114,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false, 
+    fallback: 'blocking', // Allow dynamic generation for categories that exist but weren't pre-generated
   };
 };
 
@@ -125,6 +130,7 @@ export default function TagPagePaginated({
   homeSettings,
   categories,
   footerData,
+  siteSettings,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const handlePageChange = (page: number) => {
     console.log(`Navigating to page: ${page}`)
@@ -133,12 +139,29 @@ export default function TagPagePaginated({
   const baseUrl = 
     `/${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current}`;
 
+  // SEO Configuration
+  const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
+  const pageUrl = `${prodUrl}${baseUrl}${currentPage > 1 ? `/page/${currentPage}` : ''}`
+  const seoTitle = tag?.categoryName ? `${tag.categoryName} - VoiceStack Resources` : 'VoiceStack Resources'
+  const seoDescription = tag?.categoryDescription || `Explore ${tag?.categoryName || 'our'} content and resources on VoiceStack`
+  const seoKeywords = tag?.categoryName ? `${tag.categoryName}, VoiceStack, resources, content` : 'VoiceStack, resources, content'
+  const siteSettingWithImage = siteSettings?.find((e: any) => e?.openGraphImage)
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
-      <BaseUrlProvider baseUrl={baseUrl}>
-        <Layout>
-        <ContentHub categories={categories} contentCount={contentCount}   />
+    <>
+      <SEOHead
+        title={seoTitle}
+        description={seoDescription}
+        keywords={seoKeywords}
+        robots="index,follow"
+        canonical={pageUrl}
+        ogImage={siteSettingWithImage?.openGraphImage ? urlForImage(siteSettingWithImage.openGraphImage.asset._ref) : undefined}
+        jsonLD=""
+      />
+      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+        <BaseUrlProvider baseUrl={baseUrl}>
+          <Layout>
+          <ContentHub categories={categories} contentCount={contentCount}   />
         <TagSelect
             tags={allTags}
             tagLimit={5}
@@ -157,5 +180,6 @@ export default function TagPagePaginated({
         </Layout>
       </BaseUrlProvider>
     </GlobalDataProvider>
+    </>
   )
 }

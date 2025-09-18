@@ -133,7 +133,7 @@ export const getStaticPaths = async () => {
 
     return {
       paths,
-      fallback: false, // Changed from 'blocking' to prevent auto-generation
+      fallback: 'blocking', // Allow dynamic generation for tags that exist but weren't pre-generated
     }
   } catch (error) {
     console.error('Error in getStaticPaths:', error)

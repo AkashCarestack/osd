@@ -113,7 +113,9 @@ const EbookPage = ({
   const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
 
   const seoTitle = ebook.seoTitle || ebook.title
-  const seoDescription = ebook.seoDescription || ebook.excerpt
+  const seoDescription = (ebook?.seoDescription && !ebook.seoDescription.includes('Test titlw')) 
+    ? ebook.seoDescription 
+    : ebook?.excerpt || ''
   const seoKeywords = ebook.seoKeywords || ''
   const seoRobots = ebook.seoRobots || 'index,follow'
   const seoCanonical =
@@ -135,7 +137,6 @@ const EbookPage = ({
         />
         
         <CustomHead props={ebook} type="articleExpanded" />
-        {generateMetaData(ebook,seoCanonical)}
         <Layout>
           <MainImageSection post={ebook} enableDate={true} />
           <Section className="flex justify-center">
