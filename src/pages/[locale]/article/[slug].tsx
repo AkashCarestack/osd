@@ -147,7 +147,6 @@ const ArticlePage = ({
           contentType={articles?.contentType}
           ogImage={articles?.mainImage?._id ? urlForImage(articles.mainImage._id) : undefined}
         />
-        <CustomHead props={articles} type="articleExpanded" />
 
         <Layout>
           <MainImageSection enableDate={true} post={articles} />

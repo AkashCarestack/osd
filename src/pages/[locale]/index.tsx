@@ -146,7 +146,7 @@ export default function IndexPage(props: IndexPageProps) {
   const latestPosts = props?.latestPosts
   const siteSettings = props?.siteSettings
   const eventCards = props?.allEventCards
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://resources.voicestack.com'
 
   return (
     <GlobalDataProvider

@@ -137,8 +137,6 @@ const EbookPage = ({
           contentType={ebook?.contentType}
           ogImage={ebook?.mainImage?._id ? urlForImage(ebook.mainImage._id) : undefined}
         />
-        
-        <CustomHead props={ebook} type="articleExpanded" />
         <Layout>
           <MainImageSection post={ebook} enableDate={true} />
           <Section className="flex justify-center">

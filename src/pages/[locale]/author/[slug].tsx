@@ -23,6 +23,8 @@ import {
   getTags,
 } from '~/lib/sanity.queries'
 import { CustomHead, metaTagDataForAuthor } from '~/utils/customHead'
+import SEOHead from '~/layout/SeoHead'
+import { urlForImage } from '~/lib/sanity.image'
 
 import { SharedPageProps } from '../../_app'
 
@@ -107,13 +109,33 @@ export default function AuthorPage({
   const baseUrl = `/${siteConfig.pageURLs.author}`
   const url = process.env.NEXT_PUBLIC_BASE_URL + baseUrl
   
+  const seoTitle = author?.name || 'Author Profile'
+  const seoDescription = author?.bio || `Learn more about ${author?.name} and their contributions to VoiceStack.`
+  const seoCanonical = `${url}/${author?.slug?.current || ''}`
+  const jsonLD = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": author?.name,
+    "description": author?.bio,
+    "image": author?.picture ? urlForImage(author.picture._id) : undefined,
+    "url": seoCanonical
+  })
 
   return (
     <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
+        <SEOHead
+          title={seoTitle}
+          description={seoDescription}
+          keywords=""
+          robots="index,follow"
+          canonical={seoCanonical}
+          jsonLD={jsonLD}
+          contentType="author"
+          ogImage={author?.picture?._id ? urlForImage(author.picture._id) : undefined}
+        />
+        <CustomHead props={author} type="author" />
         <Layout>
-          <CustomHead props={author} type="author" />
-          {metaTagDataForAuthor(author, url)}
           <Section className="justify-center">
             <Wrapper className={`flex-col md:pt-headerSpacer pt-headerSpacerMob`}>
               <div className="flex md:flex-row justify-between flex-col gap-8 md:gap-16">

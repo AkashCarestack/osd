@@ -132,7 +132,6 @@ const PressReleasePage = ({
 
   return (
     <>
-      <CustomHead props={pressRelease} type="pressRelease" />
       <SEOHead
           title={seoTitle}
           description={seoDescription}
