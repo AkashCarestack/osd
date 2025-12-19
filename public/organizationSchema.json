@@ -1,133 +1,87 @@
 {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "VoiceStack",
-  "legalName": "Good Methods Global, Inc.",
-  "image": "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg",
-  "logo": "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg",
-  "url": "https://voicestack.com",
-  "email": "support@voicestack.com",
-  "numberOfEmployees": "600",
-  "description": "VoiceStack is an award-winning, cloud dental practice management software trusted by thousands of dentists & dental practices.",
-  "slogan": "The last dental software you'll ever need.",
-  "mainEntityOfPage": "https://voicestack.com",
-  "areaServed": [
+  "@graph": [
     {
-      "@type": "Country",
-      "name": "United States"
+      "@type": "Organization",
+      "@id": "https://voicestack.com/#organization",
+      "name": "VoiceStack",
+      "url": "https://voicestack.com/",
+      "logo": "https://voicestack.com/assets/schema/schema-logo-voicestack-1200x1200.jpg",
+      "image": "https://voicestack.com/assets/schema/schema-logo-voicestack-1200x1200.jpg",
+      "description": "VoiceStack® is an award-winning, AI-powered phone system that's trusted by thousands of dentists & dental practices.",
+      "slogan": "The Most Advanced AI-Powered Dental Phone System.",
+      "foundingDate": "2024",
+
+      "founder": {
+        "@type": "Person",
+        "@id": "https://voicestack.com/#founder",
+        "name": "Krishnan RV",
+        "jobTitle": "Founder",
+        "url": "https://voicestack.com/company/leadership-team",
+        "sameAs": [
+          "https://www.linkedin.com/company/voice-stack/"
+        ]
+      },
+
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "2954 Mallory Cir #209",
+        "addressLocality": "Kissimmee",
+        "addressRegion": "FL",
+        "postalCode": "34747",
+        "addressCountry": "US"
+      },
+
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "(407) 833-6436",
+          "email": "support@voicestack.com",
+          "contactType": "Customer Service",
+          "areaServed": "US",
+          "availableLanguage": "en",
+          "url": "https://voicestack.com/support"
+        },
+        {
+          "@type": "ContactPoint",
+          "telephone": "(407) 559-6068",
+          "email": "sales.us@voicestack.com",
+          "contactType": "Sales",
+          "areaServed": "US",
+          "availableLanguage": "en",
+          "url": "https://voicestack.com/sales"
+        }
+      ],
+
+      "hasProduct": {
+      "@id": "https://voicestack.com/#software"
+      },
+
+      "sameAs": [
+        "https://www.facebook.com/voicestack/",
+        "https://www.instagram.com/voicestack.ai/",
+        "https://www.linkedin.com/company/voice-stack/",
+        "https://www.youtube.com/@VoiceStack"
+      ],
+
+      "mainEntityOfPage": {
+        "@id": "https://voicestack.com/#website"
+      }
     },
+
     {
-      "@type": "Country",
-      "name": "United Kingdom"
-    }
-  ],
-  "keywords": "voicestack, dental software, voicestack dental software, top dental software, best dental software, cloud dental practice management software, dental practice management software",
-  "knowsAbout": [
-    "Dental Software",
-    "Cloud Dental Software",
-    "Dental Practice Management Software"
-  ],
-  "foundingDate": "2015-01-07",
-  "founders": [
-    {
-      "@type": "Person",
-      "name": "Abhi Krishna",
-      "jobTitle": "Co-Founder & CEO"
-    },
-    {
-      "@type": "Person",
-      "name": "Varun Nelson",
-      "jobTitle": "Co-Founder & VP Product Opearations"
-    },
-    {
-      "@type": "Person",
-      "name": "Kevin Cook",
-      "jobTitle": "Co-Founder & VP, Customer Experience"
-    }
-  ],
-  "awards": [
-    "2022 Software Advice FrontRunner",
-    "2022 Software Suggest Trending",
-    "2022 GetApp Category Leader",
-    "2021 G2 High Performer",
-    "2021 SoftwarePundit SMB10",
-    "G2 Best Meets Requirements - Summer 2024",
-    "G2 Best Meets Requirements (Small Business) - Summer 2024",
-    "G2 Best Relationship (Small Business) - Summer 2024",
-    "G2 Best Relationship - Summer 2024",
-    "G2 Best Results - Summer 2024",
-    "G2 Best Support - Summer 2024",
-    "G2 Best Usability (Small Business) - Summer 2024",
-    "G2 Best Usability - Summer 2024",
-    "G2 Highest User Adoption (Small Business) - Summer 2024",
-    "G2 Leader - Summer 2024",
-    "G2 Leader (Small Business) - Summer 2024",
-    "G2 Momentum Leader - Summer 2024",
-    "MarketsandMarkets Emerging Leader"
-  ],
-  "sameAs": [
-    "https://voicestack.com",
-    "https://www.facebook.com/VoiceStackSystem/",
-    "https://twitter.com/VoiceStackSystem/",
-    "https://www.instagram.com/voicestack_/",
-    "https://www.youtube.com/@VoiceStack",
-    "https://www.linkedin.com/company/voicestack/",
-    "https://vimeo.com/user14264510"
-  ],
-  "address": [
-    {
-      "@type": "PostalAddress",
-      "streetAddress": "2954 Mallory Cir #209",
-      "addressLocality": "Kissimmee",
-      "addressRegion": "FL",
-      "postalCode": "34747",
-      "addressCountry": "US"
-    },
-    {
-      "@type": "PostalAddress",
-      "streetAddress": "10th Yamuna, Technopark Phase III Main Rd",
-      "addressLocality": "Thiruvananthapuram",
-      "addressRegion": "KL",
-      "postalCode": "695583",
-      "addressCountry": "IN"
-    }
-  ],
-  "@logo": [
-    {
-      "@type": "ImageObject",
-      "@id": "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg",
-      "url": "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg",
-      "contentUrl": "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg",
-      "caption": "VoiceStack logo",
-      "inLanguage": ["en-US", "en-GB"],
-      "width": 1200,
-      "height": 1200
-    }
-  ],
-  "@icon": [
-    {
-      "@type": "ImageObject",
-      "@id": "https://cdn.sanity.io/images/bbmnn1wc/production/5cc4351771b60f336498e1ba2642f572ab3c8364-1201x1201.png",
-      "url": "https://cdn.sanity.io/images/bbmnn1wc/production/5cc4351771b60f336498e1ba2642f572ab3c8364-1201x1201.png",
-      "contentUrl": "https://cdn.sanity.io/images/bbmnn1wc/production/5cc4351771b60f336498e1ba2642f572ab3c8364-1201x1201.png",
-      "caption": "VoiceStack icon",
-      "inLanguage": ["en-US", "en-GB"],
-      "width": 1200,
-      "height": 1200
-    }
-  ],
-  "contactPoint": [
-    {
-      "@type": "ContactPoint",
-      "contactType": "Customer Service",
-      "telephone": "+1 (407) 833-6123",
-      "email": "support@voicestack.com"
-    },
-    {
-      "@type": "ContactPoint",
-      "contactType": "Sales",
-      "telephone": "+1 (407) 833-6123",
-      "email": "sales@voicestack.com"
+      "@type": "WebSite",
+      "@id": "https://voicestack.com/#website",
+      "url": "https://voicestack.com/",
+      "name": "VoiceStack",
+      "publisher": {
+        "@id": "https://voicestack.com/#organization"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://voicestack.com/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
     }
   ]
 }

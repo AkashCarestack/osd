@@ -163,7 +163,7 @@ const ArticlePage = ({
                   </div>
                 </div>
                 <div className="flex flex-col gap-8 md:mt-12 bg-red relative md:w-1/3 md:max-w-[410px] w-full">
-                  <div className="sticky top-24 flex flex-col-reverse md:flex-col gap-8 md:overflow-auto md:max-h-[83vh]">
+                  <div className="sticky top-24 flex flex-col-reverse md:flex-col gap-8 md:overflow-auto">
                     <Toc headings={articles?.headings} title="Contents" />
                     <div className='flex-col gap-8 flex'>
                       {articles?.author && (
