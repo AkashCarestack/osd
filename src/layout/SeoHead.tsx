@@ -1,6 +1,8 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import Script from 'next/script'
 
+import { useAlternatePaths, type AlternatePath } from '~/components/utils/alternatePaths'
 import { slugToCapitalized } from '~/utils/common'
 
 interface SEOHeadProps {
@@ -27,17 +29,32 @@ export default function SEOHead({
   props,
   ogImage,
 }: SEOHeadProps) {
+  const { alternatePaths, defaultUrl } = useAlternatePaths()
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://resources.voicestack.com'
+  const locale = useRouter().query.locale as string
+  const slug = useRouter().query.slug as string
+  console.log('locale', useRouter().query)
+  const defaultUrlx = locale === 'en' ? baseUrl : `${baseUrl}/${locale}/${slug}`
+
+  // Default values
+  const defaultTitle = title || 'Resources | On-Demand Learning Resources | VoiceStack®'
+  const defaultDescription = description || 'Whether you\'re looking for e-Books, webinars, podcasts, or articles, VoiceStack® Resources are full of helpful & informative topics to improve your practice.'
+  const defaultKeywords = keywords || 'voicestack resources, voicestack articles, voicestack webinars, voicestack blogs'
+  const defaultRobots = robots || 'index, follow, archive'
+  const defaultAuthor = 'VoiceStack®'
+
   return (
     <>
       <Head>
-        <title>{title}</title>
-        <meta property="og:title" content={title} key="og:title" />
-        <meta property="twitter:title" content={title} key="twitter:title" />
-        <meta name="description" content={description} key="description" />
-        <meta property="og:description" content={description} key="og:description" />
-        <meta property="twitter:description" content={description} key="twitter:description" />
-        <meta name="keywords" content={keywords} key="keywords" />
-        <meta name="robots" content={robots} key="robots" />
+        <title>{defaultTitle}</title>
+        <meta property="og:title" content={defaultTitle} key="og:title" />
+        <meta property="twitter:title" content={defaultTitle} key="twitter:title" />
+        <meta name="description" content={defaultDescription} key="description" />
+        <meta property="og:description" content={defaultDescription} key="og:description" />
+        <meta property="twitter:description" content={defaultDescription} key="twitter:description" />
+        <meta name="keywords" content={defaultKeywords} key="keywords" />
+        <meta name="robots" content={defaultRobots} key="robots" />
+        <meta name="author" content={defaultAuthor} key="author" />
         <link rel="canonical" href={canonical} key="canonical" />
         <meta property="og:url" content={canonical} key="og:url" />
         <meta property="twitter:url" content={canonical} key="twitter:url" />
@@ -56,6 +73,17 @@ export default function SEOHead({
           content={ogImage || "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg"}
           key="ogImage"
         />
+        {defaultUrlx && (
+          <link rel="alternate" hrefLang="x-default" href={defaultUrlx} key="hreflang-x-default" />
+        )}
+        {alternatePaths.map((alt: AlternatePath) => (
+          <link
+            rel="alternate"
+            hrefLang={alt.hrefLang}
+            href={alt.href}
+            key={`hreflang-${alt.hrefLang}`}
+          />
+        ))}
       </Head>
     </>
   )

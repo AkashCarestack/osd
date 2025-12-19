@@ -78,21 +78,6 @@ export default defineType({
       fieldset: 'seo',
     }),
     defineField({
-      name: 'seoJSONLD',
-      title: 'Meta JSON-LD',
-      type: 'text',
-      fieldset: 'seo',
-      validation: (Rule: any) =>
-        Rule.custom((json) => {
-          try {
-            JSON.parse(json || '{}')
-            return true
-          } catch (err) {
-            return 'Invalid JSON format'
-          }
-        }),
-    }),
-    defineField({
       name: 'seoCanonical',
       title: 'Canonical URL',
       type: 'url',
@@ -267,6 +252,23 @@ export default defineType({
         hotspot: true,
       },
       validation: (Rule) => Rule.required().error('Main image is required.'),
+    }),
+    defineField({
+      name: 'articleImage',
+      title: 'Article Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      hidden: ({ parent }) => parent.contentType !== 'article',
+      description: 'Additional image for article schema',
+    }),
+    defineField({
+      name: 'articleUrl',
+      title: 'Article URL',
+      type: 'url',
+      hidden: ({ parent }) => parent.contentType !== 'article',
+      description: 'URL for the article',
     }),
     defineField({
       name: 'body',

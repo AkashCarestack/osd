@@ -34,19 +34,19 @@ export function generateJSONLD(post: any) {
           author: {
             '@type': 'Person',
             name: (author && author[0]?.name) || 'Unknown Author',
-            url: 'https://carestack.com/company/leadership-team',
+            url: 'https://voicestack.com/company/leadership-team',
           },
           wordCount: estimatedWordCount ?? 0,
           dateCreated: post._createdAt,
           inLanguage: 'en-US',
           copyrightYear: post._createdAt.split(' ')[2],
           copyrightHolder: {
-            '@id': 'https://carestack.com/#organization',
+            '@id': 'https://voicestack.com/#organization',
           },
           publisher: {
             '@type': 'Organization',
-            name: 'CareStack',
-            url: 'https://carestack.com',
+            name: 'VoiceStack',
+            url: 'https://voicestack.com',
             logo: {
               '@type': 'ImageObject',
               inLanguage: 'en-US',
@@ -74,6 +74,8 @@ export function generateJSONLD(post: any) {
           '@context': 'https://schema.org',
           '@type': 'Article',
           headline: post.title,
+          image: post.articleImage ? urlForImage(post.articleImage._id) : (post.mainImage ? urlForImage(post.mainImage._id) : ''),
+          url: post.articleUrl || `https://resources.voicestack.com/article/${post.slug?.current || ''}`,
           author: {
             '@type': 'Person',
             name: (author && author[0]?.name) || 'Unknown Author',
@@ -148,19 +150,19 @@ export function generateJSONLD(post: any) {
     author: {
       '@type': 'Person',
       name: (author && author[0]?.name) || 'Unknown Author',
-      url: 'https://carestack.com/company/leadership-team',
+      url: 'https://voicestack.com/company/leadership-team',
     },
     wordCount: estimatedWordCount ?? 0,
     dateCreated: post._createdAt,
     inLanguage: 'en-US',
     copyrightYear: post._createdAt?.split(' ')[2],
     copyrightHolder: {
-      '@id': 'https://carestack.com/#organization',
+      '@id': 'https://voicestack.com/#organization',
     },
     publisher: {
       '@type': 'Organization',
-      name: 'CareStack',
-      url: 'https://carestack.com',
+      name: 'VoiceStack',
+      url: 'https://voicestack.com',
       logo: {
         '@type': 'ImageObject',
         inLanguage: 'en-US',
@@ -171,30 +173,23 @@ export function generateJSONLD(post: any) {
     },
   }
 
-  let customJSONLD = {}
-  try {
-    customJSONLD = JSON.parse(post.seoJSONLD || '{}')
-  } catch (error) {
-    console.error('Error parsing custom JSON-LD:', error)
-  }
-
-  return JSON.stringify({ ...defaultJSONLD, ...customJSONLD })
+  return JSON.stringify(defaultJSONLD)
 }
 
 export function indexPageJsonLd(params: any) {
   return {
-    maintainer: 'CareStack',
+    maintainer: 'VoiceStack',
     publisher: {
       '@type': 'Organization',
-      name: 'CareStack',
-      '@id': 'https://carestack.com/#organization',
+      name: 'VoiceStack',
+      '@id': 'https://voicestack.com/#organization',
     },
     '@context': 'https://schema.org',
     headline: params?.title || '',
     articleBody: params?.posts?.map((e: any) => e?.title).join(', ') || '',
     copyrightHolder: {
       '@type': 'Organization',
-      '@id': 'https://carestack.com/#organization',
+      '@id': 'https://voicestack.com/#organization',
     },
     name: params?.title || '',
     datePublished: params?._createdAt || '',

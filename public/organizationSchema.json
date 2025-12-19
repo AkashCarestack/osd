@@ -1,16 +1,16 @@
 {
   "@context": "https://schema.org",
-  "@type": "Corporation",
-  "name": "CareStack",
+  "@type": "Organization",
+  "name": "VoiceStack",
   "legalName": "Good Methods Global, Inc.",
   "image": "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg",
   "logo": "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg",
-  "url": "https://carestack.com",
-  "email": "hello@carestack.com",
+  "url": "https://voicestack.com",
+  "email": "support@voicestack.com",
   "numberOfEmployees": "600",
-  "description": "CareStack is an award-winning, cloud dental practice management software trusted by thousands of dentists & dental practices.",
+  "description": "VoiceStack is an award-winning, cloud dental practice management software trusted by thousands of dentists & dental practices.",
   "slogan": "The last dental software you'll ever need.",
-  "mainEntityOfPage": "https://carestack.com",
+  "mainEntityOfPage": "https://voicestack.com",
   "areaServed": [
     {
       "@type": "Country",
@@ -21,7 +21,7 @@
       "name": "United Kingdom"
     }
   ],
-  "keywords": "carestack, dental software, carestack dental software, top dental software, best dental software, cloud dental practice management software, dental practice management software",
+  "keywords": "voicestack, dental software, voicestack dental software, top dental software, best dental software, cloud dental practice management software, dental practice management software",
   "knowsAbout": [
     "Dental Software",
     "Cloud Dental Software",
@@ -66,12 +66,12 @@
     "MarketsandMarkets Emerging Leader"
   ],
   "sameAs": [
-    "https://carestack.com",
-    "https://www.facebook.com/CareStackSystem/",
-    "https://twitter.com/CareStackSystem/",
-    "https://www.instagram.com/carestack_/",
-    "https://www.youtube.com/@CareStack",
-    "https://www.linkedin.com/company/carestack/",
+    "https://voicestack.com",
+    "https://www.facebook.com/VoiceStackSystem/",
+    "https://twitter.com/VoiceStackSystem/",
+    "https://www.instagram.com/voicestack_/",
+    "https://www.youtube.com/@VoiceStack",
+    "https://www.linkedin.com/company/voicestack/",
     "https://vimeo.com/user14264510"
   ],
   "address": [
@@ -98,7 +98,7 @@
       "@id": "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg",
       "url": "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg",
       "contentUrl": "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg",
-      "caption": "CareStack logo",
+      "caption": "VoiceStack logo",
       "inLanguage": ["en-US", "en-GB"],
       "width": 1200,
       "height": 1200
@@ -110,7 +110,7 @@
       "@id": "https://cdn.sanity.io/images/bbmnn1wc/production/5cc4351771b60f336498e1ba2642f572ab3c8364-1201x1201.png",
       "url": "https://cdn.sanity.io/images/bbmnn1wc/production/5cc4351771b60f336498e1ba2642f572ab3c8364-1201x1201.png",
       "contentUrl": "https://cdn.sanity.io/images/bbmnn1wc/production/5cc4351771b60f336498e1ba2642f572ab3c8364-1201x1201.png",
-      "caption": "CareStack icon",
+      "caption": "VoiceStack icon",
       "inLanguage": ["en-US", "en-GB"],
       "width": 1200,
       "height": 1200
@@ -121,13 +121,13 @@
       "@type": "ContactPoint",
       "contactType": "Customer Service",
       "telephone": "+1 (407) 833-6123",
-      "email": "support@carestack.com"
+      "email": "support@voicestack.com"
     },
     {
       "@type": "ContactPoint",
       "contactType": "Sales",
       "telephone": "+1 (407) 833-6123",
-      "email": "sales@carestack.com"
+      "email": "sales@voicestack.com"
     }
   ]
 }

@@ -27,11 +27,11 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 const siteLink = {
   '@context': 'https://schema.org/',
   '@type': 'WebSite',
-  name: 'CareStack',
-  url: 'https://carestack.com',
+  name: 'VoiceStack',
+  url: 'https://resources.voicestack.com',
   potentialAction: {
     '@type': 'SearchAction',
-    target: 'https://carestack.com/?s={search_term_string}',
+    target: 'https://resources.voicestack.com/?s={search_term_string}',
     'query-input': 'required name=search_term_string',
   },
 }
@@ -167,6 +167,14 @@ export const customMetaTag = (
 };
 
 export const defaultMetaTag = (params: any, pageUrl?: string) => {  
+  const defaultTitle = params?.siteTitle?.trim() || 'Resources | On-Demand Learning Resources | VoiceStack®'
+  const defaultDescription = params?.siteDescription || 'Whether you\'re looking for e-Books, webinars, podcasts, or articles, VoiceStack® Resources are full of helpful & informative topics to improve your practice.'
+  const defaultKeywords = params?.keywords ? params.keywords.reduce((ac: string, reducer: string) => {
+    return ac + ',' + reducer
+  }) : 'voicestack resources, voicestack articles, voicestack webinars, voicestack blogs'
+  const defaultAuthor = 'VoiceStack®'
+  const defaultRobots = 'index, follow, archive'
+
   return (
     <Head key={params?._id}>
       {pageUrl?.length && (
@@ -182,31 +190,15 @@ export const defaultMetaTag = (params: any, pageUrl?: string) => {
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://resources.voicestack.com" />
       <meta property="twitter:url" content="https://resources.voicestack.com" />
-      {params?.siteTitle ? (
-        <>
-          {/* <meta name="title" content={params.siteTitle?.trim()}></meta> */}
-          <meta property="twitter:title" content={params.siteTitle?.trim()} />
-          <title>{slugToCapitalized(params.siteTitle?.trim())}</title>
-        </>
-      ) : (
-        <></>
-      )}
-      {params?.siteDescription ? (
-        <>
-          <meta name="description" content={params.siteDescription}></meta>
-          <meta
-            property="twitter:description"
-            content={params.siteDescription}
-          />
-          <meta
-            property="og:description"
-            content={params.siteDescription}
-          ></meta>
-          <meta property="twitter:image" content={params.openGraphImage?.asset?._ref} />
-        </>
-      ) : (
-        <></>
-      )}
+      <meta property="og:title" content={defaultTitle} />
+      <meta property="twitter:title" content={defaultTitle} />
+      <title>{slugToCapitalized(defaultTitle)}</title>
+      <meta name="description" content={defaultDescription}></meta>
+      <meta property="twitter:description" content={defaultDescription} />
+      <meta property="og:description" content={defaultDescription}></meta>
+      <meta name="keywords" content={defaultKeywords}></meta>
+      <meta name="author" content={defaultAuthor}></meta>
+      <meta name="robots" content={defaultRobots}></meta>
       {params?.openGraphImage ? (
         <meta
           property="og:image"
@@ -215,13 +207,8 @@ export const defaultMetaTag = (params: any, pageUrl?: string) => {
       ) : (
         <></>
       )}
-      {params?.keywords ? (
-        <meta
-          name="keywords"
-          content={params.keywords.reduce((ac: string, reducer: string) => {
-            return ac + ',' + reducer
-          })}
-        ></meta>
+      {params?.openGraphImage ? (
+        <meta property="twitter:image" content={urlForImage(params.openGraphImage?.asset?._ref)} />
       ) : (
         <></>
       )}
@@ -300,7 +287,7 @@ export const generateMetaData = (params: any, canonicalLink?: string) => {
   
         else{
         }
-        const url = canonicalLink.replace("carestack.com/", `carestack.com/${lang}/`);
+        const url = canonicalLink.replace("resources.voicestack.com/", `resources.voicestack.com/${lang}/`);
         return <link key={lang} rel="alternate" href={url} hrefLang={lang} />;
 
       })}
@@ -415,17 +402,17 @@ export function CustomHead({
             return e.name
           }),
         ],
-        url: 'https://carestack.com',
+        url: 'https://voicestack.com',
       },
       dateCreated: props?.date,
       inLanguage: 'en-US',
       copyrightHolder: {
-        '@id': 'https://carestack.com/#organization',
+        '@id': 'https://voicestack.com/#organization',
       },
       publisher: {
         '@type': 'Organization',
-        name: 'CareStack',
-        url: 'https://carestack.com',
+        name: 'VoiceStack',
+        url: 'https://voicestack.com',
       },
     }
     return head(metaData, randomId, type + randomId)
@@ -456,12 +443,12 @@ export function CustomHead({
       ],
       inLanguage: 'en-US',
       copyrightHolder: {
-        '@id': 'https://carestack.com/#organization',
+        '@id': 'https://voicestack.com/#organization',
       },
       publisher: {
         '@type': 'Organization',
-        name: 'CareStack',
-        url: 'https://carestack.com',
+        name: 'VoiceStack',
+        url: 'https://voicestack.com',
       },
     }
     return head(metaData, randomId, type + randomId)
@@ -485,7 +472,7 @@ export function CustomHead({
         inLanguage: 'English',
         isbn: '00000000',
         numberOfPages: '1234',
-        publisher: 'CareStack',
+        publisher: 'VoiceStack',
         name: props?.title,
         ratingValue: 5,
         aggregateRating: {
@@ -522,8 +509,8 @@ export function CustomHead({
       },
       organizer: {
         '@type': 'Organization',
-        name: 'CareStack',
-        url: 'https://carestack.com',
+        name: 'VoiceStack',
+        url: 'https://voicestack.com',
       },
       performer: {
         '@type': 'Person',
@@ -581,12 +568,12 @@ export function CustomHead({
       performer: props?.author?.map((e) => e?.name)[0],
       name: props?.title,
       location: 'global',
-      organizer: 'CareStack',
+      organizer: 'VoiceStack',
       startDate: new Date(),
       description: props?.excerpt,
       datePublished: props?.publishedAt,
       image: urlForImage(props?.mainImage?._id),
-      address: 'CareStack',
+      address: 'VoiceStack',
       eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
       author: props?.author?.map((e) => ({
         '@type': 'Person',
@@ -615,7 +602,7 @@ export function CustomHead({
       },
       publisher: {
         '@type': 'Organization',
-        name: 'CareStack',
+        name: 'VoiceStack',
         logo: {
           '@type': 'ImageObject',
           url: 'https://elitestrategies-elitestrategies.netdna-ssl.com/wp-content/uploads/2013/04/elitestrategies.png',

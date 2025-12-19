@@ -3,9 +3,10 @@ import '~/styles/global.scss'
 import track, { getDeviceData } from 'cs-tracker'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import Router from 'next/router'
 import { usePathname } from 'next/navigation'
 import Script from 'next/script'
-import { lazy } from 'react'
+import { lazy, useEffect } from 'react'
 
 import { cookieSelector, slugToCapitalized } from '~/utils/common'
 import { orgSchema, siteLinkSchema } from '~/utils/customHead'
@@ -35,6 +36,30 @@ function App({
   const index = pathname?.split('/').length - 1 || 0
   const result = slugToCapitalized(currentWindow[index])
 
+  // Initialize dataLayer and track route changes for GTM
+  useEffect(() => {
+    // Initialize dataLayer if it doesn't exist
+    if (typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || [];
+    }
+
+    // Track page views on route changes
+    const handleRouteChange = (url: string) => {
+      if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push({
+          event: 'page_view',
+          page_path: url,
+        });
+      }
+    };
+
+    Router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      Router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, []);
+
   return (
     <>
       <TrackUserProvider>
@@ -55,6 +80,7 @@ function App({
         {/* Google Tag Manager */}
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
+            window.dataLayer = window.dataLayer || [];
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -99,7 +125,7 @@ function App({
 let trackData: any[] = [];
 let isSending = false;
 const TrackWrapper = track(
-  { app: "carestack", },
+  { app: "voicestack", },
   {
     dispatch: dispatchEvent
   },

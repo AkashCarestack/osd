@@ -40,7 +40,6 @@ export interface Post {
   seoRobots?: string
   seoKeywords?: string
   seoCanonical?: string
-  seoJSONLD?: string
 
   author?: {
     length: number
@@ -145,6 +144,8 @@ export interface Articles {
   excerpt?: string
   summary?: string
   image?: string
+  articleImage?: ImageAsset
+  articleUrl?: string
   author?: {
     length: number
     name: string

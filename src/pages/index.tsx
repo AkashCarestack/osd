@@ -1,5 +1,6 @@
 import type { GetStaticProps } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import Layout from '~/components/Layout'
@@ -120,6 +121,8 @@ export default function IndexPage(props: IndexPageProps) {
   const siteSettings = props?.siteSettings
   const eventCards = props?.allEventCards
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://resources.voicestack.com'
+  const locale = useRouter().query.locale as string
+  const defaultUrl = !locale || locale === 'en' ? baseUrl : `${baseUrl}/${locale}`
 
   return (
     <GlobalDataProvider
@@ -134,7 +137,7 @@ export default function IndexPage(props: IndexPageProps) {
         })}
         <Head>
           <link rel="canonical" href={baseUrl} key="canonical" />
-          <link rel="alternate" href={baseUrl} hrefLang="x-default" />
+          <link rel="alternate" href={defaultUrl} hrefLang="x-default" />
           <link rel="alternate" href={baseUrl + '/en'} hrefLang="en-US" /> 
           <link rel="alternate" href={baseUrl + '/en-GB'} hrefLang="en-GB" /> 
           <link rel="alternate" href={baseUrl + '/en-AU'} hrefLang="en-AU" /> 
