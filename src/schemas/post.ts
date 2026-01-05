@@ -316,6 +316,14 @@ export default defineType({
       readOnly: true,
       hidden: true,
     }),
+    // API Exposure Field
+    defineField({
+      name: 'exposeToAPI',
+      title: 'Expose to API',
+      description: 'Enable this to make this content available via the API endpoint. Only published content with this enabled will be accessible.',
+      type: 'boolean',
+      initialValue: false,
+    }),
   ],
   preview: {
     select: {

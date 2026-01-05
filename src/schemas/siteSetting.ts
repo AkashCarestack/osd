@@ -170,6 +170,24 @@ export default defineType({
       description: 'Text to appear in the footer of the site.',
     },
     defineField({
+      name: 'selectedBlogs',
+      title: 'Selected Blogs',
+      description: 'Choose which blogs/content should be available via the API. Make sure to enable "Expose to API" on the posts you want to include.',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'post' }],
+          options: {
+            disableNew: true,
+          },
+        },
+      ],
+      options: {
+        sortable: true,
+      },
+    }),
+    defineField({
       name: 'language',
       type: 'string',
       readOnly: true,
