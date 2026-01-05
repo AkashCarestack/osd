@@ -30,6 +30,7 @@ import {
 } from '~/lib/sanity.queries'
 import { CustomHead, generateMetaData } from '~/utils/customHead'
 import { generateJSONLD } from '~/utils/generateJSONLD'
+import { sanitizeUrl } from '~/utils/common'
 
 interface Props {
   webinar: Podcasts
@@ -123,7 +124,7 @@ const WebinarPage = ({
     return null 
   }
 
-  const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
+  const prodUrl = 'https://resources.voicestack.com'
 
   const seoTitle = webinar.seoTitle || webinar.title
   const seoDescription = (webinar?.seoDescription && !webinar.seoDescription.includes('Test titlw')) 
@@ -131,9 +132,10 @@ const WebinarPage = ({
     : webinar?.excerpt || ''
   const seoKeywords = webinar.seoKeywords || ''
   const seoRobots = webinar.seoRobots || 'index,follow'
-  const seoCanonical =
+  const seoCanonical = sanitizeUrl(
     webinar.seoCanonical ||
     `${prodUrl}/${siteConfig.pageURLs.webinar}/${webinar.slug.current}`
+  )
   const jsonLD: any = generateJSONLD(webinar)
 
   return (

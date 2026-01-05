@@ -31,6 +31,7 @@ import {
 import homeSettings from '~/schemas/homeSettings'
 import { CustomHead, customMetaTag, generateMetaData } from '~/utils/customHead'
 import { generateJSONLD } from '~/utils/generateJSONLD'
+import { sanitizeUrl } from '~/utils/common'
 
 interface Props {
   caseStudy: CaseStudies
@@ -118,16 +119,17 @@ const CaseStudyPage = ({
     return null
   }
 
-  const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
+  const prodUrl = 'https://resources.voicestack.com'
   const seoTitle = caseStudy.seoTitle || caseStudy.title
   const seoDescription = (caseStudy?.seoDescription && !caseStudy.seoDescription.includes('Test titlw')) 
     ? caseStudy.seoDescription 
     : caseStudy?.excerpt || ''
   const seoKeywords = caseStudy.seoKeywords || ''
   const seoRobots = caseStudy.seoRobots || 'index,follow'
-  const seoCanonical =
+  const seoCanonical = sanitizeUrl(
     caseStudy.seoCanonical ||
     `${prodUrl}/${siteConfig.pageURLs.caseStudy}/${caseStudy.slug.current}`
+  )
   const jsonLD: any = generateJSONLD(caseStudy)
 
   return (

@@ -1,7 +1,7 @@
 import { Post } from '~/interfaces/post'
 import { urlForImage } from '~/lib/sanity.image'
 
-import { fetchAuthor } from './common'
+import { fetchAuthor, sanitizeUrl } from './common'
 
 export function generateJSONLD(post: any) {
   const {
@@ -75,7 +75,7 @@ export function generateJSONLD(post: any) {
           '@type': 'Article',
           headline: post.title,
           image: post.articleImage ? urlForImage(post.articleImage._id) : (post.mainImage ? urlForImage(post.mainImage._id) : ''),
-          url: post.articleUrl || `https://resources.voicestack.com/article/${post.slug?.current || ''}`,
+          url: sanitizeUrl(post.articleUrl || `https://resources.voicestack.com/article/${post.slug?.current || ''}`),
           author: {
             '@type': 'Person',
             name: (author && author[0]?.name) || 'Unknown Author',
@@ -200,12 +200,13 @@ export function indexPageJsonLd(params: any) {
 export function breadCrumbJsonLd(
   breadCrumbList: { breadcrumb: string; url?: string }[],
 ) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://resources.voicestack.com'
+  const sanitizedBaseUrl = sanitizeUrl(baseUrl)
   const home = {
     '@type': 'ListItem',
     position: 1,
     name: 'home',
-    item: `${baseUrl}`,
+    item: sanitizedBaseUrl,
   }
   const JsonLdItems = {
     '@context': 'https://schema.org',
@@ -216,7 +217,7 @@ export function breadCrumbJsonLd(
         '@type': 'ListItem',
         position: i + 2,
         name: e?.label ?? '',
-        item:  `${baseUrl}${e?.href}`
+        item: sanitizeUrl(`${sanitizedBaseUrl}${e?.href}`)
       }
     }),
   }

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Script from 'next/script'
 
 import { useAlternatePaths, type AlternatePath } from '~/components/utils/alternatePaths'
-import { slugToCapitalized } from '~/utils/common'
+import { slugToCapitalized, sanitizeUrl } from '~/utils/common'
 
 interface SEOHeadProps {
   title: string
@@ -42,6 +42,7 @@ export default function SEOHead({
   const defaultKeywords = keywords || 'voicestack resources, voicestack articles, voicestack webinars, voicestack blogs'
   const defaultRobots = robots || 'index, follow, archive'
   const defaultAuthor = 'VoiceStack®'
+  const sanitizedCanonical = sanitizeUrl(canonical)
 
   return (
     <>
@@ -55,9 +56,9 @@ export default function SEOHead({
         <meta name="keywords" content={defaultKeywords} key="keywords" />
         <meta name="robots" content={defaultRobots} key="robots" />
         <meta name="author" content={defaultAuthor} key="author" />
-        <link rel="canonical" href={canonical} key="canonical" />
-        <meta property="og:url" content={canonical} key="og:url" />
-        <meta property="twitter:url" content={canonical} key="twitter:url" />
+        <link rel="canonical" href={sanitizedCanonical} key="canonical" />
+        <meta property="og:url" content={sanitizedCanonical} key="og:url" />
+        <meta property="twitter:url" content={sanitizedCanonical} key="twitter:url" />
         <meta property="og:type" content="website" key="og:type" />
         <meta property="twitter:card" content="summary_large_image" key="twitter:card" />
         {jsonLD && (

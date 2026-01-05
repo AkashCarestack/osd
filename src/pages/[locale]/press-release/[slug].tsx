@@ -30,6 +30,7 @@ import {
 } from '~/lib/sanity.queries'
 import { CustomHead, generateMetaData } from '~/utils/customHead'
 import { generateJSONLD } from '~/utils/generateJSONLD'
+import { sanitizeUrl } from '~/utils/common'
 
 interface Props {
   pressRelease: PressRelease
@@ -117,7 +118,7 @@ const PressReleasePage = ({
 
   if(!pressRelease) return null
 
-  const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
+  const prodUrl = 'https://resources.voicestack.com'
 
   const seoTitle = pressRelease.seoTitle || pressRelease.title
   const seoDescription = (pressRelease?.seoDescription && !pressRelease.seoDescription.includes('Test titlw')) 
@@ -125,9 +126,10 @@ const PressReleasePage = ({
     : pressRelease?.excerpt || ''
   const seoKeywords = pressRelease.seoKeywords || ''
   const seoRobots = pressRelease.seoRobots || 'index,follow'
-  const seoCanonical =
+  const seoCanonical = sanitizeUrl(
     pressRelease.seoCanonical ||
     `${prodUrl}/${siteConfig.pageURLs.pressRelease}/${pressRelease.slug.current}`
+  )
   const jsonLD: any = generateJSONLD(pressRelease)
 
   return (

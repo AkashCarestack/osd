@@ -7,7 +7,7 @@ import { urlForImage } from '~/lib/sanity.image'
 
 import ogMetaData from '../../public/ogData.json'
 import organizationSchema from '../../public/organizationSchema.json'
-import { slugToCapitalized } from './common'
+import { slugToCapitalized, sanitizeUrl } from './common'
 import { breadCrumbJsonLd, generateJSONLD } from './generateJSONLD'
 
 const head = (data: any, i: string, id: string = '') => {
@@ -274,27 +274,28 @@ export const generateMetaData = (params: any, canonicalLink?: string) => {
   if (!params || !canonicalLink) return null;
 
   const locales = ["en-gb", "en-au", "en"];
+  const sanitizedCanonical = sanitizeUrl(canonicalLink);
 
   return (
     <Head>
       {/* Canonical Link */}
-      <link rel="canonical" href={canonicalLink} />
+      <link rel="canonical" href={sanitizedCanonical} />
 
       {locales.map((lang) => {
         if(lang === 'en'){
-          return <link key={lang} rel="alternate" href={canonicalLink} hrefLang={'en-us'} />;
+          return <link key={lang} rel="alternate" href={sanitizedCanonical} hrefLang={'en-us'} />;
         } 
   
         else{
         }
-        const url = canonicalLink.replace("resources.voicestack.com/", `resources.voicestack.com/${lang}/`);
+        const url = sanitizedCanonical.replace("resources.voicestack.com/", `resources.voicestack.com/${lang}/`);
         return <link key={lang} rel="alternate" href={url} hrefLang={lang} />;
 
       })}
       
-      <link rel="alternate" href={canonicalLink} hrefLang="x-default" />
+      <link rel="alternate" href={sanitizedCanonical} hrefLang="x-default" />
 
-      <meta property="twitter:url" content={canonicalLink} />
+      <meta property="twitter:url" content={sanitizedCanonical} />
       <meta property="og:type" content="website" />
       <meta property="twitter:card" content="summary_large_image" />
 

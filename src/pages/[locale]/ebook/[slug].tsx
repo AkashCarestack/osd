@@ -28,6 +28,7 @@ import {
 } from '~/lib/sanity.queries'
 import { CustomHead, generateMetaData } from '~/utils/customHead'
 import { generateJSONLD } from '~/utils/generateJSONLD'
+import { sanitizeUrl } from '~/utils/common'
 
 export interface EbookProps {
   ebook: Ebooks
@@ -111,7 +112,7 @@ const EbookPage = ({
   footerData
 }: EbookProps) => {
   if(!ebook) return null
-  const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
+  const prodUrl = 'https://resources.voicestack.com'
 
   const seoTitle = ebook.seoTitle || ebook.title
   const seoDescription = (ebook?.seoDescription && !ebook.seoDescription.includes('Test titlw')) 
@@ -119,9 +120,10 @@ const EbookPage = ({
     : ebook?.excerpt || ''
   const seoKeywords = ebook.seoKeywords || ''
   const seoRobots = ebook.seoRobots || 'index,follow'
-  const seoCanonical =
+  const seoCanonical = sanitizeUrl(
     ebook.seoCanonical ||
     `${prodUrl}/${siteConfig.pageURLs.ebook}/${ebook.slug.current}`
+  )
   const jsonLD: any = generateJSONLD(ebook)
 
   return (

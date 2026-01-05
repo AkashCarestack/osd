@@ -301,3 +301,20 @@ export function download_file(fileURL, fileName) {
       console.error('Download failed:', error);
     });
 }
+
+/**
+ * Sanitizes URLs by replacing any Vercel URLs with the production URL
+ * @param url - The URL to sanitize
+ * @returns The sanitized URL with production domain
+ */
+export function sanitizeUrl(url: string | undefined | null): string {
+  if (!url) return 'https://resources.voicestack.com';
+  
+  // Replace any Vercel URLs with production URL
+  const vercelUrlPattern = /https?:\/\/[^/]*vercel\.app[^/]*/gi;
+  const sanitized = url.replace(vercelUrlPattern, 'https://resources.voicestack.com');
+  
+  // Also handle URLs without protocol
+  const vercelUrlPatternNoProtocol = /[^/]*vercel\.app[^/]*/gi;
+  return sanitized.replace(vercelUrlPatternNoProtocol, 'resources.voicestack.com');
+}

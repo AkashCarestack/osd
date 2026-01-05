@@ -31,6 +31,7 @@ import {
 import { SharedPageProps } from '~/pages/_app'
 import SEOHead from '~/layout/SeoHead'
 import { urlForImage } from '~/lib/sanity.image'
+import { sanitizeUrl } from '~/utils/common'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const client = getClient();
@@ -140,8 +141,8 @@ export default function TagPagePaginated({
     `/${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current}`;
 
   // SEO Configuration
-  const prodUrl = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://resources.voicestack.com'
-  const pageUrl = `${prodUrl}${baseUrl}${currentPage > 1 ? `/page/${currentPage}` : ''}`
+  const prodUrl = 'https://resources.voicestack.com'
+  const pageUrl = sanitizeUrl(`${prodUrl}${baseUrl}${currentPage > 1 ? `/page/${currentPage}` : ''}`)
   const seoTitle = tag?.categoryName ? `${tag.categoryName} - VoiceStack Resources` : 'VoiceStack Resources'
   const seoDescription = tag?.categoryDescription || `Explore ${tag?.categoryName || 'our'} content and resources on VoiceStack`
   const seoKeywords = tag?.categoryName ? `${tag.categoryName}, VoiceStack, resources, content` : 'VoiceStack, resources, content'
