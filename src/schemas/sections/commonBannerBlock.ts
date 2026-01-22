@@ -1,8 +1,6 @@
-import { init } from 'next/dist/compiled/webpack/webpack'
-
 export default {
-  name: 'demoBannerBlock',
-  title: 'Call to Action Block',
+  name: 'commonBannerBlock',
+  title: 'Common Banner Block',
   type: 'object',
   fields: [
     {
@@ -17,7 +15,7 @@ export default {
       title: 'Description',
       type: 'text',
       description: 'A brief description or subtext',
-      initialValue: 'Looking for the best cloud-based dental software?',
+      initialValue: 'Looking for the best AI-powered phone system for your dental practice?',
     },
     {
       name: 'buttonText',
@@ -31,13 +29,19 @@ export default {
       title: 'Button Link',
       type: 'url',
       description: 'The URL the button should link to',
-      initialValue: 'https://voicestack.com/#demo',
+      validation: (Rule) => Rule.required().error('Button link is required'),
     },
   ],
   preview: {
+    select: {
+      title: 'title',
+    },
     prepare(selection) {
-      const { bio, title } = selection
-      return { ...selection, title: title && `${title}` }
+      const { title } = selection
+      return {
+        title: title || 'Common Banner Block',
+      }
     },
   },
 }
+

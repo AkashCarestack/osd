@@ -1,7 +1,5 @@
 import { InsertBelowIcon } from '@sanity/icons'
 
-import demoBannerBlock from './sections/demoBannerBlock'
-
 export default {
   name: 'dynamicComponent',
   title: 'Dynamic Component',
@@ -14,7 +12,10 @@ export default {
       type: 'string',
       options: {
         list: [
-          { title: 'Book Free Demo Banner', value: 'bannerBlock' },
+          { title: 'Book Free Demo Banner - en', value: 'bannerBlockUS' },
+          { title: 'Book Free Demo Banner - en-GB', value: 'bannerBlockGB' },
+          { title: 'Book Free Demo Banner - en-AU', value: 'bannerBlockAU' },
+          { title: 'Custom Banner Block', value: 'commonBannerBlock' },
           { title: 'Testimonial Card', value: 'testimonialCard' },
           { title: 'Embed Form', value: 'embedForm' },
           //add the component name
@@ -44,10 +45,28 @@ export default {
       hidden: ({ parent }) => parent?.componentType !== 'imageBlock',
     },
     {
-      name: 'bannerBlock',
-      title: 'Demo Banner Block',
-      type: 'demoBannerBlock',
-      hidden: ({ parent }) => parent?.componentType !== 'bannerBlock',
+      name: 'bannerBlockUS',
+      title: 'Demo Banner Block - US',
+      type: 'demoBannerBlockUS',
+      hidden: ({ parent }) => parent?.componentType !== 'bannerBlockUS',
+    },
+    {
+      name: 'bannerBlockGB',
+      title: 'Demo Banner Block - UK',
+      type: 'demoBannerBlockGB',
+      hidden: ({ parent }) => parent?.componentType !== 'bannerBlockGB',
+    },
+    {
+      name: 'bannerBlockAU',
+      title: 'Demo Banner Block - AU',
+      type: 'demoBannerBlockAU',
+      hidden: ({ parent }) => parent?.componentType !== 'bannerBlockAU',
+    },
+    {
+      name: 'commonBannerBlock',
+      title: 'Common Banner Block',
+      type: 'commonBannerBlock',
+      hidden: ({ parent }) => parent?.componentType !== 'commonBannerBlock',
     },
     {
       name: 'testimonialCard',
