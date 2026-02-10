@@ -33,7 +33,6 @@ export default function SEOHead({
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://resources.voicestack.com'
   const locale = useRouter().query.locale as string
   const slug = useRouter().query.slug as string
-  console.log('locale', useRouter().query)
   const defaultUrlx = locale === 'en' ? baseUrl : `${baseUrl}/${locale}/${slug}`
 
   // Default values

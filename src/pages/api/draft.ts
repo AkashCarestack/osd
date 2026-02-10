@@ -4,6 +4,7 @@ import { isValidSecret } from 'sanity-plugin-iframe-pane/is-valid-secret'
 
 import { previewSecretId, readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
+import { generateHref } from '~/utils/common'
 
 export default async function preview(
   req: NextApiRequest,
@@ -18,6 +19,7 @@ export default async function preview(
 
   const secret = typeof query.secret === 'string' ? query.secret : undefined
   const slug = typeof query.slug === 'string' ? query.slug : undefined
+  const id = typeof query.id === 'string' ? query.id : undefined
 
   if (!secret || !slug) {
     res.status(401)
@@ -36,21 +38,41 @@ export default async function preview(
   }
 
   try {
-    const document = await authClient.fetch(
-      `*[slug.current == $slug][0]{ _type, contentType, slug }`,
-      { slug },
-    )
+    // Use document ID if provided (more accurate for translations), otherwise fall back to slug
+    let document
+    if (id) {
+      // Try both draft and published versions
+      document = await authClient.fetch(
+        `*[_id == $id || _id == $draftId][0]{ _type, contentType, slug, language }`,
+        { id, draftId: `drafts.${id}` },
+      )
+    }
+    
+    // Fall back to slug if id didn't work or wasn't provided
+    if (!document) {
+      document = await authClient.fetch(
+        `*[slug.current == $slug][0]{ _type, contentType, slug, language }`,
+        { slug },
+      )
+    }
 
     if (document) {
       const actualContentType = document.contentType || document._type
-      if (Object.values(siteConfig.pageURLs)) {
+      const locale = document.language || 'en'
+      
+      // Build the preview path with locale
+      const previewPath = `${actualContentType}/${slug}`
+      const previewUrl = generateHref(locale, previewPath)
+      
+      if (Object.values(siteConfig.pageURLs).includes(actualContentType)) {
         res.setDraftMode({ enable: true })
-        res.writeHead(307, { Location: `/${actualContentType}/${slug}` })
+        res.writeHead(307, { Location: previewUrl })
         res.end()
         return
       } else if (actualContentType === 'post') {
         res.setDraftMode({ enable: true })
-        res.writeHead(307, { Location: `/post/${slug}` })
+        const postPreviewUrl = generateHref(locale, `post/${slug}`)
+        res.writeHead(307, { Location: postPreviewUrl })
         res.end()
         return
       }
