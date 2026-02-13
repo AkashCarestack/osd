@@ -195,6 +195,7 @@ export default function IndexPage(props: IndexPageProps) {
           releaseNotes={props?.releaseNotes}
           eventCards={eventCards}
           podcasts={props?.podcasts}
+          categories={props?.categories}
         />
       </Layout>
     </GlobalDataProvider>

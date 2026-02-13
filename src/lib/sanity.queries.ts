@@ -124,7 +124,21 @@ export const iframesQuery = groq`*[_type == "iframes" && defined(slug.current)] 
 export const authorsQuery = groq`*[_type == "author" && defined(slug.current)] | order(date desc)`
 
 export const tagsQuery = groq`*[_type == "tag"] | order(tagName asc)`
-export const categoriesQuery = groq`*[_type == "category" ]  | order(categoryName asc)`
+export const categoriesQuery = groq`*[_type == "category" ]  | order(categoryName asc) {
+  _id,
+  categoryName,
+  categoryDescription,
+  slug,
+  "associatedContent": associatedContent[]-> {
+    _id,
+    title,
+    slug,
+    contentType,
+    excerpt,
+    date,
+    ${imageFragment},
+  },
+}`
 export const tagsByOrderQuery = groq`*[_type == "tag" ] | order(tagName asc) {_id, slug, tagName}`
 
 export const eventCardQuery = groq`

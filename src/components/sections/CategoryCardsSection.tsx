@@ -1,0 +1,156 @@
+import { ArrowTopRightIcon } from '@sanity/icons'
+import siteConfig from 'config/siteConfig'
+import { useRouter } from 'next/router'
+import React from 'react'
+
+import Anchor from '~/components/commonSections/Anchor'
+import ImageLoader from '~/components/commonSections/ImageLoader'
+import H2Large from '~/components/typography/H2Large'
+import H4Large from '~/components/typography/H4Large'
+import { generateHref } from '~/utils/common'
+
+interface CategoryCardsSectionProps {
+  categories?: any[]
+}
+
+const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories }) => {
+  const router = useRouter()
+  const { locale } = router.query
+
+  // Background images for cards (cycling through)
+  const bgImages = [
+    'https://cdn.sanity.io/images/bbmnn1wc/production/69f78e1d2126dda19c732337893448dc94969932-784x568.png',
+    'https://cdn.sanity.io/images/bbmnn1wc/production/880ec674fe4f1672dbc1bbfebf0ba967b7941900-784x568.png',
+    'https://cdn.sanity.io/images/bbmnn1wc/production/30ff45d24d2f4688f1885c96fecc94d319eb76d0-784x568.png',
+    'https://cdn.sanity.io/images/bbmnn1wc/production/baf2c5ede0b78146b13c4ac8854d5459fdd1bb7c-2400x1350.jpg',
+    'https://cdn.sanity.io/images/bbmnn1wc/production/8df81deaa98d4958936163340be7b77f798d1dcf-2500x2000.jpg',
+  ]
+
+  // Background colors for cards (cycling through)
+  const bgColors = ['#c241bd', '#ffcf23', '#3abfbf', '#c241bd', '#ffcf23']
+
+  // Debug logging
+  if (typeof window !== 'undefined') {
+    console.log('CategoryCardsSection - categories:', categories)
+    console.log('CategoryCardsSection - categories length:', categories?.length)
+  }
+
+  // Filter categories that have associated content, or show all categories if none have content
+  const categoriesWithContent = categories?.filter(
+    (category) => category?.associatedContent && category.associatedContent.length > 0
+  ) || []
+
+  // If no categories have associatedContent, show all categories (up to 4)
+  // This ensures the section always renders if categories exist
+  const displayCategories = categoriesWithContent.length > 0
+    ? categoriesWithContent.slice(0, 4)
+    : (categories || []).slice(0, 4)
+
+  if (!displayCategories || displayCategories.length === 0) {
+    if (typeof window !== 'undefined') {
+      console.log('CategoryCardsSection - No categories to display')
+    }
+    return null
+  }
+
+  if (typeof window !== 'undefined') {
+    console.log('CategoryCardsSection - Displaying categories:', displayCategories.length)
+  }
+
+  return (
+    <div className="flex w-full justify-center px-4">
+      <section className="my-9 max-w-7xl w-full">
+        <div className="flex flex-col gap-3 mb-12">
+          <H2Large className="text-zinc-900">Major Topics</H2Large>
+          <p className="text-zinc-900 opacity-80 text-base font-medium leading-[1.6] max-w-[601px]">
+            Articles that specifically refer to the dashboards available to the DEO.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-8 items-start">
+          {displayCategories.map((category, index) => {
+            // Get first associated content item for the link
+            const firstContent = category?.associatedContent?.[0]
+            const categorySlug = category?.slug?.current
+            const contentSlug = firstContent?.slug?.current
+
+            // Build the URL: topic/{category-slug}/{content-slug} if content exists,
+            // otherwise just link to the category page
+            const href = contentSlug && categorySlug
+              ? `/${siteConfig.categoryBaseUrls.base}/${categorySlug}/${contentSlug}`
+              : categorySlug
+                ? `/${siteConfig.categoryBaseUrls.base}/${categorySlug}`
+                : `/${siteConfig.categoryBaseUrls.base}`
+
+            const imageIndex = index % bgImages.length
+            const colorIndex = index % bgColors.length
+
+            return (
+              <div
+                key={category._id || index}
+                className="flex flex-col items-start overflow-hidden p-8 relative rounded-[10px] shrink-0 w-full md:w-[392px]"
+              >
+                {/* Background image with color overlay */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 pointer-events-none rounded-[10px]"
+                >
+                  <div
+                    className="absolute inset-0 rounded-[10px]"
+                    style={{ backgroundColor: bgColors[colorIndex] }}
+                  />
+                  <div className="absolute inset-0 rounded-[10px] overflow-hidden">
+                    <ImageLoader
+                      className="h-full w-full"
+                      image={bgImages[imageIndex]}
+                      alt=""
+                      fixed={true}
+                      sizes="(max-width: 768px) 100vw, 392px"
+                    />
+                  </div>
+                </div>
+
+                {/* Content card */}
+                <Anchor
+                  href={generateHref(locale as string, href)}
+                  className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 relative rounded-[5px] shrink-0 w-full group"
+                >
+                  <div className="flex flex-col gap-2 items-start w-full">
+                    {/* Category badge */}
+                    <div className="bg-zinc-500 flex items-center justify-center px-2 py-1 rounded">
+                      <span className="text-white text-xs font-medium leading-[1.5] uppercase tracking-[0.6px]">
+                        DEO Articles
+                      </span>
+                    </div>
+
+                    {/* Category title */}
+                    <H4Large className="text-zinc-900 font-bold leading-[1.3] text-2xl tracking-[-0.24px]">
+                      {category.categoryName || 'Category'}
+                    </H4Large>
+                  </div>
+
+                  {/* Read Now link */}
+                  <div className="flex gap-2 items-center">
+                    <span className="text-zinc-900 text-base font-medium leading-[1.6]">
+                      Read Now
+                    </span>
+                    <div className="flex items-center justify-center">
+                      <div className="-scale-y-100 flex-none">
+                        <ArrowTopRightIcon
+                          className="group-hover:translate-y-[-2px] transition-transform duration-300"
+                          height={20}
+                          width={20}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Anchor>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+    </div>
+  )
+}
+
+export default CategoryCardsSection
