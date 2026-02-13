@@ -27,6 +27,18 @@ export default defineType({
         maxLength: 96,
       },
     }),
+    defineField({
+      name: 'associatedContent',
+      title: 'Associated Content',
+      description: 'Select content/blog posts related to this category. The first item will be auto-selected when visiting this topic page.',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'post' }],
+        },
+      ],
+    }),
   ],
   preview: {
     select: {

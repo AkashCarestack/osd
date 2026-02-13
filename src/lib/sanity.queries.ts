@@ -1294,10 +1294,69 @@ export const getCategoryBySlugQuery = groq`
     categoryName,
     categoryDescription,
     slug,
+    "associatedContent": associatedContent[]-> {
+      _id,
+      title,
+      slug,
+      contentType,
+      excerpt,
+      date,
+      ${imageFragment},
+    },
+  }
+`
+
+export const postBySlugAndRegionQuery = groq`
+  *[_type == "post" && language == $region && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    contentType,
+    excerpt,
+    duration,
+    publishedAt,
+    seoTitle,
+    seoDescription,
+    seoKeywords,
+    seoCanonical,
+    seoRobots,
+    ${imageFragment},
+    ${bodyFragment},
+    ${tocFragment},
+    "numberOfCharacters": length(pt::text(body)),
+    "estimatedWordCount": round(length(pt::text(body)) / 5),
+    "estimatedReadingTime": round(length(pt::text(body)) / 5 / 180),
+    "region": region,
+    "date": date,
+    "author": author[]-> {
+      _id,
+      name,
+      slug,
+      role,
+      bio,
+      ${authorImageFragment},
+    },
+    "tags": tags[]-> {
+      _id,
+      tagName,
+      slug
+    },
   }
 `
 
 export const iframeBySlugQuery = groq`*[_type == "iframes" && slug.current == $slug][0]`
+
+export async function getPostBySlugAndRegion(
+  client: SanityClient,
+  slug: string,
+  region: string = 'en'
+): Promise<any> {
+  const post = await client.fetch(postBySlugAndRegionQuery, {
+    slug,
+    region,
+  })
+  return post || null
+}
 
 export async function getPost(
   client: SanityClient,
