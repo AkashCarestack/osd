@@ -39,6 +39,11 @@ const config = {
         locale: false,
       },
       {
+        source: '/release-notes/:slug*',
+        destination: '/en/release-notes/:slug*',
+        locale: false,
+      },
+      {
         source: '/testimonial/:slug*',
         destination: '/en/testimonial/:slug*',
         locale: false,

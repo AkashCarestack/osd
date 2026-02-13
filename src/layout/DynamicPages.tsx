@@ -3,8 +3,12 @@ import siteConfig from 'config/siteConfig'
 import { BaseUrlProvider } from '~/components/Context/UrlContext'
 import EventCarousel from '~/components/eventCarousel'
 import AllcontentSection from '~/components/sections/AllcontentSection'
+import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
 import FeaturedAndPopularBlogs from '~/components/sections/FeaturedAndPopularBlogsSection'
+import HeroSection from '~/components/sections/HeroSection'
 import LatestBlogs from '~/components/sections/LatestBlogSection'
+import ReleaseNotesHeroSection from '~/components/sections/ReleaseNotesHeroSection'
+import ShortBannerSection from '~/components/sections/ShortBannerSection'
 import SliderSection from '~/components/sections/SliderSection'
 import TestimonialSection from '~/components/sections/TestimonialSection'
 import TagSelect from '~/contentUtils/TagSelector'
@@ -24,6 +28,7 @@ interface DynamicProps {
   FeaturedContents?: any
   webinars?: any
   ebooks?: any
+  releaseNotes?: any
 }
 
 const DynamicPages = ({
@@ -34,6 +39,7 @@ const DynamicPages = ({
   latestPosts,
   ebooks,
   webinars,
+  releaseNotes,
   eventCards,
 }: DynamicProps) => {
   const featuredBlog = homeSettings?.FeaturedBlog || posts[0]
@@ -67,11 +73,13 @@ const DynamicPages = ({
       <BaseUrlProvider baseUrl={baseUrl}>
         <TagSelect tags={tags} tagLimit={7} />
          <EventCarousel allEventCards={uniqueEventCards} />
+         <HeroSection />
         <LatestBlogs contents={latestPosts} />
         <FeaturedAndPopularBlogs
           featuredBlog={featuredBlog}
           popularBlogs={featuredContents}
         />
+        <ReleaseNotesHeroSection releaseNotes={releaseNotes} />
         {/* <BannerSubscribeSection /> */}
         <SliderSection items={reorderedCarouselItems} />
         <TestimonialSection testimonials={testimonialList} />
@@ -81,9 +89,8 @@ const DynamicPages = ({
             itemsPerPage={siteConfig.pagination.itemsHomePage}
             redirect={true}
           />
-        )
         <EventCarousel bgColor={'white'} allEventCards={uniqueEventCards} />
-        {/* <ShortBannerSection /> */}
+        <BannerSubscribeSection hideBanner={true} />
       </BaseUrlProvider>
     </>
   )

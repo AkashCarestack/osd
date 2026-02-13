@@ -39,6 +39,7 @@ export default defineType({
           { title: 'Podcast', value: 'podcast' },
           { title: 'Case Study', value: 'case-study' },
           { title: 'Press Release', value: 'press-release' },
+          { title: 'Release notes', value: 'release-notes' },
         ],
       },
       validation: (Rule) => Rule.required().error('Content type is required.'),
@@ -260,14 +261,14 @@ export default defineType({
       options: {
         hotspot: true,
       },
-      hidden: ({ parent }) => parent.contentType !== 'article',
+      hidden: ({ parent }) => parent.contentType !== 'article' && parent.contentType !== 'release-notes',
       description: 'Additional image for article schema',
     }),
     defineField({
       name: 'articleUrl',
       title: 'Article URL',
       type: 'url',
-      hidden: ({ parent }) => parent.contentType !== 'article',
+      hidden: ({ parent }) => parent.contentType !== 'article' && parent.contentType !== 'release-notes',
       description: 'URL for the article',
     }),
     defineField({

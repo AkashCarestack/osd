@@ -14,6 +14,7 @@ const siteConfig = {
     about: 'about',
     podcast: 'podcast',
     pressRelease: 'press-release',
+    releaseNotes: 'release-notes',
     testimonial: 'testimonial',
     webinar: 'webinar',
     author: 'author',

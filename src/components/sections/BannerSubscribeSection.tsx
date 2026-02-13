@@ -11,13 +11,12 @@ import H34XL from '../typography/H34XL'
 
 interface BannerSubscribeSectionProps {
   isSmall?: boolean
+  hideBanner?: boolean
 }
-function BannerSubscribeSection({ isSmall }: BannerSubscribeSectionProps) {
+function BannerSubscribeSection({ isSmall, hideBanner = false }: BannerSubscribeSectionProps) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const [hideBanner, setHideBanner] = useState(true);
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -52,7 +51,7 @@ function BannerSubscribeSection({ isSmall }: BannerSubscribeSectionProps) {
   }
 
   return (
-    hideBanner ? (
+    !hideBanner  ? (
       <></>
     ):(
     <Section className="justify-center">

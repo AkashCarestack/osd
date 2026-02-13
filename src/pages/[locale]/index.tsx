@@ -17,6 +17,7 @@ import {
   getFooterData,
   getHomeSettings,
   getPosts,
+  getReleaseNotes,
   getSiteSettings,
   getTags,
   getTagsByOrder,
@@ -33,6 +34,7 @@ interface IndexPageProps {
   tagsByOrder: any
   webinars: any
   ebooks: any
+  releaseNotes: any
   siteSettings: any
   contentType: string
   latestPosts: any
@@ -87,6 +89,7 @@ export const getStaticProps: GetStaticProps<
       siteSettings,
       ebooks,
       webinars,
+      releaseNotes,
       allEventCards,
       categories,
       footerData
@@ -100,6 +103,7 @@ export const getStaticProps: GetStaticProps<
       getSiteSettings(client),
       getEbooks(client,region),
       getWebinars(client,region),
+      getReleaseNotes(client, 0, 3, region),
       getEventCards(client),
       getCategories(client),
       getFooterData(client, region)
@@ -118,6 +122,7 @@ export const getStaticProps: GetStaticProps<
         siteSettings,
         ebooks,
         webinars,
+        releaseNotes,
         allEventCards,
         categories,
         footerData
@@ -135,6 +140,7 @@ export const getStaticProps: GetStaticProps<
         homeSettings: [],
         ebooks: [],
         webinars: [],
+        releaseNotes: [],
         footerData: [],
         error: true,
       },
@@ -180,6 +186,7 @@ export default function IndexPage(props: IndexPageProps) {
           latestPosts={latestPosts}
           ebooks={props?.ebooks}
           webinars={props?.webinars}
+          releaseNotes={props?.releaseNotes}
           eventCards={eventCards}
         />
       </Layout>

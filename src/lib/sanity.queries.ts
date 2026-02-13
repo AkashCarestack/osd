@@ -675,6 +675,26 @@ export async function getArticlesCount(client: SanityClient,region: string = 'en
   const countQuery = groq`count(${artilclesQuery})`
   return await client.fetch(countQuery,{region:region})
 }
+
+export async function getReleaseNotes(
+  client: SanityClient,
+  skip: number = 0,
+  limit?: number,
+  region: string = 'en'
+): Promise<Post[]> {
+  let query = releaseNotesQuery
+
+  if (skip > 0 || limit !== undefined) {
+    query += `[${skip}..${limit ? skip + limit : ''}]`
+  }
+
+  return await client.fetch(query,{region:region})
+}
+
+export async function getReleaseNotesCount(client: SanityClient,region: string = 'en'): Promise<number> {
+  const countQuery = groq`count(${releaseNotesQuery})`
+  return await client.fetch(countQuery,{region:region})
+}
 export async function getCaseStudies(
   client: SanityClient,
   skip: number = 0,
@@ -1233,6 +1253,80 @@ export const articleBySlugQuery = groq`
   }
 `
 
+export const releaseNotesQuery = groq`
+*[_type == "post"
+ && contentType == "release-notes"
+  && defined(slug.current) 
+  && language == $region
+  && defined(date)] |  order(date desc)
+  {
+  _id,
+  title,
+  slug,
+  contentType,
+  "audioFile": Video.link,
+  "platform": Video.platform,
+  duration,
+  publishedAt,
+  excerpt,
+  date,
+  ${imageFragment},
+  ${bodyFragment},
+  "estimatedReadingTime": round(length(pt::text(body)) / 5 / 180),
+  "author": author[]-> {
+    _id,
+    name,
+    role,
+    slug,
+    bio,
+    ${authorImageFragment},
+  },
+  tags[]-> {
+    _id,
+    tagName,
+    slug
+  }
+}
+`
+
+export const releaseNotesBySlugQuery = groq`
+  *[_type == "post" && contentType == "release-notes" && language == $region  && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    contentType,
+    duration,
+    publishedAt,
+    excerpt,
+    seoTitle,
+    seoDescription,
+    seoKeywords,
+    seoCanonical,
+    seoRobots,
+   ${imageFragment},
+    ${bodyFragment},
+    ${tocFragment},
+    "numberOfCharacters": length(pt::text(body)),
+    "estimatedWordCount": round(length(pt::text(body)) / 5),
+    "estimatedReadingTime": round(length(pt::text(body)) / 5 / 180),
+    "region": region,
+    "date": date,
+    "author": author[]-> {
+      _id,
+      name,
+      slug,
+      role,
+      bio,
+      ${authorImageFragment},
+    },
+    "tags": tags[]-> {
+    _id,
+    tagName,
+    slug
+  },
+  }
+`
+
 export const caseStudyBySlugQuery = groq`
   *[_type == "post" && language == $region && contentType == "case-study" && slug.current == $slug][0] {
     _id,
@@ -1709,6 +1803,18 @@ export async function getArticle(
   }
   return article
 }
+
+export async function getReleaseNote(
+  client: SanityClient,
+  slug: string,
+  region: string = 'en'
+): Promise<any> {
+  const releaseNote = await client.fetch(releaseNotesBySlugQuery, { slug, region })
+  if (!releaseNote) {
+    return null
+  }
+  return releaseNote
+}
 export async function getWebinar(
   client: SanityClient,
   slug: string,
@@ -1802,6 +1908,13 @@ export const podcastSlugsQuery = groq`
 `
 export const articleSlugsQuery = groq`
   *[_type == "post" && contentType == "article" && language == $locale && defined(slug.current)] {
+      "slug": slug.current,
+      "locale": language
+    }
+`
+
+export const releaseNotesSlugsQuery = groq`
+  *[_type == "post" && contentType == "release-notes" && language == $locale && defined(slug.current)] {
       "slug": slug.current,
       "locale": language
     }
