@@ -52,10 +52,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
       <Section className="justify-center w-full !py-0 relative z-10">
         <Wrapper className="flex h-auto flex-col">
           <div className="flex flex-col items-start justify-center p-4 md:p-12 relative shrink-0 w-full">
-            <div className="flex flex-col items-start gap-12 md:gap-[48px] relative shrink-0 w-full">
-              <div className="flex flex-col md:flex-row gap-8 md:gap-[32px] items-start md:items-end relative shrink-0 text-white w-full whitespace-pre-wrap">
+            <div className="flex flex-col items-start gap-6 md:gap-[48px] relative shrink-0 w-full">
+              <div className="flex flex-col md:flex-row gap-6 md:gap-[32px] items-start md:items-end relative shrink-0 text-white w-full whitespace-pre-wrap">
                 {/* Main heading */}
-                <h1 className="font-manrope font-bold leading-[1.1] relative shrink-0 text-4xl md:text-5xl lg:text-[64px] tracking-[-1.28px] w-full md:w-[816px] text-white">
+                <h1 className="font-manrope font-bold leading-[1.1] relative shrink-0 text-3xl md:text-5xl lg:text-[64px] tracking-[-0.72px] md:tracking-[-1.28px] w-full md:w-[816px] text-white">
                   <span className="leading-[1.1]">{data.title}</span>
                   {data.titleHighlight && (
                     <>
@@ -69,7 +69,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                 </h1>
 
                 {/* Description text */}
-                <p className="flex-1 font-medium leading-[1.6] min-h-px min-w-px not-italic opacity-80 relative text-base text-white/80 md:max-w-none">
+                <p className="flex-1 font-medium leading-[1.6] min-h-px min-w-px not-italic opacity-80 relative text-sm md:text-base text-white/80 md:max-w-none">
                   {data.description}
                 </p>
               </div>
@@ -79,11 +79,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                 href={data.buttonLink || '#'}
                 className="flex gap-2 md:gap-[8px] items-center relative shrink-0 group"
               >
-                <span className="font-medium leading-[1.6] not-italic relative shrink-0 text-[#18181b] text-base bg-white px-6 py-3 rounded-md hover:bg-zinc-100 transition-colors">
+                <span className="font-medium leading-[1.6] not-italic relative shrink-0 text-[#18181b] text-sm md:text-base bg-white px-5 py-2.5 md:px-6 md:py-3 rounded-md hover:bg-zinc-100 transition-colors">
                   {data.buttonText || 'Read Now'}
                 </span>
                 <div className="flex items-center justify-center relative shrink-0">
-                  <div className="relative size-5">
+                  <div className="relative size-4 md:size-5">
                     <ArrowTopRightIcon className="block max-w-none size-full text-[#18181b]" />
                   </div>
                 </div>
