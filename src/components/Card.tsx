@@ -271,13 +271,13 @@ export default function Card({
           <Anchor href={linkUrl}>
             <AnimatingWrapper transitionType="slide-in" delay={0.8} immediate={index < 2}>
               <div
-                className={`${!isLast && `border-b-2`} pb-6 flex flex-col gap-3  border-zinc-800`}
+                className={`${!isLast && `border-b-2`} pb-6 flex flex-col gap-3  border-zinc-800 !text-black`}
               >
                 {post.contentType && (
                   <SubText>{isPageUrl ? tag?.tagName : post.contentType}</SubText>
                 )}
                 <H3Medium
-                  className={`group-hover: group-hover:underline underline-offset-4 tracking-[-0.72px] md:!text-[1.8rem]`}
+                  className={`group-hover: group-hover:underline underline-offset-4 tracking-[-0.72px] md:!text-[1.8rem] !text-black`}
                 >
                   {post.title}
                 </H3Medium>
@@ -356,58 +356,69 @@ export default function Card({
       ) : cardType === 'podcast-card' ? (
         <Anchor href={linkUrl}>
           <div
-            className={`flex flex-col h-full  relative items-center group hover: transition duration-500 ${className}`}
+            className={`flex flex-col gap-6 h-full relative group ${className}`}
           >
             {post.mainImage && (
-              <div className="w-full rounded-t-lg transform transition duration-500 overflow-hidden min-h-[210px]">
+              <div className="w-full rounded-[10px] overflow-hidden relative h-[234px]">
                 <ImageLoader
-                  className="transform  rounded-lg  duration-300 group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full object-cover transform duration-300 group-hover:scale-105"
                   image={post?.mainImage}
                   fixed={true}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
-                <div className="">
-                  {post.contentType === 'podcast' ? (
-                    <div className="absolute bottom-6 left-6 flex items-center gap-2">
-                      <Image src={SoundIcon} alt="soundIcon" />
-                      <span className="text-white text-sm font-medium">
-                        {' '}
-                        {`Listen Now`}
-                      </span>
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
+                
+                {/* Watch badge - top left */}
+                {(post.contentType === 'podcast' || post.contentType === 'webinar') && (
+                  <div className="absolute top-6 left-6 flex items-center gap-2.5 z-10">
+                    <div className="bg-white rounded-full p-2 flex items-center justify-center">
+                      {post.contentType === 'webinar' ? (
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M5.285 5.2722C5.285 4.8838 5.5346 4.6389 5.8739 4.8249L9.1833 6.5527C9.5352 6.7463 9.5352 7.2537 9.1833 7.4473L5.8745 9.1751C5.5352 9.3611 5.2856 9.1162 5.2856 8.7284L5.285 5.2722Z"
+                            fill="#18181B"
+                          />
+                        </svg>
+                      ) : (
+                        <Image src={SoundIcon} alt="soundIcon" className="w-3.5 h-3.5" />
+                      )}
                     </div>
-                  ) : post.contentType === 'webinar' ? (
-                    <div className="absolute bottom-6 left-6 flex items-center gap-2">
-                      <PlayIcon />
-                      <span className="text-white text-sm font-medium">{`Watch`}</span>
-                    </div>
-                  ) : (
-                    ''
-                  )}
-                </div>
+                    <span className="text-white text-sm font-medium leading-[1.5]">
+                      {post.contentType === 'webinar' ? 'Watch' : 'Listen'}
+                    </span>
+                  </div>
+                )}
               </div>
             )}
-            <div className="flex p-6 bg-zinc-100 w-full justify-center">
-              <span className="text-zinc-900, text-sm font-medium text-center">
-                by {post.author[0]?.name || ''}
-              </span>
-            </div>
-            <div className="flex gap-3 flex-col ">
-              <div className="flex flex-col flex-1 gap-2 pt-6">
-                {post.contentType && (
-                  <SubText>
-                    {isPageUrl ? tag?.tagName : post.contentType}
-                  </SubText>
-                )}
-                <H4Large
-                  className={`group-hover: group-hover:underline underline-offset-4 line-clamp-3 text-ellipsis overflow-hidden`}
-                >
-                  {post.title}
-                </H4Large>
+            
+            {/* Content below image */}
+            <div className="flex flex-col gap-3">
+              {/* Category and Date */}
+              <div className="flex items-start gap-3 text-[#71717a] text-sm font-medium leading-[1.5] tracking-[0.7px] uppercase">
+                <span>
+                  {tag?.tagName || post.contentType || 'Knowledge Guides'}
+                </span>
+                {post.date || post._createdAt ? (
+                  <>
+                    <span>|</span>
+                    <span>
+                      {(() => {
+                        const date = new Date(post.date || post._createdAt)
+                        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                        return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+                      })()}
+                    </span>
+                  </>
+                ) : null}
               </div>
-              <span className="text-zinc-500 text-sm ">
-                {' '}
-                {`${post?.estimatedReadingTime ? post.estimatedReadingTime : post.duration} ${post.contentType === 'article' || post.contentType === 'press-release' ? 'min read' : ''}   `}
-              </span>
+              
+              {/* Title */}
+              <h3 className="font-bold text-2xl leading-[1.3] text-[#18181b] tracking-[-0.24px] line-clamp-2 overflow-hidden text-ellipsis h-[62px]">
+                {post.title}
+              </h3>
             </div>
           </div>
         </Anchor>

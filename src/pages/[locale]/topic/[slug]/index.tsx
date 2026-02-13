@@ -14,6 +14,7 @@ import TagSelect from '~/contentUtils/TagSelector'
 import { getClient } from '~/lib/sanity.client'
 import {
   catsSlugsQuery,
+  catsSlugsWithoutAssociatedContentQuery,
   getArticlesCount,
   getCategories,
   getCategory,
@@ -135,9 +136,11 @@ export const getStaticPaths = async () => {
   const client = getClient()
   const locales = siteConfig.locales
 
+  // Only generate static paths for categories without associatedContent
+  // Categories with associatedContent will be generated on-demand (fallback: 'blocking')
   const slugs = await Promise.all(
     locales.map(async (locale) => {
-      const data = await client.fetch(catsSlugsQuery, { locale });
+      const data = await client.fetch(catsSlugsWithoutAssociatedContentQuery, { locale });
       return data.map((item: any) => ({
         slug: item.slug,
         locale: item.locale
@@ -149,7 +152,7 @@ export const getStaticPaths = async () => {
     paths: slugs.flat().map((item: any) => ({
       params: { slug: item.slug, locale: item.locale },
     })),
-    fallback: 'blocking', // Allow dynamic generation for new categories
+    fallback: 'blocking', // Allow dynamic generation for new categories and those with associatedContent
   }
 }
 

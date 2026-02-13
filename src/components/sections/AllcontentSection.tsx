@@ -35,6 +35,8 @@ interface LatestBlogsProps {
   sectionType?: string
   uiType?: string
   compIndex?: number
+  customHeading?: string
+  customButtonText?: string
 }
 
 const AllcontentSection: React.FC<LatestBlogsProps> = ({
@@ -50,7 +52,9 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
   authorName,
   showCount = false,
   uiType,
-  compIndex
+  compIndex,
+  customHeading,
+  customButtonText
 }) => {
   const postsToShow = itemsPerPage || siteConfig.pagination.childItemsPerPage
   const [selectedTag, setSelectedTag] = useState('')
@@ -70,11 +74,13 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
         ? 'Keep Watching'
         : 'Keep Reading'
 
-  let browseHeading = contentType
-    ? contentHeading
-    : authorName
-      ? `Posts By ${authorName}`
-      : 'Explore All'
+  let browseHeading = customHeading
+    ? customHeading
+    : contentType
+      ? contentHeading
+      : authorName
+        ? `Posts By ${authorName}`
+        : 'Explore All'
 
   const uniqueCategories = allContent && Object.values(allContent.reduce((acc, item) => {
     acc[item?.category?.categoryName] = item?.category;
@@ -194,7 +200,7 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
               className="shrink-0"
             >
               <div className="flex items-center gap-3 transform group duration-300 cursor-pointer">
-                <span className="text-base font-medium">{`Browse All`}</span>
+                <span className="text-base font-medium">{customButtonText || 'Browse All'}</span>
                 <span className="text-xl">
                   <ArrowTopRightIcon
                     className="group-hover:translate-y-[-2px] transition-transform duration-300"
@@ -216,7 +222,7 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
           ${cardType === 'left-image-card'
             ? 'grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-x-6 xl:gap-x-16 gap-y-6 md:gap-y-12'
             : cardType === 'podcast-card'
-              ? 'lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 md:gap-10'
+              ? 'lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8'
               : 'lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6 md:gap-10'
           }
           }

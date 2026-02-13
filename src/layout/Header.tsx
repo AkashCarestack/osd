@@ -27,12 +27,11 @@ import  {ShortNavPopover}  from './overlaynav/ShortNavPopover';
 
 
 export const navigationLinks = [
-  // { href: siteConfig.pageURLs.caseStudy, label: "Case Studies", icon: CaseStudiesIcon },
-  { href: siteConfig.pageURLs.article, label: "Articles", icon: ArticlesIcon },
-  // { href: siteConfig.pageURLs.podcast, label: "Podcasts", icon: PodcastsIcon },
-  // { href: siteConfig.pageURLs.ebook, label: "Ebooks", icon: EbooksIcon },
-  // { href: siteConfig.pageURLs.webinar, label: "Webinars", icon: WebinarsIcon },
-  // { href: siteConfig.pageURLs.pressRelease, label: "Press", icon: PressIcon }
+  { id: 'topics', label: 'Topics', sectionId: 'topics-section' },
+  { id: 'training', label: 'Training', sectionId: 'training-section' },
+  { id: 'release-notes', label: 'Release Notes', sectionId: 'release-notes-section' },
+  { id: 'faqs', label: 'FAQs', sectionId: 'faqs-section' },
+  { id: 'events-updates', label: 'Events & Updates', sectionId: 'events-updates-section' },
 ];
 
 
@@ -43,6 +42,7 @@ const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [headerFixed, setHeaderFixed] = useState(false);
   const [navPopoverId, setNavPopoverId] = useState(Math.random().toString(36).substr(2, 9));
+  const [activeSection, setActiveSection] = useState<string>('topics');
   const pathname = usePathname()
 
   const closeMenu = (e) => {
@@ -65,6 +65,51 @@ const Header = () => {
   const handleScrollMob = () => {
     setHeaderFixed(window.scrollY > 44);
   };
+
+  const scrollToSection = (sectionId: string, navId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const headerOffset = 100;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+      setActiveSection(navId);
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = navigationLinks.map((link) => link.sectionId);
+      const scrollPosition = window.scrollY + 200;
+
+      // Check if we're at the top of the page
+      if (window.scrollY < 100) {
+        setActiveSection('topics');
+        return;
+      }
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const element = document.getElementById(sections[i]);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          if (scrollPosition >= offsetTop) {
+            setActiveSection(navigationLinks[i].id);
+            break;
+          }
+        }
+      }
+    };
+
+    // Set initial active section
+    handleScroll();
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const isMobile: any = useMediaQuery(1024);
 
@@ -110,37 +155,27 @@ const Header = () => {
                     <VoiceStackResources/>
                   </Link>
                   <div className={`flex lg:gap-10   justify-between rounded-xl items-center`}>
-                    {!isMobile && <div className='group relative py-4' >
-                    <Link  href={generateHref(locale, siteConfig.categoryBaseUrls.base)}   className='text-zinc-500 flex items-center gap-[6px] cursor-pointer text-base hover:text-zinc-300'>
-                      <span>
-                      {`Topics`}
-                      </span>
-                      <ChevronDownIcon className={`w-5 h-5  group-hover:translate-x-[4px] transition-transform duration-300 ease-in-out ${showMenu && 'rotate-180'}`} />
-                    </Link>
-                    <ShortNavPopover navPopoverId={navPopoverId}   showMenu={showMenu} setShowMenu={setShowMenu} className='z-10 lg:group-hover:block lg:group-hover:visible lg:group-hover:opacity-100 lg:group-hover:translate-y-0 ' />
-                    </div>}
                     <div className={`lg:flex-row top-[110px] hidden right-0 px-4 pt-4 pb-8 lg:p-0 bg-zinc-900 lg:bg-transparent left-0 lg:static flex-col gap-2 justify-between lg:items-center lg:flex`}>
-                      <nav className="flex flex-col lg:flex-row lg:gap-10 flex-wrap ">
-                        {navigationLinks && navigationLinks?.map((link, i) => {                                                    
-                          return(
-                          <Anchor
-                            key={link.href}
-                            href={generateHref(locale as string, link.href)}
-                            className={`hover:text-zinc-300 text-base ${pathname.includes(link.href) ? 'text-gray-400' : 'text-gray-500'}`}
-                          >
-                            {link.label}
-                          </Anchor>
-                        )})}
-                        {/* {featuredTags && featuredTags?.map((link, i) => ( // tag version nav
-                          <Anchor
-                            key={link.slug?.current}
-                            href={`/browse/${link.slug?.current}`}
-                            className={`hover:text-zinc-300 text-sm ${pathname.includes(link.slug?.current) ? 'text-zinc-300' : 'text-zinc-500'}`}
-                          >
-                            {link.tagName}
-                          </Anchor>
-
-                        ))} */}
+                      <nav className="flex flex-col lg:flex-row lg:gap-10 flex-wrap border-b border-zinc-800 pb-4 lg:pb-0 lg:border-0">
+                        {navigationLinks && navigationLinks?.map((link) => {
+                          const isActive = activeSection === link.id;
+                          return (
+                            <button
+                              key={link.id}
+                              onClick={() => scrollToSection(link.sectionId, link.id)}
+                              className={`text-base transition-colors duration-200 relative pb-1 lg:pb-0 ${
+                                isActive
+                                  ? 'text-white'
+                                  : 'text-zinc-500 hover:text-zinc-300'
+                              }`}
+                            >
+                              {link.label}
+                              {isActive && (
+                                <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-white" />
+                              )}
+                            </button>
+                          );
+                        })}
                       </nav>
                       <RegionSwitcher className='md:pl-10'/>
                     </div>

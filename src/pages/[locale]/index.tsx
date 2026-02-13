@@ -16,6 +16,7 @@ import {
   getEventCards,
   getFooterData,
   getHomeSettings,
+  getPodcasts,
   getPosts,
   getReleaseNotes,
   getSiteSettings,
@@ -39,6 +40,7 @@ interface IndexPageProps {
   contentType: string
   latestPosts: any
   podcastData: any
+  podcasts: any
   draftMode: boolean
   token: string
   posts: Array<Post>
@@ -92,7 +94,8 @@ export const getStaticProps: GetStaticProps<
       releaseNotes,
       allEventCards,
       categories,
-      footerData
+      footerData,
+      podcasts
     ] = await Promise.all([
       getPosts(client, 5,region),
       getPosts(client,undefined,region),
@@ -106,7 +109,8 @@ export const getStaticProps: GetStaticProps<
       getReleaseNotes(client, 0, 3, region),
       getEventCards(client),
       getCategories(client),
-      getFooterData(client, region)
+      getFooterData(client, region),
+      getPodcasts(client, undefined, undefined, region)
     ])
 
     return {
@@ -125,7 +129,8 @@ export const getStaticProps: GetStaticProps<
         releaseNotes,
         allEventCards,
         categories,
-        footerData
+        footerData,
+        podcasts
       },
     }
   } catch (error) {
@@ -142,6 +147,7 @@ export const getStaticProps: GetStaticProps<
         webinars: [],
         releaseNotes: [],
         footerData: [],
+        podcasts: [],
         error: true,
       },
     }
@@ -188,6 +194,7 @@ export default function IndexPage(props: IndexPageProps) {
           webinars={props?.webinars}
           releaseNotes={props?.releaseNotes}
           eventCards={eventCards}
+          podcasts={props?.podcasts}
         />
       </Layout>
     </GlobalDataProvider>

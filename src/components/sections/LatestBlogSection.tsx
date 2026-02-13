@@ -54,11 +54,11 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
 
     return (
       <React.Fragment>
-      <Section className="justify-center    bg-zinc-900 text-white ">
+      <Section className="justify-center !bg-white !text-black ">
         <Wrapper
-          className={`md:flex-row md:pt-16 pt-8 flex-col ${reverse ? 'md:flex-row-reverse' : ''} gap-8 md:gap-12 xl:gap-36`}
+          className={`md:flex-row md:pt-16 pt-8 flex-col ${reverse ? 'md:flex-row-reverse' : ''} gap-8 md:gap-12 xl:gap-36 !text-black`}
         >
-          <div className="xl:w-6/12 w-full h-full flex-1">
+          <div className="xl:w-6/12 w-full h-full flex-1 !text-black">
             <Card
               minHeight={350}
               contentType={contentType}
@@ -79,12 +79,12 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
 
     return(
       <React.Fragment>
-      <Section className="justify-center  md:pb-24  bg-zinc-900 text-white ">
+      <Section className="justify-center md:pb-24 !bg-white !text-black ">
         <Wrapper
-          className={`md:flex-row md:pt-16 pt-8 flex-col ${reverse ? 'md:flex-row-reverse' : ''} gap-2 md:gap-12 xl:gap-16`}
+          className={`md:flex-row md:pt-16 pt-8 flex-col ${reverse ? 'md:flex-row-reverse' : ''} gap-2 md:gap-12 xl:gap-16 !text-black`}
         >
 
-          <div className="xl:w-6/12 w-full h-full flex-1">
+          <div className="xl:w-6/12 w-full h-full flex-1 !text-black">
             <Card
               minHeight={350}
               contentType={contentType}
@@ -96,7 +96,7 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
               post={otherBlogs[0]}
             />
           </div>
-          <div className="xl:w-6/12 w-full h-full flex-1">
+          <div className="xl:w-6/12 w-full h-full flex-1 !text-black">
             <Card
               minHeight={350}
               contentType={contentType}
@@ -119,15 +119,15 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
 
   return (
     <React.Fragment>
-      <Section className="justify-center  bg-zinc-900 text-white md:pt-headerSpacer pt-headerSpacerMob">
+      <Section className="justify-center !bg-white !text-black md:pt-headerSpacer pt-headerSpacerMob">
         <Wrapper
           className={`md:flex-row md:pt-16 pt-8 flex-col ${reverse ? 'md:flex-row-reverse' : ''} gap-8 md:gap-12 xl:gap-36`}
         >
-          <div className="flex flex-col gap-9 xl:w-5/12 w-full flex-1">
-            <H2Large className="select-none ">
+          <div className="flex flex-col gap-9 xl:w-5/12 w-full flex-1 !text-black">
+            <H2Large className="select-none !text-black">
               {reverse ? displayName : `Latest`}
             </H2Large>
-            <div className="flex flex-col gap-8 ">
+            <div className="flex flex-col gap-8 !text-black">
               {otherBlogs.map((blog, i) => (
                 <Card
                   key={i + 1 || blog._id}

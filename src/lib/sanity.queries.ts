@@ -1897,6 +1897,13 @@ export const catsSlugsQuery = groq`
       "locale": $locale
     }
 `
+
+export const catsSlugsWithoutAssociatedContentQuery = groq`
+  *[_type == "category" && defined(slug.current) && (!defined(associatedContent) || count(associatedContent) == 0)] {
+      "slug": slug.current,
+      "locale": $locale
+    }
+`
 export const testimonialSlugsQuery = groq`
   *[_type == "testimonial" && defined(slug.current)][].slug.current
 `

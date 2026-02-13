@@ -183,17 +183,30 @@ export const NavPopover = ({
               className={`w-full transform transition-all duration-200}`}
             >
               <nav className="flex flex-col lg:flex-row gap-y-6 gap-x-6 lg:gap-x-10 flex-wrap rounded-[6px] py-[17px] lg:px-[20px] lg:bg-zinc-100">
-                {navigationLinks?.map((link, i) => {
-                  return(
-                  <Anchor
-                    key={link.href}
-                    href={generateHref(router.query.locale, link.href)}
-                    className={`hover:text-zinc-500 self-start font-medium text-base lg:text-sm flex items-center gap-2 ${router.pathname.startsWith(link.href) ? 'text-zinc-600' : 'text-zinc-600'}`}
-                  >
-                    {link.icon && <link.icon />}
-                    {link.label}
-                  </Anchor>
-                )})}
+                {navigationLinks?.map((link) => {
+                  const scrollToSection = (sectionId: string) => {
+                    const element = document.getElementById(sectionId);
+                    if (element) {
+                      const headerOffset = 100;
+                      const elementPosition = element.getBoundingClientRect().top;
+                      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth',
+                      });
+                      setShowMenu(false);
+                    }
+                  };
+                  return (
+                    <button
+                      key={link.id}
+                      onClick={() => scrollToSection(link.sectionId)}
+                      className="hover:text-zinc-500 self-start font-medium text-base lg:text-sm flex items-center gap-2 text-zinc-600 text-left"
+                    >
+                      {link.label}
+                    </button>
+                  );
+                })}
               </nav>
               <div className="px-[10px] py-6 lg:p-6 lg:block hidden">
                 <div className="text-zinc-400 pb-6 font-medium text-sm uppercase">

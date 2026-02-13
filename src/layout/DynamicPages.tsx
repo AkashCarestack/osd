@@ -4,6 +4,7 @@ import { BaseUrlProvider } from '~/components/Context/UrlContext'
 import EventCarousel from '~/components/eventCarousel'
 import AllcontentSection from '~/components/sections/AllcontentSection'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
+import FAQSection from '~/components/sections/FAQSection'
 import FeaturedAndPopularBlogs from '~/components/sections/FeaturedAndPopularBlogsSection'
 import HeroSection from '~/components/sections/HeroSection'
 import LatestBlogs from '~/components/sections/LatestBlogSection'
@@ -13,6 +14,7 @@ import SliderSection from '~/components/sections/SliderSection'
 import TestimonialSection from '~/components/sections/TestimonialSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Tag } from '~/interfaces/post'
+import faqData from '~/lib/faqData.json'
 import { getUniqueData, getUniqueReorderedCarouselItems } from '~/utils/common'
 
 interface DynamicProps {
@@ -41,6 +43,7 @@ const DynamicPages = ({
   webinars,
   releaseNotes,
   eventCards,
+  podcasts,
 }: DynamicProps) => {
   const featuredBlog = homeSettings?.FeaturedBlog || posts[0]
   const customBrowseContent = homeSettings?.customBrowseContent 
@@ -67,29 +70,54 @@ const DynamicPages = ({
 
   const baseUrl = `/${siteConfig.pageURLs.home}`
   
+  // Use podcasts prop if available, otherwise filter from posts
+  const podcastPosts = Array.isArray(podcasts) && podcasts.length > 0
+    ? podcasts
+    : Array.isArray(posts) 
+      ? posts.filter((post: any) => {
+          const isPodcast = post && (post.contentType === 'podcast' || post.contentType === 'Podcast')
+          return isPodcast
+        })
+      : []
 
   return (
     <>
       <BaseUrlProvider baseUrl={baseUrl}>
         <TagSelect tags={tags} tagLimit={7} />
          <EventCarousel allEventCards={uniqueEventCards} />
-         <HeroSection />
+         <div id="topics-section">
+          <HeroSection />
+        </div>
+         <SliderSection items={reorderedCarouselItems} />
+
         <LatestBlogs contents={latestPosts} />
         <FeaturedAndPopularBlogs
           featuredBlog={featuredBlog}
           popularBlogs={featuredContents}
         />
-        <ReleaseNotesHeroSection releaseNotes={releaseNotes} />
+        <div id="release-notes-section">
+          <ReleaseNotesHeroSection releaseNotes={releaseNotes} />
+        </div>
         {/* <BannerSubscribeSection /> */}
-        <SliderSection items={reorderedCarouselItems} />
         <TestimonialSection testimonials={testimonialList} />
+        <div id="training-section">
           <AllcontentSection
             customBrowseContent={customBrowseContent}
-            allContent={posts}
+            allContent={podcastPosts}
             itemsPerPage={siteConfig.pagination.itemsHomePage}
             redirect={true}
+            contentType="podcast"
+            cardType="podcast-card"
+            customHeading="Training for Onboarding & Learning"
+            customButtonText="View All Trainings"
           />
-        <EventCarousel bgColor={'white'} allEventCards={uniqueEventCards} />
+        </div>
+        <div id="faqs-section">
+          <FAQSection faqData={faqData} />
+        </div>
+        <div id="events-updates-section">
+          <EventCarousel bgColor={'white'} allEventCards={uniqueEventCards} />
+        </div>
         <BannerSubscribeSection hideBanner={true} />
       </BaseUrlProvider>
     </>

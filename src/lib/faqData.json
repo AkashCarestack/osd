@@ -1,0 +1,32 @@
+{
+  "faqs": [
+    {
+      "id": 1,
+      "question": "How long does onboarding take?",
+      "answer": "A dental analytics platform aggregates data from your practice management software (PMS), financial tools, and other sources to provide real-time dashboards, insights, and key performance indicators (KPIs) to help you make data-driven decisions."
+    },
+    {
+      "id": 2,
+      "question": "What systems are supported for integration?",
+      "answer": "We support integration with major practice management software systems including Dentrix, Eaglesoft, Open Dental, and many others. Our platform is designed to work seamlessly with your existing technology stack."
+    },
+    {
+      "id": 3,
+      "question": "Are training resources available for new staff?",
+      "answer": "Yes, we provide comprehensive training resources including video tutorials, documentation, and live training sessions. New staff members can access our learning management system with step-by-step guides and best practices."
+    },
+    {
+      "id": 4,
+      "question": "Who do we contact for technical support?",
+      "answer": "You can reach our technical support team through multiple channels: email at support@osdental.com, phone at our dedicated support line, or through the in-app support chat. Our team is available during business hours to assist with any technical issues."
+    },
+    {
+      "id": 5,
+      "question": "How are updates communicated?",
+      "answer": "We communicate updates through multiple channels including email notifications, in-app announcements, and our partner portal. Major updates are announced at least two weeks in advance, and detailed release notes are available in our documentation center."
+    }
+  ],
+  "title": "Frequently Asked Questions",
+  "description": "Frequently asked questions from partners, covering onboarding, integrations, workflows, and support.",
+  "readNowLink": "#"
+}
