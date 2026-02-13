@@ -105,21 +105,29 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const [
     categories,
-    allCategoryPosts,
     tags,
     homeSettings,
     footerData,
   ] = await Promise.all([
     getCategories(client),
-    getPostsByCategoryAndLimit(client, category._id, 0, 3, region),
     getTags(client),
     getHomeSettings(client, region),
     getFooterData(client, region),
   ])
 
-  const categoriesWithPosts = categories.filter((cat, index) => {
+  // Get posts for all categories to filter categoriesWithPosts correctly
+  const allCategoryPosts = await Promise.all(
+    categories.map((cat) => getPostsByCategoryAndLimit(client, cat._id, 0, 3, region))
+  )
+  let categoriesWithPosts = categories.filter((cat, index) => {
     return allCategoryPosts[index] && allCategoryPosts[index].length > 0
   })
+  
+  // Ensure current category is always included (it should have at least the current content)
+  const currentCategoryInList = categoriesWithPosts.some(cat => cat._id === category._id)
+  if (!currentCategoryInList && category) {
+    categoriesWithPosts.push(category)
+  }
 
   // Get related content
   const tagIds = content?.tags?.map((tag: any) => tag?._id) || []
@@ -172,10 +180,10 @@ export default function TopicContentPage({
     >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
-          <ContentHub
+          {/* <ContentHub
             categories={categoriesWithPosts}
             contentCount={{}}
-          />
+          /> */}
           <MainImageSection enableDate={true} post={content} />
           <Section className="justify-center">
             <Wrapper className={`flex-col`}>
