@@ -1,5 +1,2 @@
 User-agent: *
-Disallow: 
-
-# Sitemap
-Sitemap: https://resources.voicestack.com/sitemap.xml
+Disallow: /
