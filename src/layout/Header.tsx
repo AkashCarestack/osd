@@ -42,7 +42,7 @@ const Header = () => {
   const { locale } = router.query; 
   const [showMenu, setShowMenu] = useState(false);
   const [headerFixed, setHeaderFixed] = useState(false);
-  const [navPopoverId, setNavPopoverId] = useState(null);
+  const [navPopoverId, setNavPopoverId] = useState(Math.random().toString(36).substr(2, 9));
   const pathname = usePathname()
 
   const closeMenu = (e) => {
@@ -111,13 +111,13 @@ const Header = () => {
                   </Link>
                   <div className={`flex lg:gap-10   justify-between rounded-xl items-center`}>
                     {!isMobile && <div className='group relative py-4' >
-                    {/* <Link  href={generateHref(locale, siteConfig.categoryBaseUrls.base)}   className='text-zinc-500 flex items-center gap-[6px] cursor-pointer text-base hover:text-zinc-300'>
+                    <Link  href={generateHref(locale, siteConfig.categoryBaseUrls.base)}   className='text-zinc-500 flex items-center gap-[6px] cursor-pointer text-base hover:text-zinc-300'>
                       <span>
                       {`Topics`}
                       </span>
                       <ChevronDownIcon className={`w-5 h-5  group-hover:translate-x-[4px] transition-transform duration-300 ease-in-out ${showMenu && 'rotate-180'}`} />
-                    </Link> */}
-                    {navPopoverId && <ShortNavPopover navPopoverId={navPopoverId}   showMenu={showMenu} setShowMenu={setShowMenu} className='z-10 group-hover:block group-hover:visible group-hover:opacity-100 ' />}
+                    </Link>
+                    <ShortNavPopover navPopoverId={navPopoverId}   showMenu={showMenu} setShowMenu={setShowMenu} className='z-10 lg:group-hover:block lg:group-hover:visible lg:group-hover:opacity-100 lg:group-hover:translate-y-0 ' />
                     </div>}
                     <div className={`lg:flex-row top-[110px] hidden right-0 px-4 pt-4 pb-8 lg:p-0 bg-zinc-900 lg:bg-transparent left-0 lg:static flex-col gap-2 justify-between lg:items-center lg:flex`}>
                       <nav className="flex flex-col lg:flex-row lg:gap-10 flex-wrap ">

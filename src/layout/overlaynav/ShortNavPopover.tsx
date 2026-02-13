@@ -108,8 +108,8 @@ export const ShortNavPopover = ({
       onMouseLeave={handleMouseLeave}
       className={`p-2  lg:rounded-[12px] bg-white shadow-custom 
       justify-center bg-transparent fixed lg:absolute lg:top-16 left-2/4 w-[200px] translate-x-[-50%] lg:h-auto 
-      ${'lg:-translate-y-3 opacity-0 invisible'}
-      ${'lg:overflow-hidden'}
+      lg:-translate-y-3 lg:opacity-0 lg:invisible
+      lg:overflow-hidden
       ${className}
     `}
     >
