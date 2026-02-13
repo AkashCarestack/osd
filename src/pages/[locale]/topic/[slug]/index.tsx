@@ -1,5 +1,7 @@
 import siteConfig from 'config/siteConfig'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 import Pagination from '~/components/commonSections/Pagination'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
@@ -93,20 +95,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const totalPages = Math.ceil(allPostsForTag.length / cardsPerPage);
 
-  // If category has associated content, redirect to first content immediately using Next.js redirect
+  // Build redirect path if category has associated content (for client-side redirect)
+  let redirectPath: string | null = null;
   if (category?.associatedContent && category.associatedContent.length > 0) {
     const firstContent = category.associatedContent[0]
     if (firstContent?.slug?.current) {
       // Build the redirect path with proper locale handling
       const localePath = region === 'en' ? '' : `/${region}`
-      const redirectPath = `${localePath}/${siteConfig.categoryBaseUrls.base}/${slug}/${firstContent.slug.current}`
-      
-      return {
-        redirect: {
-          destination: redirectPath,
-          permanent: false,
-        },
-      }
+      redirectPath = `${localePath}/${siteConfig.categoryBaseUrls.base}/${slug}/${firstContent.slug.current}`
     }
   }
 
@@ -130,6 +126,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       siteSettings,
       homeSettings,
       footerData,
+      redirectPath,
     },
   };
 };
@@ -167,8 +164,18 @@ export default function TagPage({
   totalPostCount,
   siteSettings,
   homeSettings,
-  footerData
+  footerData,
+  redirectPath
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const router = useRouter();
+  
+  // Handle client-side redirect if category has associated content
+  useEffect(() => {
+    if (redirectPath) {
+      router.replace(redirectPath);
+    }
+  }, [redirectPath, router]);
+
   const handlePageChange = (page: number) => {
     console.log(`Navigating to page: ${page}`)
   }
@@ -178,6 +185,11 @@ export default function TagPage({
 
   if (siteSettingWithImage) {
     siteSettingWithImage.siteTitle = slugToCapitalized(category?.slug?.current);
+  }
+
+  // If redirecting, show nothing or a loading state
+  if (redirectPath) {
+    return null;
   }
 
   // Default category listing view
