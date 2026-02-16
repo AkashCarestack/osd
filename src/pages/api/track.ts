@@ -7,7 +7,7 @@ export default async function trackEvents(
   res: NextApiResponse
 ) {
   
-  if (req.headers.host == "resources.voicestack.com") {
+  if (req.headers.host == "osdental.io") {
     if (req.method === "POST") {
       const type = req.query.type;
       switch (type) {
@@ -16,7 +16,6 @@ export default async function trackEvents(
             const id = await createUser(req.body);
             return res.json({ userId: id });
           } catch (error) {
-            console.log(error);
             return res.status(500).json({ error: "Error" });
           }
         }
@@ -26,8 +25,6 @@ export default async function trackEvents(
             await addEvent(events);
             return res.json({ msg: "success" });
           } catch (error) {
-            console.log(error);
-
             if (error !== null && typeof error === "object") {
               if (
                 (error as any)?.details?.includes(
@@ -55,7 +52,6 @@ export default async function trackEvents(
             const id = await addSession(session);
             return res.json({ id });
           } catch (error) {
-            console.log(error);
             if (error !== null && typeof error === "object") {
               if (
                 (error as any)?.details?.includes(
@@ -95,7 +91,6 @@ export default async function trackEvents(
           }
         }
       } catch (error) {
-        console.log(error);
         res.status(500).json({ error: "Error" });
       }
     }
@@ -108,8 +103,6 @@ export default async function trackEvents(
             const query = await supabase.from("users").select("*").eq("id", id);
             return res.json(query.data![0] ?? null);
           } catch (error) {
-            console.log(error);
-
             return res.json({ error: "Error" });
           }
         }

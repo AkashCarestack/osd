@@ -137,7 +137,7 @@ const PodcastPage = ({
     return <div>Podcast not found</div>
   }
 
-  const prodUrl = 'https://resources.voicestack.com'
+  const prodUrl = 'https://osdental.io'
 
   const seoTitle = podcast.seoTitle || podcast.title
   const seoDescription = (podcast?.seoDescription && !podcast.seoDescription.includes('Test titlw')) 

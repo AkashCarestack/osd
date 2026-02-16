@@ -20,6 +20,7 @@ import demoBannerBlockUS from './sections/demoBannerBlockUS'
 import demoBannerBlockGB from './sections/demoBannerBlockGB'
 import demoBannerBlockAU from './sections/demoBannerBlockAU'
 import commonBannerBlock from './sections/commonBannerBlock'
+import faqSection from './sections/faqSection'
 import testimonialCard from './sections/testimonialCard'
 import siteSetting from './siteSetting'
 import table from './table'
@@ -37,6 +38,7 @@ export const schemaTypes = [
   demoBannerBlockGB,
   demoBannerBlockAU,
   commonBannerBlock,
+  faqSection,
   dynamicComponent,
   author,
   homeSettings,
@@ -66,6 +68,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     demoBannerBlockGB,
     demoBannerBlockAU,
     commonBannerBlock,
+    faqSection,
     dynamicComponent,
     author,
     homeSettings,

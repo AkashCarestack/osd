@@ -14,7 +14,6 @@ import SliderSection from '~/components/sections/SliderSection'
 import TestimonialSection from '~/components/sections/TestimonialSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Tag } from '~/interfaces/post'
-import faqData from '~/lib/faqData.json'
 import { getUniqueData, getUniqueReorderedCarouselItems } from '~/utils/common'
 
 interface DynamicProps {
@@ -115,7 +114,7 @@ const DynamicPages = ({
           />
         </div>
         <div id="faqs-section">
-          <FAQSection faqData={faqData} />
+          <FAQSection faqData={homeSettings?.faqSection} />
         </div>
         <div id="events-updates-section">
           <EventCarousel bgColor={'white'} allEventCards={uniqueEventCards} />

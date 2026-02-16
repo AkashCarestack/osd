@@ -30,17 +30,17 @@ export default function SEOHead({
   ogImage,
 }: SEOHeadProps) {
   const { alternatePaths, defaultUrl } = useAlternatePaths()
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://resources.voicestack.com'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://osdental.io'
   const locale = useRouter().query.locale as string
   const slug = useRouter().query.slug as string
   const defaultUrlx = locale === 'en' ? baseUrl : `${baseUrl}/${locale}/${slug}`
 
   // Default values
-  const defaultTitle = title || 'Resources | On-Demand Learning Resources | VoiceStack®'
-  const defaultDescription = description || 'Whether you\'re looking for e-Books, webinars, podcasts, or articles, VoiceStack® Resources are full of helpful & informative topics to improve your practice.'
-  const defaultKeywords = keywords || 'voicestack resources, voicestack articles, voicestack webinars, voicestack blogs'
+  const defaultTitle = title || 'Resources | On-Demand Learning Resources | OS Dental'
+  const defaultDescription = description || 'Whether you\'re looking for e-Books, webinars, podcasts, or articles, OS Dental Resources are full of helpful & informative topics to improve your practice.'
+  const defaultKeywords = keywords || 'os dental resources, os dental articles, os dental webinars, os dental blogs'
   const defaultRobots = robots || 'index, follow, archive'
-  const defaultAuthor = 'VoiceStack®'
+  const defaultAuthor = 'OS Dental'
   const sanitizedCanonical = sanitizeUrl(canonical)
 
   return (

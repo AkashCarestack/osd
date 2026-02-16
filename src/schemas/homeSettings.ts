@@ -25,6 +25,10 @@ export default {
       name: 'featuredCategories',
       title: 'Featured Categories',
     },
+    {
+      name: 'faq',
+      title: 'FAQ Section',
+    },
   ],
   fields: [
     {
@@ -220,6 +224,13 @@ export default {
       validation: (Rule) =>
         Rule.unique().custom(uniqueTestimonialsValidation).min(6),
       group: 'popularBlogs',
+    },
+    {
+      name: 'faqSection',
+      title: 'FAQ Section',
+      description: 'Configure the Frequently Asked Questions section',
+      type: 'faqSection',
+      group: 'faq',
     },
     defineField({
       name: 'language',

@@ -29,12 +29,6 @@ const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories 
   // Background colors for cards (cycling through)
   const bgColors = ['#c241bd', '#ffcf23', '#3abfbf', '#c241bd', '#ffcf23']
 
-  // Debug logging
-  if (typeof window !== 'undefined') {
-    console.log('CategoryCardsSection - categories:', categories)
-    console.log('CategoryCardsSection - categories length:', categories?.length)
-  }
-
   // Filter categories that have associated content, or show all categories if none have content
   const categoriesWithContent = categories?.filter(
     (category) => category?.associatedContent && category.associatedContent.length > 0
@@ -47,14 +41,7 @@ const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories 
     : (categories || []).slice(0, 4)
 
   if (!displayCategories || displayCategories.length === 0) {
-    if (typeof window !== 'undefined') {
-      console.log('CategoryCardsSection - No categories to display')
-    }
     return null
-  }
-
-  if (typeof window !== 'undefined') {
-    console.log('CategoryCardsSection - Displaying categories:', displayCategories.length)
   }
 
   return (
@@ -104,7 +91,7 @@ const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories 
 
                 {/* Content card */}
                 <Anchor
-                  href={generateHref(locale as string, href)}
+                  href={router.isReady ? generateHref(locale as string, href) : '#'}
                   className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 relative rounded-[5px] shrink-0 w-full group"
                 >
                   <div className="flex flex-col gap-2 items-start w-full">

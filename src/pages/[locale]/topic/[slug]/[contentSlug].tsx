@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 
 import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
 import AuthorInfo from '~/components/commonSections/AuthorInfo'
+import ArticlesInSection from '~/components/commonSections/ArticlesInSection'
 import RelatedTag from '~/components/commonSections/RelatedTag'
 import ShareableLinks from '~/components/commonSections/ShareableLinks'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
@@ -46,11 +47,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
         
         if (categoryWithContent?.associatedContent && categoryWithContent.associatedContent.length > 0) {
           for (const content of categoryWithContent.associatedContent) {
-            if (content?.slug?.current) {
+            // Filter by language/region if content has a language field
+            const hasLanguage = content?.language
+            const matchesLocale = !hasLanguage || content.language === locale
+            
+            // Check for slug - handle both slug.current and slug formats
+            const contentSlug = content?.slug?.current || content?.slug
+            
+            if (matchesLocale && contentSlug && category.slug?.current) {
               pathsForLocale.push({
                 params: {
-                  slug: category.slug?.current,
-                  contentSlug: content.slug.current,
+                  slug: category.slug.current,
+                  contentSlug: typeof contentSlug === 'string' ? contentSlug : contentSlug.current || contentSlug,
                   locale: locale,
                 },
               })
@@ -166,7 +174,9 @@ export default function TopicContentPage({
   homeSettings,
   footerData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const router = useRouter()
   const baseUrl = `/${siteConfig.categoryBaseUrls.base}/${category?.slug?.current}`
+  const currentContentSlug = content?.slug?.current || (router.query.contentSlug as string)
 
   if (!content) {
     return null
@@ -188,19 +198,20 @@ export default function TopicContentPage({
           <Section className="justify-center">
             <Wrapper className={`flex-col`}>
               <div className="flex md:flex-row flex-col-reverse gap-6 md:gap-12 justify-between">
-                <div className="md:mt-12 flex-1 flex md:flex-col flex-col-reverse md:w-2/3 w-full md:max-w-[710px]">
-                  <div className="post__content w-full">
-                    <SanityPortableText
-                      content={content?.body}
-                      draftMode={false}
-                      token={null}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-8 md:mt-12 bg-red relative md:w-1/3 md:max-w-[410px] w-full">
-                  <div className="sticky top-24 flex flex-col-reverse md:flex-col gap-8 md:overflow-auto">
-                    {content?.headings && (
-                      <Toc headings={content?.headings} title="Contents" />
+                {/* Left Sidebar - Articles in Section (if associatedContent) OR TOC (if no associatedContent), Author, Share */}
+                <div className="flex flex-col gap-8 md:mt-12 relative md:w-1/3 md:max-w-[410px] w-full">
+                  <div className="sticky top-24 flex flex-col gap-8 md:overflow-auto">
+                    {/* Show Articles in Section if category has associated content, otherwise show TOC */}
+                    {category?.associatedContent && category.associatedContent.length > 0 ? (
+                      <ArticlesInSection
+                        associatedContent={category.associatedContent}
+                        categorySlug={category?.slug?.current}
+                        currentContentSlug={currentContentSlug}
+                      />
+                    ) : (
+                      content?.headings && (
+                        <Toc headings={content?.headings} title="Contents" />
+                      )
                     )}
                     <div className="flex-col gap-8 flex">
                       {content?.author && content.author.length > 0 && (
@@ -210,6 +221,16 @@ export default function TopicContentPage({
                       )}
                       <ShareableLinks props={content?.title} />
                     </div>
+                  </div>
+                </div>
+                {/* Main Content Area - Body */}
+                <div className="md:mt-12 flex-1 flex flex-col gap-8 md:w-2/3 w-full md:max-w-[710px]">
+                  <div className="post__content w-full">
+                    <SanityPortableText
+                      content={content?.body}
+                      draftMode={false}
+                      token={null}
+                    />
                   </div>
                 </div>
               </div>

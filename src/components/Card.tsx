@@ -117,15 +117,45 @@ export default function Card({
   useEffect(() => {
     if (router.isReady && post?.slug) {
       const { locale = 'en' } = router.query;
-      const contentTypePath = getBasePath(router, post.contentType);
+      
+      // Check if post has category information - if so, use topic route format
+      const hasCategory = post?.category && post.category.slug?.current;
+      
+      if (hasCategory) {
+        // Use topic route format: /topic/[category-slug]/[content-slug]
+        const categorySlug = post.category.slug.current.replace(/^\/+/, '').replace(/\/+$/, '');
+        const contentSlug = post?.slug?.current?.replace(/^\/+/, '').replace(/\/+$/, '') || '';
+        const topicBase = siteConfig.categoryBaseUrls.base;
+        
+        const newLinkUrl = varyingIndex
+          ? locale === 'en' 
+            ? `/${topicBase}/${categorySlug}`
+            : `/${locale}/${topicBase}/${categorySlug}`
+          : locale === 'en'
+            ? `/${topicBase}/${categorySlug}/${contentSlug}`
+            : `/${locale}/${topicBase}/${categorySlug}/${contentSlug}`;
 
-      const newLinkUrl = varyingIndex
-        ? `${locale === 'en' ? '' : `/${locale}`}/${contentTypePath}`
-        : `${locale === 'en' ? '' : `/${locale}`}/${contentTypePath}/${post?.slug?.current || ''}`;
+        setLinkUrl(newLinkUrl);
+      } else {
+        // Use default content type route format
+        const contentTypePath = getBasePath(router, post.contentType);
+        
+        // Normalize paths to avoid double slashes
+        const normalizedContentPath = contentTypePath?.replace(/^\/+/, '').replace(/\/+$/, '') || '';
+        const normalizedSlug = post?.slug?.current?.replace(/^\/+/, '').replace(/\/+$/, '') || '';
 
-      setLinkUrl(newLinkUrl);
+        const newLinkUrl = varyingIndex
+          ? locale === 'en' 
+            ? `/${normalizedContentPath}`
+            : `/${locale}/${normalizedContentPath}`
+          : locale === 'en'
+            ? `/${normalizedContentPath}/${normalizedSlug}`
+            : `/${locale}/${normalizedContentPath}/${normalizedSlug}`;
+
+        setLinkUrl(newLinkUrl);
+      }
     }
-  }, [router.isReady, post?.contentType, post?.slug, varyingIndex, router.query.locale, router]);
+  }, [router.isReady, post?.contentType, post?.slug, post?.category, varyingIndex, router.query.locale, router]);
 
   if (!post || !linkUrl) {
     return null

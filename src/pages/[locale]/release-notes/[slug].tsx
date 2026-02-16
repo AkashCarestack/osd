@@ -123,7 +123,7 @@ const ReleaseNotePage = ({
     return null
   }
   
-  const prodUrl = 'https://resources.voicestack.com'
+  const prodUrl = 'https://osdental.io'
   const seoTitle = releaseNote?.seoTitle || releaseNote?.title || 'Release Note'
   const seoDescription = (releaseNote?.seoDescription && !releaseNote.seoDescription.includes('Test titlw')) 
     ? releaseNote.seoDescription 

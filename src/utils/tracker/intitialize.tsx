@@ -72,7 +72,7 @@ export const createUser = async (deviceData: any) => {
       }
     }
   } catch (error) {
-    console.log(error);
+    // Error handled silently
   }
 };
 
@@ -83,7 +83,7 @@ export async function getUserData(id: string) {
     const data = await res.json();
     return data;
   } catch (error) {
-    console.log(error);
+    // Error handled silently
   }
 }
 

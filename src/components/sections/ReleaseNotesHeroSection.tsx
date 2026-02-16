@@ -1,11 +1,13 @@
 import { ArrowTopRightIcon } from '@sanity/icons'
 import React from 'react'
+import { useRouter } from 'next/router'
 
 import Wrapper from '~/layout/Wrapper'
 import Section from '~/components/Section'
 import Anchor from '~/components/commonSections/Anchor'
 import { formatDateShort } from '~/utils/formateDate'
 import { Articles } from '~/interfaces/post'
+import { generateHref } from '~/utils/common'
 import siteConfig from 'config/siteConfig'
 
 interface ReleaseNotesHeroSectionProps {
@@ -19,8 +21,10 @@ const ReleaseNotesHeroSection: React.FC<ReleaseNotesHeroSectionProps> = ({
   buttonText = 'Read Now',
   buttonLink,
 }) => {
-  const baseUrl = `/${siteConfig.pageURLs.releaseNotes}`
-  const linkUrl = buttonLink || baseUrl
+  const router = useRouter()
+  const { locale } = router.query
+  const baseUrl = siteConfig.pageURLs.releaseNotes
+  const linkUrl = buttonLink || (router.isReady ? generateHref(locale as string, baseUrl) : '#')
 
   // Get first 3 release notes for the cards
   const featuredReleaseNotes = releaseNotes.slice(0, 3)
@@ -62,8 +66,8 @@ const ReleaseNotesHeroSection: React.FC<ReleaseNotesHeroSectionProps> = ({
                     const releaseDate = releaseNoteWithDate.date
                       ? formatDateShort(releaseNoteWithDate.date).trim()
                       : ''
-                    const slug = releaseNote.slug?.current
-                      ? `/${siteConfig.pageURLs.releaseNotes}/${releaseNote.slug.current}`
+                    const slug = router.isReady && releaseNote.slug?.current
+                      ? generateHref(locale as string, `${siteConfig.pageURLs.releaseNotes}/${releaseNote.slug.current}`)
                       : '#'
 
                     return (
