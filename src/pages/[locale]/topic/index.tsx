@@ -213,7 +213,7 @@ export default function ProjectSlugRoute(
                 </div> 
               )
             })}
-            <BannerSubscribeSection />
+            <BannerSubscribeSection hideBanner={true} />
           </Layout>
         </BaseUrlProvider>
       </GlobalDataProvider>
