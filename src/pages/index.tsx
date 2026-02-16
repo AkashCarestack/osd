@@ -133,7 +133,7 @@ export default function IndexPage(props: IndexPageProps) {
   const latestPosts = props?.latestPosts
   const siteSettings = props?.siteSettings
   const eventCards = props?.allEventCards
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://resources.voicestack.com'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://osdental.io'
   const locale = useRouter().query.locale as string
   const defaultUrl = !locale || locale === 'en' ? baseUrl : `${baseUrl}/${locale}`
 

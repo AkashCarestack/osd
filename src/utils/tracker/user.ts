@@ -47,7 +47,7 @@ export async function generateUserData(
       return body;
     }
   } catch (error) {
-    console.log(error);
+    // Error handled silently
   }
 }
 

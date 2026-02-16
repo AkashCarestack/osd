@@ -45,8 +45,6 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
     }
   }, [categories])
 
-  console.log(categories, 'categories');
-
   // Handle categories
   if (categories) {
     // Filter categories that have associated content, or show all categories if none have content

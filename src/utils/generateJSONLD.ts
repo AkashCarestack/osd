@@ -22,9 +22,9 @@ export function generateJSONLD(post: any) {
           '@type': 'BlogPosting',
           mainEntityOfPage: {
             '@type': 'WebPage',
-            '@id': `https://resources.voicestack.com${post.slug}`,
+            '@id': `https://osdental.io${post.slug}`,
             isPartOf: {
-              '@id': 'https://resources.voicestack.com/#website',
+              '@id': 'https://osdental.io/#website',
             },
           },
           headline: post.title,
@@ -34,19 +34,19 @@ export function generateJSONLD(post: any) {
           author: {
             '@type': 'Person',
             name: (author && author[0]?.name) || 'Unknown Author',
-            url: 'https://voicestack.com/company/leadership-team',
+            url: 'https://osdental.io/company/leadership-team',
           },
           wordCount: estimatedWordCount ?? 0,
           dateCreated: post._createdAt,
           inLanguage: 'en-US',
           copyrightYear: post._createdAt.split(' ')[2],
           copyrightHolder: {
-            '@id': 'https://voicestack.com/#organization',
+            '@id': 'https://osdental.io/#organization',
           },
           publisher: {
             '@type': 'Organization',
-            name: 'VoiceStack',
-            url: 'https://voicestack.com',
+            name: 'OS Dental',
+            url: 'https://osdental.io',
             logo: {
               '@type': 'ImageObject',
               inLanguage: 'en-US',
@@ -75,7 +75,7 @@ export function generateJSONLD(post: any) {
           '@type': 'Article',
           headline: post.title,
           image: post.articleImage ? urlForImage(post.articleImage._id) : (post.mainImage ? urlForImage(post.mainImage._id) : ''),
-          url: sanitizeUrl(post.articleUrl || `https://resources.voicestack.com/article/${post.slug?.current || ''}`),
+          url: sanitizeUrl(post.articleUrl || `https://osdental.io/article/${post.slug?.current || ''}`),
           author: {
             '@type': 'Person',
             name: (author && author[0]?.name) || 'Unknown Author',
@@ -138,9 +138,9 @@ export function generateJSONLD(post: any) {
     '@type': 'BlogPosting',
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://resources.voicestack.com${post.slug}`,
+      '@id': `https://osdental.io${post.slug}`,
       isPartOf: {
-        '@id': 'https://resources.voicestack.com/#website',
+        '@id': 'https://osdental.io/#website',
       },
     },
     headline: post.title,
@@ -150,19 +150,19 @@ export function generateJSONLD(post: any) {
     author: {
       '@type': 'Person',
       name: (author && author[0]?.name) || 'Unknown Author',
-      url: 'https://voicestack.com/company/leadership-team',
+      url: 'https://osdental.io/company/leadership-team',
     },
     wordCount: estimatedWordCount ?? 0,
     dateCreated: post._createdAt,
     inLanguage: 'en-US',
     copyrightYear: post._createdAt?.split(' ')[2],
     copyrightHolder: {
-      '@id': 'https://voicestack.com/#organization',
+      '@id': 'https://osdental.io/#organization',
     },
     publisher: {
       '@type': 'Organization',
-      name: 'VoiceStack',
-      url: 'https://voicestack.com',
+      name: 'OS Dental',
+      url: 'https://osdental.io',
       logo: {
         '@type': 'ImageObject',
         inLanguage: 'en-US',
@@ -178,18 +178,18 @@ export function generateJSONLD(post: any) {
 
 export function indexPageJsonLd(params: any) {
   return {
-    maintainer: 'VoiceStack',
+    maintainer: 'OS Dental',
     publisher: {
       '@type': 'Organization',
-      name: 'VoiceStack',
-      '@id': 'https://voicestack.com/#organization',
+      name: 'OS Dental',
+      '@id': 'https://osdental.io/#organization',
     },
     '@context': 'https://schema.org',
     headline: params?.title || '',
     articleBody: params?.posts?.map((e: any) => e?.title).join(', ') || '',
     copyrightHolder: {
       '@type': 'Organization',
-      '@id': 'https://voicestack.com/#organization',
+      '@id': 'https://osdental.io/#organization',
     },
     name: params?.title || '',
     datePublished: params?._createdAt || '',
@@ -200,7 +200,7 @@ export function indexPageJsonLd(params: any) {
 export function breadCrumbJsonLd(
   breadCrumbList: { breadcrumb: string; url?: string }[],
 ) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://resources.voicestack.com'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://osdental.io'
   const sanitizedBaseUrl = sanitizeUrl(baseUrl)
   const home = {
     '@type': 'ListItem',

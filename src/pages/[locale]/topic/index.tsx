@@ -168,9 +168,6 @@ export default function ProjectSlugRoute(
 
   const siteSettingWithImage = siteSettings?.find((e: any) => e?.openGraphImage)
 
-  console.log(categoriesWithPosts, 'categoriesWithPosts');
-
-
   return (
     <>
       <GlobalDataProvider data={categoriesWithPosts} featuredTags={homeSettings?.featuredTags} footerData={props?.footerData}>

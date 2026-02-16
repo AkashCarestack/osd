@@ -232,7 +232,7 @@ export default function TagPage({
   footerData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const handlePageChange = (page: number) => {
-    console.log(`Navigating to page: ${page}`)
+    // Page change handler
   }
   const baseUrl =
     `/${siteConfig.categoryBaseUrls.base}/${category?.slug?.current}`;

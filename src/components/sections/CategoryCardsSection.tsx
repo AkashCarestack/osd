@@ -29,12 +29,6 @@ const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories 
   // Background colors for cards (cycling through)
   const bgColors = ['#c241bd', '#ffcf23', '#3abfbf', '#c241bd', '#ffcf23']
 
-  // Debug logging
-  if (typeof window !== 'undefined') {
-    console.log('CategoryCardsSection - categories:', categories)
-    console.log('CategoryCardsSection - categories length:', categories?.length)
-  }
-
   // Filter categories that have associated content, or show all categories if none have content
   const categoriesWithContent = categories?.filter(
     (category) => category?.associatedContent && category.associatedContent.length > 0
@@ -47,14 +41,7 @@ const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories 
     : (categories || []).slice(0, 4)
 
   if (!displayCategories || displayCategories.length === 0) {
-    if (typeof window !== 'undefined') {
-      console.log('CategoryCardsSection - No categories to display')
-    }
     return null
-  }
-
-  if (typeof window !== 'undefined') {
-    console.log('CategoryCardsSection - Displaying categories:', displayCategories.length)
   }
 
   return (

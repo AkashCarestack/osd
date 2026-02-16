@@ -231,13 +231,20 @@ export function slugToCapitalized(slug) {
     .join(' ')
 }
 
-export const normalizePath = (path) => path && path.replace(/\/+/g, '/').replace(/^\//, '/');
+export const normalizePath = (path) => {
+  if (!path) return '';
+  // Remove all multiple slashes and ensure single slashes
+  return path.replace(/\/+/g, '/').replace(/^\/+/, '').replace(/\/+$/, '');
+};
 
 
 export function generateHref(locale: any, linkHref: string): string {
+  if (!linkHref) return '/';
+  
   const isValidHref = locale && locale !== 'en' && siteConfig.locales.includes(locale);
 
-  const cleanPath = normalizePath(linkHref).replace(/^\/+/, '');
+  // Normalize path: remove leading/trailing slashes and multiple slashes
+  const cleanPath = normalizePath(linkHref);
 
   if (!cleanPath || cleanPath === '') {
     return '/';
@@ -308,13 +315,13 @@ export function download_file(fileURL, fileName) {
  * @returns The sanitized URL with production domain
  */
 export function sanitizeUrl(url: string | undefined | null): string {
-  if (!url) return 'https://resources.voicestack.com';
+  if (!url) return 'https://osdental.io';
   
   // Replace any Vercel URLs with production URL
   const vercelUrlPattern = /https?:\/\/[^/]*vercel\.app[^/]*/gi;
-  const sanitized = url.replace(vercelUrlPattern, 'https://resources.voicestack.com');
+  const sanitized = url.replace(vercelUrlPattern, 'https://osdental.io');
   
   // Also handle URLs without protocol
   const vercelUrlPatternNoProtocol = /[^/]*vercel\.app[^/]*/gi;
-  return sanitized.replace(vercelUrlPatternNoProtocol, 'resources.voicestack.com');
+  return sanitized.replace(vercelUrlPatternNoProtocol, 'osdental.io');
 }

@@ -118,7 +118,7 @@ const PressReleasePage = ({
 
   if(!pressRelease) return null
 
-  const prodUrl = 'https://resources.voicestack.com'
+  const prodUrl = 'https://osdental.io'
 
   const seoTitle = pressRelease.seoTitle || pressRelease.title
   const seoDescription = (pressRelease?.seoDescription && !pressRelease.seoDescription.includes('Test titlw')) 

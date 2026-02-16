@@ -138,7 +138,7 @@ export default function TagPagePaginated({
   footerData
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const handlePageChange = (page: number) => {
-    console.log(`Navigating to page: ${page}`)
+    // Page change handler
   }
 
   const baseUrl = 

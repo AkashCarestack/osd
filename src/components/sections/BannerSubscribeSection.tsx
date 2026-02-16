@@ -112,7 +112,7 @@ function BannerSubscribeSection({ isSmall, hideBanner = false }: BannerSubscribe
         <p className="mt-3 md:mt-6 text-xs md:text-base font-medium text-zinc-500 leading-[1.2]">
           You can unsubscribe at any time, no hard feelings.{' '}
           <Anchor
-            href="https://resources.voicestack.com/legal/2025-01/privacy-policy"
+            href="https://osdental.io/legal/2025-01/privacy-policy"
             target="_blank"
             className="underline underline-offset-2"
           >

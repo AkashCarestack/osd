@@ -118,10 +118,18 @@ export default function Card({
     if (router.isReady && post?.slug) {
       const { locale = 'en' } = router.query;
       const contentTypePath = getBasePath(router, post.contentType);
+      
+      // Normalize paths to avoid double slashes
+      const normalizedContentPath = contentTypePath?.replace(/^\/+/, '').replace(/\/+$/, '') || '';
+      const normalizedSlug = post?.slug?.current?.replace(/^\/+/, '').replace(/\/+$/, '') || '';
 
       const newLinkUrl = varyingIndex
-        ? `${locale === 'en' ? '' : `/${locale}`}/${contentTypePath}`
-        : `${locale === 'en' ? '' : `/${locale}`}/${contentTypePath}/${post?.slug?.current || ''}`;
+        ? locale === 'en' 
+          ? `/${normalizedContentPath}`
+          : `/${locale}/${normalizedContentPath}`
+        : locale === 'en'
+          ? `/${normalizedContentPath}/${normalizedSlug}`
+          : `/${locale}/${normalizedContentPath}/${normalizedSlug}`;
 
       setLinkUrl(newLinkUrl);
     }

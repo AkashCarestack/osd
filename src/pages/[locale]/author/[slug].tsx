@@ -110,7 +110,7 @@ export default function AuthorPage({
   const url = process.env.NEXT_PUBLIC_BASE_URL + baseUrl
   
   const seoTitle = author?.name || 'Author Profile'
-  const seoDescription = author?.bio || `Learn more about ${author?.name} and their contributions to VoiceStack.`
+  const seoDescription = author?.bio || `Learn more about ${author?.name} and their contributions to OS Dental.`
   const seoCanonical = `${url}/${author?.slug?.current || ''}`
   const jsonLD = JSON.stringify({
     "@context": "https://schema.org",
