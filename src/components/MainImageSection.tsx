@@ -22,6 +22,7 @@ interface Props {
   isAudio?: boolean
   contentType?: string
   landing?: boolean
+  categoryName?: string
 }
 
 const MainImageSection = ({
@@ -31,6 +32,7 @@ const MainImageSection = ({
   isAudio = false,
   contentType,
   landing = false,
+  categoryName,
 }: Props) => {
   const router = useRouter();
   const { locale } = router.query; 
@@ -58,19 +60,27 @@ const MainImageSection = ({
               {!landing && <Breadcrumb />}
               <div>
                 {!landing ? (
-                  <Anchor href={generateHref(locale as string, hrefTemplate)}>
-                  <SubText className="!text-sky-500 mb-3 block hover:!text-sky-400">
-                    {tag?.tagName ? tag?.tagName : ''}
-                  </SubText>
-                  </Anchor>
+                  categoryName ? (
+                    <h1 className="text-white mb-3 block text-[36px] font-bold leading-tight">
+                      {categoryName}
+                    </h1>
+                  ) : (
+                    <Anchor href={generateHref(locale as string, hrefTemplate)}>
+                      <SubText className="!text-sky-500 mb-3 block hover:!text-sky-400">
+                        {tag?.tagName ? tag?.tagName : ''}
+                      </SubText>
+                    </Anchor>
+                  )
                 ) : (
                   <SubText className="!text-yellow-500 mb-3  block">
                     {post?.tagName ? post?.tagName : ''}
                   </SubText>
                 )}
-                <h1 className="text-white font-manrope leading-tight lg:text-4xl text-2xl font-bold  mb-[10px]">
-                  {post.title ? post.title : 'Post Title'}
-                </h1>
+                {!categoryName && (
+                  <h1 className="text-white font-manrope leading-tight lg:text-4xl text-2xl font-bold  mb-[10px]">
+                    {post.title ? post.title : 'Post Title'}
+                  </h1>
+                )}
                 {enableDate && (
                   <DurationSection
                     isAudio={isAudio}
