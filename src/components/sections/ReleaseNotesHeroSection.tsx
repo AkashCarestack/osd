@@ -33,7 +33,7 @@ const ReleaseNotesHeroSection: React.FC<ReleaseNotesHeroSectionProps> = ({
     <div className="w-full flex gap-1 items-center bg-[#18181b] relative overflow-hidden pt-headerSpacerMob md:pt-headerSpacer">
       <Section className="justify-center w-full !py-0 relative z-10">
         <Wrapper className="flex h-auto flex-col">
-          <div className="flex flex-col items-start justify-center p-4 md:p-12 relative shrink-0 w-full">
+          <div className="flex flex-col items-start justify-center pb-4 md:pb-12 relative shrink-0 w-full">
             <div className="flex flex-col items-start gap-12 md:gap-[48px] relative shrink-0 w-full">
               {/* Header with title and button */}
               <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8 md:gap-[32px] relative shrink-0 text-white w-full">
@@ -66,14 +66,18 @@ const ReleaseNotesHeroSection: React.FC<ReleaseNotesHeroSectionProps> = ({
                     const releaseDate = releaseNoteWithDate.date
                       ? formatDateShort(releaseNoteWithDate.date).trim()
                       : ''
-                    const slug = router.isReady && releaseNote.slug?.current
-                      ? generateHref(locale as string, `${siteConfig.pageURLs.releaseNotes}/${releaseNote.slug.current}`)
-                      : '#'
+                    
+                    // Use articleUrl if available, otherwise fall back to slug-based URL
+                    const href = releaseNote.articleUrl 
+                      ? releaseNote.articleUrl
+                      : router.isReady && releaseNote.slug?.current
+                        ? generateHref(locale as string, `${siteConfig.pageURLs.releaseNotes}/${releaseNote.slug.current}`)
+                        : '#'
 
                     return (
                       <Anchor
                         key={releaseNote._id || index}
-                        href={slug}
+                        href={href}
                         className="border border-[rgba(255,255,255,0.15)] border-solid flex flex-1 flex-col gap-6 md:gap-[24px] items-start p-6 md:p-[24px] relative rounded-[10px] hover:border-[rgba(255,255,255,0.3)] transition-colors"
                       >
                         <div className="flex flex-col gap-2 md:gap-[8px] items-start relative shrink-0 w-full">
