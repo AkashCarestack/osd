@@ -41,7 +41,7 @@ const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [headerFixed, setHeaderFixed] = useState(false);
   const [navPopoverId, setNavPopoverId] = useState('nav-popover');
-  const [activeSection, setActiveSection] = useState<string>('training');
+  const [activeSection, setActiveSection] = useState<string>('');
   const [showTopicsDropdown, setShowTopicsDropdown] = useState(false);
   const pathname = usePathname()
 
@@ -88,7 +88,7 @@ const Header = () => {
 
       // Check if we're at the top of the page
       if (window.scrollY < 100) {
-        setActiveSection('training');
+        setActiveSection('');
         return;
       }
 

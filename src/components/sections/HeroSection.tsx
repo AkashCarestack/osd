@@ -78,7 +78,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
 
       <Section className="justify-center w-full !py-0 relative z-10">
         <Wrapper className="flex h-auto flex-col">
-          <div className="flex flex-col items-start justify-center p-4 md:p-12 relative shrink-0 w-full">
+          <div className="flex flex-col items-start justify-center py-12 md:pt-[130px] md:pb-[96px] relative shrink-0 w-full">
             <div className="flex flex-col items-start gap-6 md:gap-[48px] relative shrink-0 w-full">
               <div className="flex flex-col md:flex-row gap-6 md:gap-[32px] items-start md:items-end relative shrink-0 text-white w-full whitespace-pre-wrap">
                 {/* Main heading */}
@@ -102,7 +102,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
               </div>
 
               {/* Buttons */}
-              <div className="flex gap-3 items-center relative shrink-0">
+              <div className="flex flex-wrap gap-3 items-center relative shrink-0">
                 {/* Primary Button - White background */}
                 <Anchor
                   href={data.primaryButtonLink || '#'}
