@@ -16,7 +16,7 @@ interface HeroData {
 }
 
 interface HeroSectionProps {
-  heroData?: HeroData
+  heroData?: HeroData | null
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
@@ -34,7 +34,31 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
       'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',
   }
 
-  const data = heroData || defaultHeroData
+  // Transform Sanity data to match component interface
+  const transformHeroData = (sanityData: any): HeroData | null => {
+    if (!sanityData) {
+      return null
+    }
+
+    return {
+      title: sanityData.title || defaultHeroData.title,
+      titleHighlight: sanityData.titleHighlight || defaultHeroData.titleHighlight,
+      description: sanityData.description || defaultHeroData.description,
+      primaryButtonText:
+        sanityData.primaryButtonText || defaultHeroData.primaryButtonText,
+      primaryButtonLink:
+        sanityData.primaryButtonLink || defaultHeroData.primaryButtonLink,
+      secondaryButtonText:
+        sanityData.secondaryButtonText || defaultHeroData.secondaryButtonText,
+      secondaryButtonLink:
+        sanityData.secondaryButtonLink || defaultHeroData.secondaryButtonLink,
+      backgroundImage:
+        sanityData.backgroundImage || defaultHeroData.backgroundImage,
+    }
+  }
+
+  const transformedData = heroData ? transformHeroData(heroData) : null
+  const data = transformedData || defaultHeroData
 
   return (
     <div className="w-full flex gap-1 items-center bg-[#18181b] relative overflow-hidden pt-headerSpacerMob md:pt-headerSpacer">

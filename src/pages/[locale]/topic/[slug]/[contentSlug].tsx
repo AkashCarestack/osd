@@ -127,14 +127,47 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const allCategoryPosts = await Promise.all(
     categories.map((cat) => getPostsByCategoryAndLimit(client, cat._id, 0, 3, region))
   )
-  let categoriesWithPosts = categories.filter((cat, index) => {
-    return allCategoryPosts[index] && allCategoryPosts[index].length > 0
-  })
+  
+  // Filter categories to show those with either associatedContent OR posts from getPostsByCategoryAndLimit
+  // Also filter associatedContent by region if it has a language field
+  const categoriesWithPosts = categories
+    .map((cat, index) => {
+      // Filter associatedContent by region if it exists
+      let filteredAssociatedContent = cat?.associatedContent;
+      if (filteredAssociatedContent && Array.isArray(filteredAssociatedContent)) {
+        filteredAssociatedContent = filteredAssociatedContent.filter(
+          (content: any) => !content.language || content.language === region
+        );
+      }
+      
+      const hasAssociatedContent = filteredAssociatedContent && filteredAssociatedContent.length > 0;
+      const hasPosts = allCategoryPosts[index] && allCategoryPosts[index].length > 0;
+      
+      // Return category with filtered associatedContent if it has content
+      if (hasAssociatedContent || hasPosts) {
+        return {
+          ...cat,
+          associatedContent: filteredAssociatedContent || cat.associatedContent
+        };
+      }
+      return null;
+    })
+    .filter(Boolean); // Remove null entries
   
   // Ensure current category is always included (it should have at least the current content)
   const currentCategoryInList = categoriesWithPosts.some(cat => cat._id === category._id)
   if (!currentCategoryInList && category) {
-    categoriesWithPosts.push(category)
+    // Filter associatedContent for current category by region
+    let filteredAssociatedContent = category?.associatedContent;
+    if (filteredAssociatedContent && Array.isArray(filteredAssociatedContent)) {
+      filteredAssociatedContent = filteredAssociatedContent.filter(
+        (content: any) => !content.language || content.language === region
+      );
+    }
+    categoriesWithPosts.push({
+      ...category,
+      associatedContent: filteredAssociatedContent || category.associatedContent
+    })
   }
 
   // Get related content
