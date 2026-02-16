@@ -12,11 +12,11 @@ import { Articles } from '~/interfaces/post'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
-  getReleaseNotes,
-  getReleaseNotesCount,
   getCategories,
   getFooterData,
   getHomeSettings,
+  getReleaseNotes,
+  getReleaseNotesCount,
   getSiteSettings,
   getTags,
 } from '~/lib/sanity.queries'

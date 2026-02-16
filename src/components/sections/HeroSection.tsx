@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Wrapper from '~/layout/Wrapper'
-import Section from '~/components/Section'
 import Anchor from '~/components/commonSections/Anchor'
+import Section from '~/components/Section'
+import Wrapper from '~/layout/Wrapper'
 
 interface HeroData {
   title: string

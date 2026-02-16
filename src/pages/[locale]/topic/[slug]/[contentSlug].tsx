@@ -4,8 +4,8 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
-import AuthorInfo from '~/components/commonSections/AuthorInfo'
 import ArticlesInSection from '~/components/commonSections/ArticlesInSection'
+import AuthorInfo from '~/components/commonSections/AuthorInfo'
 import RelatedTag from '~/components/commonSections/RelatedTag'
 import ShareableLinks from '~/components/commonSections/ShareableLinks'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
@@ -20,8 +20,8 @@ import { Toc } from '~/contentUtils/sanity-toc'
 import Wrapper from '~/layout/Wrapper'
 import { getClient } from '~/lib/sanity.client'
 import {
-  getCategory,
   getCategories,
+  getCategory,
   getFooterData,
   getHomeSettings,
   getPostBySlugAndRegion,

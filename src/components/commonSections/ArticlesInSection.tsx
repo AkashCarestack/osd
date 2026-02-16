@@ -1,9 +1,10 @@
+import siteConfig from 'config/siteConfig'
 import { useRouter } from 'next/router'
 import React from 'react'
 
-import Anchor from './Anchor'
 import { generateHref } from '~/utils/common'
-import siteConfig from 'config/siteConfig'
+
+import Anchor from './Anchor'
 
 interface ArticlesInSectionProps {
   associatedContent: any[]

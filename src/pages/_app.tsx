@@ -3,11 +3,12 @@ import '~/styles/global.scss'
 import track, { getDeviceData } from 'cs-tracker'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import Router from 'next/router'
 import { usePathname } from 'next/navigation'
+import Router from 'next/router'
 import Script from 'next/script'
 import { lazy, useEffect } from 'react'
 
+import BookDemoContextProvider from '~/components/Context/BookDemoProvider'
 import { cookieSelector, slugToCapitalized } from '~/utils/common'
 import { orgSchema, siteLinkSchema } from '~/utils/customHead'
 import { checkCookie, eraseCookie,getCookie } from '~/utils/tracker/cookie'
@@ -15,7 +16,6 @@ import { addEvent } from '~/utils/tracker/events'
 import { createObservedUser, createSession, createUser, getUserData, TrackUserProvider } from '~/utils/tracker/intitialize'
 import { getSession } from '~/utils/tracker/session'
 import { getUser } from '~/utils/tracker/user'
-import BookDemoContextProvider from '~/components/Context/BookDemoProvider'
 
 export interface SharedPageProps {
   draftMode?: boolean

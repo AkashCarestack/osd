@@ -1,14 +1,14 @@
 import { ArrowTopRightIcon } from '@sanity/icons'
-import React from 'react'
-import { useRouter } from 'next/router'
-
-import Wrapper from '~/layout/Wrapper'
-import Section from '~/components/Section'
-import Anchor from '~/components/commonSections/Anchor'
-import { formatDateShort } from '~/utils/formateDate'
-import { Articles } from '~/interfaces/post'
-import { generateHref } from '~/utils/common'
 import siteConfig from 'config/siteConfig'
+import { useRouter } from 'next/router'
+import React from 'react'
+
+import Anchor from '~/components/commonSections/Anchor'
+import Section from '~/components/Section'
+import { Articles } from '~/interfaces/post'
+import Wrapper from '~/layout/Wrapper'
+import { generateHref } from '~/utils/common'
+import { formatDateShort } from '~/utils/formateDate'
 
 interface ReleaseNotesHeroSectionProps {
   releaseNotes?: Articles[]

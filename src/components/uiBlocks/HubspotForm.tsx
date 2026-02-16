@@ -1,9 +1,10 @@
 import { useTracking } from 'cs-tracker'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+
+import { downloadPDF } from '~/utils/downloadHelper';
 import { getCookie } from '~/utils/tracker/cookie'
 import useMediaQuery from '~/utils/useMediaQueryHook';
-import { downloadPDF } from '~/utils/downloadHelper';
 
 declare global {
   interface Window {

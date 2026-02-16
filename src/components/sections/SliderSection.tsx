@@ -1,21 +1,23 @@
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+
 import { ArrowRightIcon } from '@sanity/icons'
 import { ArrowLeftIcon } from '@sanity/icons'
 import { ArrowTopRightIcon } from '@sanity/icons'
 import siteConfig from 'config/siteConfig'
 import { useRouter } from 'next/router'
-import React, { useRef, useEffect } from 'react'
+import React, { useEffect,useRef } from 'react'
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
 
 import Anchor from '~/components/commonSections/Anchor'
 import ImageLoader from '~/components/commonSections/ImageLoader'
+import { generateHref } from '~/utils/common'
+
 import H2Large from '../typography/H2Large'
 import H4Large from '../typography/H4Large'
 import Carousel from './Carousel'
-import { generateHref } from '~/utils/common'
 
 interface BannerBlockProps {
   items?: any
