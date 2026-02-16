@@ -497,6 +497,16 @@ export const homeSettingsQuery = groq`
         answer
       }
     },
+    "heroSection": heroSection {
+      title,
+      titleHighlight,
+      description,
+      primaryButtonText,
+      primaryButtonLink,
+      secondaryButtonText,
+      secondaryButtonLink,
+      "backgroundImage": backgroundImage.asset->url
+    },
   }[0]
 `
 

@@ -29,6 +29,10 @@ export default {
       name: 'faq',
       title: 'FAQ Section',
     },
+    {
+      name: 'hero',
+      title: 'Hero Section',
+    },
   ],
   fields: [
     {
@@ -231,6 +235,13 @@ export default {
       description: 'Configure the Frequently Asked Questions section',
       type: 'faqSection',
       group: 'faq',
+    },
+    {
+      name: 'heroSection',
+      title: 'Hero Section',
+      description: 'Configure the Hero section with title, description, and buttons',
+      type: 'heroSection',
+      group: 'hero',
     },
     defineField({
       name: 'language',

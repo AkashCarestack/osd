@@ -87,7 +87,7 @@ const DynamicPages = ({
         <TagSelect tags={tags} tagLimit={7} />
          <EventCarousel allEventCards={uniqueEventCards} />
          <div id="topics-section">
-          <HeroSection />
+          <HeroSection heroData={homeSettings?.heroSection} />
         </div>
          {/* <CategoryCardsSection categories={categories} /> */}
          <SliderSection items={reorderedCarouselItems} categories={categories} />
