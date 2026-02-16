@@ -488,6 +488,15 @@ export const homeSettingsQuery = groq`
       ${authorImageFragment},
     },
     },
+    "faqSection": faqSection {
+      title,
+      description,
+      readNowLink,
+      faqs[] {
+        question,
+        answer
+      }
+    },
   }[0]
 `
 

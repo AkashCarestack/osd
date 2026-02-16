@@ -20,7 +20,7 @@ interface FAQData {
 }
 
 interface FAQSectionProps {
-  faqData?: FAQData
+  faqData?: FAQData | null
 }
 
 const FAQSection: React.FC<FAQSectionProps> = ({ faqData }) => {
@@ -66,7 +66,26 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqData }) => {
     readNowLink: '#',
   }
 
-  const data = faqData || defaultData
+  // Transform Sanity data to match component interface
+  const transformFAQData = (sanityData: any): FAQData | null => {
+    if (!sanityData || !sanityData.faqs || !Array.isArray(sanityData.faqs)) {
+      return null
+    }
+
+    return {
+      title: sanityData.title || defaultData.title,
+      description: sanityData.description || defaultData.description,
+      readNowLink: sanityData.readNowLink || defaultData.readNowLink,
+      faqs: sanityData.faqs.map((faq: any, index: number) => ({
+        id: index + 1,
+        question: faq.question || '',
+        answer: faq.answer || '',
+      })),
+    }
+  }
+
+  const transformedData = faqData ? transformFAQData(faqData) : null
+  const data = transformedData || defaultData
 
   const toggleFAQ = (id: number) => {
     setActiveId(activeId === id ? null : id)
