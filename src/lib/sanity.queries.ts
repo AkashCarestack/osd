@@ -136,6 +136,7 @@ export const categoriesQuery = groq`*[_type == "category" ]  | order(categoryNam
     contentType,
     excerpt,
     date,
+    language,
     ${imageFragment},
   },
 }`
@@ -1409,6 +1410,7 @@ export const getCategoryBySlugQuery = groq`
       contentType,
       excerpt,
       date,
+      language,
       ${imageFragment},
     },
   }

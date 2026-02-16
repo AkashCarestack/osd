@@ -43,7 +43,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false, // Changed from 'blocking' to prevent auto-generation
+    fallback: false, 
   }
 }
 
@@ -89,10 +89,31 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     })
   )
 
-  // Filter out categories with no posts for ContentHub
-  const categoriesWithPosts = categories.filter((category, index) => {
-    return categoryPosts[index] && categoryPosts[index].length > 0;
-  });
+  // Filter categories to show those with either associatedContent OR posts from getPostsByCategoryAndLimit
+  // Also filter associatedContent by region if it has a language field
+  const categoriesWithPosts = categories
+    .map((category, index) => {
+      // Filter associatedContent by region if it exists
+      let filteredAssociatedContent = category?.associatedContent;
+      if (filteredAssociatedContent && Array.isArray(filteredAssociatedContent)) {
+        filteredAssociatedContent = filteredAssociatedContent.filter(
+          (content: any) => !content.language || content.language === region
+        );
+      }
+      
+      const hasAssociatedContent = filteredAssociatedContent && filteredAssociatedContent.length > 0;
+      const hasPosts = categoryPosts[index] && categoryPosts[index].length > 0;
+      
+      // Return category with filtered associatedContent if it has content
+      if (hasAssociatedContent || hasPosts) {
+        return {
+          ...category,
+          associatedContent: filteredAssociatedContent || category.associatedContent
+        };
+      }
+      return null;
+    })
+    .filter(Boolean); // Remove null entries
   
   
   const totalPages = Math.ceil(totalPosts.length / cardsPerPage)
@@ -146,6 +167,8 @@ export default function ProjectSlugRoute(
 
   const siteSettingWithImage = siteSettings?.find((e: any) => e?.openGraphImage)
 
+  console.log(categoriesWithPosts, 'categoriesWithPosts');
+
 
   return (
     <>
@@ -158,10 +181,26 @@ export default function ProjectSlugRoute(
               <></>
             )}
             <ContentHub featuredDescription={homeSettings?.topicDescription} categories={categoriesWithPosts} contentCount={contentCount} />
-            {categoryPosts && categoryPosts.length > 0 && categoryPosts.map((post: any, index: number) => {
-              return post?.length > 0 && (
-                <div key={index + 1}>
-                  <AllcontentSection redirect={true} uiType="category" allContent={post} compIndex={index} className=''  />
+            {categoriesWithPosts && categoriesWithPosts.length > 0 && categoriesWithPosts.map((category: any, index: number) => {
+              // Use associatedContent if available, otherwise use posts from getPostsByCategoryAndLimit
+              const categoryIndex = categories.findIndex((cat: any) => cat._id === category._id);
+              let contentToShow = category?.associatedContent && category.associatedContent.length > 0
+                ? category.associatedContent
+                : categoryPosts[categoryIndex] || [];
+              
+              // Add category information to each content item if it doesn't have it
+              contentToShow = contentToShow.map((content: any) => ({
+                ...content,
+                category: content.category || {
+                  categoryName: category.categoryName,
+                  slug: category.slug,
+                  categoryDescription: category.categoryDescription
+                }
+              }));
+              
+              return contentToShow?.length > 0 && (
+                <div key={category._id || index}>
+                  <AllcontentSection redirect={true} uiType="category" allContent={contentToShow} compIndex={index} className=''  />
                 </div> 
               )
             })}

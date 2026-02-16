@@ -399,7 +399,7 @@ export default function Card({
               {/* Category and Date */}
               <div className="flex items-start gap-3 text-[#71717a] text-sm font-medium leading-[1.5] tracking-[0.7px] uppercase">
                 <span>
-                  {tag?.tagName || post.contentType || 'Knowledge Guides'}
+                  {post.category?.categoryName || tag?.tagName || post.contentType || 'Knowledge Guides'}
                 </span>
                 {post.date || post._createdAt ? (
                   <>
