@@ -43,8 +43,28 @@ export default function ContentHub({ contentCount, categories, featuredDescripti
   }, [categories, categoriesCopy]);
 
   useEffect(() => {
-    const currentCategory = categoriesData && categoriesData.find(category => pathname.includes(category?.slug?.current));
-    setCurrentCategory(currentCategory);
+    if (!categoriesData || categoriesData.length === 0) {
+      setCurrentCategory(null);
+      return;
+    }
+    
+    // Extract the category slug from pathname for nested routes like /topic/category-slug/content-slug
+    // or /topic/category-slug
+    const topicBasePath = `/${siteConfig.categoryBaseUrls.base}/`;
+    const topicIndex = pathname.indexOf(topicBasePath);
+    
+    if (topicIndex !== -1) {
+      const pathAfterTopic = pathname.substring(topicIndex + topicBasePath.length);
+      const categorySlug = pathAfterTopic.split('/')[0]; // Get first segment after /topic/
+      
+      const currentCategory = categoriesData.find(category => {
+        const slug = category?.slug?.current;
+        return slug && (pathname.includes(`/${slug}/`) || pathname.endsWith(`/${slug}`) || categorySlug === slug);
+      });
+      setCurrentCategory(currentCategory || null);
+    } else {
+      setCurrentCategory(null);
+    }
   }, [categoriesData, pathname]);
 
   useEffect(() => {

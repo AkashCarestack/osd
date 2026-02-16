@@ -112,7 +112,7 @@ const EbookPage = ({
   footerData
 }: EbookProps) => {
   if(!ebook) return null
-  const prodUrl = 'https://resources.voicestack.com'
+  const prodUrl = 'https://osdental.io'
 
   const seoTitle = ebook.seoTitle || ebook.title
   const seoDescription = (ebook?.seoDescription && !ebook.seoDescription.includes('Test titlw')) 

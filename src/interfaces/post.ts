@@ -51,6 +51,12 @@ export interface Post {
   tags?: Array<{
     [key: string]: any
   }>
+  category?: {
+    categoryName?: string
+    slug?: Slug
+    categoryDescription?: string
+    _id?: string
+  }
 }
 
 export interface Author {

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 
 import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
 import AuthorInfo from '~/components/commonSections/AuthorInfo'
+import ArticlesInSection from '~/components/commonSections/ArticlesInSection'
 import RelatedTag from '~/components/commonSections/RelatedTag'
 import ShareableLinks from '~/components/commonSections/ShareableLinks'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
@@ -46,11 +47,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
         
         if (categoryWithContent?.associatedContent && categoryWithContent.associatedContent.length > 0) {
           for (const content of categoryWithContent.associatedContent) {
-            if (content?.slug?.current) {
+            // Filter by language/region if content has a language field
+            const hasLanguage = content?.language
+            const matchesLocale = !hasLanguage || content.language === locale
+            
+            // Check for slug - handle both slug.current and slug formats
+            const contentSlug = content?.slug?.current || content?.slug
+            
+            if (matchesLocale && contentSlug && category.slug?.current) {
               pathsForLocale.push({
                 params: {
-                  slug: category.slug?.current,
-                  contentSlug: content.slug.current,
+                  slug: category.slug.current,
+                  contentSlug: typeof contentSlug === 'string' ? contentSlug : contentSlug.current || contentSlug,
                   locale: locale,
                 },
               })
@@ -105,21 +113,62 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const [
     categories,
-    allCategoryPosts,
     tags,
     homeSettings,
     footerData,
   ] = await Promise.all([
     getCategories(client),
-    getPostsByCategoryAndLimit(client, category._id, 0, 3, region),
     getTags(client),
     getHomeSettings(client, region),
     getFooterData(client, region),
   ])
 
-  const categoriesWithPosts = categories.filter((cat, index) => {
-    return allCategoryPosts[index] && allCategoryPosts[index].length > 0
-  })
+  // Get posts for all categories to filter categoriesWithPosts correctly
+  const allCategoryPosts = await Promise.all(
+    categories.map((cat) => getPostsByCategoryAndLimit(client, cat._id, 0, 3, region))
+  )
+  
+  // Filter categories to show those with either associatedContent OR posts from getPostsByCategoryAndLimit
+  // Also filter associatedContent by region if it has a language field
+  const categoriesWithPosts = categories
+    .map((cat, index) => {
+      // Filter associatedContent by region if it exists
+      let filteredAssociatedContent = cat?.associatedContent;
+      if (filteredAssociatedContent && Array.isArray(filteredAssociatedContent)) {
+        filteredAssociatedContent = filteredAssociatedContent.filter(
+          (content: any) => !content.language || content.language === region
+        );
+      }
+      
+      const hasAssociatedContent = filteredAssociatedContent && filteredAssociatedContent.length > 0;
+      const hasPosts = allCategoryPosts[index] && allCategoryPosts[index].length > 0;
+      
+      // Return category with filtered associatedContent if it has content
+      if (hasAssociatedContent || hasPosts) {
+        return {
+          ...cat,
+          associatedContent: filteredAssociatedContent || cat.associatedContent
+        };
+      }
+      return null;
+    })
+    .filter(Boolean); // Remove null entries
+  
+  // Ensure current category is always included (it should have at least the current content)
+  const currentCategoryInList = categoriesWithPosts.some(cat => cat._id === category._id)
+  if (!currentCategoryInList && category) {
+    // Filter associatedContent for current category by region
+    let filteredAssociatedContent = category?.associatedContent;
+    if (filteredAssociatedContent && Array.isArray(filteredAssociatedContent)) {
+      filteredAssociatedContent = filteredAssociatedContent.filter(
+        (content: any) => !content.language || content.language === region
+      );
+    }
+    categoriesWithPosts.push({
+      ...category,
+      associatedContent: filteredAssociatedContent || category.associatedContent
+    })
+  }
 
   // Get related content
   const tagIds = content?.tags?.map((tag: any) => tag?._id) || []
@@ -158,7 +207,9 @@ export default function TopicContentPage({
   homeSettings,
   footerData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const router = useRouter()
   const baseUrl = `/${siteConfig.categoryBaseUrls.base}/${category?.slug?.current}`
+  const currentContentSlug = content?.slug?.current || (router.query.contentSlug as string)
 
   if (!content) {
     return null
@@ -172,27 +223,28 @@ export default function TopicContentPage({
     >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
-          <ContentHub
+          {/* <ContentHub
             categories={categoriesWithPosts}
             contentCount={{}}
-          />
+          /> */}
           <MainImageSection enableDate={true} post={content} />
           <Section className="justify-center">
             <Wrapper className={`flex-col`}>
               <div className="flex md:flex-row flex-col-reverse gap-6 md:gap-12 justify-between">
-                <div className="md:mt-12 flex-1 flex md:flex-col flex-col-reverse md:w-2/3 w-full md:max-w-[710px]">
-                  <div className="post__content w-full">
-                    <SanityPortableText
-                      content={content?.body}
-                      draftMode={false}
-                      token={null}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-8 md:mt-12 bg-red relative md:w-1/3 md:max-w-[410px] w-full">
-                  <div className="sticky top-24 flex flex-col-reverse md:flex-col gap-8 md:overflow-auto">
-                    {content?.headings && (
-                      <Toc headings={content?.headings} title="Contents" />
+                {/* Left Sidebar - Articles in Section (if associatedContent) OR TOC (if no associatedContent), Author, Share */}
+                <div className="flex flex-col gap-8 md:mt-12 relative md:w-1/3 md:max-w-[410px] w-full">
+                  <div className="sticky top-24 flex flex-col gap-8 md:overflow-auto">
+                    {/* Show Articles in Section if category has associated content, otherwise show TOC */}
+                    {category?.associatedContent && category.associatedContent.length > 0 ? (
+                      <ArticlesInSection
+                        associatedContent={category.associatedContent}
+                        categorySlug={category?.slug?.current}
+                        currentContentSlug={currentContentSlug}
+                      />
+                    ) : (
+                      content?.headings && (
+                        <Toc headings={content?.headings} title="Contents" />
+                      )
                     )}
                     <div className="flex-col gap-8 flex">
                       {content?.author && content.author.length > 0 && (
@@ -202,6 +254,16 @@ export default function TopicContentPage({
                       )}
                       <ShareableLinks props={content?.title} />
                     </div>
+                  </div>
+                </div>
+                {/* Main Content Area - Body */}
+                <div className="md:mt-12 flex-1 flex flex-col gap-8 md:w-2/3 w-full md:max-w-[710px]">
+                  <div className="post__content w-full">
+                    <SanityPortableText
+                      content={content?.body}
+                      draftMode={false}
+                      token={null}
+                    />
                   </div>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 export function parseUrlForTracking(pageUrl: string): string {
   try {
     const url = new URL(pageUrl);
-    const domain = url.hostname || 'resources.voicestack.com';
+    const domain = url.hostname || 'osdental.io';
     const pathParts = url.pathname.split('/').filter(part => part);
     
     let contentType = '';

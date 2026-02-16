@@ -105,7 +105,7 @@ export function getBaseUrl(): string {
   // Fallback to env var or production URL
   return (
     process.env.NEXT_PUBLIC_BASE_URL || 
-    'https://resources.voicestack.com'
+    'https://osdental.io'
   )
 }
 

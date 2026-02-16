@@ -23,7 +23,6 @@ export default async function handler(
       )
       if (response.ok) {
         const data = await response.json()
-        console.log('Data from Google Apps Script API:', data)
         res.status(200).json({ message: 'Success' })
       } else {
         const errorData = await response.text()

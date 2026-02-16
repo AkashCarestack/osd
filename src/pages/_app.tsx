@@ -141,7 +141,6 @@ function dispatchEvent(data: any) {
   const pageVersion: any = getCookie("__cs_pc");
 
   if ((cookieAnalytics && cookieAnalytics !== "yes") && countryVersion == 2 && !(pageVersion === "ph-c")) {
-    console.log("returned from tracker in app.tsx");
     return
   }
 
@@ -153,7 +152,7 @@ function dispatchEvent(data: any) {
     trackData.push(temp);
     const domain = window.location.origin;
     // if (window !== undefined && trackData.length > 0 && !isSending) {
-    if (window !== undefined && trackData.length > 0 && !isSending && domain === "https://resources.voicestack.com") {
+    if (window !== undefined && trackData.length > 0 && !isSending && domain === "https://osdental.io") {
       const user = getUser()
       if (user) {
 
@@ -187,8 +186,6 @@ function dispatchEvent(data: any) {
               }).finally(() => { isSending = false });
             }, 1000);
           }).catch(err => {
-            console.log(err);
-
             if (err?.error === "user_key_invalid") {
               eraseCookie('__cs_pv');
               eraseCookie('session');

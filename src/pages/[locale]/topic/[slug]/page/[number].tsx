@@ -134,18 +134,18 @@ export default function TagPagePaginated({
   siteSettings,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const handlePageChange = (page: number) => {
-    console.log(`Navigating to page: ${page}`)
+    // Page change handler
   }
 
   const baseUrl = 
     `/${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current}`;
 
   // SEO Configuration
-  const prodUrl = 'https://resources.voicestack.com'
+  const prodUrl = 'https://osdental.io'
   const pageUrl = sanitizeUrl(`${prodUrl}${baseUrl}${currentPage > 1 ? `/page/${currentPage}` : ''}`)
-  const seoTitle = tag?.categoryName ? `${tag.categoryName} - VoiceStack Resources` : 'VoiceStack Resources'
-  const seoDescription = tag?.categoryDescription || `Explore ${tag?.categoryName || 'our'} content and resources on VoiceStack`
-  const seoKeywords = tag?.categoryName ? `${tag.categoryName}, VoiceStack, resources, content` : 'VoiceStack, resources, content'
+  const seoTitle = tag?.categoryName ? `${tag.categoryName} - OS Dental Resources` : 'OS Dental Resources'
+  const seoDescription = tag?.categoryDescription || `Explore ${tag?.categoryName || 'our'} content and resources on OS Dental`
+  const seoKeywords = tag?.categoryName ? `${tag.categoryName}, OS Dental, resources, content` : 'OS Dental, resources, content'
   const siteSettingWithImage = siteSettings?.find((e: any) => e?.openGraphImage)
 
   return (

@@ -123,7 +123,7 @@ const ArticlePage = ({
     return null
   }
   
-  const prodUrl = 'https://resources.voicestack.com'
+  const prodUrl = 'https://osdental.io'
   const seoTitle = articles?.seoTitle || articles?.title || 'Article'
   const seoDescription = (articles?.seoDescription && !articles.seoDescription.includes('Test titlw')) 
     ? articles.seoDescription 

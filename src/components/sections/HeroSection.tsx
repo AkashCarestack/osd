@@ -1,4 +1,3 @@
-import { ArrowTopRightIcon } from '@sanity/icons'
 import React from 'react'
 
 import Anchor from '~/components/commonSections/Anchor'
@@ -9,13 +8,15 @@ interface HeroData {
   title: string
   titleHighlight?: string
   description: string
-  buttonText?: string
-  buttonLink?: string
+  primaryButtonText?: string
+  primaryButtonLink?: string
+  secondaryButtonText?: string
+  secondaryButtonLink?: string
   backgroundImage?: string
 }
 
 interface HeroSectionProps {
-  heroData?: HeroData
+  heroData?: HeroData | null
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
@@ -25,13 +26,39 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
     titleHighlight: 'OS Dental & DEO Group',
     description:
       "Here you'll find product updates, onboarding guides, training materials, and key resources to support implementation and ongoing success.",
-    buttonText: 'Read Now',
-    buttonLink: '#',
+    primaryButtonText: 'Book a Clinical Demo',
+    primaryButtonLink: '#',
+    secondaryButtonText: 'Clinical Dashboards Overview',
+    secondaryButtonLink: '#',
     backgroundImage:
       'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',
   }
 
-  const data = heroData || defaultHeroData
+  // Transform Sanity data to match component interface
+  const transformHeroData = (sanityData: any): HeroData | null => {
+    if (!sanityData) {
+      return null
+    }
+
+    return {
+      title: sanityData.title || defaultHeroData.title,
+      titleHighlight: sanityData.titleHighlight || defaultHeroData.titleHighlight,
+      description: sanityData.description || defaultHeroData.description,
+      primaryButtonText:
+        sanityData.primaryButtonText || defaultHeroData.primaryButtonText,
+      primaryButtonLink:
+        sanityData.primaryButtonLink || defaultHeroData.primaryButtonLink,
+      secondaryButtonText:
+        sanityData.secondaryButtonText || defaultHeroData.secondaryButtonText,
+      secondaryButtonLink:
+        sanityData.secondaryButtonLink || defaultHeroData.secondaryButtonLink,
+      backgroundImage:
+        sanityData.backgroundImage || defaultHeroData.backgroundImage,
+    }
+  }
+
+  const transformedData = heroData ? transformHeroData(heroData) : null
+  const data = transformedData || defaultHeroData
 
   return (
     <div className="w-full flex gap-1 items-center bg-[#18181b] relative overflow-hidden pt-headerSpacerMob md:pt-headerSpacer">
@@ -52,10 +79,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
       <Section className="justify-center w-full !py-0 relative z-10">
         <Wrapper className="flex h-auto flex-col">
           <div className="flex flex-col items-start justify-center p-4 md:p-12 relative shrink-0 w-full">
-            <div className="flex flex-col items-start gap-12 md:gap-[48px] relative shrink-0 w-full">
-              <div className="flex flex-col md:flex-row gap-8 md:gap-[32px] items-start md:items-end relative shrink-0 text-white w-full whitespace-pre-wrap">
+            <div className="flex flex-col items-start gap-6 md:gap-[48px] relative shrink-0 w-full">
+              <div className="flex flex-col md:flex-row gap-6 md:gap-[32px] items-start md:items-end relative shrink-0 text-white w-full whitespace-pre-wrap">
                 {/* Main heading */}
-                <h1 className="font-manrope font-bold leading-[1.1] relative shrink-0 text-4xl md:text-5xl lg:text-[64px] tracking-[-1.28px] w-full md:w-[816px] text-white">
+                <h1 className="font-manrope font-bold leading-[1.1] relative shrink-0 text-3xl md:text-5xl lg:text-[64px] tracking-[-0.72px] md:tracking-[-1.28px] w-full md:w-[816px] text-white">
                   <span className="leading-[1.1]">{data.title}</span>
                   {data.titleHighlight && (
                     <>
@@ -69,25 +96,33 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                 </h1>
 
                 {/* Description text */}
-                <p className="flex-1 font-medium leading-[1.6] min-h-px min-w-px not-italic opacity-80 relative text-base text-white/80 md:max-w-none">
+                <p className="flex-1 font-medium leading-[1.6] min-h-px min-w-px not-italic opacity-80 relative text-sm md:text-base text-white/80 md:max-w-none">
                   {data.description}
                 </p>
               </div>
 
-              {/* Read Now button */}
-              <Anchor
-                href={data.buttonLink || '#'}
-                className="flex gap-2 md:gap-[8px] items-center relative shrink-0 group"
-              >
-                <span className="font-medium leading-[1.6] not-italic relative shrink-0 text-[#18181b] text-base bg-white px-6 py-3 rounded-md hover:bg-zinc-100 transition-colors">
-                  {data.buttonText || 'Read Now'}
-                </span>
-                <div className="flex items-center justify-center relative shrink-0">
-                  <div className="relative size-5">
-                    <ArrowTopRightIcon className="block max-w-none size-full text-[#18181b]" />
-                  </div>
-                </div>
-              </Anchor>
+              {/* Buttons */}
+              <div className="flex gap-3 items-center relative shrink-0">
+                {/* Primary Button - White background */}
+                <Anchor
+                  href={data.primaryButtonLink || '#'}
+                  className="bg-white flex items-center overflow-hidden px-6 py-3 relative rounded-[5px] shrink-0 hover:bg-zinc-100 transition-colors"
+                >
+                  <p className="font-medium leading-[1.6] not-italic relative shrink-0 text-[#18181b] text-base text-center whitespace-nowrap">
+                    {data.primaryButtonText || 'Book a Clinical Demo'}
+                  </p>
+                </Anchor>
+
+                {/* Secondary Button - Transparent with border */}
+                <Anchor
+                  href={data.secondaryButtonLink || '#'}
+                  className="bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.3)] border-solid flex items-center overflow-hidden px-6 py-3 relative rounded-[5px] shrink-0 hover:bg-[rgba(255,255,255,0.15)] transition-colors"
+                >
+                  <p className="font-medium leading-[1.6] not-italic relative shrink-0 text-base text-center text-white whitespace-nowrap">
+                    {data.secondaryButtonText || 'Clinical Dashboards Overview'}
+                  </p>
+                </Anchor>
+              </div>
             </div>
           </div>
         </Wrapper>

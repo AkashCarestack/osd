@@ -27,11 +27,11 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 const siteLink = {
   '@context': 'https://schema.org/',
   '@type': 'WebSite',
-  name: 'VoiceStack',
-  url: 'https://resources.voicestack.com',
+  name: 'OS Dental',
+  url: 'https://osdental.io',
   potentialAction: {
     '@type': 'SearchAction',
-    target: 'https://resources.voicestack.com/?s={search_term_string}',
+    target: 'https://osdental.io/?s={search_term_string}',
     'query-input': 'required name=search_term_string',
   },
 }
@@ -167,12 +167,12 @@ export const customMetaTag = (
 };
 
 export const defaultMetaTag = (params: any, pageUrl?: string) => {  
-  const defaultTitle = params?.siteTitle?.trim() || 'Resources | On-Demand Learning Resources | VoiceStack®'
-  const defaultDescription = params?.siteDescription || 'Whether you\'re looking for e-Books, webinars, podcasts, or articles, VoiceStack® Resources are full of helpful & informative topics to improve your practice.'
+  const defaultTitle = params?.siteTitle?.trim() || 'Resources | On-Demand Learning Resources | OS Dental'
+  const defaultDescription = params?.siteDescription || 'Whether you\'re looking for e-Books, webinars, podcasts, or articles, OS Dental Resources are full of helpful & informative topics to improve your practice.'
   const defaultKeywords = params?.keywords ? params.keywords.reduce((ac: string, reducer: string) => {
     return ac + ',' + reducer
-  }) : 'voicestack resources, voicestack articles, voicestack webinars, voicestack blogs'
-  const defaultAuthor = 'VoiceStack®'
+  }) : 'os dental resources, os dental articles, os dental webinars, os dental blogs'
+  const defaultAuthor = 'OS Dental'
   const defaultRobots = 'index, follow, archive'
 
   return (
@@ -188,8 +188,8 @@ export const defaultMetaTag = (params: any, pageUrl?: string) => {
       )}
       <meta property="twitter:card" content="summary_large_image" />
       <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://resources.voicestack.com" />
-      <meta property="twitter:url" content="https://resources.voicestack.com" />
+      <meta property="og:url" content="https://osdental.io" />
+      <meta property="twitter:url" content="https://osdental.io" />
       <meta property="og:title" content={defaultTitle} />
       <meta property="twitter:title" content={defaultTitle} />
       <title>{slugToCapitalized(defaultTitle)}</title>
@@ -240,7 +240,7 @@ export const metaTagDataForAuthor = (props: any, pageUrl: string) => {
       {props?.name && (
         <>
           <meta property="og:title" content={props.name}></meta>
-          <title>{`${props.name} | Author Profile | VoiceStack`}</title>
+          <title>{`${props.name} | Author Profile | OS Dental`}</title>
           <meta property="twitter:title" content={props?.name} />
         </>
       )}
@@ -288,7 +288,7 @@ export const generateMetaData = (params: any, canonicalLink?: string) => {
   
         else{
         }
-        const url = sanitizedCanonical.replace("resources.voicestack.com/", `resources.voicestack.com/${lang}/`);
+        const url = sanitizedCanonical.replace("osdental.io/", `osdental.io/${lang}/`);
         return <link key={lang} rel="alternate" href={url} hrefLang={lang} />;
 
       })}
@@ -403,22 +403,22 @@ export function CustomHead({
             return e.name
           }),
         ],
-        url: 'https://voicestack.com',
+        url: 'https://osdental.io',
       },
       dateCreated: props?.date,
       inLanguage: 'en-US',
       copyrightHolder: {
-        '@id': 'https://voicestack.com/#organization',
+        '@id': 'https://osdental.io/#organization',
       },
       publisher: {
         '@type': 'Organization',
-        name: 'VoiceStack',
-        url: 'https://voicestack.com',
+        name: 'OS Dental',
+        url: 'https://osdental.io',
       },
     }
     return head(metaData, randomId, type + randomId)
   } else if (props && type === 'articleExpanded' && props?.title) {
-    const url = baseUrl ?? 'www.resources.voicestack.com'
+    const url = baseUrl ?? 'www.osdental.io'
     const metaData = {
       '@context': 'https://schema.org',
       '@type': 'Article',
@@ -444,12 +444,12 @@ export function CustomHead({
       ],
       inLanguage: 'en-US',
       copyrightHolder: {
-        '@id': 'https://voicestack.com/#organization',
+        '@id': 'https://osdental.io/#organization',
       },
       publisher: {
         '@type': 'Organization',
-        name: 'VoiceStack',
-        url: 'https://voicestack.com',
+        name: 'OS Dental',
+        url: 'https://osdental.io',
       },
     }
     return head(metaData, randomId, type + randomId)
@@ -473,7 +473,7 @@ export function CustomHead({
         inLanguage: 'English',
         isbn: '00000000',
         numberOfPages: '1234',
-        publisher: 'VoiceStack',
+        publisher: 'OS Dental',
         name: props?.title,
         ratingValue: 5,
         aggregateRating: {
@@ -510,8 +510,8 @@ export function CustomHead({
       },
       organizer: {
         '@type': 'Organization',
-        name: 'VoiceStack',
-        url: 'https://voicestack.com',
+        name: 'OS Dental',
+        url: 'https://osdental.io',
       },
       performer: {
         '@type': 'Person',
@@ -546,7 +546,7 @@ export function CustomHead({
         name: props?.map((ele) => {
           return ele?.author?.map((a) => a.name)
         }),
-        url: 'https://resources.voicestack.com',
+        url: 'https://osdental.io',
       },
       itemListElement: [
         {
@@ -554,8 +554,8 @@ export function CustomHead({
           position: pageNumber ?? 1,
           url:
             props && props[0]
-              ? `www.resources.voicestack.com/${props[0]?.contentType}/page/${pageNumber}`
-              : 'www.resources.voicestack.com',
+              ? `www.osdental.io/${props[0]?.contentType}/page/${pageNumber}`
+              : 'www.osdental.io',
         },
       ],
       numberOfItems: 3,
@@ -569,12 +569,12 @@ export function CustomHead({
       performer: props?.author?.map((e) => e?.name)[0],
       name: props?.title,
       location: 'global',
-      organizer: 'VoiceStack',
+      organizer: 'OS Dental',
       startDate: new Date(),
       description: props?.excerpt,
       datePublished: props?.publishedAt,
       image: urlForImage(props?.mainImage?._id),
-      address: 'VoiceStack',
+      address: 'OS Dental',
       eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
       author: props?.author?.map((e) => ({
         '@type': 'Person',
@@ -589,7 +589,7 @@ export function CustomHead({
       '@type': 'Article',
       mainEntityOfPage: {
         '@type': 'WebPage',
-        '@id': 'https://resources.voicestack.com/press-release',
+        '@id': 'https://osdental.io/press-release',
       },
       headline: props?.title,
       image: urlForImage(props?.mainImage?._id),
@@ -603,7 +603,7 @@ export function CustomHead({
       },
       publisher: {
         '@type': 'Organization',
-        name: 'VoiceStack',
+        name: 'OS Dental',
         logo: {
           '@type': 'ImageObject',
           url: 'https://elitestrategies-elitestrategies.netdna-ssl.com/wp-content/uploads/2013/04/elitestrategies.png',

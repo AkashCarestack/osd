@@ -119,7 +119,7 @@ const CaseStudyPage = ({
     return null
   }
 
-  const prodUrl = 'https://resources.voicestack.com'
+  const prodUrl = 'https://osdental.io'
   const seoTitle = caseStudy.seoTitle || caseStudy.title
   const seoDescription = (caseStudy?.seoDescription && !caseStudy.seoDescription.includes('Test titlw')) 
     ? caseStudy.seoDescription 

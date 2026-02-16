@@ -156,7 +156,7 @@ export default async function handler(
       }
 
       // Format single post response - only essential fields
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://resources.voicestack.com'
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://osdental.io'
       const formattedPost = {
         _id: post._id,
         contentType: post.contentType,

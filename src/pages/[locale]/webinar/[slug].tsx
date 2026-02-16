@@ -124,7 +124,7 @@ const WebinarPage = ({
     return null 
   }
 
-  const prodUrl = 'https://resources.voicestack.com'
+  const prodUrl = 'https://osdental.io'
 
   const seoTitle = webinar.seoTitle || webinar.title
   const seoDescription = (webinar?.seoDescription && !webinar.seoDescription.includes('Test titlw')) 

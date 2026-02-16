@@ -27,7 +27,6 @@ import  {ShortNavPopover}  from './overlaynav/ShortNavPopover';
 
 
 export const navigationLinks = [
-  { id: 'topics', label: 'Topics', sectionId: 'topics-section' },
   { id: 'training', label: 'Training', sectionId: 'training-section' },
   { id: 'release-notes', label: 'Release Notes', sectionId: 'release-notes-section' },
   { id: 'faqs', label: 'FAQs', sectionId: 'faqs-section' },
@@ -41,8 +40,9 @@ const Header = () => {
   const { locale } = router.query; 
   const [showMenu, setShowMenu] = useState(false);
   const [headerFixed, setHeaderFixed] = useState(false);
-  const [navPopoverId, setNavPopoverId] = useState(Math.random().toString(36).substr(2, 9));
-  const [activeSection, setActiveSection] = useState<string>('topics');
+  const [navPopoverId, setNavPopoverId] = useState('nav-popover');
+  const [activeSection, setActiveSection] = useState<string>('training');
+  const [showTopicsDropdown, setShowTopicsDropdown] = useState(false);
   const pathname = usePathname()
 
   const closeMenu = (e) => {
@@ -59,7 +59,7 @@ const Header = () => {
     } else {
       document.body.classList.remove("menu-active");
     }
-    setNavPopoverId(Math.random().toString(36).substr(2, 9)); 
+    // ID is now static to prevent hydration mismatch 
   };
 
   const handleScrollMob = () => {
@@ -88,7 +88,7 @@ const Header = () => {
 
       // Check if we're at the top of the page
       if (window.scrollY < 100) {
-        setActiveSection('topics');
+        setActiveSection('training');
         return;
       }
 
@@ -123,7 +123,8 @@ const Header = () => {
 
   const buttonRef = React.createRef();
 
-  let homeUrl  =  `${siteConfig.pageURLs.home}/${locale && locale !== 'en' ? locale : ''}`;
+  const homeUrl = router.isReady ? generateHref(locale as string, siteConfig.pageURLs.home) : '/';
+  const topicsUrl = router.isReady ? generateHref(locale as string, siteConfig.categoryBaseUrls.base) : '#';
 
   const before = "before:content-[''] before:h-[100px] before:absolute before:left-0 before:right-0 before:top-full before:bg-vs-blue";
   return (
@@ -133,7 +134,7 @@ const Header = () => {
         <header
           className={`fixed w-full top-0 left-0 z-20 transition-all duration-300 ease-linear ${headerFixed && `!fixed w-full ${homeSettings?.demoBanner ? '!top-[-44px]' : '!top-0'}  left-0`}`}      >
           {homeSettings?.demoBanner && <div className={`bg-cs-primary group hover:bg-[#42dd88] transition-all duration-200 px-4 h-[44px]`}>
-            <Anchor href="https://voicestack.com/?refer=carestack " className="flex justify-center py-3">
+            <Anchor href="https://osdental.io/?refer=carestack " className="flex justify-center py-3">
               <div className="max-w-7xl flex justify-center gap-3 w-full items-center">
                 <div className="text-xs md:text-sm text-zinc-900">
                   {` Book a Demo with us - It's free!`}
@@ -151,10 +152,19 @@ const Header = () => {
               <div className={`flex flex-col gap-3 justify-between py-0 transition-all duration-300 ease-linear`}>
               <div className={`flex flex-row gap-2 justify-between items-center 
                 lg:relative transition-all duration-300 ease-in-out ${headerFixed ? 'lg:my-2 my-2' : 'lg:my-4 my-2'}`}>
-                  <Link href={normalizePath(homeUrl)} className="text-2xl font-extrabold bg-gradient-text bg-clip-text text-transparent font-monrope tracking-tighterText">
+                  <Link href={homeUrl} className="text-2xl font-extrabold bg-gradient-text bg-clip-text text-transparent font-monrope tracking-tighterText">
                     <VoiceStackResources/>
                   </Link>
                   <div className={`flex lg:gap-10   justify-between rounded-xl items-center`}>
+                    {!isMobile && <div className='group relative py-4' onMouseEnter={() => setShowTopicsDropdown(true)} onMouseLeave={() => setShowTopicsDropdown(false)}>
+                      <Link href={topicsUrl} className='text-zinc-500 flex items-center gap-[6px] cursor-pointer text-base hover:text-zinc-300'>
+                        <span>
+                          {`Topics`}
+                        </span>
+                        <ChevronDownIcon className={`w-5 h-5 transition-transform duration-300 ease-in-out ${showTopicsDropdown ? 'rotate-180' : ''}`} />
+                      </Link>
+                      {navPopoverId && <ShortNavPopover navPopoverId={navPopoverId} showMenu={showTopicsDropdown} setShowMenu={setShowTopicsDropdown} className='z-10 lg:group-hover:block lg:group-hover:visible lg:group-hover:opacity-100' />}
+                    </div>}
                     <div className={`lg:flex-row top-[110px] hidden right-0 px-4 pt-4 pb-8 lg:p-0 bg-zinc-900 lg:bg-transparent left-0 lg:static flex-col gap-2 justify-between lg:items-center lg:flex`}>
                       <nav className="flex flex-col lg:flex-row lg:gap-10 flex-wrap border-b border-zinc-800 pb-4 lg:pb-0 lg:border-0">
                         {navigationLinks && navigationLinks?.map((link) => {

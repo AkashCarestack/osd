@@ -162,7 +162,7 @@ const Footer = ({className}:any) => {
           </div>
           <div className='py-6 border-gray-800 border-t'>
             <div className='flex flex-col md:flex-row gap-3 items-center justify-between'>
-              <span className='text-gray-600 font-inter text-sm font-medium leading-[115%]'>&copy; VoiceStack {CopyrightYear}</span>
+              <span className='text-gray-600 font-inter text-sm font-medium leading-[115%]'>&copy; OS Dental {CopyrightYear}</span>
               {/* <span className='text-gray-600 font-inter text-sm font-medium leading-[115%]'>Made with ♥︎ in Good Methods Global</span> */}
               {/* {isUk ? (
                 <ul className='flex items-center gap-4'>

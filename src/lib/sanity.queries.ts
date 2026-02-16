@@ -124,7 +124,22 @@ export const iframesQuery = groq`*[_type == "iframes" && defined(slug.current)] 
 export const authorsQuery = groq`*[_type == "author" && defined(slug.current)] | order(date desc)`
 
 export const tagsQuery = groq`*[_type == "tag"] | order(tagName asc)`
-export const categoriesQuery = groq`*[_type == "category" ]  | order(categoryName asc)`
+export const categoriesQuery = groq`*[_type == "category" ]  | order(categoryName asc) {
+  _id,
+  categoryName,
+  categoryDescription,
+  slug,
+  "associatedContent": associatedContent[]-> {
+    _id,
+    title,
+    slug,
+    contentType,
+    excerpt,
+    date,
+    language,
+    ${imageFragment},
+  },
+}`
 export const tagsByOrderQuery = groq`*[_type == "tag" ] | order(tagName asc) {_id, slug, tagName}`
 
 export const eventCardQuery = groq`
@@ -472,6 +487,25 @@ export const homeSettingsQuery = groq`
       bio,
       ${authorImageFragment},
     },
+    },
+    "faqSection": faqSection {
+      title,
+      description,
+      readNowLink,
+      faqs[] {
+        question,
+        answer
+      }
+    },
+    "heroSection": heroSection {
+      title,
+      titleHighlight,
+      description,
+      primaryButtonText,
+      primaryButtonLink,
+      secondaryButtonText,
+      secondaryButtonLink,
+      "backgroundImage": backgroundImage.asset->url
     },
   }[0]
 `
@@ -1395,6 +1429,7 @@ export const getCategoryBySlugQuery = groq`
       contentType,
       excerpt,
       date,
+      language,
       ${imageFragment},
     },
   }

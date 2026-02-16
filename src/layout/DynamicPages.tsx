@@ -14,7 +14,6 @@ import SliderSection from '~/components/sections/SliderSection'
 import TestimonialSection from '~/components/sections/TestimonialSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Tag } from '~/interfaces/post'
-import faqData from '~/lib/faqData.json'
 import { getUniqueData, getUniqueReorderedCarouselItems } from '~/utils/common'
 
 interface DynamicProps {
@@ -31,6 +30,7 @@ interface DynamicProps {
   webinars?: any
   ebooks?: any
   releaseNotes?: any
+  categories?: any[]
 }
 
 const DynamicPages = ({
@@ -44,6 +44,7 @@ const DynamicPages = ({
   releaseNotes,
   eventCards,
   podcasts,
+  categories,
 }: DynamicProps) => {
   const featuredBlog = homeSettings?.FeaturedBlog || posts[0]
   const customBrowseContent = homeSettings?.customBrowseContent 
@@ -86,10 +87,10 @@ const DynamicPages = ({
         <TagSelect tags={tags} tagLimit={7} />
          <EventCarousel allEventCards={uniqueEventCards} />
          <div id="topics-section">
-          <HeroSection />
+          <HeroSection heroData={homeSettings?.heroSection} />
         </div>
-         <SliderSection items={reorderedCarouselItems} />
-
+         {/* <CategoryCardsSection categories={categories} /> */}
+         <SliderSection items={reorderedCarouselItems} categories={categories} />
         <LatestBlogs contents={latestPosts} />
         <FeaturedAndPopularBlogs
           featuredBlog={featuredBlog}
@@ -113,7 +114,7 @@ const DynamicPages = ({
           />
         </div>
         <div id="faqs-section">
-          <FAQSection faqData={faqData} />
+          <FAQSection faqData={homeSettings?.faqSection} />
         </div>
         <div id="events-updates-section">
           <EventCarousel bgColor={'white'} allEventCards={uniqueEventCards} />
