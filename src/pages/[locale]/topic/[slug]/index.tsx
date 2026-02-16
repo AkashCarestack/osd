@@ -183,14 +183,32 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   // This allows users to see and navigate to all categories
   const categoriesForContentHub = categories || [];
   
-  // For other uses, filter categories with posts (but always include current category)
-  const categoriesWithPosts = categories.filter((cat, index) => {
-    const hasPosts = allCategoryPosts[index] && allCategoryPosts[index].length > 0;
-    const isCurrentCategory = cat._id === category._id;
-    // Also check if category has associatedContent
-    const hasAssociatedContent = cat?.associatedContent && Array.isArray(cat.associatedContent) && cat.associatedContent.length > 0;
-    return hasPosts || isCurrentCategory || hasAssociatedContent; // Always include current category
-  });
+  // Filter categories to show those with either associatedContent OR posts from getPostsByCategoryAndLimit
+  // Also filter associatedContent by region if it has a language field
+  const categoriesWithPosts = categories
+    .map((cat, index) => {
+      // Filter associatedContent by region if it exists
+      let filteredAssociatedContent = cat?.associatedContent;
+      if (filteredAssociatedContent && Array.isArray(filteredAssociatedContent)) {
+        filteredAssociatedContent = filteredAssociatedContent.filter(
+          (content: any) => !content.language || content.language === region
+        );
+      }
+      
+      const hasAssociatedContent = filteredAssociatedContent && filteredAssociatedContent.length > 0;
+      const hasPosts = allCategoryPosts[index] && allCategoryPosts[index].length > 0;
+      const isCurrentCategory = cat._id === category._id;
+      
+      // Return category with filtered associatedContent if it has content or is current category
+      if (hasAssociatedContent || hasPosts || isCurrentCategory) {
+        return {
+          ...cat,
+          associatedContent: filteredAssociatedContent || cat.associatedContent
+        };
+      }
+      return null;
+    })
+    .filter(Boolean); // Remove null entries
 
   return {
     props: {
