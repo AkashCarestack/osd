@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next'
 import groq from 'groq'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 import { getClient } from '~/lib/sanity.client'
 import { getSiteSettings } from '~/lib/sanity.queries'

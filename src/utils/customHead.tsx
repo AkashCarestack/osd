@@ -7,7 +7,7 @@ import { urlForImage } from '~/lib/sanity.image'
 
 import ogMetaData from '../../public/ogData.json'
 import organizationSchema from '../../public/organizationSchema.json'
-import { slugToCapitalized, sanitizeUrl } from './common'
+import { sanitizeUrl,slugToCapitalized } from './common'
 import { breadCrumbJsonLd, generateJSONLD } from './generateJSONLD'
 
 const head = (data: any, i: string, id: string = '') => {

@@ -19,8 +19,8 @@ import { Toc } from '~/contentUtils/sanity-toc'
 import Wrapper from '~/layout/Wrapper'
 import { getClient } from '~/lib/sanity.client'
 import {
-  getCategory,
   getCategories,
+  getCategory,
   getFooterData,
   getHomeSettings,
   getPostBySlugAndRegion,

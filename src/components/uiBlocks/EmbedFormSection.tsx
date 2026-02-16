@@ -1,19 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react'
-import AuthorInfo from '../commonSections/AuthorInfo'
-import DescriptionText from '../typography/DescriptionText'
-import H3Medium from '../typography/H3Medium'
-import ChordIcon from '~/assets/reactiveAssets/ChordIcon'
 import Image from 'next/image'
-import ImageLoader from '../commonSections/ImageLoader'
-import H4Medium from '../typography/H4Medium'
-import H2Large from '../typography/H2Large'
-import SanityPortableText from '../blockEditor/sanityBlockEditor'
-import { useGlobalData } from '../Context/GlobalDataContext'
-import { EmbedForm } from '../uiBlocks/EmbedForm'
+import React, { useContext, useEffect, useState } from 'react'
+
+import ChordIcon from '~/assets/reactiveAssets/ChordIcon'
 import { download_file } from '~/utils/common'
-import SidebarTitle from '../typography/SidebarTitle'
 import useMediaQuery from '~/utils/useMediaQueryHook'
+
+import SanityPortableText from '../blockEditor/sanityBlockEditor'
+import AuthorInfo from '../commonSections/AuthorInfo'
+import ImageLoader from '../commonSections/ImageLoader'
 import { BookDemoContext } from '../Context/BookDemoProvider'
+import { useGlobalData } from '../Context/GlobalDataContext'
+import DescriptionText from '../typography/DescriptionText'
+import H2Large from '../typography/H2Large'
+import H3Medium from '../typography/H3Medium'
+import H4Medium from '../typography/H4Medium'
+import SidebarTitle from '../typography/SidebarTitle'
+import { EmbedForm } from '../uiBlocks/EmbedForm'
 
 
 interface EmbedFormSectionProps {

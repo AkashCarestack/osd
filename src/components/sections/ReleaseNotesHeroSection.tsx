@@ -1,12 +1,12 @@
 import { ArrowTopRightIcon } from '@sanity/icons'
+import siteConfig from 'config/siteConfig'
 import React from 'react'
 
-import Wrapper from '~/layout/Wrapper'
-import Section from '~/components/Section'
 import Anchor from '~/components/commonSections/Anchor'
-import { formatDateShort } from '~/utils/formateDate'
+import Section from '~/components/Section'
 import { Articles } from '~/interfaces/post'
-import siteConfig from 'config/siteConfig'
+import Wrapper from '~/layout/Wrapper'
+import { formatDateShort } from '~/utils/formateDate'
 
 interface ReleaseNotesHeroSectionProps {
   releaseNotes?: Articles[]

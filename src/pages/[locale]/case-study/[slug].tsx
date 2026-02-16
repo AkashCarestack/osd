@@ -29,9 +29,9 @@ import {
   getTags,
 } from '~/lib/sanity.queries'
 import homeSettings from '~/schemas/homeSettings'
+import { sanitizeUrl } from '~/utils/common'
 import { CustomHead, customMetaTag, generateMetaData } from '~/utils/customHead'
 import { generateJSONLD } from '~/utils/generateJSONLD'
-import { sanitizeUrl } from '~/utils/common'
 
 interface Props {
   caseStudy: CaseStudies
