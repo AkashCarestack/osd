@@ -91,7 +91,7 @@ const DynamicPages = ({
           <HeroSection />
         </div>
          {/* <CategoryCardsSection categories={categories} /> */}
-         <SliderSection items={reorderedCarouselItems} />
+         <SliderSection items={reorderedCarouselItems} categories={categories} />
         <LatestBlogs contents={latestPosts} />
         <FeaturedAndPopularBlogs
           featuredBlog={featuredBlog}

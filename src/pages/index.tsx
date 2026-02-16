@@ -121,6 +121,7 @@ export const getStaticProps: GetStaticProps<
         releaseNotes: [],
         footerData: [],
         podcasts: [],
+        categories: [],
         error: true,
       },
     }
@@ -165,6 +166,7 @@ export default function IndexPage(props: IndexPageProps) {
           webinars={props?.webinars}
           releaseNotes={props?.releaseNotes}
           eventCards={eventCards}
+          categories={props?.categories}
         />
       </Layout>
     </GlobalDataProvider>

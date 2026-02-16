@@ -68,18 +68,11 @@ const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories 
         </div>
         <div className="flex flex-wrap gap-8 items-start">
           {displayCategories.map((category, index) => {
-            // Get first associated content item for the link
-            const firstContent = category?.associatedContent?.[0]
+            // Build the URL to the category page only
             const categorySlug = category?.slug?.current
-            const contentSlug = firstContent?.slug?.current
-
-            // Build the URL: topic/{category-slug}/{content-slug} if content exists,
-            // otherwise just link to the category page
-            const href = contentSlug && categorySlug
-              ? `/${siteConfig.categoryBaseUrls.base}/${categorySlug}/${contentSlug}`
-              : categorySlug
-                ? `/${siteConfig.categoryBaseUrls.base}/${categorySlug}`
-                : `/${siteConfig.categoryBaseUrls.base}`
+            const href = categorySlug
+              ? `/${siteConfig.categoryBaseUrls.base}/${categorySlug}`
+              : `/${siteConfig.categoryBaseUrls.base}`
 
             const imageIndex = index % bgImages.length
             const colorIndex = index % bgColors.length

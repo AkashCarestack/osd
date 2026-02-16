@@ -1,7 +1,5 @@
 import siteConfig from 'config/siteConfig'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 
 import Pagination from '~/components/commonSections/Pagination'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
@@ -14,7 +12,6 @@ import TagSelect from '~/contentUtils/TagSelector'
 import { getClient } from '~/lib/sanity.client'
 import {
   catsSlugsQuery,
-  catsSlugsWithoutAssociatedContentQuery,
   getArticlesCount,
   getCategories,
   getCategory,
@@ -65,7 +62,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const cardsPerPage = siteConfig.pagination.childItemsPerPage || 5;
 
   const [
-    categoryPosts,
+    categoryPostsFromRefs,
     allPostsForTag,
     totalPodcasts,
     totalWebinars,
@@ -86,38 +83,104 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getFooterData(client, region)
   ]);
 
-  // Filter out categories with no posts for ContentHub
+  // Combine posts from category references AND associatedContent
+  // Filter associatedContent by region if it has a language field
+  let associatedContentPosts = [];
+  if (category?.associatedContent && Array.isArray(category.associatedContent)) {
+    associatedContentPosts = category.associatedContent
+      .filter((content: any) => !content.language || content.language === region)
+      .map((content: any) => ({
+        ...content,
+        category: {
+          _id: category._id,
+          categoryName: category.categoryName,
+          categoryDescription: category.categoryDescription,
+          slug: category.slug,
+        }
+      }));
+  }
+
+  // Merge posts from both sources, removing duplicates by _id
+  const allCategoryPostsMap = new Map();
+  
+  // Add posts from category references
+  if (categoryPostsFromRefs && Array.isArray(categoryPostsFromRefs)) {
+    categoryPostsFromRefs.forEach((post: any) => {
+      if (post?._id) {
+        allCategoryPostsMap.set(post._id, post);
+      }
+    });
+  }
+  
+  // Add posts from associatedContent
+  associatedContentPosts.forEach((post: any) => {
+    if (post?._id) {
+      allCategoryPostsMap.set(post._id, post);
+    }
+  });
+
+  // Convert back to array and sort by date
+  const categoryPosts = Array.from(allCategoryPostsMap.values())
+    .sort((a: any, b: any) => {
+      const dateA = a.date ? new Date(a.date).getTime() : 0;
+      const dateB = b.date ? new Date(b.date).getTime() : 0;
+      return dateB - dateA; // Descending order
+    })
+    .slice(0, cardsPerPage);
+
+  // Calculate total count including both sources
+  // Combine allPostsForTag (from category references) with associatedContent
+  const allPostsForCategorySet = new Set();
+  
+  // Add posts from category references (allPostsForTag)
+  if (allPostsForTag && Array.isArray(allPostsForTag)) {
+    allPostsForTag.forEach((post: any) => {
+      if (post?._id) {
+        allPostsForCategorySet.add(post._id);
+      }
+    });
+  }
+  
+  // Add posts from associatedContent
+  associatedContentPosts.forEach((post: any) => {
+    if (post?._id) {
+      allPostsForCategorySet.add(post._id);
+    }
+  });
+  
+  const totalPostCount = allPostsForCategorySet.size;
+  const totalPages = Math.ceil(totalPostCount / cardsPerPage);
+
+  // Get posts for all categories to determine which have content
   const allCategoryPosts = await Promise.all(
     categories.map((cat) => getPostsByCategoryAndLimit(client, cat._id, 0, 3, region))
   );
+  
+  // For ContentHub, show ALL categories (not just those with posts)
+  // This allows users to see and navigate to all categories
+  const categoriesForContentHub = categories || [];
+  
+  // For other uses, filter categories with posts (but always include current category)
   const categoriesWithPosts = categories.filter((cat, index) => {
-    return allCategoryPosts[index] && allCategoryPosts[index].length > 0;
+    const hasPosts = allCategoryPosts[index] && allCategoryPosts[index].length > 0;
+    const isCurrentCategory = cat._id === category._id;
+    // Also check if category has associatedContent
+    const hasAssociatedContent = cat?.associatedContent && Array.isArray(cat.associatedContent) && cat.associatedContent.length > 0;
+    return hasPosts || isCurrentCategory || hasAssociatedContent; // Always include current category
   });
-
-  const totalPages = Math.ceil(allPostsForTag.length / cardsPerPage);
-
-  // Build redirect path if category has associated content (for client-side redirect)
-  let redirectPath: string | null = null;
-  if (category?.associatedContent && category.associatedContent.length > 0) {
-    const firstContent = category.associatedContent[0]
-    if (firstContent?.slug?.current) {
-      // Build the redirect path with proper locale handling
-      const localePath = region === 'en' ? '' : `/${region}`
-      redirectPath = `${localePath}/${siteConfig.categoryBaseUrls.base}/${slug}/${firstContent.slug.current}`
-    }
-  }
 
   return {
     props: {
       category,
       categories,
+      categoriesForContentHub,
       categoriesWithPosts,
       allTags,
       totalPages,
       categoryPosts,
       draftMode: false,
       token: null,
-      totalPostCount: allPostsForTag.length,
+      totalPostCount: totalPostCount,
       contentCount: {
         podcasts: totalPodcasts,
         webinars: totalWebinars,
@@ -127,7 +190,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       siteSettings,
       homeSettings,
       footerData,
-      redirectPath,
     },
   };
 };
@@ -136,11 +198,10 @@ export const getStaticPaths = async () => {
   const client = getClient()
   const locales = siteConfig.locales
 
-  // Only generate static paths for categories without associatedContent
-  // Categories with associatedContent will be generated on-demand (fallback: 'blocking')
+  // Generate static paths for all categories
   const slugs = await Promise.all(
     locales.map(async (locale) => {
-      const data = await client.fetch(catsSlugsWithoutAssociatedContentQuery, { locale });
+      const data = await client.fetch(catsSlugsQuery, { locale });
       return data.map((item: any) => ({
         slug: item.slug,
         locale: item.locale
@@ -152,13 +213,14 @@ export const getStaticPaths = async () => {
     paths: slugs.flat().map((item: any) => ({
       params: { slug: item.slug, locale: item.locale },
     })),
-    fallback: 'blocking', // Allow dynamic generation for new categories and those with associatedContent
+    fallback: 'blocking', // Allow dynamic generation for new categories
   }
 }
 
 export default function TagPage({
   category,
   categories,
+  categoriesForContentHub,
   categoriesWithPosts,
   categoryPosts,
   allTags,
@@ -168,17 +230,7 @@ export default function TagPage({
   siteSettings,
   homeSettings,
   footerData,
-  redirectPath
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const router = useRouter();
-  
-  // Handle client-side redirect if category has associated content
-  useEffect(() => {
-    if (redirectPath) {
-      router.replace(redirectPath);
-    }
-  }, [redirectPath, router]);
-
   const handlePageChange = (page: number) => {
     console.log(`Navigating to page: ${page}`)
   }
@@ -190,18 +242,13 @@ export default function TagPage({
     siteSettingWithImage.siteTitle = slugToCapitalized(category?.slug?.current);
   }
 
-  // If redirecting, show nothing or a loading state
-  if (redirectPath) {
-    return null;
-  }
-
   // Default category listing view
   return (
     <GlobalDataProvider data={categoriesWithPosts} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {siteSettingWithImage ? defaultMetaTag(siteSettingWithImage) : <></>}
-          <ContentHub categories={categoriesWithPosts} contentCount={contentCount}   />
+          <ContentHub categories={categoriesForContentHub} contentCount={contentCount}   />
           <TagSelect
             tags={allTags}
             tagLimit={5}
