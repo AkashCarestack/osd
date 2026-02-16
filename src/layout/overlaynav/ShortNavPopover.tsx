@@ -37,6 +37,7 @@ export const ShortNavPopover = ({
   const buttonRef = useRef(null)
   const navPopoverRef = useRef(null)
   const router = useRouter()
+  const locale = (router.query.locale as string) || 'en'
 
 
   useEffect(() => {
@@ -159,12 +160,27 @@ export const ShortNavPopover = ({
               {tagData &&
                     tagData.length > 0 &&
                     tagData.map((tag, index) => {
-                      const hrefLink = `/${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current || ''}`;
-                      const cleanHref = normalizePath(hrefLink);
+                      // Get first associated content item for the link
+                      const firstContent = tag?.associatedContent?.[0]
+                      const categorySlug = tag?.slug?.current
+                      const contentSlug = firstContent?.slug?.current
+
+                      // Build the URL: topic/{category-slug}/{content-slug} if content exists,
+                      // otherwise just link to the category page
+                      let href = ''
+                      if (contentSlug && categorySlug) {
+                        href = `${siteConfig.categoryBaseUrls.base}/${categorySlug}/${contentSlug}`
+                      } else if (categorySlug) {
+                        href = `${siteConfig.categoryBaseUrls.base}/${categorySlug}`
+                      } else {
+                        href = siteConfig.categoryBaseUrls.base
+                      }
+                      
+                      const cleanHref = normalizePath(href);
                     return (
                       <div className="break-inside-avoid p-2 " key={index}>
                         <Anchor
-                          href={generateHref(router.query.locale as string, cleanHref)}
+                          href={generateHref(locale, cleanHref)}
                           scroll={false}
                           className="text-zinc-500 font-medium text-sm hover:text-zinc-600 transition-colors inline-flex "
                         >
@@ -216,12 +232,27 @@ export const ShortNavPopover = ({
               {tagData &&
                 tagData.length > 0 &&
                 tagData.map((tag, index) => {
-                  const hrefLink = `/${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current || ''}`;
-                  const cleanHref = normalizePath(hrefLink);
+                  // Get first associated content item for the link
+                  const firstContent = tag?.associatedContent?.[0]
+                  const categorySlug = tag?.slug?.current
+                  const contentSlug = firstContent?.slug?.current
+
+                  // Build the URL: topic/{category-slug}/{content-slug} if content exists,
+                  // otherwise just link to the category page
+                  let href = ''
+                  if (contentSlug && categorySlug) {
+                    href = `${siteConfig.categoryBaseUrls.base}/${categorySlug}/${contentSlug}`
+                  } else if (categorySlug) {
+                    href = `${siteConfig.categoryBaseUrls.base}/${categorySlug}`
+                  } else {
+                    href = siteConfig.categoryBaseUrls.base
+                  }
+                  
+                  const cleanHref = normalizePath(href);
                   return(
                   <div className="break-inside-avoid" key={index}>
                     <Anchor
-                      href={generateHref(router.query.locale as any, cleanHref)}
+                      href={generateHref(locale, cleanHref)}
                       scroll={false}
                       className="text-zinc-500 pb-[14px] font-medium text-sm flex hover:text-zinc-600 transition-colors"
                     >
