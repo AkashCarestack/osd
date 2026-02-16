@@ -1,7 +1,7 @@
 import { ArrowTopRightIcon } from '@sanity/icons'
 import siteConfig from 'config/siteConfig'
-import React from 'react'
 import { useRouter } from 'next/router'
+import React from 'react'
 
 import Anchor from '~/components/commonSections/Anchor'
 import Section from '~/components/Section'

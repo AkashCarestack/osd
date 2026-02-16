@@ -1,7 +1,6 @@
+import siteConfig from 'config/siteConfig'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
-import siteConfig from '~/config/siteConfig'
 
 interface AssociatedContentProps {
   associatedContent?: Array<{
