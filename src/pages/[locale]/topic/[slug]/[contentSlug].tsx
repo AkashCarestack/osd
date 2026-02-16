@@ -31,6 +31,7 @@ import {
 } from '~/lib/sanity.queries'
 import { slugToCapitalized } from '~/utils/common'
 import { defaultMetaTag } from '~/utils/customHead'
+import { formatDateShort } from '~/utils/formateDate'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
@@ -227,11 +228,11 @@ export default function TopicContentPage({
             categories={categoriesWithPosts}
             contentCount={{}}
           /> */}
-          <MainImageSection enableDate={true} post={content} />
+          <MainImageSection enableDate={false} post={content} categoryName={category?.categoryName} />
           <Section className="justify-center">
             <Wrapper className={`flex-col`}>
               <div className="flex md:flex-row flex-col-reverse gap-6 md:gap-12 justify-between">
-                {/* Left Sidebar - Articles in Section (if associatedContent) OR TOC (if no associatedContent), Author, Share */}
+                {/* Left Sidebar - Articles in Section (if associatedContent) OR TOC (if no associatedContent), Share */}
                 <div className="flex flex-col gap-8 md:mt-12 relative md:w-1/3 md:max-w-[410px] w-full">
                   <div className="sticky top-24 flex flex-col gap-8 md:overflow-auto">
                     {/* Show Articles in Section if category has associated content, otherwise show TOC */}
@@ -246,18 +247,31 @@ export default function TopicContentPage({
                         <Toc headings={content?.headings} title="Contents" />
                       )
                     )}
-                    <div className="flex-col gap-8 flex">
-                      {content?.author && content.author.length > 0 && (
-                        <div>
-                          <AuthorInfo author={content?.author} />
-                        </div>
-                      )}
-                      <ShareableLinks props={content?.title} />
-                    </div>
+                    <ShareableLinks props={content?.title} />
                   </div>
                 </div>
                 {/* Main Content Area - Body */}
                 <div className="md:mt-12 flex-1 flex flex-col gap-8 md:w-2/3 w-full md:max-w-[710px]">
+                  {/* Article Title */}
+                  <h1 className="text-zinc-900 font-manrope leading-tight lg:text-4xl text-2xl font-bold">
+                    {content?.title || 'Article Title'}
+                  </h1>
+                  {/* Date and Read Time */}
+                  {/* {content?.date && (
+                    <div className="flex items-center gap-2 text-zinc-600 text-sm font-medium">
+                      <span>{formatDateShort(content.date)}</span>
+                      {content?.estimatedReadingTime && (
+                        <>
+                          <span className="text-zinc-400">•</span>
+                          <span>{content.estimatedReadingTime} min read</span>
+                        </>
+                      )}
+                    </div>
+                  )} */}
+                  {/* Author Info */}
+                  {content?.author && content.author.length > 0 && (
+                    <AuthorInfo author={content?.author} />
+                  )}
                   <div className="post__content w-full">
                     <SanityPortableText
                       content={content?.body}

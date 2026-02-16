@@ -24,15 +24,8 @@ const ArticlesInSection: React.FC<ArticlesInSectionProps> = ({
     return null
   }
 
-  // Filter out the current content from the list
-  const filteredContent = associatedContent.filter((content) => {
-    const contentSlug = content?.slug?.current || content?.slug
-    return contentSlug !== currentContentSlug
-  })
-
-  if (filteredContent.length === 0) {
-    return null
-  }
+  // Show all articles including the current one (no filtering)
+  const filteredContent = associatedContent
 
   return (
     <div className="bg-zinc-50 flex flex-col gap-6 items-start p-6 rounded-[10px] w-full">
@@ -43,11 +36,22 @@ const ArticlesInSection: React.FC<ArticlesInSectionProps> = ({
       </div>
       <div className="flex gap-1.5 items-start leading-[1.5] text-zinc-600 text-sm w-full">
         <div className="flex flex-col gap-3 shrink-0">
-          {filteredContent.map((_, index) => (
-            <p key={index} className="font-normal relative shrink-0">
-              {index + 1}.
-            </p>
-          ))}
+          {filteredContent.map((content, index) => {
+            const contentSlug = content?.slug?.current || content?.slug
+            const isActive = contentSlug === currentContentSlug
+            return (
+              <p 
+                key={index} 
+                className={`relative shrink-0 text-sm leading-[150%] opacity-100 ${
+                  isActive 
+                    ? 'text-[#93C5FD] font-medium' 
+                    : 'text-zinc-600 font-normal'
+                }`}
+              >
+                {index + 1}.
+              </p>
+            )
+          })}
         </div>
         <div className="flex flex-1 flex-col gap-3 items-start min-h-0 min-w-0 whitespace-pre-wrap">
           {filteredContent.map((content, index) => {
@@ -65,9 +69,11 @@ const ArticlesInSection: React.FC<ArticlesInSectionProps> = ({
               <Anchor
                 key={content?._id || index}
                 href={generateHref(locale as string, href)}
-                className={`font-normal relative shrink-0 w-full ${
-                  isActive ? 'font-medium' : ''
-                } hover:underline`}
+                className={`relative shrink-0 w-full text-sm leading-[150%] opacity-100 ${
+                  isActive 
+                    ? 'text-[#93C5FD] font-medium hover:text-[#7DD3FC]' 
+                    : 'text-zinc-600 font-normal hover:underline'
+                }`}
               >
                 {title}
               </Anchor>
