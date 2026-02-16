@@ -40,7 +40,7 @@ const Header = () => {
   const { locale } = router.query; 
   const [showMenu, setShowMenu] = useState(false);
   const [headerFixed, setHeaderFixed] = useState(false);
-  const [navPopoverId, setNavPopoverId] = useState(Math.random().toString(36).substr(2, 9));
+  const [navPopoverId, setNavPopoverId] = useState('nav-popover');
   const [activeSection, setActiveSection] = useState<string>('training');
   const [showTopicsDropdown, setShowTopicsDropdown] = useState(false);
   const pathname = usePathname()
@@ -59,7 +59,7 @@ const Header = () => {
     } else {
       document.body.classList.remove("menu-active");
     }
-    setNavPopoverId(Math.random().toString(36).substr(2, 9)); 
+    // ID is now static to prevent hydration mismatch 
   };
 
   const handleScrollMob = () => {

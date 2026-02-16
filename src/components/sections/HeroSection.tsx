@@ -1,4 +1,3 @@
-import { ArrowTopRightIcon } from '@sanity/icons'
 import React from 'react'
 
 import Wrapper from '~/layout/Wrapper'
@@ -9,8 +8,10 @@ interface HeroData {
   title: string
   titleHighlight?: string
   description: string
-  buttonText?: string
-  buttonLink?: string
+  primaryButtonText?: string
+  primaryButtonLink?: string
+  secondaryButtonText?: string
+  secondaryButtonLink?: string
   backgroundImage?: string
 }
 
@@ -25,8 +26,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
     titleHighlight: 'OS Dental & DEO Group',
     description:
       "Here you'll find product updates, onboarding guides, training materials, and key resources to support implementation and ongoing success.",
-    buttonText: 'Read Now',
-    buttonLink: '#',
+    primaryButtonText: 'Book a Clinical Demo',
+    primaryButtonLink: '#',
+    secondaryButtonText: 'Clinical Dashboards Overview',
+    secondaryButtonLink: '#',
     backgroundImage:
       'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',
   }
@@ -74,20 +77,28 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                 </p>
               </div>
 
-              {/* Read Now button */}
-              <Anchor
-                href={data.buttonLink || '#'}
-                className="flex gap-2 md:gap-[8px] items-center relative shrink-0 group"
-              >
-                <span className="font-medium leading-[1.6] not-italic relative shrink-0 text-[#18181b] text-sm md:text-base bg-white px-5 py-2.5 md:px-6 md:py-3 rounded-md hover:bg-zinc-100 transition-colors">
-                  {data.buttonText || 'Read Now'}
-                </span>
-                <div className="flex items-center justify-center relative shrink-0">
-                  <div className="relative size-4 md:size-5">
-                    <ArrowTopRightIcon className="block max-w-none size-full text-[#18181b]" />
-                  </div>
-                </div>
-              </Anchor>
+              {/* Buttons */}
+              <div className="flex gap-3 items-center relative shrink-0">
+                {/* Primary Button - White background */}
+                <Anchor
+                  href={data.primaryButtonLink || '#'}
+                  className="bg-white flex items-center overflow-hidden px-6 py-3 relative rounded-[5px] shrink-0 hover:bg-zinc-100 transition-colors"
+                >
+                  <p className="font-medium leading-[1.6] not-italic relative shrink-0 text-[#18181b] text-base text-center whitespace-nowrap">
+                    {data.primaryButtonText || 'Book a Clinical Demo'}
+                  </p>
+                </Anchor>
+
+                {/* Secondary Button - Transparent with border */}
+                <Anchor
+                  href={data.secondaryButtonLink || '#'}
+                  className="bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.3)] border-solid flex items-center overflow-hidden px-6 py-3 relative rounded-[5px] shrink-0 hover:bg-[rgba(255,255,255,0.15)] transition-colors"
+                >
+                  <p className="font-medium leading-[1.6] not-italic relative shrink-0 text-base text-center text-white whitespace-nowrap">
+                    {data.secondaryButtonText || 'Clinical Dashboards Overview'}
+                  </p>
+                </Anchor>
+              </div>
             </div>
           </div>
         </Wrapper>
