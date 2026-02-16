@@ -46,11 +46,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
         
         if (categoryWithContent?.associatedContent && categoryWithContent.associatedContent.length > 0) {
           for (const content of categoryWithContent.associatedContent) {
-            if (content?.slug?.current) {
+            // Filter by language/region if content has a language field
+            const hasLanguage = content?.language
+            const matchesLocale = !hasLanguage || content.language === locale
+            
+            // Check for slug - handle both slug.current and slug formats
+            const contentSlug = content?.slug?.current || content?.slug
+            
+            if (matchesLocale && contentSlug && category.slug?.current) {
               pathsForLocale.push({
                 params: {
-                  slug: category.slug?.current,
-                  contentSlug: content.slug.current,
+                  slug: category.slug.current,
+                  contentSlug: typeof contentSlug === 'string' ? contentSlug : contentSlug.current || contentSlug,
                   locale: locale,
                 },
               })

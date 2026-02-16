@@ -187,14 +187,25 @@ export default function ProjectSlugRoute(
                 : categoryPosts[categoryIndex] || [];
               
               // Add category information to each content item if it doesn't have it
-              contentToShow = contentToShow.map((content: any) => ({
-                ...content,
-                category: content.category || {
-                  categoryName: category.categoryName,
-                  slug: category.slug,
-                  categoryDescription: category.categoryDescription
+              contentToShow = contentToShow.map((content: any) => {
+                // Ensure content has a slug
+                const contentSlug = content?.slug?.current || content?.slug;
+                if (!contentSlug) {
+                  return null; // Skip items without slugs
                 }
-              }));
+                
+                return {
+                  ...content,
+                  // Ensure slug is properly structured
+                  slug: content.slug?.current ? content.slug : { current: contentSlug },
+                  category: content.category || {
+                    categoryName: category.categoryName,
+                    slug: category.slug,
+                    categoryDescription: category.categoryDescription,
+                    _id: category._id
+                  }
+                };
+              }).filter(Boolean); // Remove null entries
               
               return contentToShow?.length > 0 && (
                 <div key={category._id || index}>

@@ -91,7 +91,7 @@ const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories 
 
                 {/* Content card */}
                 <Anchor
-                  href={generateHref(locale as string, href)}
+                  href={router.isReady ? generateHref(locale as string, href) : '#'}
                   className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 relative rounded-[5px] shrink-0 w-full group"
                 >
                   <div className="flex flex-col gap-2 items-start w-full">

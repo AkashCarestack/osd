@@ -11,6 +11,7 @@ export const getBasePath = (
     'press-release': 'press-release',
     ebook: 'ebook',
     'case-study': 'case-study',
+    'release-notes': 'release-notes',
   }
 
   return basePaths[contentType] || ''

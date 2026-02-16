@@ -88,26 +88,49 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   let associatedContentPosts = [];
   if (category?.associatedContent && Array.isArray(category.associatedContent)) {
     associatedContentPosts = category.associatedContent
-      .filter((content: any) => !content.language || content.language === region)
-      .map((content: any) => ({
-        ...content,
-        category: {
-          _id: category._id,
-          categoryName: category.categoryName,
-          categoryDescription: category.categoryDescription,
-          slug: category.slug,
-        }
-      }));
+      .filter((content: any) => {
+        // Filter by language if it exists
+        const matchesLanguage = !content.language || content.language === region;
+        // Ensure content has a slug
+        const hasSlug = content?.slug?.current || content?.slug;
+        return matchesLanguage && hasSlug;
+      })
+      .map((content: any) => {
+        // Ensure slug is properly structured
+        const contentSlug = content?.slug?.current || content?.slug;
+        return {
+          ...content,
+          slug: content.slug?.current ? content.slug : { current: contentSlug },
+          category: {
+            _id: category._id,
+            categoryName: category.categoryName,
+            categoryDescription: category.categoryDescription,
+            slug: category.slug,
+          }
+        };
+      });
   }
 
   // Merge posts from both sources, removing duplicates by _id
   const allCategoryPostsMap = new Map();
   
-  // Add posts from category references
+  // Add posts from category references (add category info if not present)
   if (categoryPostsFromRefs && Array.isArray(categoryPostsFromRefs)) {
     categoryPostsFromRefs.forEach((post: any) => {
       if (post?._id) {
-        allCategoryPostsMap.set(post._id, post);
+        // Ensure slug is properly structured
+        const postSlug = post?.slug?.current || post?.slug;
+        const postWithCategory = {
+          ...post,
+          slug: post.slug?.current ? post.slug : (postSlug ? { current: postSlug } : post.slug),
+          category: post.category || {
+            _id: category._id,
+            categoryName: category.categoryName,
+            categoryDescription: category.categoryDescription,
+            slug: category.slug,
+          }
+        };
+        allCategoryPostsMap.set(post._id, postWithCategory);
       }
     });
   }

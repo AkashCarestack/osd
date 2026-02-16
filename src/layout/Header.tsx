@@ -123,7 +123,8 @@ const Header = () => {
 
   const buttonRef = React.createRef();
 
-  let homeUrl  =  `${siteConfig.pageURLs.home}/${locale && locale !== 'en' ? locale : ''}`;
+  const homeUrl = router.isReady ? generateHref(locale as string, siteConfig.pageURLs.home) : '/';
+  const topicsUrl = router.isReady ? generateHref(locale as string, siteConfig.categoryBaseUrls.base) : '#';
 
   const before = "before:content-[''] before:h-[100px] before:absolute before:left-0 before:right-0 before:top-full before:bg-vs-blue";
   return (
@@ -151,12 +152,12 @@ const Header = () => {
               <div className={`flex flex-col gap-3 justify-between py-0 transition-all duration-300 ease-linear`}>
               <div className={`flex flex-row gap-2 justify-between items-center 
                 lg:relative transition-all duration-300 ease-in-out ${headerFixed ? 'lg:my-2 my-2' : 'lg:my-4 my-2'}`}>
-                  <Link href={normalizePath(homeUrl)} className="text-2xl font-extrabold bg-gradient-text bg-clip-text text-transparent font-monrope tracking-tighterText">
+                  <Link href={homeUrl} className="text-2xl font-extrabold bg-gradient-text bg-clip-text text-transparent font-monrope tracking-tighterText">
                     <VoiceStackResources/>
                   </Link>
                   <div className={`flex lg:gap-10   justify-between rounded-xl items-center`}>
                     {!isMobile && <div className='group relative py-4' onMouseEnter={() => setShowTopicsDropdown(true)} onMouseLeave={() => setShowTopicsDropdown(false)}>
-                      <Link href={generateHref(locale, siteConfig.categoryBaseUrls.base)} className='text-zinc-500 flex items-center gap-[6px] cursor-pointer text-base hover:text-zinc-300'>
+                      <Link href={topicsUrl} className='text-zinc-500 flex items-center gap-[6px] cursor-pointer text-base hover:text-zinc-300'>
                         <span>
                           {`Topics`}
                         </span>
