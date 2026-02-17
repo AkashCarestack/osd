@@ -17,8 +17,10 @@ import Section from '~/components/Section'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
 import ContentHub from '~/contentUtils/ContentHub'
 import { Toc } from '~/contentUtils/sanity-toc'
+import SEOHead from '~/layout/SeoHead'
 import Wrapper from '~/layout/Wrapper'
 import { getClient } from '~/lib/sanity.client'
+import { urlForImage } from '~/lib/sanity.image'
 import {
   getCategories,
   getCategory,
@@ -29,9 +31,10 @@ import {
   getTagRelatedContents,
   getTags,
 } from '~/lib/sanity.queries'
-import { slugToCapitalized } from '~/utils/common'
+import { sanitizeUrl, slugToCapitalized } from '~/utils/common'
 import { defaultMetaTag } from '~/utils/customHead'
 import { formatDateShort } from '~/utils/formateDate'
+import { generateFAQJSONLD, generateGlossaryJSONLD, generateJSONLD } from '~/utils/generateJSONLD'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
@@ -258,6 +261,7 @@ export default function TopicContentPage({
   footerData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const router = useRouter()
+  const locale = router.query.locale as string || 'en'
   const baseUrl = `/${siteConfig.categoryBaseUrls.base}/${category?.slug?.current}`
   const currentContentSlug = content?.slug?.current || (router.query.contentSlug as string)
   const isGlossary = currentContentSlug === 'glossary'
@@ -268,6 +272,77 @@ export default function TopicContentPage({
     return null
   }
 
+  /**
+   * SEO Configuration for FAQ, Glossary, and Content Pages
+   * 
+   * This section sets up structured data (JSON-LD) and meta tags for SEO:
+   * 
+   * 1. FAQ Pages:
+   *    - Uses FAQPage schema (https://schema.org/FAQPage)
+   *    - Formats FAQ data from category.faq.faqs array
+   *    - Each FAQ item must have 'question' and 'answer' properties
+   *    - Enables rich snippets in Google search results
+   * 
+   * 2. Glossary Pages:
+   *    - Uses ItemList schema with DefinedTerm items
+   *    - Formats glossary terms from category.glossary.terms array
+   *    - Each term must have 'term' and 'value' properties
+   *    - Helps search engines understand glossary structure
+   * 
+   * 3. Regular Content Pages:
+   *    - Uses standard content schemas (Article, BlogPosting, etc.)
+   *    - Based on content.contentType field
+   * 
+   * The JSON-LD is injected via SEOHead component which renders:
+   * <script type="application/ld+json">{jsonLD}</script>
+   * 
+   * Canonical URLs are constructed with locale support:
+   * - English (en): /topic/{category-slug}/{content-slug}
+   * - Other locales: /{locale}/topic/{category-slug}/{content-slug}
+   */
+  const prodUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://osdental.io'
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
+  const pageUrl = sanitizeUrl(`${prodUrl}${localePrefix}${baseUrl}/${currentContentSlug}`)
+  
+  // Generate JSON-LD schema based on page type
+  let jsonLD = '{}'
+  let seoTitle = ''
+  let seoDescription = ''
+  let seoKeywords = ''
+  let seoRobots = 'index, follow, archive'
+  let ogImage = undefined
+
+  if (isGlossary && category?.glossary) {
+    // Glossary SEO and JSON-LD
+    // Data format: category.glossary.terms = [{ term: "Term", value: "Definition" }, ...]
+    jsonLD = generateGlossaryJSONLD(category.glossary, pageUrl)
+    seoTitle = category.glossary.mainHeading 
+      ? `${category.glossary.mainHeading} - ${category.categoryName} - OS Dental`
+      : `${category.categoryName} Glossary - OS Dental`
+    seoDescription = category.glossary.subheading || 
+      `Glossary of terms for ${category.categoryName} - OS Dental`
+    seoKeywords = `${category.categoryName}, glossary, definitions, OS Dental`
+  } else if (isFAQ && category?.faq) {
+    // FAQ SEO and JSON-LD
+    // Data format: category.faq.faqs = [{ question: "Q?", answer: "A" }, ...]
+    jsonLD = generateFAQJSONLD(category.faq, pageUrl)
+    seoTitle = category.faq.name 
+      ? `${category.faq.name} - ${category.categoryName} - OS Dental`
+      : `${category.categoryName} FAQ - OS Dental`
+    seoDescription = `Frequently asked questions about ${category.categoryName} - OS Dental`
+    seoKeywords = `${category.categoryName}, FAQ, frequently asked questions, OS Dental`
+  } else if (content) {
+    // Regular content SEO and JSON-LD
+    jsonLD = generateJSONLD(content)
+    seoTitle = content?.seoTitle || content?.title || 'Article - OS Dental'
+    seoDescription = (content?.seoDescription && !content.seoDescription.includes('Test titlw'))
+      ? content.seoDescription
+      : content?.excerpt || ''
+    seoKeywords = content?.seoKeywords || ''
+    seoRobots = content?.seoRobots || 'index, follow, archive'
+    ogImage = content?.mainImage?._id ? urlForImage(content.mainImage._id) : undefined
+  }
+
   return (
     <GlobalDataProvider
       data={categoriesWithPosts}
@@ -275,6 +350,16 @@ export default function TopicContentPage({
       footerData={footerData}
     >
       <BaseUrlProvider baseUrl={baseUrl}>
+        <SEOHead
+          title={seoTitle}
+          description={seoDescription}
+          keywords={seoKeywords}
+          robots={seoRobots}
+          canonical={pageUrl}
+          jsonLD={jsonLD}
+          props={content ? { contentType: content?.contentType } : undefined}
+          ogImage={ogImage}
+        />
         <Layout>
           {/* <ContentHub
             categories={categoriesWithPosts}

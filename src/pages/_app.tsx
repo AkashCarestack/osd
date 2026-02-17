@@ -9,6 +9,8 @@ import Script from 'next/script'
 import { lazy, useEffect } from 'react'
 
 import BookDemoContextProvider from '~/components/Context/BookDemoProvider'
+import { getClient } from '~/lib/sanity.client'
+import { getSiteSettings } from '~/lib/sanity.queries'
 import { cookieSelector, slugToCapitalized } from '~/utils/common'
 import { orgSchema, siteLinkSchema } from '~/utils/customHead'
 import { checkCookie, eraseCookie,getCookie } from '~/utils/tracker/cookie'
@@ -21,6 +23,7 @@ export interface SharedPageProps {
   draftMode?: boolean
   token?: string
   locale?: string
+  favicon?: string
 }
 
 const PreviewProvider = lazy(() => import('~/components/PreviewProvider'))
@@ -30,7 +33,7 @@ function App({
   Component,
   pageProps,
 }: AppProps<SharedPageProps>) {
-  const { draftMode, token } = pageProps
+  const { draftMode, token, favicon } = pageProps
   const pathname: any = usePathname()
   const currentWindow = pathname && pathname?.split('/') || []
   const index = pathname?.split('/').length - 1 || 0
@@ -93,19 +96,39 @@ function App({
           style={{ display: 'none', visibility: 'hidden' }}></iframe></noscript>
         {/* <!--[END Google Tag Manager (noscript)]--> */}
         <Head>
-          <link
-            rel="icon"
-            href="/favicon-32x32.ico"
-            sizes="32x32"
-            type="image/png"
-          />
-          <link
-            rel="icon"
-            href="/VoiceStack.svg"
-            sizes="16x16"
-            type="image/png"
-          />
-          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+          {favicon ? (
+            <>
+              <link
+                rel="icon"
+                href={favicon}
+                sizes="32x32"
+                type="image/png"
+              />
+              <link
+                rel="icon"
+                href={favicon}
+                sizes="16x16"
+                type="image/png"
+              />
+              <link rel="shortcut icon" href={favicon} type="image/x-icon" />
+            </>
+          ) : (
+            <>
+              <link
+                rel="icon"
+                href="/favicon-32x32.ico"
+                sizes="32x32"
+                type="image/png"
+              />
+              <link
+                rel="icon"
+                href="/VoiceStack.svg"
+                sizes="16x16"
+                type="image/png"
+              />
+              <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+            </>
+          )}
         </Head>
         {orgSchema()}
         {siteLinkSchema()}
@@ -131,6 +154,35 @@ const TrackWrapper = track(
   },
   // }
 )(App);
+
+TrackWrapper.getInitialProps = async (appContext: any) => {
+  let favicon = null;
+  
+  try {
+    const client = getClient();
+    const siteSettings = await getSiteSettings(client);
+    const siteSetting = siteSettings?.[0];
+    
+    if (siteSetting?.favicon?.url) {
+      favicon = siteSetting.favicon.url;
+    }
+  } catch (error) {
+    console.error('Error fetching site settings for favicon:', error);
+  }
+
+  // Call the page's getInitialProps if it exists
+  // Note: Pages using getStaticProps/getServerSideProps will have their props
+  // automatically merged, so we only need to call getInitialProps for pages that use it
+  let pageProps: any = {};
+  if (appContext.Component.getInitialProps) {
+    pageProps = await appContext.Component.getInitialProps(appContext.ctx);
+  }
+
+  return {
+    ...pageProps,
+    favicon,
+  };
+};
 
 export default TrackWrapper;
 
