@@ -139,6 +139,29 @@ export const categoriesQuery = groq`*[_type == "category" ]  | order(categoryNam
     language,
     ${imageFragment},
   },
+  "glossary": glossary-> {
+    _id,
+    mainHeading,
+    subheading,
+    terms[] {
+      term,
+      value
+    }
+  },
+  "faq": faq-> {
+    _id,
+    name,
+    "author": author-> {
+      _id,
+      name,
+      slug,
+      ${authorImageFragment},
+    },
+    faqs[] {
+      question,
+      answer
+    }
+  },
 }`
 export const tagsByOrderQuery = groq`*[_type == "tag" ] | order(tagName asc) {_id, slug, tagName}`
 
@@ -1433,6 +1456,29 @@ export const getCategoryBySlugQuery = groq`
       date,
       language,
       ${imageFragment},
+    },
+    "glossary": glossary-> {
+      _id,
+      mainHeading,
+      subheading,
+      terms[] {
+        term,
+        value
+      }
+    },
+    "faq": faq-> {
+      _id,
+      name,
+      "author": author-> {
+        _id,
+        name,
+        slug,
+        ${authorImageFragment},
+      },
+      faqs[] {
+        question,
+        answer
+      }
     },
   }
 `
