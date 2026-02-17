@@ -117,10 +117,36 @@ export default function Card({
   useEffect(() => {
     if (router.isReady && post?.slug) {
       const { locale = 'en' } = router.query;
-      
-      // Prioritize content type route format to include content type (e.g., "podcast") in URL
-      const contentTypePath = getBasePath(router, post.contentType);
       const contentSlug = post?.slug?.current?.replace(/^\/+/, '').replace(/\/+$/, '') || '';
+      
+      // Check if we're on the topic index page
+      const topicBase = siteConfig.categoryBaseUrls.base;
+      const isTopicIndexPage = pathname === `/${topicBase}` || 
+                               pathname === `/${locale}/${topicBase}` ||
+                               pathname.endsWith(`/${topicBase}`);
+      
+      // If on topic index page, prioritize topic route format
+      if (isTopicIndexPage) {
+        const hasCategory = post?.category && post.category.slug?.current;
+        
+        if (hasCategory) {
+          const categorySlug = post.category.slug.current.replace(/^\/+/, '').replace(/\/+$/, '');
+          
+          const newLinkUrl = varyingIndex
+            ? locale === 'en' 
+              ? `/${topicBase}/${categorySlug}`
+              : `/${locale}/${topicBase}/${categorySlug}`
+            : locale === 'en'
+              ? `/${topicBase}/${categorySlug}/${contentSlug}`
+              : `/${locale}/${topicBase}/${categorySlug}/${contentSlug}`;
+
+          setLinkUrl(newLinkUrl);
+          return;
+        }
+      }
+      
+      // Otherwise, prioritize content type route format to include content type (e.g., "podcast") in URL
+      const contentTypePath = getBasePath(router, post.contentType);
       
       // If content type path exists (e.g., "podcast", "article"), use it
       if (contentTypePath) {
@@ -141,7 +167,6 @@ export default function Card({
         
         if (hasCategory) {
           const categorySlug = post.category.slug.current.replace(/^\/+/, '').replace(/\/+$/, '');
-          const topicBase = siteConfig.categoryBaseUrls.base;
           
           const newLinkUrl = varyingIndex
             ? locale === 'en' 
@@ -155,7 +180,7 @@ export default function Card({
         }
       }
     }
-  }, [router.isReady, post?.contentType, post?.slug, post?.category, varyingIndex, router.query.locale, router]);
+  }, [router.isReady, post?.contentType, post?.slug, post?.category, varyingIndex, router.query.locale, router, pathname]);
 
   if (!post || !linkUrl) {
     return null
