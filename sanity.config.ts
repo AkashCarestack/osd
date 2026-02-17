@@ -87,7 +87,9 @@ export default defineConfig({
             "eventCard",
             "category",
             'testimonial',
-            'footer'
+            'footer',
+            'glossary',
+            'faq'
       ],
     }),
 
@@ -160,6 +162,16 @@ export default defineConfig({
             S.documentTypeListItem('testimonial').title('Testimonial'),
             S.documentTypeListItem('videos').title('Video'),
             S.documentTypeListItem('eventCard').title('Events Card'),
+            S.listItem()
+              .title('Content Repo')
+              .child(
+                S.list()
+                  .title('Content Repo')
+                  .items([
+                    S.documentTypeListItem('glossary').title('Glossary'),
+                    S.documentTypeListItem('faq').title('FAQ'),
+                  ])
+              ),
             S.documentTypeListItem('homeSettings').title('Home Page').icon(HomeIcon),
             S.documentTypeListItem('footer').title('Footer').icon(GroqIcon),
             S.listItem()

@@ -46,6 +46,31 @@ export const getStaticPaths: GetStaticPaths = async () => {
         // Get category with associated content
         const categoryWithContent = await getCategory(client, category.slug?.current)
         
+        if (!categoryWithContent || !category.slug?.current) continue
+        
+        // Add glossary path if it exists
+        if (categoryWithContent?.glossary) {
+          pathsForLocale.push({
+            params: {
+              slug: category.slug.current,
+              contentSlug: 'glossary',
+              locale: locale,
+            },
+          })
+        }
+        
+        // Add FAQ path if it exists
+        if (categoryWithContent?.faq) {
+          pathsForLocale.push({
+            params: {
+              slug: category.slug.current,
+              contentSlug: 'faq',
+              locale: locale,
+            },
+          })
+        }
+        
+        // Add associated content paths
         if (categoryWithContent?.associatedContent && categoryWithContent.associatedContent.length > 0) {
           for (const content of categoryWithContent.associatedContent) {
             // Filter by language/region if content has a language field
@@ -90,25 +115,49 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }
 
-  const [category, content] = await Promise.all([
-    getCategory(client, categorySlug),
-    getPostBySlugAndRegion(client, contentSlug, region),
-  ])
-
-  if (!category || !content) {
+  const category = await getCategory(client, categorySlug)
+  
+  if (!category) {
     return {
       notFound: true,
     }
   }
 
-  // Verify that the content is associated with this category
-  const isAssociated = category?.associatedContent?.some(
-    (item: any) => item?.slug?.current === contentSlug
-  )
+  // Handle glossary and FAQ routes
+  const isGlossary = contentSlug === 'glossary'
+  const isFAQ = contentSlug === 'faq'
+  
+  let content = null
+  if (!isGlossary && !isFAQ) {
+    content = await getPostBySlugAndRegion(client, contentSlug, region)
+    
+    if (!content) {
+      return {
+        notFound: true,
+      }
+    }
 
-  if (!isAssociated) {
-    return {
-      notFound: true,
+    // Verify that the content is associated with this category
+    const isAssociated = category?.associatedContent?.some(
+      (item: any) => item?.slug?.current === contentSlug
+    )
+
+    if (!isAssociated) {
+      return {
+        notFound: true,
+      }
+    }
+  } else {
+    // For glossary/FAQ, verify they exist in the category
+    if (isGlossary && !category?.glossary) {
+      return {
+        notFound: true,
+      }
+    }
+    if (isFAQ && !category?.faq) {
+      return {
+        notFound: true,
+      }
     }
   }
 
@@ -211,8 +260,11 @@ export default function TopicContentPage({
   const router = useRouter()
   const baseUrl = `/${siteConfig.categoryBaseUrls.base}/${category?.slug?.current}`
   const currentContentSlug = content?.slug?.current || (router.query.contentSlug as string)
+  const isGlossary = currentContentSlug === 'glossary'
+  const isFAQ = currentContentSlug === 'faq'
 
-  if (!content) {
+  // If it's glossary or FAQ, content might be null, which is fine
+  if (!isGlossary && !isFAQ && !content) {
     return null
   }
 
@@ -228,65 +280,130 @@ export default function TopicContentPage({
             categories={categoriesWithPosts}
             contentCount={{}}
           /> */}
-          <MainImageSection enableDate={false} post={content} categoryName={category?.categoryName} />
+          <MainImageSection 
+            enableDate={false} 
+            post={isGlossary || isFAQ ? { title: isGlossary ? category?.glossary?.mainHeading : category?.faq?.name } : content} 
+            categoryName={category?.categoryName} 
+            categoryDescription={category?.categoryDescription} 
+            revamp={true} 
+          />
           <Section className="justify-center">
             <Wrapper className={`flex-col`}>
               <div className="flex md:flex-row flex-col-reverse gap-6 md:gap-12 justify-between">
                 {/* Left Sidebar - Articles in Section (if associatedContent) OR TOC (if no associatedContent), Share */}
                 <div className="flex flex-col gap-8 md:mt-12 relative md:w-1/3 md:max-w-[410px] w-full">
                   <div className="sticky top-24 flex flex-col gap-8 md:overflow-auto">
-                    {/* Show Articles in Section if category has associated content, otherwise show TOC */}
-                    {category?.associatedContent && category.associatedContent.length > 0 ? (
+                    {/* Show Articles in Section if category has associated content, glossary, or FAQ, otherwise show TOC */}
+                    {(category?.associatedContent && category.associatedContent.length > 0) || category?.glossary || category?.faq ? (
                       <ArticlesInSection
-                        associatedContent={category.associatedContent}
+                        associatedContent={category.associatedContent || []}
                         categorySlug={category?.slug?.current}
                         currentContentSlug={currentContentSlug}
+                        glossary={category?.glossary}
+                        faq={category?.faq}
                       />
                     ) : (
                       content?.headings && (
                         <Toc headings={content?.headings} title="Contents" />
                       )
                     )}
-                    <ShareableLinks props={content?.title} />
+                    <ShareableLinks props={
+                      isGlossary 
+                        ? category?.glossary?.mainHeading 
+                        : isFAQ 
+                        ? category?.faq?.name 
+                        : content?.title
+                    } />
                   </div>
                 </div>
                 {/* Main Content Area - Body */}
                 <div className="md:mt-12 flex-1 flex flex-col gap-8 md:w-2/3 w-full md:max-w-[710px]">
-                  {/* Article Title */}
-                  <h1 className="text-zinc-900 font-manrope leading-tight lg:text-4xl text-2xl font-bold">
-                    {content?.title || 'Article Title'}
-                  </h1>
-                  {/* Date and Read Time */}
-                  {/* {content?.date && (
-                    <div className="flex items-center gap-2 text-zinc-600 text-sm font-medium">
-                      <span>{formatDateShort(content.date)}</span>
-                      {content?.estimatedReadingTime && (
-                        <>
-                          <span className="text-zinc-400">•</span>
-                          <span>{content.estimatedReadingTime} min read</span>
-                        </>
+                  {/* Render Glossary */}
+                  {isGlossary && category?.glossary ? (
+                    <>
+                      <h1 className="text-zinc-900 font-manrope leading-tight lg:text-4xl text-2xl font-bold">
+                        {category.glossary.mainHeading || 'Glossary'}
+                      </h1>
+                      {category.glossary.subheading && (
+                        <p className="text-zinc-600 text-base leading-relaxed">
+                          {category.glossary.subheading}
+                        </p>
                       )}
-                    </div>
-                  )} */}
-                  {/* Author Info */}
-                  {content?.author && content.author.length > 0 && (
-                    <AuthorInfo author={content?.author} />
+                      {category.glossary.terms && category.glossary.terms.length > 0 && (
+                        <div className="flex flex-col gap-6 w-full">
+                          {category.glossary.terms.map((termItem: any, index: number) => (
+                            <div key={index} className="border-b border-zinc-200 pb-6 last:border-b-0">
+                              <h3 className="text-zinc-900 font-semibold text-lg mb-2">
+                                {termItem.term}
+                              </h3>
+                              <p className="text-zinc-600 text-base leading-relaxed">
+                                {termItem.value}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : isFAQ && category?.faq ? (
+                    <>
+                      <h1 className="text-zinc-900 font-manrope leading-tight lg:text-4xl text-2xl font-bold">
+                        {category.faq.name || 'Frequently Asked Questions'}
+                      </h1>
+                      {category.faq.author && category.faq.author.length > 0 && (
+                        <AuthorInfo author={category.faq.author} />
+                      )}
+                      {category.faq.faqs && category.faq.faqs.length > 0 && (
+                        <div className="flex flex-col gap-4 w-full">
+                          {category.faq.faqs.map((faqItem: any, index: number) => (
+                            <div key={index} className="border border-zinc-200 rounded-lg p-6">
+                              <h3 className="text-zinc-900 font-semibold text-lg mb-3">
+                                {faqItem.question}
+                              </h3>
+                              <p className="text-zinc-600 text-base leading-relaxed whitespace-pre-wrap">
+                                {faqItem.answer}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {/* Article Title */}
+                      <h1 className="text-zinc-900 font-manrope leading-tight lg:text-4xl text-2xl font-bold">
+                        {content?.title || 'Article Title'}
+                      </h1>
+                      {content?.date && (
+                        <div className="flex items-center gap-2 text-zinc-600 text-sm font-medium">
+                          <span>{formatDateShort(content.date)}</span>
+                          {content?.estimatedReadingTime && (
+                            <>
+                              <span className="text-zinc-400">•</span>
+                              <span>{content.estimatedReadingTime} min read</span>
+                            </>
+                          )}
+                        </div>
+                      )}
+                      {content?.author && content.author.length > 0 && (
+                        <AuthorInfo author={content?.author} />
+                      )}
+                      <div className="post__content w-full">
+                        <SanityPortableText
+                          content={content?.body}
+                          draftMode={false}
+                          token={null}
+                        />
+                      </div>
+                    </>
                   )}
-                  <div className="post__content w-full">
-                    <SanityPortableText
-                      content={content?.body}
-                      draftMode={false}
-                      token={null}
-                    />
-                  </div>
                 </div>
               </div>
-              {content?.tags && content.tags.length > 0 && (
+              {!isGlossary && !isFAQ && content?.tags && content.tags.length > 0 && (
                 <RelatedTag tags={content?.tags} />
               )}
             </Wrapper>
           </Section>
-          {relatedContents && relatedContents.length > 0 && (
+          {!isGlossary && !isFAQ && relatedContents && relatedContents.length > 0 && (
             <RelatedFeaturesSection
               contentType={content?.contentType}
               allPosts={relatedContents}

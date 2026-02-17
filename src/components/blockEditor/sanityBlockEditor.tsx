@@ -120,6 +120,12 @@ const SanityPortableText: React.FC<SanityPortableTextProps> = ({
     },
   }
 
+  // Check if content exists and is valid
+  if (!content || (Array.isArray(content) && content.length === 0)) {
+    console.warn('SanityPortableText: content is empty or undefined', content)
+    return null
+  }
+
   return <PortableText value={content} components={portableTextComponents} />
 }
 
