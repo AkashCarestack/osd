@@ -95,7 +95,10 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
   const revampClass = uiType && uiType === 'category' ? true : false
 
   let categoryName =  revampClass ? catName : 'All Content'
-  let categoryUrl = `/${categoryName ? `${siteConfig.categoryBaseUrls.base}/${catUrl} `: siteConfig.paginationBaseUrls.base}`
+  // For topic index page, always redirect to topic index instead of category page
+  let categoryUrl = revampClass 
+    ? `/${siteConfig.categoryBaseUrls.base}`
+    : `/${categoryName ? `${siteConfig.categoryBaseUrls.base}/${catUrl} `: siteConfig.paginationBaseUrls.base}`
 
   const isBrowsePath = router.pathname.includes('browse/') || router.pathname.startsWith('/[locale]/browse')
   

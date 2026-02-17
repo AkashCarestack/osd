@@ -534,8 +534,14 @@ export const homeSettingsQuery = groq`
 `
 
 const siteSettingsQuery = groq`*[_type == "siteSetting"] | order(date desc) {
-...,
-
+  ...,
+  "favicon": favicon.asset-> {
+    _id,
+    url,
+    metadata {
+      dimensions
+    }
+  }
 }`
 
 export async function getPosts(
