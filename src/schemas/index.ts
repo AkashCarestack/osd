@@ -28,6 +28,8 @@ import table from './table'
 import tag from './tag'
 import testiMonial from './testiMonial'
 import videos from './videos'
+import glossary from './contentRepo/glossary'
+import faq from './contentRepo/faq'
 
 export const schemaTypes = [
   post,
@@ -57,7 +59,9 @@ export const schemaTypes = [
   customContent,
   eventCard,
   category,
-  footer
+  footer,
+  glossary,
+  faq
 ]
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -88,6 +92,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     customContent,
     eventCard,
     category,
-    footer
+    footer,
+    glossary,
+    faq
   ],
 }
