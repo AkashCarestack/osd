@@ -23,6 +23,8 @@ interface Props {
   contentType?: string
   landing?: boolean
   categoryName?: string
+  categoryDescription?: string
+  revamp?: boolean
 }
 
 const MainImageSection = ({
@@ -33,6 +35,8 @@ const MainImageSection = ({
   contentType,
   landing = false,
   categoryName,
+  categoryDescription,
+  revamp = false,
 }: Props) => {
   const router = useRouter();
   const { locale } = router.query; 
@@ -48,6 +52,145 @@ const MainImageSection = ({
   }
 
  let hrefTemplate = tag?.slug?.current ? `/${siteConfig.paginationBaseUrls.base}/${tag?.slug?.current} `: ''
+
+  if (revamp) {
+    return (
+      <>
+        <style dangerouslySetInnerHTML={{__html: `
+          .revamp-breadcrumb-wrapper {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            z-index: 50 !important;
+            position: relative !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: 24px !important;
+          }
+          .revamp-breadcrumb-wrapper nav {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            color: #d4d4d8 !important;
+            margin-bottom: 1rem !important;
+            cursor: pointer !important;
+          }
+          .revamp-breadcrumb-wrapper nav,
+          .revamp-breadcrumb-wrapper nav *,
+          .revamp-breadcrumb-wrapper nav div,
+          .revamp-breadcrumb-wrapper nav span,
+          .revamp-breadcrumb-wrapper nav a {
+            visibility: visible !important;
+            opacity: 1 !important;
+            display: inline-block !important;
+            color: #d4d4d8 !important;
+          }
+          .revamp-breadcrumb-wrapper a,
+          .revamp-breadcrumb-wrapper a *,
+          .revamp-breadcrumb-wrapper nav a {
+            color: #d4d4d8 !important;
+            text-decoration: none !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            display: inline-block !important;
+          }
+          .revamp-breadcrumb-wrapper span:not(:has(svg)),
+          .revamp-breadcrumb-wrapper nav span:not(:has(svg)) {
+            color: #71717a !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            display: inline-block !important;
+          }
+          .revamp-breadcrumb-wrapper svg,
+          .revamp-breadcrumb-wrapper nav svg {
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            color: #71717a !important;
+            fill: #71717a !important;
+            width: 24px !important;
+            height: 24px !important;
+          }
+          .revamp-breadcrumb-wrapper div {
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+          }
+          .revamp-breadcrumb-wrapper .zinc-300,
+          .revamp-breadcrumb-wrapper [class*="zinc-300"] {
+            color: #d4d4d8 !important;
+          }
+          .revamp-breadcrumb-wrapper .zinc-400,
+          .revamp-breadcrumb-wrapper [class*="zinc-400"] {
+            color: #a1a1aa !important;
+          }
+          .revamp-breadcrumb-wrapper .zinc-500,
+          .revamp-breadcrumb-wrapper [class*="zinc-500"] {
+            color: #71717a !important;
+          }
+        `}} />
+        <div className="w-full bg-zinc-900 relative overflow-hidden pt-headerSpacerMob">
+          <Section className="flex justify-center w-full !py-0 relative overflow-hidden">
+            <Wrapper className="z-10 relative flex h-auto flex-col md:flex-row items-start  min-h-[250px] md:min-h-[341px] overflow-hidden">
+              <div className="flex flex-col gap-12 md:gap-[48px] items-start flex-1 pb-16 md:pb-[64px] pt-24 md:pt-[96px] relative z-10 max-w-full md:max-w-[598px]">
+                <div className="flex flex-col gap-[6px] items-start w-full">
+                  <div 
+                    className="revamp-breadcrumb-wrapper w-full !block !visible !opacity-100"
+                    style={{
+                      display: 'block',
+                      visibility: 'visible',
+                      opacity: 1,
+                      zIndex: 50,
+                      position: 'relative',
+                      width: '100%',
+                      minHeight: '24px'
+                    }}
+                  >
+                    <Breadcrumb className="!text-zinc-300" />
+                  </div>
+             
+              </div>
+              <div className="flex flex-col gap-3 md:gap-[12px] items-start justify-center w-full">
+                <h1 className="text-white font-manrope font-bold leading-[1.1] text-3xl md:text-[48px] tracking-[-0.96px]">
+                  {categoryName || post?.title || 'Post Title'}
+                </h1>
+                {categoryDescription && (
+                  <p className="text-white text-sm md:text-base font-normal leading-[1.6] opacity-70 whitespace-pre-wrap">
+                    {categoryDescription}
+                  </p>
+                )}
+                {!categoryDescription && post?.description && (
+                  <p className="text-white text-sm md:text-base font-normal leading-[1.6] opacity-70 whitespace-pre-wrap">
+                    {post.description}
+                  </p>
+                )}
+              </div>
+            </div>
+           </Wrapper>
+           <div className="absolute top-0 bottom-0 right-0 hidden md:block w-[478.379px] h-full z-0 pointer-events-none overflow-hidden">
+                <div className="w-full h-full origin-center relative flex items-center justify-center">
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    viewBox="0 0 391 341" 
+                    fill="none"
+                    className="w-full h-full"
+                    preserveAspectRatio="none"
+                  >
+                    <path 
+                      d="M89.9399 279.92C54.8333 198.852 24.2299 90.0657 -0.000488283 -38.963L-0.000488281 -39L478.379 -39L478.379 -38.8569C454.151 90.126 423.556 198.875 388.458 279.92L478.379 279.92L478.379 439.379L-0.000509192 439.379L-0.000502222 279.92L89.9399 279.92Z" 
+                      fill="#27272A"
+                    />
+                  </svg>
+                </div>
+              </div>
+        </Section>
+        
+      </div>
+      </>
+    )
+  }
 
   return (
     <div className="w-full flex gap-1 items-center bg-zinc-900 relative overflow-hidden pt-headerSpacerMob">
