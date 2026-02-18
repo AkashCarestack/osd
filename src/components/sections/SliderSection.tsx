@@ -64,9 +64,9 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
     }
 
     return (
-      <div className="flex w-full justify-center px-4">
-        <section className="my-9 max-w-7xl w-full">
-          <div className="flex justify-between gap-6 pb-9">
+      <div className="flex w-full justify-center px-4 bg-zinc-100">
+        <section className="md:py-24 py-16 max-w-7xl w-full">
+          <div className="flex justify-between gap-6 pb-12">
             <div className="flex flex-col gap-3">
               <H2Large className="text-zinc-900">Major Topics</H2Large>
               <p className="text-zinc-900 opacity-80 text-base font-medium leading-[1.6] max-w-[601px]">
@@ -171,10 +171,10 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
                         {/* Read Now link */}
                         <div className="flex gap-2 items-center">
                           <span className="text-zinc-900 text-base font-medium leading-[1.6]">
-                            Read Now
+                            Learn More
                           </span>
                           <div className="flex items-center justify-center">
-                            <div className="-scale-y-100 flex-none">
+                            <div className="scale-x-[1] scale-y-[1] flex-none">
                               <ArrowTopRightIcon
                                 className="group-hover:translate-y-[-2px] transition-transform duration-300"
                                 height={20}
@@ -199,7 +199,7 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
   if (!items || items.length === 0) return null
   return (
     <div className={` flex w-full justify-center px-4 `}>
-      <section className="my-9 max-w-7xl w-full">
+      <section className='max-w-7xl w-full'>
         <div className="flex justify-between gap-6 pb-9">
           <H2Large>{`Ebooks and Webinars`}</H2Large>
           <div className="flex gap-9 self-end">
