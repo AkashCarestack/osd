@@ -37,6 +37,7 @@ interface LatestBlogsProps {
   compIndex?: number
   customHeading?: string
   customButtonText?: string
+  headingWithLineBreak?: boolean
 }
 
 const AllcontentSection: React.FC<LatestBlogsProps> = ({
@@ -54,7 +55,8 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
   uiType,
   compIndex,
   customHeading,
-  customButtonText
+  customButtonText,
+  headingWithLineBreak = false
 }) => {
   const postsToShow = itemsPerPage || siteConfig.pagination.childItemsPerPage
   const [selectedTag, setSelectedTag] = useState('')
@@ -184,12 +186,12 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
   }
   
   return (
-    <Section className={`justify-center md:pb-0 ${revampClass && compIndex === 0 ? 'md:pt-16' : revampClass ? 'md:pt-9' : 'md:pt-24'} ${!homeSettings?.eventCarousel && 'md:pb-24'} ${className}`}>  
+    <Section className={`justify-center ${headingWithLineBreak ? 'bg-zinc-100' : ''} ${revampClass && compIndex === 0 ? 'md:pt-16' : revampClass ? 'md:pt-9' : 'md:pt-24'} ${!homeSettings?.eventCarousel && 'md:pb-24'} ${className}`}>  
       <Wrapper className={`flex-col ${revampClass && 'bg-zinc-100 md:p-12 p-6'}`}>
       {!hideHeader && (
         <div className={`md:flex-row flex-col gap-8 flex ${revampClass ? 'items-start' : 'items-center'} justify-between pb-12 `}>
           {!pathname.includes(`/${siteConfig.categoryBaseUrls.base}/`) &&  <div className='flex flex-col gap-4'>
-            <H2Large className="tracking-tighterText select-none">
+            <H2Large className={`tracking-tighterText select-none ${headingWithLineBreak ? 'md:max-w-[450px]' : 'w-full'}`}>
               {`${selectedTag ? selectedTag : revampClass ? categoryName: browseHeading } `}
             </H2Large>
             {revampClass && <DescriptionText className='text-zinc-600 md:max-w-[659px] w-full'>

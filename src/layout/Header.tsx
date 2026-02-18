@@ -209,7 +209,7 @@ const Header = () => {
                           );
                         })}
                       </nav>
-                      <RegionSwitcher className='md:pl-10'/>
+                      {/* <RegionSwitcher className='md:pl-10'/> */}
                     </div>
                     {isMobile && <div onClick={toggleMenu} className={`flex text-zinc-900 cursor-pointer items-center select-none z-20 rounded-lg lg:rounded-xl lg:py-[6px] lg:pr-[10px] lg:pl-[14px]
                       ${showMenu ? 'absolute top-5 lg:top-[8px] right-5 lg:right-[8px] lg:relative' : 'bg-white'}`}>
