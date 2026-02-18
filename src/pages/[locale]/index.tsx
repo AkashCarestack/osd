@@ -158,6 +158,8 @@ export const getStaticProps: GetStaticProps<
         releaseNotes: [],
         footerData: [],
         podcasts: [],
+        categories: [],
+        faqCategories: [],
         error: true,
       },
     }

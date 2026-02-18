@@ -118,7 +118,7 @@ const DynamicPages = ({
         <TestimonialSection testimonials={testimonialList} />
 
         <div id="faqs-section">
-          <FAQSection faqData={homeSettings?.faqSection} />
+          <FAQSection faqCategories={faqCategories} />
         </div>
         <div id="events-updates-section">
           <EventCarousel bgColor={'white'} allEventCards={uniqueEventCards} />
