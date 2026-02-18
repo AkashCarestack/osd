@@ -1,12 +1,12 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
+import Anchor from '~/components/commonSections/Anchor'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import Layout from '~/components/Layout'
-import Anchor from '~/components/commonSections/Anchor'
 import { getClient } from '~/lib/sanity.client'
 import {
   getAllFAQs,
@@ -350,9 +350,9 @@ export default function FAQPage({
                 <div className="flex-1 lg:max-w-[50%]">
                   <p className="text-gray-600 text-base leading-relaxed">
                     If you have a question about OS Dental University, then someone else has likely
-                    already asked about the same topic. We've collected a list of the most
+                    already asked about the same topic. We&apos;ve collected a list of the most
                     frequently asked questions, so feel free to browse by topic to find an answer.
-                    And please don't hesitate to contact our support team for additional
+                    And please don&apos;t hesitate to contact our support team for additional
                     information!
                   </p>
                 </div>
