@@ -8,7 +8,8 @@ const siteConfig = {
   pageURLs: {
     home: '/',
     blog: 'blog',
-    article: 'article',
+    article: 'topic',
+    topic: 'topic',
     caseStudy: 'case-study',
     ebook: 'ebook',
     about: 'about',

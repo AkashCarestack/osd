@@ -51,6 +51,7 @@ interface CardProps {
   baseUrl?: string
   contentType?:
   | 'ebook'
+  | 'topic'
   | 'article'
   | 'podcast'
   | 'webinar'
@@ -145,10 +146,32 @@ export default function Card({
         }
       }
       
-      // Otherwise, prioritize content type route format to include content type (e.g., "podcast") in URL
+      // Check if content type is topic/article - these need category slug in URL
       const contentTypePath = getBasePath(router, post.contentType);
+      const isTopicContent = post.contentType === 'topic' || post.contentType === 'article';
       
-      // If content type path exists (e.g., "podcast", "article"), use it
+      // For topic/article content, always use category-based format
+      if (isTopicContent) {
+        const hasCategory = post?.category && post.category.slug?.current;
+        
+        if (hasCategory) {
+          const categorySlug = post.category.slug.current.replace(/^\/+/, '').replace(/\/+$/, '');
+          
+          const newLinkUrl = varyingIndex
+            ? locale === 'en' 
+              ? `/${topicBase}/${categorySlug}`
+              : `/${locale}/${topicBase}/${categorySlug}`
+            : locale === 'en'
+              ? `/${topicBase}/${categorySlug}/${contentSlug}`
+              : `/${locale}/${topicBase}/${categorySlug}/${contentSlug}`;
+
+          setLinkUrl(newLinkUrl);
+          return;
+        }
+      }
+      
+      // Otherwise, prioritize content type route format to include content type (e.g., "podcast") in URL
+      // If content type path exists (e.g., "podcast", "webinar"), use it
       if (contentTypePath) {
         const normalizedContentPath = contentTypePath.replace(/^\/+/, '').replace(/\/+$/, '');
         
