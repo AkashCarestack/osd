@@ -219,10 +219,13 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqCategories = [] }) => {
   return (
     <Section className="justify-center bg-white">
       <Wrapper className="w-full">
-        <div className="w-full lg:py-24">
+        <div className="w-full">
+          {/* FAQ Title */}
+          <h2 className="font-manrope md:max-w-[450px] md:text-5xl text-3xl md:font-extrabold font-semibold leading-[110%] tracking-[-0.96px] text-[#18181B] mb-8 lg:mb-12">
+            Frequently Asked Questions
+          </h2>
+
           {/* Main Content */}
-         
-          
           <div className="flex lg:flex-row flex-col md:justify-between gap-8">
             {/* Mobile Dropdown */}
             <div className="lg:hidden w-full">
