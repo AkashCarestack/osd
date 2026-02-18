@@ -116,6 +116,12 @@ export const postsQuery = groq`
     tagName,
     slug
   },
+  "category": category->{
+    _id,
+    categoryName,
+    categoryDescription,
+    slug,
+  },
 }
 `
 
@@ -581,6 +587,33 @@ export async function getTags(client: SanityClient): Promise<Tag[]> {
 }
 export async function getCategories(client: SanityClient,): Promise<any[]> {
   return await client.fetch(categoriesQuery,)
+}
+
+export const allFAQsQuery = groq`
+  *[_type == "category" && defined(faq)] | order(categoryName asc) {
+    _id,
+    categoryName,
+    categoryDescription,
+    slug,
+    "faq": faq-> {
+      _id,
+      name,
+      "author": author-> {
+        _id,
+        name,
+        slug,
+        ${authorImageFragment},
+      },
+      faqs[] {
+        question,
+        answer
+      }
+    }
+  }
+`
+
+export async function getAllFAQs(client: SanityClient): Promise<any[]> {
+  return await client.fetch(allFAQsQuery)
 }
 export async function getTagsByOrder(client: SanityClient): Promise<Tag[]> {
   return await client.fetch(tagsByOrderQuery)

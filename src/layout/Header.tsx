@@ -169,6 +169,28 @@ const Header = () => {
                       <nav className="flex flex-col lg:flex-row lg:gap-10 flex-wrap border-b border-zinc-800 pb-4 lg:pb-0 lg:border-0">
                         {navigationLinks && navigationLinks?.map((link) => {
                           const isActive = activeSection === link.id;
+                          const isFAQ = link.id === 'faqs';
+                          const faqUrl = router.isReady ? generateHref(locale as string, '/faq') : '/faq';
+                          
+                          if (isFAQ) {
+                            return (
+                              <Anchor
+                                key={link.id}
+                                href={faqUrl}
+                                className={`text-base transition-colors duration-200 relative pb-1 lg:pb-0 ${
+                                  router.asPath.includes('/faq')
+                                    ? 'text-white'
+                                    : 'text-zinc-500 hover:text-zinc-300'
+                                }`}
+                              >
+                                {link.label}
+                                {router.asPath.includes('/faq') && (
+                                  <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-white" />
+                                )}
+                              </Anchor>
+                            );
+                          }
+                          
                           return (
                             <button
                               key={link.id}

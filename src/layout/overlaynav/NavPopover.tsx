@@ -197,6 +197,21 @@ export const NavPopover = ({
                       setShowMenu(false);
                     }
                   };
+                  const isFAQ = link.id === 'faqs';
+                  const faqUrl = generateHref(router.query.locale as string, '/faq');
+                  
+                  if (isFAQ) {
+                    return (
+                      <Anchor
+                        key={link.id}
+                        href={faqUrl}
+                        className="hover:text-zinc-500 self-start font-medium text-base lg:text-sm flex items-center gap-2 text-zinc-600 text-left"
+                      >
+                        {link.label}
+                      </Anchor>
+                    );
+                  }
+                  
                   return (
                     <button
                       key={link.id}
