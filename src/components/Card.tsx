@@ -247,28 +247,57 @@ export default function Card({
               </div>
               <div
                 style={{
-                  backgroundColor: `${color && color ? color : '#18181B'}`,
+                  backgroundColor: cardColor === '#2f6fa5' ? '#2f6fa5' : (color && color ? color : '#18181B'),
                 }}
-                className={`flex w-full h-full ${reverse ? 'rounded-t-lg' : 'rounded-b-lg'} ${ alignCard &&  'rounded-tl-none rounded-bl-none'  } p-6 md:p-9  flex-col items-start gap-10 ${!alignCard && 'flex-1'} `}
+                className={`flex w-full h-full ${reverse ? 'rounded-t-lg' : 'rounded-b-lg'} ${ alignCard &&  'rounded-tl-none rounded-bl-none'  } ${cardColor === '#2f6fa5' ? 'pb-9 pt-[42px] px-9' : 'p-6 md:p-9'} flex-col items-start ${cardColor === '#2f6fa5' ? 'gap-6' : 'gap-10'} ${!alignCard && 'flex-1'} `}
               >
-                <div className="flex flex-col gap-3">
-                  <SubText className="!text-white">
-                    {isPageUrl ? tag?.tagName : post.contentType}
-                  </SubText>
-                  <H3Large className="group-hover:underline underline-offset-4">
+                <div className={`flex flex-col ${cardColor === '#2f6fa5' ? 'gap-6' : 'gap-3'} w-full`}>
+                  {/* Label: Category | Date */}
+                  <div className={`flex items-start gap-3 text-sm font-inter font-medium leading-[1.5] tracking-[0.7px] uppercase ${cardColor === '#2f6fa5' ? 'text-white' : '!text-white'}`}>
+                    <span>
+                      {post.category?.categoryName || tag?.tagName || post.contentType || 'Knowledge Guides'}
+                    </span>
+                    {post.date || post._createdAt ? (
+                      <>
+                        <span>|</span>
+                        <span>
+                          {(() => {
+                            const date = new Date(post.date || post._createdAt)
+                            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                            return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+                          })()}
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
+                  {/* Title */}
+                  <h3 className={`font-manrope font-bold text-[36px] leading-[1.1] tracking-[-0.72px] !text-white group-hover:underline underline-offset-4 whitespace-pre-wrap ${cardColor === '#2f6fa5' ? '' : ''}`}>
                     {post.title}
-                  </H3Large>
-                  <DescriptionText className="text-opacity-70 line-clamp-3 overflow-hidden text-ellipsis">
-                    {post.desc ? post.desc : post.excerpt}
-                  </DescriptionText>
+                  </h3>
+                  {cardColor !== '#2f6fa5' && (
+                    <DescriptionText className="text-opacity-70 line-clamp-3 overflow-hidden text-ellipsis">
+                      {post.desc ? post.desc : post.excerpt}
+                    </DescriptionText>
+                  )}
                 </div>
                 {post.author && post.author.length > 0 && (
-                  <AuthorInfo
-                    isParentLink={true}
-                    className="!text-white"
-                    author={post.author}
-                    showNameOnly={true}
-                  />
+                  <div className="flex gap-4 items-center">
+                    {post.author[0]?.picture && (
+                      <div className="h-12 w-12 shrink-0 border-[3px] border-[rgba(255,255,255,0.2)] rounded-full overflow-hidden">
+                        <ImageLoader
+                          alt={post.author[0].name}
+                          imageClassName="rounded-full !m-0"
+                          image={post.author[0].picture}
+                          height={48}
+                          width={48}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      </div>
+                    )}
+                    <span className="font-inter font-semibold text-[18px] leading-[1.625] text-white">
+                      {post.author[0]?.name}
+                    </span>
+                  </div>
                 )}
               </div>
             </div>
@@ -349,16 +378,30 @@ export default function Card({
           <Anchor href={linkUrl}>
             <AnimatingWrapper transitionType="slide-in" delay={0.8} immediate={index < 2}>
               <div
-                className={`${!isLast && `border-b-2`} pb-6 flex flex-col gap-3  border-zinc-800 !text-black`}
+                className={`${!isLast ? `border-b border-[rgba(24,24,27,0.2)]` : ''} py-8 flex flex-col gap-3 !text-black`}
               >
-                {post.contentType && (
-                  <SubText>{isPageUrl ? tag?.tagName : post.contentType}</SubText>
-                )}
-                <H3Medium
-                  className={`group-hover: group-hover:underline underline-offset-4 tracking-[-0.72px] md:!text-[1.8rem] !text-black`}
-                >
+                {/* Label: Category | Date */}
+                <div className="flex items-start gap-3 text-[#71717a] text-sm font-inter font-medium leading-[1.5] tracking-[0.7px] uppercase">
+                  <span>
+                    {post.category?.categoryName || tag?.tagName || post.contentType || 'Knowledge Guides'}
+                  </span>
+                  {post.date || post._createdAt ? (
+                    <>
+                      <span>|</span>
+                      <span>
+                        {(() => {
+                          const date = new Date(post.date || post._createdAt)
+                          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                          return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+                        })()}
+                      </span>
+                    </>
+                  ) : null}
+                </div>
+                {/* Title */}
+                <h3 className="font-manrope font-bold text-[36px] leading-[1.1] tracking-[-0.72px] !text-[#18181b] group-hover:underline underline-offset-4 whitespace-pre-wrap">
                   {post.title}
-                </H3Medium>
+                </h3>
                 {isPageUrl && post.contentType === 'podcast' && (
                   <CreaterInfo creater={post?.author} duration={post?.duration} />
                 )}

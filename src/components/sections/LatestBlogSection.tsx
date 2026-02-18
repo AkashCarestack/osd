@@ -1,4 +1,9 @@
+import { ArrowTopRightIcon } from '@sanity/icons'
+import { useRouter } from 'next/router'
 import React from 'react'
+
+import Anchor from '~/components/commonSections/Anchor'
+import { generateHref } from '~/utils/common'
 
 import Wrapper from '../../layout/Wrapper'
 import Card from '../Card'
@@ -29,7 +34,9 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
   showPlayIcon,
 }) => {
   const baseUrl = useBaseUrl()
-    const { homeSettings } = useGlobalData();
+  const { homeSettings } = useGlobalData()
+  const router = useRouter()
+  const { locale } = router.query
 
   if (!contents) {
     return null
@@ -117,17 +124,53 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
   }
   
 
+  // Get the first blog's URL for "Read Now" link
+  const getFirstBlogUrl = () => {
+    if (!firstBlog?.slug?.current) return '#'
+    const contentSlug = firstBlog.slug.current.replace(/^\/+/, '').replace(/\/+$/, '')
+    const categorySlug = firstBlog?.category?.slug?.current
+    const topicBase = 'topic'
+    
+    if (categorySlug) {
+      return router.isReady 
+        ? generateHref(locale as string, `/${topicBase}/${categorySlug}/${contentSlug}`)
+        : '#'
+    }
+    return router.isReady && firstBlog.contentType
+      ? generateHref(locale as string, `/${firstBlog.contentType}/${contentSlug}`)
+      : '#'
+  }
+
   return (
     <React.Fragment>
       <Section className="justify-center !bg-white !text-black md:pt-headerSpacer pt-headerSpacerMob">
         <Wrapper
-          className={`md:flex-row md:pt-16 pt-8 flex-col ${reverse ? 'md:flex-row-reverse' : ''} gap-8 md:gap-12 xl:gap-36`}
+          className={`md:flex-row md:py-[15px] flex-col ${reverse ? 'md:flex-row-reverse' : ''} gap-8 md:gap-12 xl:gap-[140px]`}
         >
-          <div className="flex flex-col gap-9 xl:w-5/12 w-full flex-1 !text-black">
-            <H2Large className="select-none !text-black">
-              {reverse ? displayName : `Latest`}
-            </H2Large>
-            <div className="flex flex-col gap-8 !text-black">
+          <div className="flex flex-col gap-6 xl:w-[498px] w-full flex-1 !text-black">
+            <div className="flex gap-6 items-end">
+              <H2Large className="select-none !text-black font-extrabold text-[48px] leading-[1.1] tracking-[-0.96px]">
+                {reverse ? displayName : `Latest`}
+              </H2Large>
+              <Anchor
+                href={getFirstBlogUrl()}
+                className="flex gap-2 items-center group pb-1"
+              >
+                <span className="text-zinc-900 text-base font-medium leading-[1.6]">
+                  See All
+                </span>
+                <div className="flex items-center justify-center">
+                  <div className="scale-y-100 flex-none">
+                    <ArrowTopRightIcon
+                      className="group-hover:translate-y-[-2px] transition-transform duration-300"
+                      height={20}
+                      width={20}
+                    />
+                  </div>
+                </div>
+              </Anchor>
+            </div>
+            <div className="flex flex-col gap-0 !text-black">
               {otherBlogs.map((blog, i) => (
                 <Card
                   key={i + 1 || blog._id}
@@ -144,7 +187,7 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
               minHeight={350}
               contentType={contentType}
               baseUrl={baseUrl}
-              cardColor="bg-orange-700"
+              cardColor="#2f6fa5"
               reverse={reverse}
               cardType="top-image-card"
               key={firstBlog?._id}

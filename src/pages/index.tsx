@@ -9,6 +9,7 @@ import DynamicPages from '~/layout/DynamicPages'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
+  getAllFAQs,
   getCategories,
   getEbooks,
   getEventCards,
@@ -45,6 +46,7 @@ interface IndexPageProps {
   tags: Array<any>
   testimonials: Array<any>
   homeSettings: any
+  faqCategories: any[]
 }
 
 export const getStaticProps: GetStaticProps<
@@ -68,7 +70,8 @@ export const getStaticProps: GetStaticProps<
       allEventCards,
       categories,
       footerData,
-      podcasts
+      podcasts,
+      faqCategories
     ] = await Promise.all([
       getPosts(client, 5),
       getPosts(client),
@@ -83,8 +86,14 @@ export const getStaticProps: GetStaticProps<
       getEventCards(client),
       getCategories(client),
       getFooterData(client, region),
-      getPodcasts(client, 0, undefined, region)
+      getPodcasts(client, 0, undefined, region),
+      getAllFAQs(client)
     ])
+
+    // Filter categories that have FAQs
+    const categoriesWithFAQs = faqCategories.filter(
+      (category) => category.faq && category.faq.faqs && category.faq.faqs.length > 0,
+    )
 
     return {
       props: {
@@ -103,7 +112,8 @@ export const getStaticProps: GetStaticProps<
         allEventCards,
         categories,
         footerData,
-        podcasts: podcasts || []
+        podcasts: podcasts || [],
+        faqCategories: categoriesWithFAQs
       },
     }
   } catch (error) {
@@ -122,6 +132,7 @@ export const getStaticProps: GetStaticProps<
         footerData: [],
         podcasts: [],
         categories: [],
+        faqCategories: [],
         error: true,
       },
     }
@@ -167,6 +178,7 @@ export default function IndexPage(props: IndexPageProps) {
           releaseNotes={props?.releaseNotes}
           eventCards={eventCards}
           categories={props?.categories}
+          faqCategories={props?.faqCategories}
         />
       </Layout>
     </GlobalDataProvider>

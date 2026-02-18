@@ -31,6 +31,7 @@ interface DynamicProps {
   ebooks?: any
   releaseNotes?: any
   categories?: any[]
+  faqCategories?: any[]
 }
 
 const DynamicPages = ({
@@ -45,6 +46,7 @@ const DynamicPages = ({
   eventCards,
   podcasts,
   categories,
+  faqCategories,
 }: DynamicProps) => {
   const featuredBlog = homeSettings?.FeaturedBlog || posts[0]
   const customBrowseContent = homeSettings?.customBrowseContent 
@@ -96,12 +98,7 @@ const DynamicPages = ({
           featuredBlog={featuredBlog}
           popularBlogs={featuredContents}
         />
-        <div id="release-notes-section">
-          <ReleaseNotesHeroSection releaseNotes={releaseNotes} />
-        </div>
-        {/* <BannerSubscribeSection /> */}
-        <TestimonialSection testimonials={testimonialList} />
-        <div id="training-section">
+        <div id="training-section ">
           <AllcontentSection
             customBrowseContent={customBrowseContent}
             allContent={podcastPosts}
@@ -111,10 +108,17 @@ const DynamicPages = ({
             cardType="podcast-card"
             customHeading="Training for Onboarding & Learning"
             customButtonText="View All Trainings"
+            headingWithLineBreak={true}
           />
         </div>
+        <div id="release-notes-section">
+          <ReleaseNotesHeroSection releaseNotes={releaseNotes} />
+        </div>
+        {/* <BannerSubscribeSection /> */}
+        <TestimonialSection testimonials={testimonialList} />
+
         <div id="faqs-section">
-          <FAQSection faqData={homeSettings?.faqSection} />
+          <FAQSection faqCategories={faqCategories} />
         </div>
         <div id="events-updates-section">
           <EventCarousel bgColor={'white'} allEventCards={uniqueEventCards} />
