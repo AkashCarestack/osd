@@ -30,6 +30,7 @@ import testiMonial from './testiMonial'
 import videos from './videos'
 import glossary from './contentRepo/glossary'
 import faq from './contentRepo/faq'
+import whyPracticeLoveSection from './contentRepo/whyPracticeLoveSection'
 
 export const schemaTypes = [
   post,
@@ -61,7 +62,8 @@ export const schemaTypes = [
   category,
   footer,
   glossary,
-  faq
+  faq,
+  whyPracticeLoveSection
 ]
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -94,6 +96,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     category,
     footer,
     glossary,
-    faq
+    faq,
+    whyPracticeLoveSection
   ],
 }
