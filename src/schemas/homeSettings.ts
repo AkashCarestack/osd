@@ -33,6 +33,10 @@ export default {
       name: 'hero',
       title: 'Hero Section',
     },
+    {
+      name: 'whyPracticeLove',
+      title: 'Why Practices Love Section',
+    },
   ],
   fields: [
     {
@@ -242,6 +246,13 @@ export default {
       description: 'Configure the Hero section with title, description, and buttons',
       type: 'heroSection',
       group: 'hero',
+    },
+    {
+      name: 'whyPracticeLoveSection',
+      title: 'Why Practices Love Section',
+      description: 'Configure the Why Practices Love section with features and CTA',
+      type: 'whyPracticeLoveSection',
+      group: 'whyPracticeLove',
     },
     defineField({
       name: 'language',

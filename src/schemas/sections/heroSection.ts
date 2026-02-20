@@ -8,7 +8,7 @@ export default {
       title: 'Title',
       type: 'string',
       description: 'The main heading text',
-      initialValue: 'Centralized Resource for',
+      initialValue: 'Turn Data Into Action with Clinical Dashboards',
       validation: (Rule) => Rule.required().error('Title is required'),
     },
     {
@@ -16,7 +16,7 @@ export default {
       title: 'Title Highlight',
       type: 'string',
       description: 'The highlighted part of the title (optional)',
-      initialValue: 'OS Dental & DEO Group',
+      initialValue: '',
     },
     {
       name: 'description',
@@ -24,7 +24,7 @@ export default {
       type: 'text',
       description: 'The description text displayed in the hero section',
       initialValue:
-        "Here you'll find product updates, onboarding guides, training materials, and key resources to support implementation and ongoing success.",
+        'Your data should do more than sit in reports, it should drive smarter decisions and measurable growth.',
       validation: (Rule) => Rule.required().error('Description is required'),
     },
     {
@@ -42,9 +42,9 @@ export default {
     },
     {
       name: 'secondaryButtonText',
-      title: 'Secondary Button Text',
+      title: 'Video Button Text',
       type: 'string',
-      description: 'Text for the secondary button (transparent with border)',
+      description: 'Text for the video play button overlay',
       initialValue: 'Clinical Dashboards Overview',
     },
     {
@@ -61,6 +61,21 @@ export default {
       options: {
         hotspot: true,
       },
+    },
+    {
+      name: 'videoThumbnail',
+      title: 'Video Thumbnail',
+      type: 'image',
+      description: 'Thumbnail image for the video preview on the right side',
+      options: {
+        hotspot: true,
+      },
+    },
+    {
+      name: 'videoLink',
+      title: 'Video Link',
+      type: 'url',
+      description: 'URL for the video (YouTube, Vimeo, etc.)',
     },
   ],
   preview: {

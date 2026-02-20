@@ -12,6 +12,7 @@ import ReleaseNotesHeroSection from '~/components/sections/ReleaseNotesHeroSecti
 import ShortBannerSection from '~/components/sections/ShortBannerSection'
 import SliderSection from '~/components/sections/SliderSection'
 import TestimonialSection from '~/components/sections/TestimonialSection'
+import WhyPracticeLoveSection from '~/components/sections/WhyPracticeLoveSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Tag } from '~/interfaces/post'
 import { getUniqueData, getUniqueReorderedCarouselItems } from '~/utils/common'
@@ -91,14 +92,16 @@ const DynamicPages = ({
          <div id="topics-section">
           <HeroSection heroData={homeSettings?.heroSection} />
         </div>
+        <WhyPracticeLoveSection data={homeSettings?.whyPracticeLoveSection} />
+
          {/* <CategoryCardsSection categories={categories} /> */}
          <SliderSection items={reorderedCarouselItems} categories={categories} />
-        <LatestBlogs contents={latestPosts} />
-        <FeaturedAndPopularBlogs
-          featuredBlog={featuredBlog}
+        {/* <LatestBlogs contents={latestPosts} /> */}
+        {/* <FeaturedAndPopularBlogs
+          featuredBlog={featuredBlog
           popularBlogs={featuredContents}
-        />
-        <div id="training-section ">
+        /> */}
+        {/* <div id="training-section ">
           <AllcontentSection
             customBrowseContent={customBrowseContent}
             allContent={podcastPosts}
@@ -110,10 +113,10 @@ const DynamicPages = ({
             customButtonText="View All Trainings"
             headingWithLineBreak={true}
           />
-        </div>
-        <div id="release-notes-section">
+        </div> */}
+        {/* <div id="release-notes-section">
           <ReleaseNotesHeroSection releaseNotes={releaseNotes} />
-        </div>
+        </div> */}
         {/* <BannerSubscribeSection /> */}
         <TestimonialSection testimonials={testimonialList} />
 

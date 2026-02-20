@@ -65,7 +65,7 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
 
     return (
       <div className="flex w-full justify-center px-4 bg-zinc-100">
-        <section className="md:py-24 py-16 max-w-7xl w-full">
+        <section className="md:pt-16 md:pb-24 py-12 max-w-7xl w-full">
           <div className="flex justify-between gap-6 pb-12">
             <div className="flex flex-col gap-3">
               <H2Large className="text-zinc-900">Major Topics</H2Large>
