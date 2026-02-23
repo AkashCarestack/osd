@@ -534,7 +534,9 @@ export const homeSettingsQuery = groq`
       primaryButtonLink,
       secondaryButtonText,
       secondaryButtonLink,
-      "backgroundImage": backgroundImage.asset->url
+      "backgroundImage": backgroundImage.asset->url,
+      "videoThumbnail": videoThumbnail.asset->url,
+      videoLink
     },
   }[0]
 `

@@ -21,6 +21,44 @@ interface HeroSectionProps {
   heroData?: HeroData | null
 }
 
+// Function to extract video ID and generate thumbnail URL
+const generateVideoThumbnail = (videoUrl: string): string | null => {
+  if (!videoUrl) return null
+
+  try {
+    // YouTube
+    const youtubeRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
+    const youtubeMatch = videoUrl.match(youtubeRegex)
+    if (youtubeMatch && youtubeMatch[1]) {
+      return `https://img.youtube.com/vi/${youtubeMatch[1]}/maxresdefault.jpg`
+    }
+
+    // Vimeo
+    const vimeoRegex = /(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/
+    const vimeoMatch = videoUrl.match(vimeoRegex)
+    if (vimeoMatch && vimeoMatch[1]) {
+      // Using vumbnail.com for Vimeo thumbnails (free service)
+      return `https://vumbnail.com/${vimeoMatch[1]}.jpg`
+    }
+
+    // Vidyard (handles share.vidyard.com, vidyard.com, and play.vidyard.com)
+    const vidyardRegex = /(?:share\.vidyard\.com\/watch\/|vidyard\.com\/watch\/|play\.vidyard\.com\/)([a-zA-Z0-9]+)(?:\?|$|\/)/
+    const vidyardMatch = videoUrl.match(vidyardRegex)
+    if (vidyardMatch && vidyardMatch[1]) {
+      const videoId = vidyardMatch[1]
+      // Try multiple Vidyard thumbnail URL formats
+      // Format 1: embed.vidyard.com (most common)
+      // Format 2: Using Vidyard's thumbnail service
+      return `https://embed.vidyard.com/${videoId}.jpg`
+    }
+
+    return null
+  } catch (error) {
+    console.error('Error generating video thumbnail:', error)
+    return null
+  }
+}
+
 // Play icon SVG component
 const PlayIcon = () => (
   <svg
@@ -66,6 +104,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
       return null
     }
 
+    // Auto-generate thumbnail if not provided but videoLink exists
+    const videoThumbnail =
+      sanityData.videoThumbnail ||
+      (sanityData.videoLink
+        ? generateVideoThumbnail(sanityData.videoLink)
+        : null) ||
+      defaultHeroData.videoThumbnail
+
     return {
       title: sanityData.title || defaultHeroData.title,
       titleHighlight: sanityData.titleHighlight || defaultHeroData.titleHighlight,
@@ -80,8 +126,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
         sanityData.secondaryButtonLink || defaultHeroData.secondaryButtonLink,
       backgroundImage:
         sanityData.backgroundImage || defaultHeroData.backgroundImage,
-      videoThumbnail:
-        sanityData.videoThumbnail || defaultHeroData.videoThumbnail,
+      videoThumbnail,
       videoLink: sanityData.videoLink || defaultHeroData.videoLink,
     }
   }
