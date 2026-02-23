@@ -22,6 +22,7 @@ interface WhyPracticeLoveData {
 
 interface WhyPracticeLoveSectionProps {
   data?: WhyPracticeLoveData | null
+  heroPrimaryButtonLink?: string
 }
 
 const CheckIcon = () => (
@@ -62,7 +63,7 @@ const FeatureCard: React.FC<{ feature: Feature }> = ({ feature }) => {
   )
 }
 
-const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data }) => {
+const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data, heroPrimaryButtonLink }) => {
   // Default data
   const defaultData: WhyPracticeLoveData = {
     title: 'Why Practices Love Clinical Dashboards',
@@ -177,7 +178,7 @@ const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data })
 
             {/* CTA Button */}
             <Anchor
-              href={sectionData.ctaButtonLink}
+              href={heroPrimaryButtonLink || sectionData.ctaButtonLink}
               className="bg-white flex items-center overflow-hidden px-6 py-3 rounded-[5px] shrink-0 hover:bg-zinc-100 transition-colors relative z-10 w-fit"
             >
               <span className="font-inter font-medium text-base leading-[1.6] text-zinc-900 text-center whitespace-nowrap">

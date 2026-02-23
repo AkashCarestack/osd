@@ -92,7 +92,10 @@ const DynamicPages = ({
          <div id="topics-section">
           <HeroSection heroData={homeSettings?.heroSection} />
         </div>
-        <WhyPracticeLoveSection data={homeSettings?.whyPracticeLoveSection} />
+        <WhyPracticeLoveSection 
+          data={homeSettings?.whyPracticeLoveSection} 
+          heroPrimaryButtonLink={homeSettings?.heroSection?.primaryButtonLink}
+        />
 
          {/* <CategoryCardsSection categories={categories} /> */}
          <SliderSection items={reorderedCarouselItems} categories={categories} />
