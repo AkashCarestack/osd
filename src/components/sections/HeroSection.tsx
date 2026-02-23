@@ -21,41 +21,75 @@ interface HeroSectionProps {
   heroData?: HeroData | null
 }
 
-// Function to extract video ID and generate thumbnail URL
-const generateVideoThumbnail = (videoUrl: string): string | null => {
-  if (!videoUrl) return null
+// Function to extract video platform and ID from URL
+interface VideoInfo {
+  platform: 'youtube' | 'vimeo' | 'vidyard' | null
+  videoId: string | null
+}
+
+const extractVideoInfo = (videoUrl: string): VideoInfo => {
+  if (!videoUrl) return { platform: null, videoId: null }
 
   try {
     // YouTube
     const youtubeRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
     const youtubeMatch = videoUrl.match(youtubeRegex)
     if (youtubeMatch && youtubeMatch[1]) {
-      return `https://img.youtube.com/vi/${youtubeMatch[1]}/maxresdefault.jpg`
+      return { platform: 'youtube', videoId: youtubeMatch[1] }
     }
 
     // Vimeo
     const vimeoRegex = /(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/
     const vimeoMatch = videoUrl.match(vimeoRegex)
     if (vimeoMatch && vimeoMatch[1]) {
-      // Using vumbnail.com for Vimeo thumbnails (free service)
-      return `https://vumbnail.com/${vimeoMatch[1]}.jpg`
+      return { platform: 'vimeo', videoId: vimeoMatch[1] }
     }
 
     // Vidyard (handles share.vidyard.com, vidyard.com, and play.vidyard.com)
     const vidyardRegex = /(?:share\.vidyard\.com\/watch\/|vidyard\.com\/watch\/|play\.vidyard\.com\/)([a-zA-Z0-9]+)(?:\?|$|\/)/
     const vidyardMatch = videoUrl.match(vidyardRegex)
     if (vidyardMatch && vidyardMatch[1]) {
-      const videoId = vidyardMatch[1]
-      // Try multiple Vidyard thumbnail URL formats
-      // Format 1: embed.vidyard.com (most common)
-      // Format 2: Using Vidyard's thumbnail service
-      return `https://embed.vidyard.com/${videoId}.jpg`
+      return { platform: 'vidyard', videoId: vidyardMatch[1] }
     }
 
-    return null
+    return { platform: null, videoId: null }
   } catch (error) {
-    console.error('Error generating video thumbnail:', error)
-    return null
+    console.error('Error extracting video info:', error)
+    return { platform: null, videoId: null }
+  }
+}
+
+// Function to generate thumbnail URL
+const generateVideoThumbnail = (videoUrl: string): string | null => {
+  if (!videoUrl) return null
+
+  const videoInfo = extractVideoInfo(videoUrl)
+  
+  if (!videoInfo.platform || !videoInfo.videoId) return null
+
+  switch (videoInfo.platform) {
+    case 'youtube':
+      return `https://img.youtube.com/vi/${videoInfo.videoId}/maxresdefault.jpg`
+    case 'vimeo':
+      return `https://vumbnail.com/${videoInfo.videoId}.jpg`
+    case 'vidyard':
+      return `https://embed.vidyard.com/${videoInfo.videoId}.jpg`
+    default:
+      return null
+  }
+}
+
+// Function to get iframe embed URL
+const getVideoEmbedUrl = (platform: string, videoId: string): string | null => {
+  switch (platform) {
+    case 'youtube':
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${videoId}&iv_load_policy=3&showinfo=0&color=white&theme=dark`
+    case 'vimeo':
+      return `https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1&controls=0&loop=1&title=0&byline=0&portrait=0&background=1&transparent=1`
+    case 'vidyard':
+      return `https://play.vidyard.com/${videoId}?autoplay=1&muted=1&loop=1&controls=0&transparent=1`
+    default:
+      return null
   }
 }
 
@@ -134,6 +168,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
   const transformedData = heroData ? transformHeroData(heroData) : null
   const data = transformedData || defaultHeroData
 
+  // Extract video info for embedding
+  const videoInfo = data.videoLink ? extractVideoInfo(data.videoLink) : { platform: null, videoId: null }
+  const canEmbedVideo = videoInfo.platform && videoInfo.videoId
+
   return (
     <div className="w-full flex gap-1 items-center bg-[#18181b] relative overflow-hidden pt-headerSpacerMob md:pt-headerSpacer">
       {/* Blurred background image */}
@@ -185,34 +223,63 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                 </Anchor>
               </div>
 
-              {/* Right Content - Video Thumbnail (Hidden on mobile) */}
-              <div className="hidden lg:block lg:w-[495px] shrink-0 lg:h-[280px] rounded-[18px] overflow-hidden relative">
-                {/* Video Thumbnail Background */}
-                {data.videoThumbnail && (
-                  <div
-                    className="absolute inset-0 w-full h-full"
-                    style={{
-                      backgroundImage: `url(${data.videoThumbnail})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      backgroundRepeat: 'no-repeat',
-                    }}
-                  />
+              {/* Right Content - Video Player (Hidden on mobile) */}
+              <div className="hidden lg:block lg:w-[495px] shrink-0 lg:h-[280px] rounded-[18px] overflow-hidden relative" style={{ backgroundColor: 'transparent', background: 'transparent' }}>
+                {canEmbedVideo ? (
+                  // Embedded Video Player - Auto-plays, loops, no controls
+                  <div className="w-full h-full rounded-[18px] overflow-hidden" style={{ backgroundColor: 'transparent', background: 'transparent' }}>
+                    <iframe
+                      src={getVideoEmbedUrl(videoInfo.platform!, videoInfo.videoId!) || ''}
+                      className="w-full h-full border-0"
+                      frameBorder="0"
+                      allow="autoplay; fullscreen; picture-in-picture"
+                      allowFullScreen
+                      title={data.secondaryButtonText || 'Video Player'}
+                      style={{ 
+                        backgroundColor: 'transparent',
+                        background: 'transparent',
+                        margin: 0,
+                        padding: 0,
+                        display: 'block',
+                        border: 'none',
+                        outline: 'none',
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  </div>
+                ) : (
+                  // Video Thumbnail with Play Button (fallback for non-embeddable videos)
+                  <>
+                    {/* Video Thumbnail Background */}
+                    {data.videoThumbnail && (
+                      <div
+                        className="absolute inset-0 w-full h-full"
+                        style={{
+                          backgroundImage: `url(${data.videoThumbnail})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          backgroundRepeat: 'no-repeat',
+                        }}
+                      />
+                    )}
+
+                    {/* Blue overlay */}
+                    <div className="absolute inset-0 bg-[#2727e6] mix-blend-color" />
+
+                    {/* Play Button Overlay */}
+                    <Anchor
+                      href={data.videoLink || data.secondaryButtonLink || '#'}
+                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur-xl bg-black/30 border border-white/30 flex gap-2 items-center overflow-hidden pl-3.5 pr-4 py-2 rounded-full hover:bg-black/40 transition-colors"
+                    >
+                      <PlayIcon />
+                      <span className="font-inter font-medium leading-[1.5] text-[15px] text-white whitespace-nowrap">
+                        {data.secondaryButtonText || 'Clinical Dashboards Overview'}
+                      </span>
+                    </Anchor>
+                  </>
                 )}
-
-                {/* Blue overlay */}
-                <div className="absolute inset-0 bg-[#2727e6] mix-blend-color" />
-
-                {/* Play Button Overlay */}
-                <Anchor
-                  href={data.videoLink || data.secondaryButtonLink || '#'}
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur-xl bg-black/30 border border-white/30 flex gap-2 items-center overflow-hidden pl-3.5 pr-4 py-2 rounded-full hover:bg-black/40 transition-colors"
-                >
-                  <PlayIcon />
-                  <span className="font-inter font-medium leading-[1.5] text-[15px] text-white whitespace-nowrap">
-                    {data.secondaryButtonText || 'Clinical Dashboards Overview'}
-                  </span>
-                </Anchor>
               </div>
             </div>
           </div>
