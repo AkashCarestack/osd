@@ -152,7 +152,7 @@ const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data })
           </div>
 
           {/* CTA Banner */}
-          <div className="bg-[#01061e] flex flex-col md:flex-row gap-8 md:gap-[72px] items-center overflow-hidden p-6 md:p-8 rounded-[10px] w-full relative">
+          <div className="bg-[#01061e] flex flex-col md:flex-row gap-8 md:gap-[72px] items-start md:items-center overflow-hidden p-6 md:p-8 rounded-[10px] w-full relative">
             {/* Blurred background image - using same image as HeroSection */}
             <div
               className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden"
@@ -178,7 +178,7 @@ const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data })
             {/* CTA Button */}
             <Anchor
               href={sectionData.ctaButtonLink}
-              className="bg-white flex items-center overflow-hidden px-6 py-3 rounded-[5px] shrink-0 hover:bg-zinc-100 transition-colors relative z-10"
+              className="bg-white flex items-center overflow-hidden px-6 py-3 rounded-[5px] shrink-0 hover:bg-zinc-100 transition-colors relative z-10 w-fit"
             >
               <span className="font-inter font-medium text-base leading-[1.6] text-zinc-900 text-center whitespace-nowrap">
                 {sectionData.ctaButtonText}

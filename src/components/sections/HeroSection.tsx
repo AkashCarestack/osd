@@ -223,8 +223,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                 </Anchor>
               </div>
 
-              {/* Right Content - Video Player (Hidden on mobile) */}
-              <div className="hidden lg:block lg:w-[495px] shrink-0 lg:h-[280px] rounded-[18px] overflow-hidden relative" style={{ backgroundColor: 'transparent', background: 'transparent' }}>
+              {/* Right Content - Video Player (Visible on all devices) */}
+              <div className="w-full lg:w-[495px] shrink-0 h-[200px] md:h-[250px] lg:h-[280px] rounded-[18px] overflow-hidden relative" style={{ backgroundColor: 'transparent', background: 'transparent' }}>
                 {canEmbedVideo ? (
                   // Embedded Video Player - Auto-plays, loops, no controls
                   <div className="w-full h-full rounded-[18px] overflow-hidden" style={{ backgroundColor: 'transparent', background: 'transparent' }}>
