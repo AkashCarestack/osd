@@ -66,20 +66,31 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
     return (
       <div className="flex w-full justify-center px-4 bg-zinc-100">
         <section className="md:pt-16 md:pb-24 py-12 max-w-7xl w-full">
-          <div className="flex justify-between gap-6 pb-12">
-            <div className="flex flex-col gap-3">
-              <H2Large className="text-zinc-900">Major Topics</H2Large>
-              <p className="text-zinc-900 opacity-80 text-base font-medium leading-[1.6] max-w-[601px]">
-                Articles that specifically refer to the dashboards available to the DEO.
-              </p>
+          <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-6 pb-12 items-start md:items-center">
+            <div>
+              <H2Large className="text-zinc-900">Knowledge Guides</H2Large>
             </div>
-            <div className="flex gap-9 self-end">
-              <div className="flex gap-4 md:gap-9">
+            <div className="flex flex-wrap gap-4 md:gap-6 lg:gap-9 items-center w-full md:w-auto">
+              <Anchor
+                href="https://osdental.zendesk.com/hc/en-us"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white flex items-center overflow-hidden px-6 py-3 relative rounded-[5px] shrink-0 hover:bg-zinc-100 transition-colors"
+              >
+                <span className="font-inter font-medium text-base leading-[1.6] text-zinc-900 text-center whitespace-nowrap">
+                  See All Guides
+                </span>
+              </Anchor>
+              <div className="flex gap-2 md:gap-4 lg:gap-9 ml-auto md:ml-0">
                 <button className="text-zinc-900 category-prev disabled:opacity-30 select-none">
-                  <ArrowLeftIcon height={48} width={48} />
+                  <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center">
+                    <ArrowLeftIcon className="w-full h-full" />
+                  </div>
                 </button>
                 <button className="text-zinc-900 category-next disabled:opacity-30 select-none">
-                  <ArrowRightIcon height={48} width={48} />
+                  <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center">
+                    <ArrowRightIcon className="w-full h-full" />
+                  </div>
                 </button>
               </div>
             </div>
