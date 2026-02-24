@@ -217,7 +217,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqCategories = [] }) => {
   }
 
   return (
-    <Section className="justify-center bg-white md:py-auto !py-12">
+    <Section className="justify-center bg-white md:!pt-24 md:pb-16 !py-12">
       <Wrapper className="w-full">
         <div className="w-full">
           {/* FAQ Title */}
