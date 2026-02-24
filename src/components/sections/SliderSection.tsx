@@ -64,7 +64,7 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
     }
 
     return (
-      <div className="flex w-full justify-center px-4 bg-zinc-100">
+      <div className="flex w-full justify-center px-4 bg-zinc-100" id="knowledge-guides-section">
         <section className="md:pt-16 md:pb-24 py-12 max-w-7xl w-full">
           <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-6 pb-12 items-start md:items-center">
             <div>
@@ -75,11 +75,20 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
                 href="https://osdental.zendesk.com/hc/en-us"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white flex items-center overflow-hidden px-6 py-3 relative rounded-[5px] shrink-0 hover:bg-zinc-100 transition-colors"
+                className="flex items-center gap-2 overflow-hidden relative rounded-[5px] shrink-0 transition-colors group"
               >
                 <span className="font-inter font-medium text-base leading-[1.6] text-zinc-900 text-center whitespace-nowrap">
                   See All Guides
                 </span>
+                <div className="flex items-center justify-center">
+                  <div className="flex-none">
+                    <ArrowTopRightIcon
+                      className="group-hover:translate-y-[-2px] transition-transform duration-300"
+                      height={20}
+                      width={20}
+                    />
+                  </div>
+                </div>
               </Anchor>
               <div className="flex gap-2 md:gap-4 lg:gap-9 ml-auto md:ml-0">
                 <button className="text-zinc-900 category-prev disabled:opacity-30 select-none">

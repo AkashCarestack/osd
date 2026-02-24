@@ -129,15 +129,15 @@ const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data, h
   const sectionData = transformedData || defaultData
 
   return (
-    <Section className="bg-zinc-100 justify-center md:pt-24 md:pb-16 !py-12">
+    <Section className="bg-zinc-100 justify-center md:!pt-24 md:pb-16 !py-12">
       <Wrapper className="flex flex-col gap-12">
         {/* Header Section */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-9 lg:items-end w-full">
           <div className="flex flex-col gap-3 items-start justify-center w-full lg:max-w-[601px]">
-            <h2 className="w-full text-[28px] md:text-[40px] lg:text-[48px] text-zinc-900 font-manrope font-extrabold not-italic leading-[110%] tracking-[-0.96px]">
+            <h2 className="w-full text-[28px] md:text-[40px] lg:text-[48px] text-[#18181B] font-manrope font-extrabold not-italic leading-[110%] tracking-[-0.96px]">
               {sectionData.title}
             </h2>
-            <p className="w-full opacity-80 text-zinc-900 font-inter text-base not-italic font-medium leading-[160%]">
+            <p className="w-full text-[#18181B] font-inter text-base not-italic font-medium leading-[160%] opacity-80">
               {sectionData.description}
             </p>
           </div>

@@ -27,10 +27,8 @@ import  {ShortNavPopover}  from './overlaynav/ShortNavPopover';
 
 
 export const navigationLinks = [
-  { id: 'training', label: 'Training', sectionId: 'training-section' },
-  { id: 'release-notes', label: 'Release Notes', sectionId: 'release-notes-section' },
+  { id: 'training', label: 'Training', sectionId: 'knowledge-guides-section' },
   { id: 'faqs', label: 'FAQs', sectionId: 'faqs-section' },
-  { id: 'events-updates', label: 'Events & Updates', sectionId: 'events-updates-section' },
 ];
 
 
@@ -169,42 +167,29 @@ const Header = () => {
                       <nav className="flex flex-col lg:flex-row lg:gap-10 flex-wrap border-b border-zinc-800 pb-4 lg:pb-0 lg:border-0">
                         {navigationLinks && navigationLinks?.map((link) => {
                           const isActive = activeSection === link.id;
-                          const isFAQ = link.id === 'faqs';
-                          const faqUrl = router.isReady ? generateHref(locale as string, '/faq') : '/faq';
-                          
-                          if (isFAQ) {
-                            return (
-                              <Anchor
-                                key={link.id}
-                                href={faqUrl}
-                                className={`text-base transition-colors duration-200 relative pb-1 lg:pb-0 ${
-                                  router.asPath.includes('/faq')
-                                    ? 'text-white'
-                                    : 'text-zinc-500 hover:text-zinc-300'
-                                }`}
-                              >
-                                {link.label}
-                                {router.asPath.includes('/faq') && (
-                                  <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-white" />
-                                )}
-                              </Anchor>
-                            );
-                          }
                           
                           return (
                             <button
                               key={link.id}
-                              onClick={() => scrollToSection(link.sectionId, link.id)}
-                              className={`text-base transition-colors duration-200 relative pb-1 lg:pb-0 ${
+                              onClick={() => {
+                                // If not on home page, navigate to home first, then scroll
+                                if (router.asPath !== homeUrl && router.asPath !== '/') {
+                                  router.push(homeUrl).then(() => {
+                                    setTimeout(() => {
+                                      scrollToSection(link.sectionId, link.id);
+                                    }, 100);
+                                  });
+                                } else {
+                                  scrollToSection(link.sectionId, link.id);
+                                }
+                              }}
+                              className={`text-base transition-colors duration-200 ${
                                 isActive
                                   ? 'text-white'
                                   : 'text-zinc-500 hover:text-zinc-300'
                               }`}
                             >
                               {link.label}
-                              {isActive && (
-                                <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-white" />
-                              )}
                             </button>
                           );
                         })}

@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import Anchor from '~/components/commonSections/Anchor'
 import Section from '~/components/Section'
 import Wrapper from '~/layout/Wrapper'
+import { VideoModal } from '~/components/commonSections/VideoModal'
 
 interface HeroData {
   title: string
@@ -115,6 +116,8 @@ const PlayIcon = () => (
 )
 
 const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
+
   // Default dummy data
   const defaultHeroData: HeroData = {
     title: 'Turn Data Into Action with Clinical Dashboards',
@@ -128,7 +131,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
     backgroundImage:
       'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',
     videoThumbnail:
-      'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',
+      'https://cdn.sanity.io/images/rcbknqsy/production/3e10a80054ff751b2c3ad43b7e2f53b276ca5887-990x800.png',
     videoLink: '#',
   }
 
@@ -171,6 +174,18 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
   // Extract video info for embedding
   const videoInfo = data.videoLink ? extractVideoInfo(data.videoLink) : { platform: null, videoId: null }
   const canEmbedVideo = videoInfo.platform && videoInfo.videoId
+
+  // Placeholder image URL
+  const placeholderImage = 'https://cdn.sanity.io/images/rcbknqsy/production/4c9eae156681fce630a561f64177da5bb8703bc1-990x800.png'
+
+  // Prepare video data for VideoModal
+  const videoModalData = canEmbedVideo
+    ? {
+        videoPlatform: videoInfo.platform!,
+        videoId: videoInfo.videoId!,
+        title: data.secondaryButtonText || 'Video Player',
+      }
+    : null
 
   return (
     <div className="w-full flex gap-1 items-center bg-[#18181b] relative overflow-hidden pt-headerSpacerMob md:pt-headerSpacer">
@@ -223,68 +238,54 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                 </Anchor>
               </div>
 
-              {/* Right Content - Video Player (Visible on all devices) */}
-              <div className="w-full lg:w-[495px] shrink-0 h-[200px] md:h-[250px] lg:h-[280px] rounded-[18px] overflow-hidden relative" style={{ backgroundColor: 'transparent', background: 'transparent' }}>
-                {canEmbedVideo ? (
-                  // Embedded Video Player - Auto-plays, loops, no controls
-                  <div className="w-full h-full rounded-[18px] overflow-hidden" style={{ backgroundColor: 'transparent', background: 'transparent' }}>
-                    <iframe
-                      src={getVideoEmbedUrl(videoInfo.platform!, videoInfo.videoId!) || ''}
-                      className="w-full h-full border-0"
-                      frameBorder="0"
-                      allow="autoplay; fullscreen; picture-in-picture"
-                      allowFullScreen
-                      title={data.secondaryButtonText || 'Video Player'}
-                      style={{ 
-                        backgroundColor: 'transparent',
-                        background: 'transparent',
-                        margin: 0,
-                        padding: 0,
-                        display: 'block',
-                        border: 'none',
-                        outline: 'none',
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover'
-                      }}
-                    />
-                  </div>
-                ) : (
-                  // Video Thumbnail with Play Button (fallback for non-embeddable videos)
-                  <>
-                    {/* Video Thumbnail Background */}
-                    {data.videoThumbnail && (
-                      <div
-                        className="absolute inset-0 w-full h-full"
-                        style={{
-                          backgroundImage: `url(${data.videoThumbnail})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
-                          backgroundRepeat: 'no-repeat',
-                        }}
-                      />
-                    )}
+              {/* Right Content - Clickable Placeholder Image */}
+              <div 
+                className="w-full lg:w-[495px] shrink-0 rounded-[18px] overflow-hidden relative cursor-pointer group"
+                style={{ aspectRatio: '990/800' }}
+                onClick={() => {
+                  if (canEmbedVideo) {
+                    setIsVideoModalOpen(true)
+                  } else if (data.videoLink && data.videoLink !== '#') {
+                    window.open(data.videoLink, '_blank')
+                  }
+                }}
+              >
+                {/* Placeholder Image Background */}
+                <div
+                  className="absolute inset-0 w-full h-full transition-transform duration-300 group-hover:scale-105"
+                  style={{
+                    backgroundImage: `url(${placeholderImage})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                  }}
+                />
 
-                    {/* Blue overlay */}
-                    <div className="absolute inset-0 bg-[#2727e6] mix-blend-color" />
+                {/* Blue overlay */}
+                <div className="absolute inset-0" />
 
-                    {/* Play Button Overlay */}
-                    <Anchor
-                      href={data.videoLink || data.secondaryButtonLink || '#'}
-                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur-xl bg-black/30 border border-white/30 flex gap-2 items-center overflow-hidden pl-3.5 pr-4 py-2 rounded-full hover:bg-black/40 transition-colors"
-                    >
-                      <PlayIcon />
-                      <span className="font-inter font-medium leading-[1.5] text-[15px] text-white whitespace-nowrap">
-                        {data.secondaryButtonText || 'Clinical Dashboards Overview'}
-                      </span>
-                    </Anchor>
-                  </>
-                )}
+                {/* Play Button Overlay */}
+                <div className="absolute bottom-4 right-4 backdrop-blur-xl bg-black/30 border border-white/30 flex gap-2 items-center overflow-hidden pl-3.5 pr-4 py-2 rounded-full group-hover:bg-black/40 transition-colors pointer-events-none">
+                  <PlayIcon />
+                  <span className="font-inter font-medium leading-[1.5] text-[15px] text-white whitespace-nowrap">
+                    {data.secondaryButtonText || 'Clinical Dashboards Overview'}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </Wrapper>
       </Section>
+
+      {/* Video Modal Popup */}
+      {isVideoModalOpen && videoModalData && (
+        <VideoModal
+          isPopup={true}
+          videoDetails={videoModalData}
+          className="pt-9 flex items-start"
+          onClose={() => setIsVideoModalOpen(false)}
+        />
+      )}
     </div>
   )
 }
