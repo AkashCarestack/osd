@@ -260,7 +260,7 @@ export const NavPopover = ({
             </div>
           </div>
           {/* mob region switcher */}
-          <div id='mob-region' className={`bg-white flex gap-5 justify-center items-center lg:hidden`}>
+          {/* <div id='mob-region' className={`bg-white flex gap-5 justify-center items-center lg:hidden`}>
             {regions.map((region: any, index: number) => {
               return (
                 currentRegion == region.locale ? (
@@ -291,7 +291,7 @@ export const NavPopover = ({
                 )
               )
             })}
-          </div>
+          </div> */}
           </div>
           {/* this duplicate is for mobile only */}
           {/* {showTags && ( */}

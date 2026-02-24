@@ -106,7 +106,7 @@ export const VideoModal: React.FC<VideoProps> = ({
         zIndex: 20
       } : undefined}
     >
-      <div className="w-full max-w-[750px] relative" ref={toggleRef}>
+      <div className=" md:max-w-[750px] w-full relative" ref={toggleRef}>
         {isPopup && onClose && (
           <button
             style={{
@@ -116,8 +116,8 @@ export const VideoModal: React.FC<VideoProps> = ({
               borderRadius: '50%',
               background: '#ffffff',
               cursor: 'pointer',
-              right: '-18px',
-              top: '-22px',
+              right: isMobile ? '8px' : '-18px',
+              top:  '-22px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -134,7 +134,7 @@ export const VideoModal: React.FC<VideoProps> = ({
         <div
           className={`${
             isPopup
-              ? 'relative w-full aspect-[1810/1080]'
+              ? 'relative w-full md:aspect-[1810/1080] aspect-[16/9]'
               : 'w-full aspect-[16/9] relative'
           }`}
           style={{ backgroundColor: 'transparent' }}

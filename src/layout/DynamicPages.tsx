@@ -129,7 +129,7 @@ const DynamicPages = ({
         <div id="events-updates-section">
           <EventCarousel bgColor={'white'} allEventCards={uniqueEventCards} />
         </div>
-        <BannerSubscribeSection hideBanner={true} />
+        {/* <BannerSubscribeSection hideBanner={true} /> */}
       </BaseUrlProvider>
     </>
   )

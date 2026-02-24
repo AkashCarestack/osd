@@ -133,8 +133,10 @@ const CategoryButton = ({
       onHoverEnd={() => setIsHovered(false)}
       whileHover={{ x: 4 }}
       transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-      className={`font-geist text-base leading-[150%] border-b border-b-gray-200 tracking-normal p-3 !text-left ${
-        isActive ? 'text-gray-950 font-medium' : 'text-gray-500 font-normal'
+      className={`font-geist text-base leading-[150%] tracking-normal p-3 !text-left rounded-[10px] ${
+        isActive 
+          ? 'text-gray-950 font-medium' 
+          : 'text-gray-500 font-normal'
       }`}
     >
       <div className="flex flex-row gap-2 items-center">
@@ -221,7 +223,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqCategories = [] }) => {
       <Wrapper className="w-full">
         <div className="w-full">
           {/* FAQ Title */}
-          <h2 className="font-manrope md:max-w-[450px] md:text-5xl text-3xl md:font-extrabold font-semibold leading-[110%] tracking-[-0.96px] text-[#18181B] mb-8 lg:mb-12">
+          <h2 className="font-manrope md:text-[48px] text-[32px] md:max-w-[400px] w-full font-extrabold leading-[110%] tracking-[-0.96px] text-[#18181B] mb-8 lg:mb-12">
             Frequently Asked Questions
           </h2>
 
@@ -308,16 +310,19 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqCategories = [] }) => {
                       <motion.div
                         onClick={() => toggleQuestion(questionId)}
                         key={questionId}
-                        className={`cursor-pointer border md:rounded-[16px] rounded-[6px] md:p-6 p-4 border-gray-200 ${
-                          !isQuestionOpen ? 'bg-white' : '!bg-[#F9FAFB]'
-                        }`}
-                        whileHover={
-                          !isQuestionOpen ? { backgroundColor: '#F9FAFB' } : {}
-                        }
+                        className={`cursor-pointer border md:rounded-[16px] rounded-[10px] md:p-6 p-4 border-[rgba(24,24,27,0.10)]`}
+                        style={isQuestionOpen ? { 
+                          backgroundColor: 'rgba(24, 24, 27, 0.05)',
+                        } : {
+                          backgroundColor: 'transparent',
+                        }}
+                        whileHover={isQuestionOpen ? {} : {
+                          backgroundColor: 'rgba(24, 24, 27, 0.02)',
+                        }}
                         transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
                       >
                         <button className="w-full text-left flex items-center justify-between rounded-[16px]">
-                          <dt className="font-medium font-geist tracking-normal leading-[155%] md:text-lg text-base text-gray-950 pr-4">
+                          <dt className="overflow-hidden text-ellipsis whitespace-nowrap font-inter md:text-[20px] text-sm font-medium leading-[130%] text-[#18181B] pr-4">
                             {faqItem.question}
                           </dt>
                           <div className="flex-shrink-0">
@@ -364,7 +369,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqCategories = [] }) => {
                               }}
                               className="font-geist overflow-hidden"
                             >
-                              <dd className="text-gray-600 font-geist tracking-normal md:text-base text-sm leading-[145%] font-normal md:pt-4 pt-2 whitespace-pre-wrap">
+                              <dd className="font-inter md:text-base text-sm font-normal leading-[160%] text-[#18181B] md:pt-4 pt-2 whitespace-pre-wrap">
                                 {faqItem.answer}
                               </dd>
                             </motion.div>

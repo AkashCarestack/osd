@@ -137,7 +137,7 @@ const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data, h
             <h2 className="w-full text-[28px] md:text-[40px] lg:text-[48px] text-[#18181B] font-manrope font-extrabold not-italic leading-[110%] tracking-[-0.96px]">
               {sectionData.title}
             </h2>
-            <p className="w-full text-[#18181B] font-inter text-base not-italic font-medium leading-[160%]">
+            <p className="w-full text-[#18181B] font-inter text-base not-italic font-medium leading-[160%] opacity-80">
               {sectionData.description}
             </p>
           </div>

@@ -64,7 +64,7 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
     }
 
     return (
-      <div className="flex w-full justify-center px-4 bg-zinc-100">
+      <div className="flex w-full justify-center px-4 bg-zinc-100" id="knowledge-guides-section">
         <section className="md:pt-16 md:pb-24 py-12 max-w-7xl w-full">
           <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-6 pb-12 items-start md:items-center">
             <div>
