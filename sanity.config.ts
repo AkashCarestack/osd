@@ -170,6 +170,7 @@ export default defineConfig({
                   .items([
                     S.documentTypeListItem('glossary').title('Glossary'),
                     S.documentTypeListItem('faq').title('FAQ'),
+                    S.documentTypeListItem('event').title('Events'),
                   ])
               ),
             S.documentTypeListItem('homeSettings').title('Home Page').icon(HomeIcon),

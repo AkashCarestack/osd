@@ -538,6 +538,30 @@ export const homeSettingsQuery = groq`
       "videoThumbnail": videoThumbnail.asset->url,
       videoLink
     },
+    "whyPracticeLoveSection": whyPracticeLoveSection {
+      title,
+      description,
+      features[] {
+        title,
+        description
+      },
+      ctaTitle,
+      ctaDescription,
+      ctaButtonText,
+      ctaButtonLink,
+      "ctaBackgroundImage": ctaBackgroundImage.asset->url
+    },
+    "upcomingEventsSection": upcomingEventsSection {
+      title,
+      events[] {
+        title,
+        eventType,
+        location,
+        date,
+        description,
+        link
+      }
+    },
   }[0]
 `
 

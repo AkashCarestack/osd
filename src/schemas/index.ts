@@ -31,6 +31,9 @@ import videos from './videos'
 import glossary from './contentRepo/glossary'
 import faq from './contentRepo/faq'
 import whyPracticeLoveSection from './contentRepo/whyPracticeLoveSection'
+import event from './contentRepo/event'
+import eventObject from './contentRepo/eventObject'
+import upcomingEventsSection from './contentRepo/upcomingEventsSection'
 
 export const schemaTypes = [
   post,
@@ -63,7 +66,10 @@ export const schemaTypes = [
   footer,
   glossary,
   faq,
-  whyPracticeLoveSection
+  whyPracticeLoveSection,
+  event,
+  eventObject,
+  upcomingEventsSection
 ]
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -97,6 +103,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     footer,
     glossary,
     faq,
-    whyPracticeLoveSection
+    whyPracticeLoveSection,
+    event,
+    eventObject,
+    upcomingEventsSection
   ],
 }
