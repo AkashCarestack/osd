@@ -175,7 +175,7 @@ const UpcomingEventsSection: React.FC<UpcomingEventsSectionProps> = ({ data }) =
       <Wrapper className="flex flex-col gap-12 w-full">
         {/* Section Title */}
         <div className="flex gap-8 items-end relative shrink-0 w-full">
-          <h2 className="font-manrope font-extrabold leading-[1.1] relative shrink-0 text-white text-4xl md:text-5xl tracking-[-0.96px] w-full max-w-[709px]">
+          <h2 className="font-manrope font-extrabold leading-[110%] relative shrink-0 text-white text-[48px] tracking-[-0.96px] w-full max-w-[709px]">
             {sectionData.title}
           </h2>
         </div>
