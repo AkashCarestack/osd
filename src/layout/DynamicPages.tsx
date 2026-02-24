@@ -13,6 +13,7 @@ import ShortBannerSection from '~/components/sections/ShortBannerSection'
 import SliderSection from '~/components/sections/SliderSection'
 import TestimonialSection from '~/components/sections/TestimonialSection'
 import WhyPracticeLoveSection from '~/components/sections/WhyPracticeLoveSection'
+import UpcomingEventsSection from '~/components/sections/UpcomingEventsSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Tag } from '~/interfaces/post'
 import { getUniqueData, getUniqueReorderedCarouselItems } from '~/utils/common'
@@ -99,6 +100,7 @@ const DynamicPages = ({
 
          {/* <CategoryCardsSection categories={categories} /> */}
          <SliderSection items={reorderedCarouselItems} categories={categories} />
+         <UpcomingEventsSection data={homeSettings?.upcomingEventsSection} />
         {/* <LatestBlogs contents={latestPosts} /> */}
         {/* <FeaturedAndPopularBlogs
           featuredBlog={featuredBlog

@@ -254,6 +254,13 @@ export default {
       type: 'whyPracticeLoveSection',
       group: 'whyPracticeLove',
     },
+    {
+      name: 'upcomingEventsSection',
+      title: 'Upcoming Events Section',
+      description: 'Configure the Upcoming Events section',
+      type: 'upcomingEventsSection',
+      group: 'popularBlogs',
+    },
     defineField({
       name: 'language',
       type: 'string',

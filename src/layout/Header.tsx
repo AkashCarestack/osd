@@ -28,6 +28,7 @@ import  {ShortNavPopover}  from './overlaynav/ShortNavPopover';
 
 export const navigationLinks = [
   { id: 'training', label: 'Training', sectionId: 'knowledge-guides-section' },
+  { id: 'events-updates', label: 'Events & Updates', sectionId: 'events-updates-section' },
   { id: 'faqs', label: 'FAQs', sectionId: 'faqs-section' },
 ];
 
