@@ -20,6 +20,7 @@ const dummyEvents = [
     eventType: 'Offline',
     location: 'Dallas, TX',
     date: '2026-02-26',
+    description: 'Join us for an empowering conference focused on growth and leadership in the DSO industry.',
     link: '#',
     language: 'en',
   },
