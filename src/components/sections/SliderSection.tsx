@@ -148,7 +148,7 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
 
                 return (
                   <SwiperSlide key={category._id || index} className="!h-auto">
-                    <div className="flex flex-col items-start overflow-hidden p-8 relative rounded-[10px] shrink-0 w-full h-full">
+                    <div className="flex flex-col items-start overflow-hidden md:p-8 p-6 relative rounded-[10px] shrink-0 w-full h-full">
                       {/* Background image with color overlay */}
                       <div
                         aria-hidden="true"
@@ -172,7 +172,7 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
                       {/* Content card */}
                       <Anchor
                         href={router.isReady ? generateHref(locale as string, href) : '#'}
-                        className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 relative rounded-[5px] shrink-0 w-full group h-full"
+                        className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 justify-between relative rounded-[5px] shrink-0 w-full group h-full"
                       >
                         <div className="flex flex-col gap-2 items-start w-full">
                           {/* Category badge */}

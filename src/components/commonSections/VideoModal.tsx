@@ -103,21 +103,22 @@ export const VideoModal: React.FC<VideoProps> = ({
       } ${className}`}
       style={isPopup ? { 
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        zIndex: 20
+        zIndex: 20,
+    
       } : undefined}
     >
-      <div className=" md:max-w-[750px] w-full relative" ref={toggleRef}>
+      <div className=" md:max-w-[750px] w-full relative rounded-[12px] md:border-[8px] border-[3px] border-[#ffffffde]" ref={toggleRef}>
         {isPopup && onClose && (
           <button
             style={{
               position: 'absolute',
-              width: '20px',
-              height: '20px',
+              width: '32px',
+              height: '32px',
               borderRadius: '50%',
               background: '#ffffff',
               cursor: 'pointer',
               right: isMobile ? '8px' : '-18px',
-              top:  '-22px',
+              top:  '-46px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -128,7 +129,7 @@ export const VideoModal: React.FC<VideoProps> = ({
             onClick={onClose}
             aria-label="Close video"
           >
-            <CloseIcon color="black" height={16} width={16} />
+            <CloseIcon color="black" height={20} width={20} />
           </button>
         )}
         <div
