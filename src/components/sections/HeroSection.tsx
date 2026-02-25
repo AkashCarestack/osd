@@ -194,7 +194,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
         <div
           className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden"
           style={{
-            filter: 'blur(25px)',
+            // filter: 'blur(25px)',
             backgroundImage: `url(${data.backgroundImage})`,
             backgroundSize: 'cover',
             backgroundPosition: '50%',
