@@ -158,7 +158,6 @@ const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data, h
             <div
               className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden"
               style={{
-                filter: 'blur(25px)',
                 backgroundImage: `url(${sectionData.ctaBackgroundImage || heroBackgroundImage})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'right center',
