@@ -134,7 +134,7 @@ const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data, h
         {/* Header Section */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-9 lg:items-end w-full">
           <div className="flex flex-col gap-3 items-start justify-center w-full lg:max-w-[601px]">
-            <h2 className="w-full text-[28px] md:text-[40px] lg:text-[48px] text-[#18181B] font-manrope font-extrabold not-italic leading-[110%] tracking-[-0.96px]">
+            <h2 className="w-full text-[28px] md:text-[40px] lg:text-[48px] text-[#18181B] font-manrope font-extrabold not-italic md:leading-[110%] leading-[1.08] tracking-[-0.96px]">
               {sectionData.title}
             </h2>
             <p className="w-full text-[#18181B] font-inter text-base not-italic font-medium leading-[160%] opacity-80">
@@ -153,7 +153,7 @@ const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data, h
           </div>
 
           {/* CTA Banner */}
-          <div className="bg-[#01061e] flex flex-col md:flex-row gap-8 md:gap-[72px] items-start md:items-center overflow-hidden p-6 md:p-8 rounded-[10px] w-full relative">
+          <div className="bg-[#01061e]  flex flex-col md:flex-row gap-8 md:gap-[72px] items-start md:items-center justify-between overflow-hidden p-6 md:p-8 rounded-[10px] w-full relative">
             {/* Blurred background image - using same image as HeroSection */}
             <div
               className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden"
@@ -167,7 +167,7 @@ const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data, h
             />
 
             {/* Content */}
-            <div className="flex flex-col gap-2 items-start flex-1 relative z-10">
+            <div className="flex flex-col gap-2 md:max-w-[679px] w-full items-start flex-1 relative z-10">
               <h3 className="font-manrope font-semibold text-xl md:text-2xl leading-[1.2] text-white w-full">
                 {sectionData.ctaTitle}
               </h3>

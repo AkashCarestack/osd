@@ -145,7 +145,7 @@ export const NavPopover = ({
             <TruncateIcon width={40} height={40} />
           </button> */}
           <div
-            className={`lg:hidden  transition-all ease-out duration-200 flex fixed top-0 left-0 w-full py-4 px-4 z-20 border-b  h-[56px] items-center justify-between`}
+            className={`lg:hidden bg-black  transition-all ease-out duration-200 flex fixed top-0 left-0 w-full py-4 px-4 z-20 border-b  h-[56px] items-center justify-between`}
           >
             {showTags ? (
               <div className="flex items-center gap-0">
@@ -170,7 +170,7 @@ export const NavPopover = ({
               width={40}
               height={40}
               onClick={closeMenu}
-              className="text-black"
+              className="text-white"
             />
           </div>
           <div className='flex flex-col h-full gap-40 flex-shrink-0'>
@@ -197,21 +197,7 @@ export const NavPopover = ({
                       setShowMenu(false);
                     }
                   };
-                  const isFAQ = link.id === 'faqs';
-                  const faqUrl = generateHref(router.query.locale as string, '/faq');
-                  
-                  if (isFAQ) {
-                    return (
-                      <Anchor
-                        key={link.id}
-                        href={faqUrl}
-                        className="hover:text-zinc-500 self-start font-medium text-base lg:text-sm flex items-center gap-2 text-zinc-600 text-left"
-                      >
-                        {link.label}
-                      </Anchor>
-                    );
-                  }
-                  
+
                   return (
                     <button
                       key={link.id}

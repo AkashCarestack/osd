@@ -38,7 +38,7 @@ const Footer = ({className}:any) => {
               </Anchor>
             </div>
             {/* Social media   */}
-            <div className="mt-6 md:self-end">
+            {/* <div className="mt-6 md:self-end">
               <ul className="flex gap-6 items-center">
                 <li>
                   <a
@@ -158,7 +158,7 @@ const Footer = ({className}:any) => {
                 </li>
 
               </ul>
-            </div>
+            </div> */}
           </div>
           <div className='py-6 border-gray-800 border-t'>
             <div className='flex flex-col md:flex-row gap-3 items-center justify-between'>

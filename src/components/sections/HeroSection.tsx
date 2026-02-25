@@ -211,7 +211,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
               <div className="flex flex-col gap-8 lg:gap-12 items-start justify-end flex-1 w-full">
                 <div className="flex flex-col gap-4 lg:gap-6 items-start w-full text-white">
                   {/* Main heading */}
-                  <h1 className="w-full text-white text-[28px] md:text-[40px] lg:text-[56px] font-manrope font-bold not-italic leading-[110%] tracking-[-1.12px]">
+                  <h1 className="w-full text-white text-[36px] md:text-[40px] lg:text-[56px] font-manrope font-bold not-italic md:leading-[110%] leading-[1.08] tracking-[-1.12px]">
                     {data.title}
                     {data.titleHighlight && (
                       <>

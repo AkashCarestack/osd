@@ -84,7 +84,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
         </div>
 
         {/* Event Title */}
-        <h3 className="font-manrope font-bold leading-[1.3] min-w-full relative shrink-0 text-[#93c5fd] text-2xl tracking-[-0.24px] w-full whitespace-pre-wrap">
+        <h3 className="font-manrope font-bold leading-[1.3] min-w-full relative shrink-0 text-[#93c5fd] md:text-2xl text-xl tracking-[-0.24px] w-full whitespace-pre-wrap">
           {event.title}
         </h3>
 
@@ -175,7 +175,7 @@ const UpcomingEventsSection: React.FC<UpcomingEventsSectionProps> = ({ data }) =
       <Wrapper className="flex flex-col gap-12 w-full">
         {/* Section Title */}
         <div className="flex gap-8 items-end relative shrink-0 w-full">
-          <h2 className="font-manrope font-extrabold leading-[110%] relative shrink-0 text-white text-[48px] tracking-[-0.96px] w-full max-w-[709px]">
+          <h2 className="font-manrope font-extrabold leading-[110%] relative shrink-0 text-white md:text-[48px] text-[32px] tracking-[-0.96px] w-full max-w-[709px]">
             {sectionData.title}
           </h2>
         </div>
