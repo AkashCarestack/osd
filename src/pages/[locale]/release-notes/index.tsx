@@ -15,11 +15,11 @@ import { Articles } from '~/interfaces/post'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
-  getReleaseNotes,
-  getReleaseNotesCount,
   getCategories,
   getFooterData,
   getHomeSettings,
+  getReleaseNotes,
+  getReleaseNotesCount,
   getTags,
 } from '~/lib/sanity.queries'
 import { SharedPageProps } from '~/pages/_app'

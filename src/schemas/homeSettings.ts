@@ -29,6 +29,14 @@ export default {
       name: 'faq',
       title: 'FAQ Section',
     },
+    {
+      name: 'hero',
+      title: 'Hero Section',
+    },
+    {
+      name: 'whyPracticeLove',
+      title: 'Why Practices Love Section',
+    },
   ],
   fields: [
     {
@@ -231,6 +239,27 @@ export default {
       description: 'Configure the Frequently Asked Questions section',
       type: 'faqSection',
       group: 'faq',
+    },
+    {
+      name: 'heroSection',
+      title: 'Hero Section',
+      description: 'Configure the Hero section with title, description, and buttons',
+      type: 'heroSection',
+      group: 'hero',
+    },
+    {
+      name: 'whyPracticeLoveSection',
+      title: 'Why Practices Love Section',
+      description: 'Configure the Why Practices Love section with features and CTA',
+      type: 'whyPracticeLoveSection',
+      group: 'whyPracticeLove',
+    },
+    {
+      name: 'upcomingEventsSection',
+      title: 'Upcoming Events Section',
+      description: 'Configure the Upcoming Events section',
+      type: 'upcomingEventsSection',
+      group: 'popularBlogs',
     },
     defineField({
       name: 'language',

@@ -1,7 +1,7 @@
+import siteConfig from 'config/siteConfig'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-import siteConfig from 'config/siteConfig'
 import { generateHref } from '~/utils/common'
 
 /**

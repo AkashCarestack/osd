@@ -35,7 +35,7 @@ const SVGComponent: React.FC<SVGComponentProps> = ({ className, ...props }) => (
 </g>
 </g>
 <path d="M174.5 33L178.491 27.9444L174.593 23H175.889L179.12 27.1389L182.333 23H183.63L179.731 27.9444L183.722 33H182.407L179.12 28.75L175.815 33H174.5Z" fill="white"/>
-<g clip-path="url(#clip5_177_1998)">
+<g clipPath="url(#clip5_177_1998)">
 <rect x="207.721" y="13.16" width="152.88" height="29.68" fill="url(#pattern0_177_1998)"/>
 </g>
 <defs>

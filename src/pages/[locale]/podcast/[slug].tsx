@@ -27,9 +27,9 @@ import {
   getTags,
   podcastSlugsQuery,
 } from '~/lib/sanity.queries'
+import { sanitizeUrl } from '~/utils/common'
 import { generateMetaData } from '~/utils/customHead'
 import { generateJSONLD } from '~/utils/generateJSONLD'
-import { sanitizeUrl } from '~/utils/common'
 
 interface Props {
   podcast: Podcasts

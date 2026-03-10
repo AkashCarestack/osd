@@ -10,7 +10,12 @@ const config = {
       
       {
         source: `/article/:slug*`,
-        destination: '/en/article/:slug*',
+        destination: '/en/topic/:slug*',
+        locale: false,
+      },
+      {
+        source: `/topic/:slug*`,
+        destination: '/en/topic/:slug*',
         locale: false,
       },
       {
@@ -66,6 +71,11 @@ const config = {
       {
         source: '/topic/:slug*',
         destination: '/en/topic/:slug*',
+        locale: false,
+      },
+      {
+        source: '/faq',
+        destination: '/en/faq',
         locale: false,
       },
 

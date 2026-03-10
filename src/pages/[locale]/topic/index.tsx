@@ -1,7 +1,7 @@
 import siteConfig from 'config/siteConfig'
 import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import { useRouter } from 'next/router'
-import { useMemo, useState, useEffect } from 'react'
+import { useEffect,useMemo, useState } from 'react'
 
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import { BaseUrlProvider } from '~/components/Context/UrlContext'

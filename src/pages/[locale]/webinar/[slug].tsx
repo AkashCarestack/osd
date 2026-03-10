@@ -14,10 +14,10 @@ import Section from '~/components/Section'
 import SidebarTitle from '~/components/typography/SidebarTitle'
 import { Podcasts } from '~/interfaces/post'
 import SEOHead from '~/layout/SeoHead'
-import { urlForImage } from '~/lib/sanity.image'
 import Wrapper from '~/layout/Wrapper'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
+import { urlForImage } from '~/lib/sanity.image'
 import {
   getCategories,
   getFooterData,
@@ -28,9 +28,9 @@ import {
   getWebinars,
   webinarSlugsQuery,
 } from '~/lib/sanity.queries'
+import { sanitizeUrl } from '~/utils/common'
 import { CustomHead, generateMetaData } from '~/utils/customHead'
 import { generateJSONLD } from '~/utils/generateJSONLD'
-import { sanitizeUrl } from '~/utils/common'
 
 interface Props {
   webinar: Podcasts

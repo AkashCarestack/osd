@@ -1,21 +1,23 @@
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+
 import { ArrowRightIcon } from '@sanity/icons'
 import { ArrowLeftIcon } from '@sanity/icons'
 import { ArrowTopRightIcon } from '@sanity/icons'
 import siteConfig from 'config/siteConfig'
 import { useRouter } from 'next/router'
-import React, { useRef, useEffect } from 'react'
+import React, { useEffect,useRef } from 'react'
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
 
 import Anchor from '~/components/commonSections/Anchor'
 import ImageLoader from '~/components/commonSections/ImageLoader'
+import { generateHref } from '~/utils/common'
+
 import H2Large from '../typography/H2Large'
 import H4Large from '../typography/H4Large'
 import Carousel from './Carousel'
-import { generateHref } from '~/utils/common'
 
 interface BannerBlockProps {
   items?: any
@@ -62,30 +64,51 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
     }
 
     return (
-      <div className="flex w-full justify-center px-4">
-        <section className="my-9 max-w-7xl w-full">
-          <div className="flex justify-between gap-6 pb-9">
-            <div className="flex flex-col gap-3">
-              <H2Large className="text-zinc-900">Major Topics</H2Large>
-              <p className="text-zinc-900 opacity-80 text-base font-medium leading-[1.6] max-w-[601px]">
-                Articles that specifically refer to the dashboards available to the DEO.
-              </p>
+      <div className="flex w-full justify-center px-4 bg-zinc-100" id="knowledge-guides-section">
+        <section className="md:pt-16 md:pb-24 py-12 max-w-7xl w-full">
+          <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-6 pb-12 items-start md:items-center">
+            <div>
+              <H2Large className="text-zinc-900">Knowledge Guides</H2Large>
             </div>
-            <div className="flex gap-9 self-end">
-              <div className="flex gap-4 md:gap-9">
+            <div className="flex flex-wrap gap-4 md:gap-6 lg:gap-9 items-center w-full md:w-auto">
+              <Anchor
+                href="https://osdental.zendesk.com/hc/en-us"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 overflow-hidden relative rounded-[5px] shrink-0 transition-colors group"
+              >
+                <span className="font-inter font-medium text-base leading-[1.6] text-zinc-900 text-center whitespace-nowrap">
+                  See All Guides
+                </span>
+                <div className="flex items-center justify-center">
+                  <div className="flex-none">
+                    <ArrowTopRightIcon
+                      className="group-hover:translate-y-[-2px] transition-transform duration-300"
+                      height={20}
+                      width={20}
+                    />
+                  </div>
+                </div>
+              </Anchor>
+              <div className="flex gap-2 md:gap-4 lg:gap-9 ml-auto md:ml-0">
                 <button className="text-zinc-900 category-prev disabled:opacity-30 select-none">
-                  <ArrowLeftIcon height={48} width={48} />
+                  <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center">
+                    <ArrowLeftIcon className="w-full h-full" />
+                  </div>
                 </button>
                 <button className="text-zinc-900 category-next disabled:opacity-30 select-none">
-                  <ArrowRightIcon height={48} width={48} />
+                  <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center">
+                    <ArrowRightIcon className="w-full h-full" />
+                  </div>
                 </button>
               </div>
             </div>
           </div>
-          <div>
+          <div className="w-full overflow-hidden">
             <Swiper
+              className="w-full"
               modules={[Navigation, Pagination]}
-              spaceBetween={30}
+              spaceBetween={24}
               slidesPerView={1}
               slidesPerGroup={1}
               navigation={{
@@ -95,12 +118,15 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
               breakpoints={{
                 640: {
                   slidesPerView: 1,
+                  spaceBetween: 24,
                 },
                 768: {
                   slidesPerView: 2,
+                  spaceBetween: 24,
                 },
-                1200: {
+                1024: {
                   slidesPerView: 3,
+                  spaceBetween: 24,
                 },
               }}
               onSwiper={(swiper) => {
@@ -125,8 +151,8 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
                 const colorIndex = index % bgColors.length
 
                 return (
-                  <SwiperSlide key={category._id || index} className="!h-auto">
-                    <div className="flex flex-col items-start overflow-hidden p-8 relative rounded-[10px] shrink-0 w-full h-full">
+                  <SwiperSlide key={category._id || index} className="!h-auto !min-w-0">
+                    <div className="flex flex-col items-start overflow-hidden md:p-8 p-6 relative rounded-[10px] w-full h-full min-w-0">
                       {/* Background image with color overlay */}
                       <div
                         aria-hidden="true"
@@ -150,7 +176,7 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
                       {/* Content card */}
                       <Anchor
                         href={router.isReady ? generateHref(locale as string, href) : '#'}
-                        className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 relative rounded-[5px] shrink-0 w-full group h-full"
+                        className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 justify-between relative rounded-[5px] w-full min-w-0 group h-full"
                       >
                         <div className="flex flex-col gap-2 items-start w-full">
                           {/* Category badge */}
@@ -169,10 +195,10 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
                         {/* Read Now link */}
                         <div className="flex gap-2 items-center">
                           <span className="text-zinc-900 text-base font-medium leading-[1.6]">
-                            Read Now
+                            Learn More
                           </span>
                           <div className="flex items-center justify-center">
-                            <div className="-scale-y-100 flex-none">
+                            <div className="scale-x-[1] scale-y-[1] flex-none">
                               <ArrowTopRightIcon
                                 className="group-hover:translate-y-[-2px] transition-transform duration-300"
                                 height={20}
@@ -197,7 +223,7 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
   if (!items || items.length === 0) return null
   return (
     <div className={` flex w-full justify-center px-4 `}>
-      <section className="my-9 max-w-7xl w-full">
+      <section className='max-w-7xl w-full'>
         <div className="flex justify-between gap-6 pb-9">
           <H2Large>{`Ebooks and Webinars`}</H2Large>
           <div className="flex gap-9 self-end">

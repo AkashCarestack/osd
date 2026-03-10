@@ -11,9 +11,11 @@ import DynamicPages from '~/layout/DynamicPages'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
+  getAllFAQs,
   getCategories,
   getEbooks,
   getEventCards,
+  getEvents,
   getFooterData,
   getHomeSettings,
   getPodcasts,
@@ -47,6 +49,8 @@ interface IndexPageProps {
   tags: Array<any>
   testimonials: Array<any>
   homeSettings: any
+  faqCategories: any[]
+  events: any[]
 }
 
 
@@ -95,7 +99,9 @@ export const getStaticProps: GetStaticProps<
       allEventCards,
       categories,
       footerData,
-      podcasts
+      podcasts,
+      faqCategories,
+      events,
     ] = await Promise.all([
       getPosts(client, 5,region),
       getPosts(client,undefined,region),
@@ -110,8 +116,15 @@ export const getStaticProps: GetStaticProps<
       getEventCards(client),
       getCategories(client),
       getFooterData(client, region),
-      getPodcasts(client, undefined, undefined, region)
+      getPodcasts(client, undefined, undefined, region),
+      getAllFAQs(client),
+      getEvents(client, region),
     ])
+
+    // Filter categories that have FAQs
+    const categoriesWithFAQs = faqCategories.filter(
+      (category) => category.faq && category.faq.faqs && category.faq.faqs.length > 0,
+    )
 
     return {
       props: {
@@ -130,7 +143,9 @@ export const getStaticProps: GetStaticProps<
         allEventCards,
         categories,
         footerData,
-        podcasts
+        podcasts,
+        faqCategories: categoriesWithFAQs,
+        events: events || [],
       },
     }
   } catch (error) {
@@ -148,6 +163,9 @@ export const getStaticProps: GetStaticProps<
         releaseNotes: [],
         footerData: [],
         podcasts: [],
+        categories: [],
+        faqCategories: [],
+        events: [],
         error: true,
       },
     }
@@ -196,6 +214,8 @@ export default function IndexPage(props: IndexPageProps) {
           eventCards={eventCards}
           podcasts={props?.podcasts}
           categories={props?.categories}
+          faqCategories={props?.faqCategories}
+          events={props?.events}
         />
       </Layout>
     </GlobalDataProvider>

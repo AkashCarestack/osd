@@ -15,18 +15,25 @@ import newContent from './newContent'
 import post from './post'
 import asideBannerBlock from './sections/asideBannerBlock'
 import author from './sections/author'
-import customer from './sections/customer'
-import demoBannerBlockUS from './sections/demoBannerBlockUS'
-import demoBannerBlockGB from './sections/demoBannerBlockGB'
-import demoBannerBlockAU from './sections/demoBannerBlockAU'
 import commonBannerBlock from './sections/commonBannerBlock'
+import customer from './sections/customer'
+import demoBannerBlockAU from './sections/demoBannerBlockAU'
+import demoBannerBlockGB from './sections/demoBannerBlockGB'
+import demoBannerBlockUS from './sections/demoBannerBlockUS'
 import faqSection from './sections/faqSection'
+import heroSection from './sections/heroSection'
 import testimonialCard from './sections/testimonialCard'
 import siteSetting from './siteSetting'
 import table from './table'
 import tag from './tag'
 import testiMonial from './testiMonial'
 import videos from './videos'
+import glossary from './contentRepo/glossary'
+import faq from './contentRepo/faq'
+import whyPracticeLoveSection from './contentRepo/whyPracticeLoveSection'
+import event from './contentRepo/event'
+import eventObject from './contentRepo/eventObject'
+import upcomingEventsSection from './contentRepo/upcomingEventsSection'
 
 export const schemaTypes = [
   post,
@@ -39,6 +46,7 @@ export const schemaTypes = [
   demoBannerBlockAU,
   commonBannerBlock,
   faqSection,
+  heroSection,
   dynamicComponent,
   author,
   homeSettings,
@@ -55,7 +63,13 @@ export const schemaTypes = [
   customContent,
   eventCard,
   category,
-  footer
+  footer,
+  glossary,
+  faq,
+  whyPracticeLoveSection,
+  event,
+  eventObject,
+  upcomingEventsSection
 ]
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -69,6 +83,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     demoBannerBlockAU,
     commonBannerBlock,
     faqSection,
+    heroSection,
     dynamicComponent,
     author,
     homeSettings,
@@ -85,6 +100,12 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     customContent,
     eventCard,
     category,
-    footer
+    footer,
+    glossary,
+    faq,
+    whyPracticeLoveSection,
+    event,
+    eventObject,
+    upcomingEventsSection
   ],
 }

@@ -6,7 +6,8 @@ export const getBasePath = (
 ): string => {
   const basePaths = {
     podcast: 'podcast',
-    article: 'article',
+    topic: 'topic',
+    article: 'topic', // Map article to topic for backward compatibility
     webinar: 'webinar',
     'press-release': 'press-release',
     ebook: 'ebook',

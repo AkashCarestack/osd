@@ -39,6 +39,20 @@ export default defineType({
         },
       ],
     }),
+    defineField({
+      name: 'glossary',
+      title: 'Glossary',
+      description: 'Select a glossary from the content repository to associate with this category.',
+      type: 'reference',
+      to: [{ type: 'glossary' }],
+    }),
+    defineField({
+      name: 'faq',
+      title: 'FAQ',
+      description: 'Select an FAQ from the content repository to associate with this category.',
+      type: 'reference',
+      to: [{ type: 'faq' }],
+    }),
   ],
   preview: {
     select: {

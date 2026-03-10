@@ -27,10 +27,9 @@ import  {ShortNavPopover}  from './overlaynav/ShortNavPopover';
 
 
 export const navigationLinks = [
-  { id: 'training', label: 'Training', sectionId: 'training-section' },
-  { id: 'release-notes', label: 'Release Notes', sectionId: 'release-notes-section' },
-  { id: 'faqs', label: 'FAQs', sectionId: 'faqs-section' },
+  { id: 'training', label: 'Training', sectionId: 'knowledge-guides-section' },
   { id: 'events-updates', label: 'Events & Updates', sectionId: 'events-updates-section' },
+  { id: 'faqs', label: 'FAQs', sectionId: 'faqs-section' },
 ];
 
 
@@ -41,7 +40,7 @@ const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [headerFixed, setHeaderFixed] = useState(false);
   const [navPopoverId, setNavPopoverId] = useState('nav-popover');
-  const [activeSection, setActiveSection] = useState<string>('training');
+  const [activeSection, setActiveSection] = useState<string>('');
   const [showTopicsDropdown, setShowTopicsDropdown] = useState(false);
   const pathname = usePathname()
 
@@ -88,7 +87,7 @@ const Header = () => {
 
       // Check if we're at the top of the page
       if (window.scrollY < 100) {
-        setActiveSection('training');
+        setActiveSection('');
         return;
       }
 
@@ -169,25 +168,34 @@ const Header = () => {
                       <nav className="flex flex-col lg:flex-row lg:gap-10 flex-wrap border-b border-zinc-800 pb-4 lg:pb-0 lg:border-0">
                         {navigationLinks && navigationLinks?.map((link) => {
                           const isActive = activeSection === link.id;
+                          
                           return (
                             <button
                               key={link.id}
-                              onClick={() => scrollToSection(link.sectionId, link.id)}
-                              className={`text-base transition-colors duration-200 relative pb-1 lg:pb-0 ${
+                              onClick={() => {
+                                // If not on home page, navigate to home first, then scroll
+                                if (router.asPath !== homeUrl && router.asPath !== '/') {
+                                  router.push(homeUrl).then(() => {
+                                    setTimeout(() => {
+                                      scrollToSection(link.sectionId, link.id);
+                                    }, 100);
+                                  });
+                                } else {
+                                  scrollToSection(link.sectionId, link.id);
+                                }
+                              }}
+                              className={`text-base transition-colors duration-200 ${
                                 isActive
                                   ? 'text-white'
                                   : 'text-zinc-500 hover:text-zinc-300'
                               }`}
                             >
                               {link.label}
-                              {isActive && (
-                                <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-white" />
-                              )}
                             </button>
                           );
                         })}
                       </nav>
-                      <RegionSwitcher className='md:pl-10'/>
+                      {/* <RegionSwitcher className='md:pl-10'/> */}
                     </div>
                     {isMobile && <div onClick={toggleMenu} className={`flex text-zinc-900 cursor-pointer items-center select-none z-20 rounded-lg lg:rounded-xl lg:py-[6px] lg:pr-[10px] lg:pl-[14px]
                       ${showMenu ? 'absolute top-5 lg:top-[8px] right-5 lg:right-[8px] lg:relative' : 'bg-white'}`}>

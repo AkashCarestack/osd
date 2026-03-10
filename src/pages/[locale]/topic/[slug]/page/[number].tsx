@@ -11,8 +11,10 @@ import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection
 import ContentHub from '~/contentUtils/ContentHub'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Post, Tag } from '~/interfaces/post'
+import SEOHead from '~/layout/SeoHead'
 import Wrapper from '~/layout/Wrapper'
 import { getClient } from '~/lib/sanity.client'
+import { urlForImage } from '~/lib/sanity.image'
 import {
   getArticlesCount,
   getCategories,
@@ -29,8 +31,6 @@ import {
   getWebinarsCount,
 } from '~/lib/sanity.queries'
 import { SharedPageProps } from '~/pages/_app'
-import SEOHead from '~/layout/SeoHead'
-import { urlForImage } from '~/lib/sanity.image'
 import { sanitizeUrl } from '~/utils/common'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {

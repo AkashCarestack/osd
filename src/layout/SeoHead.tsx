@@ -2,8 +2,8 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
 
-import { useAlternatePaths, type AlternatePath } from '~/components/utils/alternatePaths'
-import { slugToCapitalized, sanitizeUrl } from '~/utils/common'
+import { type AlternatePath,useAlternatePaths } from '~/components/utils/alternatePaths'
+import { sanitizeUrl,slugToCapitalized } from '~/utils/common'
 
 interface SEOHeadProps {
   title: string

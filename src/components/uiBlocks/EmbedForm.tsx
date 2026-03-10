@@ -1,5 +1,6 @@
-import * as React from 'react'
 import { useRouter } from 'next/router'
+import * as React from 'react'
+
 import HubSpotForm from './HubspotForm'
 
 export interface EmbedFormProps {

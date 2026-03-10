@@ -12,6 +12,8 @@ import ReleaseNotesHeroSection from '~/components/sections/ReleaseNotesHeroSecti
 import ShortBannerSection from '~/components/sections/ShortBannerSection'
 import SliderSection from '~/components/sections/SliderSection'
 import TestimonialSection from '~/components/sections/TestimonialSection'
+import WhyPracticeLoveSection from '~/components/sections/WhyPracticeLoveSection'
+import UpcomingEventsSection from '~/components/sections/UpcomingEventsSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Tag } from '~/interfaces/post'
 import { getUniqueData, getUniqueReorderedCarouselItems } from '~/utils/common'
@@ -31,6 +33,8 @@ interface DynamicProps {
   ebooks?: any
   releaseNotes?: any
   categories?: any[]
+  faqCategories?: any[]
+  events?: any[]
 }
 
 const DynamicPages = ({
@@ -45,6 +49,8 @@ const DynamicPages = ({
   eventCards,
   podcasts,
   categories,
+  faqCategories,
+  events,
 }: DynamicProps) => {
   const featuredBlog = homeSettings?.FeaturedBlog || posts[0]
   const customBrowseContent = homeSettings?.customBrowseContent 
@@ -87,21 +93,22 @@ const DynamicPages = ({
         <TagSelect tags={tags} tagLimit={7} />
          <EventCarousel allEventCards={uniqueEventCards} />
          <div id="topics-section">
-          <HeroSection />
+          <HeroSection heroData={homeSettings?.heroSection} />
         </div>
+        <WhyPracticeLoveSection 
+          data={homeSettings?.whyPracticeLoveSection} 
+          heroPrimaryButtonLink={homeSettings?.heroSection?.primaryButtonLink}
+        />
+
          {/* <CategoryCardsSection categories={categories} /> */}
          <SliderSection items={reorderedCarouselItems} categories={categories} />
-        <LatestBlogs contents={latestPosts} />
-        <FeaturedAndPopularBlogs
-          featuredBlog={featuredBlog}
+         <UpcomingEventsSection data={homeSettings?.upcomingEventsSection} cmsEvents={events} />
+        {/* <LatestBlogs contents={latestPosts} /> */}
+        {/* <FeaturedAndPopularBlogs
+          featuredBlog={featuredBlog
           popularBlogs={featuredContents}
-        />
-        <div id="release-notes-section">
-          <ReleaseNotesHeroSection releaseNotes={releaseNotes} />
-        </div>
-        {/* <BannerSubscribeSection /> */}
-        <TestimonialSection testimonials={testimonialList} />
-        <div id="training-section">
+        /> */}
+        {/* <div id="training-section ">
           <AllcontentSection
             customBrowseContent={customBrowseContent}
             allContent={podcastPosts}
@@ -111,15 +118,22 @@ const DynamicPages = ({
             cardType="podcast-card"
             customHeading="Training for Onboarding & Learning"
             customButtonText="View All Trainings"
+            headingWithLineBreak={true}
           />
-        </div>
+        </div> */}
+        {/* <div id="release-notes-section">
+          <ReleaseNotesHeroSection releaseNotes={releaseNotes} />
+        </div> */}
+        {/* <BannerSubscribeSection /> */}
+        <TestimonialSection testimonials={testimonialList} />
+
         <div id="faqs-section">
-          <FAQSection faqData={homeSettings?.faqSection} />
+          <FAQSection faqCategories={faqCategories} />
         </div>
         <div id="events-updates-section">
           <EventCarousel bgColor={'white'} allEventCards={uniqueEventCards} />
         </div>
-        <BannerSubscribeSection hideBanner={true} />
+        {/* <BannerSubscribeSection hideBanner={true} /> */}
       </BaseUrlProvider>
     </>
   )

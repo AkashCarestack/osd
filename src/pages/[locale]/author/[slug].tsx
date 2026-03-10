@@ -10,9 +10,11 @@ import Section from '~/components/Section'
 import AllcontentSection from '~/components/sections/AllcontentSection'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
 import { Author, Post } from '~/interfaces/post'
+import SEOHead from '~/layout/SeoHead'
 import Wrapper from '~/layout/Wrapper'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
+import { urlForImage } from '~/lib/sanity.image'
 import {
   authorSlugsQuery,
   getAuthor,
@@ -23,8 +25,6 @@ import {
   getTags,
 } from '~/lib/sanity.queries'
 import { CustomHead, metaTagDataForAuthor } from '~/utils/customHead'
-import SEOHead from '~/layout/SeoHead'
-import { urlForImage } from '~/lib/sanity.image'
 
 import { SharedPageProps } from '../../_app'
 

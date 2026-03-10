@@ -116,6 +116,12 @@ export const postsQuery = groq`
     tagName,
     slug
   },
+  "category": category->{
+    _id,
+    categoryName,
+    categoryDescription,
+    slug,
+  },
 }
 `
 
@@ -138,6 +144,29 @@ export const categoriesQuery = groq`*[_type == "category" ]  | order(categoryNam
     date,
     language,
     ${imageFragment},
+  },
+  "glossary": glossary-> {
+    _id,
+    mainHeading,
+    subheading,
+    terms[] {
+      term,
+      value
+    }
+  },
+  "faq": faq-> {
+    _id,
+    name,
+    "author": author-> {
+      _id,
+      name,
+      slug,
+      ${authorImageFragment},
+    },
+    faqs[] {
+      question,
+      answer
+    }
   },
 }`
 export const tagsByOrderQuery = groq`*[_type == "tag" ] | order(tagName asc) {_id, slug, tagName}`
@@ -497,12 +526,54 @@ export const homeSettingsQuery = groq`
         answer
       }
     },
+    "heroSection": heroSection {
+      title,
+      titleHighlight,
+      description,
+      primaryButtonText,
+      primaryButtonLink,
+      secondaryButtonText,
+      secondaryButtonLink,
+      "backgroundImage": backgroundImage.asset->url,
+      "videoThumbnail": videoThumbnail.asset->url,
+      videoLink
+    },
+    "whyPracticeLoveSection": whyPracticeLoveSection {
+      title,
+      description,
+      features[] {
+        title,
+        description
+      },
+      ctaTitle,
+      ctaDescription,
+      ctaButtonText,
+      ctaButtonLink,
+      "ctaBackgroundImage": ctaBackgroundImage.asset->url
+    },
+    "upcomingEventsSection": upcomingEventsSection {
+      title,
+      events[] {
+        title,
+        eventType,
+        location,
+        date,
+        description,
+        link
+      }
+    },
   }[0]
 `
 
 const siteSettingsQuery = groq`*[_type == "siteSetting"] | order(date desc) {
-...,
-
+  ...,
+  "favicon": favicon.asset-> {
+    _id,
+    url,
+    metadata {
+      dimensions
+    }
+  }
 }`
 
 export async function getPosts(
@@ -542,6 +613,33 @@ export async function getTags(client: SanityClient): Promise<Tag[]> {
 }
 export async function getCategories(client: SanityClient,): Promise<any[]> {
   return await client.fetch(categoriesQuery,)
+}
+
+export const allFAQsQuery = groq`
+  *[_type == "category" && defined(faq)] | order(categoryName asc) {
+    _id,
+    categoryName,
+    categoryDescription,
+    slug,
+    "faq": faq-> {
+      _id,
+      name,
+      "author": author-> {
+        _id,
+        name,
+        slug,
+        ${authorImageFragment},
+      },
+      faqs[] {
+        question,
+        answer
+      }
+    }
+  }
+`
+
+export async function getAllFAQs(client: SanityClient): Promise<any[]> {
+  return await client.fetch(allFAQsQuery)
 }
 export async function getTagsByOrder(client: SanityClient): Promise<Tag[]> {
   return await client.fetch(tagsByOrderQuery)
@@ -994,6 +1092,22 @@ export const authorRelatedContentQuery = groq`
   }
 `
 
+export const eventsQuery = groq`
+  *[_type == "event"] | order(date asc) {
+    _id,
+    title,
+    eventType,
+    location,
+    date,
+    description,
+    link
+  }
+`
+
+export async function getEvents(client: SanityClient, _region?: string): Promise<any[]> {
+  return await client.fetch(eventsQuery)
+}
+
 export async function getHomeSettings(client: SanityClient,region: string = 'en'): Promise<Post[]> {
   return await client.fetch(homeSettingsQuery,{region:region})
 }
@@ -1288,6 +1402,7 @@ export const releaseNotesQuery = groq`
   title,
   slug,
   contentType,
+  articleUrl,
   "audioFile": Video.link,
   "platform": Video.platform,
   duration,
@@ -1319,6 +1434,7 @@ export const releaseNotesBySlugQuery = groq`
     title,
     slug,
     contentType,
+    articleUrl,
     duration,
     publishedAt,
     excerpt,
@@ -1421,6 +1537,29 @@ export const getCategoryBySlugQuery = groq`
       date,
       language,
       ${imageFragment},
+    },
+    "glossary": glossary-> {
+      _id,
+      mainHeading,
+      subheading,
+      terms[] {
+        term,
+        value
+      }
+    },
+    "faq": faq-> {
+      _id,
+      name,
+      "author": author-> {
+        _id,
+        name,
+        slug,
+        ${authorImageFragment},
+      },
+      faqs[] {
+        question,
+        answer
+      }
     },
   }
 `
