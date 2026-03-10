@@ -13,6 +13,7 @@ import {
   getCategories,
   getEbooks,
   getEventCards,
+  getEvents,
   getFooterData,
   getHomeSettings,
   getPodcasts,
@@ -47,6 +48,7 @@ interface IndexPageProps {
   testimonials: Array<any>
   homeSettings: any
   faqCategories: any[]
+  events: any[]
 }
 
 export const getStaticProps: GetStaticProps<
@@ -71,7 +73,8 @@ export const getStaticProps: GetStaticProps<
       categories,
       footerData,
       podcasts,
-      faqCategories
+      faqCategories,
+      events,
     ] = await Promise.all([
       getPosts(client, 5),
       getPosts(client),
@@ -87,7 +90,8 @@ export const getStaticProps: GetStaticProps<
       getCategories(client),
       getFooterData(client, region),
       getPodcasts(client, 0, undefined, region),
-      getAllFAQs(client)
+      getAllFAQs(client),
+      getEvents(client, region),
     ])
 
     // Filter categories that have FAQs
@@ -113,7 +117,8 @@ export const getStaticProps: GetStaticProps<
         categories,
         footerData,
         podcasts: podcasts || [],
-        faqCategories: categoriesWithFAQs
+        faqCategories: categoriesWithFAQs,
+        events: events || [],
       },
     }
   } catch (error) {
@@ -133,6 +138,7 @@ export const getStaticProps: GetStaticProps<
         podcasts: [],
         categories: [],
         faqCategories: [],
+        events: [],
         error: true,
       },
     }
@@ -179,6 +185,7 @@ export default function IndexPage(props: IndexPageProps) {
           eventCards={eventCards}
           categories={props?.categories}
           faqCategories={props?.faqCategories}
+          events={props?.events}
         />
       </Layout>
     </GlobalDataProvider>

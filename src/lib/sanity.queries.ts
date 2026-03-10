@@ -1092,6 +1092,22 @@ export const authorRelatedContentQuery = groq`
   }
 `
 
+export const eventsQuery = groq`
+  *[_type == "event"] | order(date asc) {
+    _id,
+    title,
+    eventType,
+    location,
+    date,
+    description,
+    link
+  }
+`
+
+export async function getEvents(client: SanityClient, _region?: string): Promise<any[]> {
+  return await client.fetch(eventsQuery)
+}
+
 export async function getHomeSettings(client: SanityClient,region: string = 'en'): Promise<Post[]> {
   return await client.fetch(homeSettingsQuery,{region:region})
 }

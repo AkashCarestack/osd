@@ -34,6 +34,7 @@ interface DynamicProps {
   releaseNotes?: any
   categories?: any[]
   faqCategories?: any[]
+  events?: any[]
 }
 
 const DynamicPages = ({
@@ -49,6 +50,7 @@ const DynamicPages = ({
   podcasts,
   categories,
   faqCategories,
+  events,
 }: DynamicProps) => {
   const featuredBlog = homeSettings?.FeaturedBlog || posts[0]
   const customBrowseContent = homeSettings?.customBrowseContent 
@@ -100,7 +102,7 @@ const DynamicPages = ({
 
          {/* <CategoryCardsSection categories={categories} /> */}
          <SliderSection items={reorderedCarouselItems} categories={categories} />
-         <UpcomingEventsSection data={homeSettings?.upcomingEventsSection} />
+         <UpcomingEventsSection data={homeSettings?.upcomingEventsSection} cmsEvents={events} />
         {/* <LatestBlogs contents={latestPosts} /> */}
         {/* <FeaturedAndPopularBlogs
           featuredBlog={featuredBlog

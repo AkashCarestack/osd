@@ -17,8 +17,20 @@ interface UpcomingEventsData {
   events?: Event[]
 }
 
+interface CmsEvent {
+  _id?: string
+  title?: string
+  eventType?: string
+  location?: string
+  date?: string
+  description?: string
+  link?: string
+}
+
 interface UpcomingEventsSectionProps {
   data?: UpcomingEventsData | null
+  /** Standalone event documents from CMS (Content Repo > Event) */
+  cmsEvents?: CmsEvent[] | null
 }
 
 // External link icon SVG - square with arrow pointing diagonally up-right
@@ -71,10 +83,13 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   }
 
   const eventType = event.eventType || 'Offline'
-  const link = event.link || '#'
+  // Ensure link from CMS is a string; use # when missing so we don't navigate
+  const rawLink = event.link
+  const link = typeof rawLink === 'string' && rawLink.trim() !== '' ? rawLink.trim() : '#'
+  const isExternal = link !== '#' && (link.startsWith('http://') || link.startsWith('https://'))
 
-  return (
-    <div className="cursor-pointer bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] border-solid flex items-start justify-between p-6 rounded-[10px] flex-1 min-w-[280px] transition-all duration-300 hover:bg-[rgba(255,255,255,0.10)] hover:border-[rgba(255,255,255,0.20)]">
+  const cardContent = (
+    <>
       <div className="flex flex-1 flex-col gap-2 items-start w-full">
         {/* Event Type Badge */}
         <div className="bg-[rgba(255,255,255,0.1)] flex items-center justify-center px-2 py-1 rounded-[4px] shrink-0">
@@ -108,57 +123,84 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
       </div>
 
       {/* External Link Icon */}
+      <span className="relative shrink-0 w-5 h-5 flex items-center justify-center">
+        <ExternalLinkIcon />
+      </span>
+    </>
+  )
+
+  const cardClass =
+    'cursor-pointer bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] border-solid flex items-start justify-between p-6 rounded-[10px] flex-1 min-w-[280px] transition-all duration-300 hover:bg-[rgba(255,255,255,0.10)] hover:border-[rgba(255,255,255,0.20)]'
+
+  if (isExternal) {
+    return (
+      <a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cardClass}
+      >
+        {cardContent}
+      </a>
+    )
+  }
+
+  if (link !== '#') {
+    return (
       <Anchor
         href={link}
-        target={link !== '#' ? '_blank' : undefined}
-        rel={link !== '#' ? 'noopener noreferrer' : undefined}
-        className="relative shrink-0 w-5 h-5 flex items-center justify-center"
+        className={cardClass}
       >
-        <ExternalLinkIcon />
+        {cardContent}
       </Anchor>
-    </div>
-  )
+    )
+  }
+
+  return <div className={cardClass}>{cardContent}</div>
 }
 
-const UpcomingEventsSection: React.FC<UpcomingEventsSectionProps> = ({ data }) => {
-  // Default data - 2 events
-  const defaultData: UpcomingEventsData = {
-    title: 'Upcoming Events',
-    events: [
-      {
-        title: 'DEO Treatment Closing Academy',
-        eventType: 'Offline',
-        location: 'Dallas, TX',
-        date: '2026-02-26',
-        link: '#',
-      },
-      {
-        title: 'Women in DSO, Empower & Grow Conference',
-        eventType: 'Offline',
-        location: 'Dallas, TX',
-        date: '2026-02-26',
-        link: '#',
-      },
-    ],
-  }
+const defaultTitle = 'Upcoming Events'
 
-  // Transform Sanity data to match component interface
-  const transformData = (sanityData: any): UpcomingEventsData | null => {
-    if (!sanityData) {
-      return null
-    }
+const mapCmsEventToEvent = (e: CmsEvent): Event => ({
+  title: e.title ?? '',
+  eventType: e.eventType,
+  location: e.location,
+  date: e.date,
+  description: e.description,
+  link: typeof e.link === 'string' ? e.link.trim() : undefined,
+})
 
-    return {
-      title: sanityData.title || defaultData.title,
-      events:
-        sanityData.events && sanityData.events.length > 0
-          ? sanityData.events
-          : defaultData.events,
-    }
-  }
+const UpcomingEventsSection: React.FC<UpcomingEventsSectionProps> = ({ data, cmsEvents }) => {
+  const defaultEvents: Event[] = [
+    {
+      title: 'DEO Treatment Closing Academy',
+      eventType: 'Offline',
+      location: 'Dallas, TX',
+      date: '2026-02-26',
+      link: '#',
+    },
+    {
+      title: 'Women in DSO, Empower & Grow Conference',
+      eventType: 'Offline',
+      location: 'Dallas, TX',
+      date: '2026-02-26',
+      link: '#',
+    },
+  ]
 
-  const transformedData = data ? transformData(data) : null
-  const sectionData = transformedData || defaultData
+  // Prefer Content Repo events (cmsEvents) when available; then Home Settings section; else default
+  const hasContentRepoEvents = Array.isArray(cmsEvents) && cmsEvents.length > 0
+  const sectionFromCms = data != null && (data.title != null || (data.events?.length ?? 0) > 0)
+  const hasSectionEvents = Boolean(sectionFromCms && data?.events?.length)
+
+  const title = (sectionFromCms && data?.title) || defaultTitle
+  const events: Event[] = hasContentRepoEvents
+    ? cmsEvents.map(mapCmsEventToEvent)
+    : hasSectionEvents
+      ? (data?.events ?? [])
+      : defaultEvents
+
+  const sectionData: UpcomingEventsData = { title, events }
 
   if (!sectionData.events || sectionData.events.length === 0) {
     return null

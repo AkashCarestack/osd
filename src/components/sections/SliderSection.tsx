@@ -104,10 +104,11 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="w-full overflow-hidden">
             <Swiper
+              className="w-full"
               modules={[Navigation, Pagination]}
-              spaceBetween={30}
+              spaceBetween={24}
               slidesPerView={1}
               slidesPerGroup={1}
               navigation={{
@@ -117,12 +118,15 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
               breakpoints={{
                 640: {
                   slidesPerView: 1,
+                  spaceBetween: 24,
                 },
                 768: {
                   slidesPerView: 2,
+                  spaceBetween: 24,
                 },
-                1200: {
+                1024: {
                   slidesPerView: 3,
+                  spaceBetween: 24,
                 },
               }}
               onSwiper={(swiper) => {
@@ -147,8 +151,8 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
                 const colorIndex = index % bgColors.length
 
                 return (
-                  <SwiperSlide key={category._id || index} className="!h-auto">
-                    <div className="flex flex-col items-start overflow-hidden md:p-8 p-6 relative rounded-[10px] shrink-0 w-full h-full">
+                  <SwiperSlide key={category._id || index} className="!h-auto !min-w-0">
+                    <div className="flex flex-col items-start overflow-hidden md:p-8 p-6 relative rounded-[10px] w-full h-full min-w-0">
                       {/* Background image with color overlay */}
                       <div
                         aria-hidden="true"
@@ -172,7 +176,7 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
                       {/* Content card */}
                       <Anchor
                         href={router.isReady ? generateHref(locale as string, href) : '#'}
-                        className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 justify-between relative rounded-[5px] shrink-0 w-full group h-full"
+                        className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 justify-between relative rounded-[5px] w-full min-w-0 group h-full"
                       >
                         <div className="flex flex-col gap-2 items-start w-full">
                           {/* Category badge */}
