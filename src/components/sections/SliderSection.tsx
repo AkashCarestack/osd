@@ -26,8 +26,9 @@ interface BannerBlockProps {
 
 const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
   const router = useRouter()
-  const { locale } = router.query
+  const { locale, partner } = router.query
   const swiperRef = useRef(null)
+  const partnerSlug = typeof partner === 'string' ? partner : undefined
 
   // Background images for category cards (cycling through)
   const bgImages = [
@@ -72,9 +73,9 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
             </div>
             <div className="flex flex-wrap gap-4 md:gap-6 lg:gap-9 items-center w-full md:w-auto">
               <Anchor
-                href="https://osdental.zendesk.com/hc/en-us"
-                target="_blank"
-                rel="noopener noreferrer"
+                href={partnerSlug ? `/${partnerSlug}/topic` : 'https://osdental.zendesk.com/hc/en-us'}
+                target={partnerSlug ? undefined : '_blank'}
+                rel={partnerSlug ? undefined : 'noopener noreferrer'}
                 className="flex items-center gap-2 overflow-hidden relative rounded-[5px] shrink-0 transition-colors group"
               >
                 <span className="font-inter font-medium text-base leading-[1.6] text-zinc-900 text-center whitespace-nowrap">
@@ -139,13 +140,13 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
                 const categorySlug = category?.slug?.current
                 const contentSlug = firstContent?.slug?.current
 
-                // Build the URL: topic/{category-slug}/{content-slug} if content exists,
-                // otherwise just link to the category page
+                // Build the URL: when on partner page use /{partner}/topic/... else /topic/...
+                const topicBase = partnerSlug ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}` : `/${siteConfig.categoryBaseUrls.base}`
                 const href = contentSlug && categorySlug
-                  ? `/${siteConfig.categoryBaseUrls.base}/${categorySlug}/${contentSlug}`
+                  ? `${topicBase}/${categorySlug}/${contentSlug}`
                   : categorySlug
-                    ? `/${siteConfig.categoryBaseUrls.base}/${categorySlug}`
-                    : `/${siteConfig.categoryBaseUrls.base}`
+                    ? `${topicBase}/${categorySlug}`
+                    : topicBase
 
                 const imageIndex = index % bgImages.length
                 const colorIndex = index % bgColors.length
@@ -175,7 +176,7 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
 
                       {/* Content card */}
                       <Anchor
-                        href={router.isReady ? generateHref(locale as string, href) : '#'}
+                        href={router.isReady ? (partnerSlug ? href : generateHref(locale as string, href)) : '#'}
                         className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 justify-between relative rounded-[5px] w-full min-w-0 group h-full"
                       >
                         <div className="flex flex-col gap-2 items-start w-full">

@@ -15,7 +15,8 @@ interface CategoryCardsSectionProps {
 
 const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories }) => {
   const router = useRouter()
-  const { locale } = router.query
+  const { locale, partner } = router.query
+  const partnerSlug = typeof partner === 'string' ? partner : undefined
 
   // Background images for cards (cycling through)
   const bgImages = [
@@ -55,11 +56,10 @@ const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories 
         </div>
         <div className="flex flex-wrap gap-8 items-start">
           {displayCategories.map((category, index) => {
-            // Build the URL to the category page only
+            // Build the URL to the category page: /{partner}/topic/{slug} when on partner page
             const categorySlug = category?.slug?.current
-            const href = categorySlug
-              ? `/${siteConfig.categoryBaseUrls.base}/${categorySlug}`
-              : `/${siteConfig.categoryBaseUrls.base}`
+            const topicBase = partnerSlug ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}` : `/${siteConfig.categoryBaseUrls.base}`
+            const href = categorySlug ? `${topicBase}/${categorySlug}` : topicBase
 
             const imageIndex = index % bgImages.length
             const colorIndex = index % bgColors.length
@@ -91,7 +91,7 @@ const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories 
 
                 {/* Content card */}
                 <Anchor
-                  href={router.isReady ? generateHref(locale as string, href) : '#'}
+                  href={router.isReady ? (partnerSlug ? href : generateHref(locale as string, href)) : '#'}
                   className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 relative rounded-[5px] shrink-0 w-full group"
                 >
                   <div className="flex flex-col gap-2 items-start w-full">

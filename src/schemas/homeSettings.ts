@@ -39,6 +39,13 @@ export default {
     },
   ],
   fields: [
+    defineField({
+      name: 'partner',
+      title: 'Partner',
+      type: 'reference',
+      to: [{ type: 'partner' }],
+      description: 'Leave empty for default/site-wide home settings. Set to show this layout for a specific partner.',
+    }),
     {
       name: 'featuredTags',
       title: 'Featured Tags',
@@ -270,12 +277,13 @@ export default {
   ],
   preview: {
     select: {
-      language: 'language',
+      partnerName: 'partner.partnerName',
     },
     prepare(selection) {
-      const { language } = selection
+      const { partnerName } = selection
+      const title = partnerName ? `Home Settings - ${partnerName}` : 'Home Settings'
       return {
-        title: `Home Settings - ${language}`,
+        title,
         media: ProjectsIcon,
       }
     },

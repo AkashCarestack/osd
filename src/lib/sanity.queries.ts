@@ -565,6 +565,364 @@ export const homeSettingsQuery = groq`
   }[0]
 `
 
+/** Partner-scoped home settings: partner-specific doc first, then fallback to language-only (no partner). */
+export const homeSettingsByPartnerQuery = groq`
+  *[_type == "homeSettings" && language == $region && (!defined(partner) || partner->slug.current == $partnerSlug)] | order((partner->slug.current == $partnerSlug) desc)[0] {
+    _id,
+    _createdAt,
+    "latestBlogs": *[_type == "post" && contentType == "article" && defined(slug.current)] | order(date desc) {
+       id,
+      "desc": postFields.excerpt,
+      title,
+      contentType,
+     ${imageFragment},
+      slug,
+      author[]-> {
+      _id,
+      name,
+      slug,
+      role,
+      bio,
+      ${authorImageFragment},
+    },
+      tags[]->{
+        _id,
+        tagName,
+        slug
+      }
+    }[0...4],
+    "testimonial": testimonial[]-> {
+      _id,
+      testimonialName,
+      slug,
+      
+      "customer": customer-> {
+        _id,
+        name,
+        role,
+        slug,
+        ${authorImageFragment},
+      },
+      excerpt,
+      layoutSwitcher,
+      hasVideo,
+      videoId,
+      image,
+      rating,
+      date
+    },
+    featuredTags[]->{
+      _id,
+      slug,
+      tagName
+    },
+    popularBlogs[]->{
+      _id,
+      slug,
+      "desc": postFields.excerpt,
+      title,
+      contentType,
+      date,
+      duration,
+     ${imageFragment},
+     ${bodyFragment},
+     "estimatedReadingTime": round(length(pt::text(body)) / 5 / 180),
+      author[]-> {
+      _id,
+      name,
+      },
+    },
+
+    featuredCarouselItems[]->{
+      _id,
+      slug,
+      title,
+      contentType,
+      date,
+      duration,
+     ${imageFragment},
+    },
+
+    FeaturedContents[]->{
+      _id,
+      slug,
+      contentType,
+      "desc": postFields.excerpt,
+      title,
+      date,
+      duration,
+      ${imageFragment},
+     ${bodyFragment},
+     "estimatedReadingTime": round(length(pt::text(body)) / 5 / 180),
+      author[]-> {
+      _id,
+      name,
+      },
+    },
+    customBrowseContent->{
+      _id,
+      slug,
+      contentType,
+      title,
+      date,
+      duration,
+      "customImage": customImage.asset-> {
+        _id,
+        metadata {
+          dimensions
+        },
+        altText,
+        title
+      },
+    },
+    featuredEvent->{
+      _id,
+      eventName,
+      ${imageFragment},
+      bgColor,
+      evenTtype,
+      eventDescription,
+      eventStartDate,
+      eventEndDate,
+      eventLocation,
+      registrationLink,
+      registerBtnTxt,
+    },
+    featuredArticle->{
+      _id,
+      slug,
+      contentType,
+      excerpt,
+      "desc": postFields.excerpt,
+      title,
+      date,
+      duration,
+      ${imageFragment},
+      author[]-> {
+      _id,
+      name,
+      slug,
+      ${authorImageFragment},
+    },
+    tags[]->{
+        _id,
+        tagName,
+        slug
+      },
+    },
+    featuredWebinar->{
+      _id,
+      slug,
+      contentType,
+      excerpt,
+      "desc": postFields.excerpt,
+      title,
+      date,
+      duration,
+      ${imageFragment},
+      author[]-> {
+      _id,
+      name,
+      slug,
+      ${authorImageFragment},
+    },
+    tags[]->{
+        _id,
+        tagName,
+        slug
+    },
+    },
+    featuredPodcast->{
+      _id,
+      slug,
+      contentType,
+      excerpt,
+      "desc": postFields.excerpt,
+      title,
+      date,
+      duration,
+      ${imageFragment},
+      author[]-> {
+      _id,
+      name,
+      slug,
+      ${authorImageFragment},
+    },
+    tags[]->{
+        _id,
+        tagName,
+        slug
+    },
+    },
+    featuredEbook->{
+      _id,
+      slug,
+      contentType,
+      excerpt,
+      "desc": postFields.excerpt,
+      title,
+      date,
+      duration,
+      ${imageFragment},
+       author[]-> {
+      _id,
+      name,
+      slug,
+      ${authorImageFragment},
+    },
+    tags[]->{
+        _id,
+        tagName,
+        slug
+    },
+    },
+    featuredCasestudy->{
+      _id,
+      slug,
+      contentType,
+      title,
+      date,
+      duration,
+      excerpt,
+      "desc": postFields.excerpt,
+      ${imageFragment},
+      author[]-> {
+      _id,
+      name,
+      slug,
+      ${authorImageFragment},
+    },
+    tags[]->{
+        _id,
+        tagName,
+        slug
+      },
+    },
+    demoBanner,
+    eventCarousel,
+    topicDescription,
+    featuredPressRelease->{
+      _id,
+      slug,
+      contentType,
+      title,
+      date,
+      duration,
+      excerpt,
+      "desc": postFields.excerpt,
+      ${imageFragment},
+      author[]-> {
+      _id,
+      name,
+      slug,
+      ${authorImageFragment},
+    },
+    tags[]->{
+        _id,
+        tagName,
+        slug
+      },
+    },
+  featuredReviews[]->{
+      _id,
+      testimonialName,
+      slug,
+    "customer": customer-> {
+      _id,
+      name,
+      role,
+      slug,
+      ${authorImageFragment},
+    },
+      excerpt,
+      layoutSwitcher,
+      hasVideo,
+    "videos": videos[]-> {  
+        _id,
+        title,
+        platform,
+        videoId,
+    },
+    ${imageFragment},
+      rating,
+      date
+  },
+    FeaturedBlog->{
+      title,
+      contentType,
+     ${imageFragment},
+      blogColor,
+      excerpt,
+      slug,
+      "desc": postFields.excerpt,
+      tags[]->{
+        _id,
+        tagName,
+        slug
+      },
+    author[]-> {
+      _id,
+      name,
+      slug,
+      role,
+      bio,
+      ${authorImageFragment},
+    },
+    },
+    "faqSection": faqSection {
+      title,
+      description,
+      readNowLink,
+      faqs[] {
+        question,
+        answer
+      }
+    },
+    "heroSection": heroSection {
+      title,
+      titleHighlight,
+      description,
+      primaryButtonText,
+      primaryButtonLink,
+      secondaryButtonText,
+      secondaryButtonLink,
+      "backgroundImage": backgroundImage.asset->url,
+      "videoThumbnail": videoThumbnail.asset->url,
+      videoLink
+    },
+    "whyPracticeLoveSection": whyPracticeLoveSection {
+      title,
+      description,
+      features[] {
+        title,
+        description
+      },
+      ctaTitle,
+      ctaDescription,
+      ctaButtonText,
+      ctaButtonLink,
+      "ctaBackgroundImage": ctaBackgroundImage.asset->url
+    },
+    "upcomingEventsSection": upcomingEventsSection {
+      title,
+      events[] {
+        title,
+        eventType,
+        location,
+        date,
+        description,
+        link
+      }
+    },
+  }
+`
+
+export const partnersSlugsQuery = groq`*[_type == "partner" && defined(slug.current)]{ "slug": slug.current }`
+
+export async function getPartnersSlugs(client: SanityClient): Promise<{ slug: string }[]> {
+  return await client.fetch(partnersSlugsQuery)
+}
+
 const siteSettingsQuery = groq`*[_type == "siteSetting"] | order(date desc) {
   ...,
   "favicon": favicon.asset-> {
@@ -1108,8 +1466,18 @@ export async function getEvents(client: SanityClient, _region?: string): Promise
   return await client.fetch(eventsQuery)
 }
 
-export async function getHomeSettings(client: SanityClient,region: string = 'en'): Promise<Post[]> {
-  return await client.fetch(homeSettingsQuery,{region:region})
+export async function getHomeSettings(
+  client: SanityClient,
+  region: string = 'en',
+  partnerSlug?: string,
+): Promise<any> {
+  if (partnerSlug) {
+    return await client.fetch(homeSettingsByPartnerQuery, {
+      region,
+      partnerSlug,
+    })
+  }
+  return await client.fetch(homeSettingsQuery, { region })
 }
 
 export async function getSiteSettings(client: SanityClient): Promise<any> {

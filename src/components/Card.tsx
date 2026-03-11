@@ -117,93 +117,70 @@ export default function Card({
 
   useEffect(() => {
     if (router.isReady && post?.slug) {
-      const { locale = 'en' } = router.query;
+      const { locale = 'en', partner } = router.query;
+      const partnerSlug = typeof partner === 'string' ? partner : undefined;
       const contentSlug = post?.slug?.current?.replace(/^\/+/, '').replace(/\/+$/, '') || '';
-      
-      // Check if we're on the topic index page
-      const topicBase = siteConfig.categoryBaseUrls.base;
-      const isTopicIndexPage = pathname === `/${topicBase}` || 
-                               pathname === `/${locale}/${topicBase}` ||
-                               pathname.endsWith(`/${topicBase}`);
-      
+
+      // Topic base: on partner pages use /{partner}/topic, else /topic or /{locale}/topic
+      const topicBase = partnerSlug ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}` : `/${siteConfig.categoryBaseUrls.base}`;
+      const topicBaseWithLocale = locale !== 'en' ? `/${locale}/${siteConfig.categoryBaseUrls.base}` : `/${siteConfig.categoryBaseUrls.base}`;
+
+      const buildTopicUrl = (catSlug: string, withContent: boolean) => {
+        if (partnerSlug) {
+          return withContent ? `${topicBase}/${catSlug}/${contentSlug}` : `${topicBase}/${catSlug}`;
+        }
+        return varyingIndex
+          ? (locale === 'en' ? `${topicBaseWithLocale}/${catSlug}` : `/${locale}/${siteConfig.categoryBaseUrls.base}/${catSlug}`)
+          : (locale === 'en' ? `${topicBaseWithLocale}/${catSlug}/${contentSlug}` : `/${locale}/${siteConfig.categoryBaseUrls.base}/${catSlug}/${contentSlug}`);
+      };
+
+      // Check if we're on the topic index page (partner or non-partner)
+      const isTopicIndexPage = pathname === `/${siteConfig.categoryBaseUrls.base}` ||
+                               pathname === `/${locale}/${siteConfig.categoryBaseUrls.base}` ||
+                               pathname.endsWith(`/${siteConfig.categoryBaseUrls.base}`) ||
+                               (partnerSlug && pathname === `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}`);
+
       // If on topic index page, prioritize topic route format
       if (isTopicIndexPage) {
         const hasCategory = post?.category && post.category.slug?.current;
-        
         if (hasCategory) {
           const categorySlug = post.category.slug.current.replace(/^\/+/, '').replace(/\/+$/, '');
-          
-          const newLinkUrl = varyingIndex
-            ? locale === 'en' 
-              ? `/${topicBase}/${categorySlug}`
-              : `/${locale}/${topicBase}/${categorySlug}`
-            : locale === 'en'
-              ? `/${topicBase}/${categorySlug}/${contentSlug}`
-              : `/${locale}/${topicBase}/${categorySlug}/${contentSlug}`;
-
-          setLinkUrl(newLinkUrl);
+          setLinkUrl(buildTopicUrl(categorySlug, !varyingIndex));
           return;
         }
       }
-      
+
       // Check if content type is topic/article - these need category slug in URL
       const contentTypePath = getBasePath(router, post.contentType);
       const isTopicContent = post.contentType === 'topic' || post.contentType === 'article';
-      
-      // For topic/article content, always use category-based format
+
       if (isTopicContent) {
         const hasCategory = post?.category && post.category.slug?.current;
-        
         if (hasCategory) {
           const categorySlug = post.category.slug.current.replace(/^\/+/, '').replace(/\/+$/, '');
-          
-          const newLinkUrl = varyingIndex
-            ? locale === 'en' 
-              ? `/${topicBase}/${categorySlug}`
-              : `/${locale}/${topicBase}/${categorySlug}`
-            : locale === 'en'
-              ? `/${topicBase}/${categorySlug}/${contentSlug}`
-              : `/${locale}/${topicBase}/${categorySlug}/${contentSlug}`;
-
-          setLinkUrl(newLinkUrl);
+          setLinkUrl(buildTopicUrl(categorySlug, !varyingIndex));
           return;
         }
       }
-      
-      // Otherwise, prioritize content type route format to include content type (e.g., "podcast") in URL
-      // If content type path exists (e.g., "podcast", "webinar"), use it
+
+      // Otherwise, content type route (podcast, webinar, etc.) – use partner prefix when on partner page
       if (contentTypePath) {
         const normalizedContentPath = contentTypePath.replace(/^\/+/, '').replace(/\/+$/, '');
-        
-        const newLinkUrl = varyingIndex
-          ? locale === 'en' 
-            ? `/${normalizedContentPath}`
-            : `/${locale}/${normalizedContentPath}`
-          : locale === 'en'
-            ? `/${normalizedContentPath}/${contentSlug}`
-            : `/${locale}/${normalizedContentPath}/${contentSlug}`;
-
+        const newLinkUrl = partnerSlug
+          ? (varyingIndex ? `/${partnerSlug}/${normalizedContentPath}` : `/${partnerSlug}/${normalizedContentPath}/${contentSlug}`)
+          : varyingIndex
+            ? (locale === 'en' ? `/${normalizedContentPath}` : `/${locale}/${normalizedContentPath}`)
+            : (locale === 'en' ? `/${normalizedContentPath}/${contentSlug}` : `/${locale}/${normalizedContentPath}/${contentSlug}`);
         setLinkUrl(newLinkUrl);
       } else {
-        // Fallback to topic route format if no content type path
         const hasCategory = post?.category && post.category.slug?.current;
-        
         if (hasCategory) {
           const categorySlug = post.category.slug.current.replace(/^\/+/, '').replace(/\/+$/, '');
-          
-          const newLinkUrl = varyingIndex
-            ? locale === 'en' 
-              ? `/${topicBase}/${categorySlug}`
-              : `/${locale}/${topicBase}/${categorySlug}`
-            : locale === 'en'
-              ? `/${topicBase}/${categorySlug}/${contentSlug}`
-              : `/${locale}/${topicBase}/${categorySlug}/${contentSlug}`;
-
-          setLinkUrl(newLinkUrl);
+          setLinkUrl(buildTopicUrl(categorySlug, !varyingIndex));
         }
       }
     }
-  }, [router.isReady, post?.contentType, post?.slug, post?.category, varyingIndex, router.query.locale, router, pathname]);
+  }, [router.isReady, post?.contentType, post?.slug, post?.category, varyingIndex, router.query.locale, router.query.partner, router, pathname]);
 
   if (!post || !linkUrl) {
     return null

@@ -22,7 +22,8 @@ const ArticlesInSection: React.FC<ArticlesInSectionProps> = ({
   faq,
 }) => {
   const router = useRouter()
-  const { locale } = router.query
+  const { locale, partner } = router.query
+  const partnerSlug = typeof partner === 'string' ? partner : undefined
 
   // Build items array: glossary first, then articles, then FAQ last
   const items: any[] = []
@@ -76,9 +77,9 @@ const ArticlesInSection: React.FC<ArticlesInSectionProps> = ({
           const itemSlug = item.type === 'glossary' ? 'glossary' : item.type === 'faq' ? 'faq' : (item?.slug?.current || item?.slug)
           const title = item?.title || 'Untitled'
           
-          // Build the URL for the content
+          // Build the URL for the content: /{partner}/topic/{categorySlug}/{itemSlug} when on partner page
           const href = categorySlug && itemSlug
-            ? `${siteConfig.categoryBaseUrls.base}/${categorySlug}/${itemSlug}`
+            ? (partnerSlug ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}/${categorySlug}/${itemSlug}` : `${siteConfig.categoryBaseUrls.base}/${categorySlug}/${itemSlug}`)
             : '#'
 
           const isActive = itemSlug === currentContentSlug || 
@@ -97,7 +98,7 @@ const ArticlesInSection: React.FC<ArticlesInSectionProps> = ({
                 {index + 1}.
               </p>
               <Anchor
-                href={generateHref(locale as string, href)}
+                href={partnerSlug ? href : generateHref(locale as string, href)}
                 className={`flex-1 text-sm leading-[150%] opacity-100 ${
                   isActive 
                     ? 'text-[#93C5FD] font-medium hover:text-[#7DD3FC]' 

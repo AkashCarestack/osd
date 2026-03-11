@@ -54,74 +54,23 @@ export const siteLinkSchema = () => {
 
 const canonicalTag = (type: string) => {
   const url = process.env.NEXT_PUBLIC_BASE_URL
-  if (type == 'article') {
-    return (
-      <>
-        <link rel="canonical" href={`${url}/${siteConfig.pageURLs.article}`} id="canonical" />
-        <link rel="alternate" href={`${url}/${siteConfig.pageURLs.article}`} hrefLang="en-us" />
-        <link rel="alternate" href={`${url}/en-GB/${siteConfig.pageURLs.article}`} hrefLang="en-gb" />
-        <link rel="alternate" href={`${url}/en-AU/${siteConfig.pageURLs.article}`} hrefLang="en-au" />
-        <link rel="alternate" hrefLang="x-default" href={`${url}/${siteConfig.pageURLs.article}`} />
-      </>
-    )
-  } else if (type == 'ebook') {
-    return (
-      <>
-        <link rel="canonical" href={`${url}/${siteConfig.pageURLs.ebook}`} key="canonical" />
-        <link rel="alternate" href={`${url}/${siteConfig.pageURLs.ebook}`} hrefLang="en-us" />
-        <link rel="alternate" href={`${url}/en-GB/${siteConfig.pageURLs.ebook}`} hrefLang="en-gb" />
-        <link rel="alternate" href={`${url}/en-AU/${siteConfig.pageURLs.ebook}`} hrefLang="en-au" />
-        <link rel="alternate" hrefLang="x-default" href={`${url}/${siteConfig.pageURLs.ebook}`} />
-      </>
-    )
-  } else if (type == 'podcast') {
-    return (
-      <>
-        <link rel="canonical" href={`${url}/${siteConfig.pageURLs.podcast}`} key="canonical" />
-        <link rel="alternate" href={`${url}/${siteConfig.pageURLs.podcast}`} hrefLang="en-us" />
-        <link rel="alternate" href={`${url}/en-GB/${siteConfig.pageURLs.podcast}`} hrefLang="en-gb" />
-        <link rel="alternate" href={`${url}/en-AU/${siteConfig.pageURLs.podcast}`} hrefLang="en-au" />
-        <link rel="alternate" hrefLang="x-default" href={`${url}/${siteConfig.pageURLs.podcast}`} />
-      </>
-    )
-  } else if (type == 'caseStudy') {
-    return (
-      <>
-     <link rel="canonical" href={`${url}/${siteConfig.pageURLs.caseStudy}`} key="canonical" />
-        <link rel="alternate" href={`${url}/${siteConfig.pageURLs.caseStudy}`} hrefLang="en-us" />
-        <link rel="alternate" href={`${url}/en-GB/${siteConfig.pageURLs.caseStudy}`} hrefLang="en-gb" />
-        <link rel="alternate" href={`${url}/en-AU/${siteConfig.pageURLs.caseStudy}`} hrefLang="en-au" />
-        <link rel="alternate" hrefLang="x-default" href={`${url}/${siteConfig.pageURLs.caseStudy}`} />
-      </>
-    )
-  } else if (type == 'pressRelease') {
-    return (
-      <>
-        {/* <link
-          rel="alternate"
-          href={`${url}/press-release`}
-          hrefLang="x-default"
-        /> */}
-        <link rel="canonical" href={`${url}/${siteConfig.pageURLs.pressRelease}`} key="canonical" />
-        <link rel="alternate" href={`${url}/${siteConfig.pageURLs.pressRelease}`} hrefLang="en-us" />
-        <link rel="alternate" href={`${url}/en-GB/${siteConfig.pageURLs.pressRelease}`} hrefLang="en-gb" />
-        <link rel="alternate" href={`${url}/en-AU/${siteConfig.pageURLs.pressRelease}`} hrefLang="en-au" />
-        <link rel="alternate" hrefLang="x-default" href={`${url}/${siteConfig.pageURLs.pressRelease}`} />
-      </>
-    )
-  } else if (type == 'webinar') {
-    return (
-      <>
-        {/* <link rel="alternate" href={`${url}/webinar`} hrefLang="x-default" />
-        <link rel="alternate" href={`${url}/webinar`} hrefLang="en-US" /> */}
-        <link rel="canonical" href={`${url}/${siteConfig.pageURLs.webinar}`} key="canonical" />
-        <link rel="alternate" href={`${url}/${siteConfig.pageURLs.webinar}`} hrefLang="en-us" />
-        <link rel="alternate" href={`${url}/en-GB/${siteConfig.pageURLs.webinar}`} hrefLang="en-gb" />
-        <link rel="alternate" href={`${url}/en-AU/${siteConfig.pageURLs.webinar}`} hrefLang="en-au" />
-        <link rel="alternate" hrefLang="x-default" href={`${url}/${siteConfig.pageURLs.webinar}`} />
-      </>
-    )
+  const paths: Record<string, string> = {
+    article: siteConfig.pageURLs.article,
+    ebook: siteConfig.pageURLs.ebook,
+    podcast: siteConfig.pageURLs.podcast,
+    caseStudy: siteConfig.pageURLs.caseStudy,
+    pressRelease: siteConfig.pageURLs.pressRelease,
+    webinar: siteConfig.pageURLs.webinar,
   }
+  const path = paths[type]
+  if (!path) return null
+  const href = `${url}/${path}`
+  return (
+    <>
+      <link rel="canonical" href={href} key="canonical" />
+      <link rel="alternate" hrefLang="x-default" href={href} />
+    </>
+  )
 }
 
 /******* custom meta tag  to show og image og url  which ha s no specific data ********** */
@@ -179,11 +128,8 @@ export const defaultMetaTag = (params: any, pageUrl?: string) => {
     <Head key={params?._id}>
       {pageUrl?.length && (
         <>
-          <link rel="canonical" href={pageUrl}></link>
-          <link rel="alternate" href={pageUrl} hrefLang="x-default" ></link>
-          <link rel="alternate" href={pageUrl} hrefLang="en-US" ></link>
-          <link rel="alternate" href={pageUrl + '/en-GB'} hrefLang="en-GB" ></link>
-          <link rel="alternate" href={pageUrl + '/en-AU'} hrefLang="en-AU" ></link>
+          <link rel="canonical" href={pageUrl} />
+          <link rel="alternate" href={pageUrl} hrefLang="x-default" />
         </>
       )}
       <meta property="twitter:card" content="summary_large_image" />
@@ -273,26 +219,11 @@ const getLocaleLinks = (url: string, lang: string) => (
 export const generateMetaData = (params: any, canonicalLink?: string) => {
   if (!params || !canonicalLink) return null;
 
-  const locales = ["en-gb", "en-au", "en"];
   const sanitizedCanonical = sanitizeUrl(canonicalLink);
 
   return (
     <Head>
-      {/* Canonical Link */}
       <link rel="canonical" href={sanitizedCanonical} />
-
-      {locales.map((lang) => {
-        if(lang === 'en'){
-          return <link key={lang} rel="alternate" href={sanitizedCanonical} hrefLang={'en-us'} />;
-        } 
-  
-        else{
-        }
-        const url = sanitizedCanonical.replace("osdental.io/", `osdental.io/${lang}/`);
-        return <link key={lang} rel="alternate" href={url} hrefLang={lang} />;
-
-      })}
-      
       <link rel="alternate" href={sanitizedCanonical} hrefLang="x-default" />
 
       <meta property="twitter:url" content={sanitizedCanonical} />

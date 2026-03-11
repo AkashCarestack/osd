@@ -1,4 +1,3 @@
-import siteConfig from 'config/siteConfig'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -140,101 +139,30 @@ function isPathAvailableForLocale(
 }
 
 /**
- * Hook to generate alternate language paths for SEO hreflang tags
- * 
- * @returns Object containing alternatePaths array and defaultUrl for x-default
+ * Hook to generate default URL for SEO (canonical / x-default).
+ * Locale alternates are no longer used; URLs are partner-based without locale segment.
+ *
+ * @returns Object containing defaultUrl for x-default and empty alternatePaths
  */
 export function useAlternatePaths(): {
   alternatePaths: AlternatePath[]
   defaultUrl: string
 } {
   const router = useRouter()
-  const [alternatePaths, setAlternatePaths] = useState<AlternatePath[]>([])
-  
-  // Initialize defaultUrl with a fallback based on current path if available
-  const getInitialDefaultUrl = (): string => {
-    if (typeof window !== 'undefined') {
-      const baseUrl = window.location.origin
-      const pathname = window.location.pathname
-      // Remove locale prefix to get base path
-      const basePath = pathname.replace(/^\/(en-[A-Z]{2}\/)?/, '') || '/'
-      const pathWithoutSlash = basePath.startsWith('/') ? basePath.slice(1) : basePath
-      const href = generateHref('en', pathWithoutSlash)
-      return `${baseUrl}${href}`
-    }
-    return ''
-  }
-  
-  const [defaultUrl, setDefaultUrl] = useState<string>(getInitialDefaultUrl())
+  const [defaultUrl, setDefaultUrl] = useState<string>('')
 
   useEffect(() => {
-    // Wait for router to be ready to ensure accurate path detection
-    if (!router.isReady) {
-      return
-    }
+    if (!router.isReady) return
 
-    const locales = siteConfig.locales || []
     const baseUrl = getBaseUrl()
-    const currentPath = router.asPath || router.pathname || '/'
-    const pathname = currentPath.split('?')[0].split('#')[0]
-    let currentLocale: string | undefined = router.query?.locale as string | undefined
-    
-    if (currentLocale && !locales.includes(currentLocale)) {
-      currentLocale = undefined
-    }
-    if (!currentLocale) {
-      const localeMatch = pathname.match(/^\/(en-[A-Z]{2})\//)
-      if (localeMatch) {
-        currentLocale = localeMatch[1]
-      } else {
-        // If no locale prefix, it's 'en'
-        currentLocale = 'en'
-      }
-    }
-    
-    // Final fallback to 'en' if no locale detected
-    if (!currentLocale || !locales.includes(currentLocale)) {
-      currentLocale = 'en'
-    }
-    
-    // Remove locale prefix to get the base path (same as sitemap)
-    const basePath = removeLocale(pathname, locales)
-    const alternates: AlternatePath[] = []
-    
-    // Include all locales, including 'en' (which should be formatted as 'en-US')
-    for (const locale of locales) {
-      if (!isPathAvailableForLocale(basePath, locale, locales)) {
-        continue
-      }
-
-      // Use generateHref just like sitemap does
-      const pathWithoutSlash = basePath.startsWith('/') ? basePath.slice(1) : basePath
-      const href = generateHref(locale, pathWithoutSlash)
-      const url = `${baseUrl}${href}`
-      // Format locale for hreflang: 'en' becomes 'en-US', others stay as-is
-      const hrefLang = formatHreflang(locale)
-      
-      alternates.push({
-        href: url,
-        hrefLang,
-      })
-    }
-
-    setAlternatePaths(alternates)
-    
-    // Set default URL (x-default) to 'en' locale (no prefix)
-    // This should always be set for all pages - x-default always points to the 'en' version
-    const defaultLocale = 'en'
-    const defaultPathWithoutSlash = basePath.startsWith('/') ? basePath.slice(1) : basePath
-    const defaultHref = generateHref(defaultLocale, defaultPathWithoutSlash)
-    const finalDefaultUrl = `${baseUrl}${defaultHref}`
-    
-    // Always set defaultUrl - this is critical for SEO
-    setDefaultUrl(finalDefaultUrl)
-  }, [router.asPath, router.pathname, router.query?.locale, router.isReady])
+    const pathname = (router.asPath || router.pathname || '/').split('?')[0].split('#')[0]
+    // Current path is the canonical URL (no locale variants)
+    const url = pathname ? `${baseUrl}${pathname.startsWith('/') ? pathname : `/${pathname}`}` : baseUrl
+    setDefaultUrl(url)
+  }, [router.asPath, router.pathname, router.isReady])
 
   return {
-    alternatePaths,
+    alternatePaths: [],
     defaultUrl,
   }
 }

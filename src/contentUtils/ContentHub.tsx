@@ -27,7 +27,8 @@ export default function ContentHub({ contentCount, categories, featuredDescripti
   const pathname = usePathname()
   const categoriesCopy = useMemo(() => categories && [...categories], [categories]);
   const router = useRouter();
-  const { locale } = router.query;
+  const { locale, partner } = router.query;
+  const partnerSlug = typeof partner === 'string' ? partner : undefined;
 
   useEffect(() => {
     const allTopic = { 'slug': `${siteConfig.categoryBaseUrls.base}`, 'categoryName': 'All Topics' }
@@ -49,8 +50,8 @@ export default function ContentHub({ contentCount, categories, featuredDescripti
     }
     
     // Extract the category slug from pathname for nested routes like /topic/category-slug/content-slug
-    // or /topic/category-slug
-    const topicBasePath = `/${siteConfig.categoryBaseUrls.base}/`;
+    // or /{partner}/topic/category-slug
+    const topicBasePath = partnerSlug ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}/` : `/${siteConfig.categoryBaseUrls.base}/`;
     const topicIndex = pathname.indexOf(topicBasePath);
     
     if (topicIndex !== -1) {
@@ -68,12 +69,13 @@ export default function ContentHub({ contentCount, categories, featuredDescripti
   }, [categoriesData, pathname]);
 
   useEffect(() => {
-    if (pathname.endsWith(`/${siteConfig.categoryBaseUrls.base}`)) {
+    const topicEnd = partnerSlug ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}` : `/${siteConfig.categoryBaseUrls.base}`;
+    if (pathname.endsWith(topicEnd)) {
       setIsMainPage(true);
     } else {
       setIsMainPage(false);
     }
-  }, [pathname]);
+  }, [pathname, partnerSlug]);
 
 
   return (
@@ -93,15 +95,18 @@ export default function ContentHub({ contentCount, categories, featuredDescripti
         {categoriesData && categoriesData.length > 0 ? (
           <div className='flex flex-wrap gap-[10px] '>
             {categoriesData.map((category, index) => {
-              let hrefTemplate = `/${category?.categoryName === 'All Topics'
-                 ? `${siteConfig.categoryBaseUrls.base}` : category?.categoryName 
-                 ? `${siteConfig.categoryBaseUrls.base}/${category?.slug?.current || ''} ` 
-                 : siteConfig.categoryBaseUrls.base}`
+              const topicPath = category?.categoryName === 'All Topics'
+                ? siteConfig.categoryBaseUrls.base
+                : category?.categoryName
+                  ? `${siteConfig.categoryBaseUrls.base}/${category?.slug?.current || ''}`.trim()
+                  : siteConfig.categoryBaseUrls.base;
+              const hrefTemplate = partnerSlug ? `/${partnerSlug}/${topicPath}` : `/${topicPath}`;
+              const topicEnd = partnerSlug ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}` : `/${siteConfig.categoryBaseUrls.base}`;
             return (
               <Anchor
               className={`text-zinc-300 flex items-center  text-sm font-normal py-2 px-3 
-                rounded-full bg-zinc-800 hover:bg-zinc-700 transition-all ease-out duration-300 ${pathname.endsWith(`/${siteConfig.categoryBaseUrls.base}`) && index === 0 ? '!bg-zinc-600 !text-zinc-50' : pathname.includes(category?.slug?.current) ? '!bg-zinc-600 !text-zinc-50' : ''}`}
-              href={generateHref(locale as string, hrefTemplate)}
+                rounded-full bg-zinc-800 hover:bg-zinc-700 transition-all ease-out duration-300 ${pathname.endsWith(topicEnd) && index === 0 ? '!bg-zinc-600 !text-zinc-50' : pathname.includes(category?.slug?.current) ? '!bg-zinc-600 !text-zinc-50' : ''}`}
+              href={partnerSlug ? hrefTemplate : generateHref(locale as string, `/${topicPath}`)}
               key={index}
               >
               {category.categoryName}

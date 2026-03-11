@@ -31,9 +31,6 @@ export default function SEOHead({
 }: SEOHeadProps) {
   const { alternatePaths, defaultUrl } = useAlternatePaths()
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://osdental.io'
-  const locale = useRouter().query.locale as string
-  const slug = useRouter().query.slug as string
-  const defaultUrlx = locale === 'en' ? baseUrl : `${baseUrl}/${locale}/${slug}`
 
   // Default values
   const defaultTitle = title || 'Resources | On-Demand Learning Resources | OS Dental'
@@ -73,8 +70,8 @@ export default function SEOHead({
           content={ogImage || "https://cdn.sanity.io/images/bbmnn1wc/production/b5665765dd8b070505dbabeb87f1fc95536b1a83-1200x1200.jpg"}
           key="ogImage"
         />
-        {defaultUrlx && (
-          <link rel="alternate" hrefLang="x-default" href={defaultUrlx} key="hreflang-x-default" />
+        {defaultUrl && (
+          <link rel="alternate" hrefLang="x-default" href={defaultUrl} key="hreflang-x-default" />
         )}
         {alternatePaths.map((alt: AlternatePath) => (
           <link
