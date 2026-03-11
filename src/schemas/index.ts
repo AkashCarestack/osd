@@ -23,6 +23,7 @@ import demoBannerBlockUS from './sections/demoBannerBlockUS'
 import faqSection from './sections/faqSection'
 import heroSection from './sections/heroSection'
 import testimonialCard from './sections/testimonialCard'
+import partner from './partner'
 import siteSetting from './siteSetting'
 import table from './table'
 import tag from './tag'
@@ -41,6 +42,7 @@ export const schemaTypes = [
   blockContent,
   newContent,
   tag,
+  partner,
   demoBannerBlockUS,
   demoBannerBlockGB,
   demoBannerBlockAU,
@@ -78,6 +80,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     blockContent,
     newContent,
     tag,
+    partner,
     demoBannerBlockUS,
     demoBannerBlockGB,
     demoBannerBlockAU,

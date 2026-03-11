@@ -46,6 +46,14 @@ export default defineType({
     }),
 
     defineField({
+      name: 'partner',
+      title: 'Partner',
+      type: 'reference',
+      to: [{ type: 'partner' }],
+      description: 'Optionally link this content to a partner.',
+    }),
+
+    defineField({
       name: 'title',
       title: 'Title',
       type: 'string',

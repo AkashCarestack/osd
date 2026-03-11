@@ -14,7 +14,22 @@ import {
 } from 'sanity-plugin-iframe-pane'
 import { previewUrl } from 'sanity-plugin-iframe-pane/preview-url'
 import { table } from '@sanity/table'
-import { CogIcon, ControlsIcon, DesktopIcon, HomeIcon,GroqIcon } from '@sanity/icons'
+import {
+  CalendarIcon,
+  CogIcon,
+  CommentIcon,
+  ComposeIcon,
+  DocumentIcon,
+  DocumentVideoIcon,
+  DocumentsIcon,
+  FolderIcon,
+  HomeIcon,
+  LinkIcon,
+  TagIcon,
+  ThListIcon,
+  UserIcon,
+  UsersIcon,
+} from '@sanity/icons'
 // see https://www.sanity.io/docs/api-versioning for how versioning works
 import {
   apiVersion,
@@ -69,6 +84,7 @@ export default defineConfig({
         "post",
             "newContent",
             "tag",
+            "partner",
             "dynamicComponent",
             "demoBannerBlockUS",
             "demoBannerBlockGB",
@@ -146,48 +162,89 @@ export default defineConfig({
         S.list()
           .title('Base')
           .items([
-            // S.listItem()
-            //   .title('Home Page')
-            //   .icon(HomeIcon)
-            //   .child(
-            //     S.document()
-            //       .schemaType('homeSettings')
-            //       .documentId('homeSettings'),
-            //   ),
-            S.documentTypeListItem('post').title('All Content'),
-            S.documentTypeListItem('author').title('Author'),
-            S.documentTypeListItem('tag').title('Tag'),
-            S.documentTypeListItem('category').title('Category'),
-            S.documentTypeListItem('customer').title('Customer'),
-            S.documentTypeListItem('testimonial').title('Testimonial'),
-            S.documentTypeListItem('videos').title('Video'),
-            S.documentTypeListItem('eventCard').title('Events Card'),
+            // —— Content ——
             S.listItem()
-              .title('Content Repo')
+              .title('Content')
+              .icon(DocumentsIcon)
               .child(
                 S.list()
-                  .title('Content Repo')
+                  .title('Content')
                   .items([
-                    S.documentTypeListItem('glossary').title('Glossary'),
-                    S.documentTypeListItem('faq').title('FAQ'),
-                    S.documentTypeListItem('event').title('Events'),
+                    S.documentTypeListItem('post').title('All Content').icon(DocumentIcon),
+                    S.listItem()
+                      .title('Content Repo')
+                      .icon(FolderIcon)
+                      .child(
+                        S.list()
+                          .title('Content Repo')
+                          .items([
+                            S.documentTypeListItem('glossary').title('Glossary'),
+                            S.documentTypeListItem('faq').title('FAQ'),
+                            S.documentTypeListItem('event').title('Events'),
+                          ])
+                      ),
+                    S.documentTypeListItem('customContent').title('Custom Content').icon(ComposeIcon),
                   ])
               ),
-            S.documentTypeListItem('homeSettings').title('Home Page').icon(HomeIcon),
-            S.documentTypeListItem('footer').title('Footer').icon(GroqIcon),
+            // —— Taxonomy ——
+            S.listItem()
+              .title('Taxonomy')
+              .icon(TagIcon)
+              .child(
+                S.list()
+                  .title('Taxonomy')
+                  .items([
+                    S.documentTypeListItem('tag').title('Tag').icon(TagIcon),
+                    S.documentTypeListItem('partner').title('Partners').icon(UsersIcon),
+                    S.documentTypeListItem('category').title('Category').icon(ThListIcon),
+                  ])
+              ),
+            // —— People & Social ——
+            S.listItem()
+              .title('People & Social')
+              .icon(UsersIcon)
+              .child(
+                S.list()
+                  .title('People & Social')
+                  .items([
+                    S.documentTypeListItem('author').title('Author').icon(UserIcon),
+                    S.documentTypeListItem('customer').title('Customer').icon(UsersIcon),
+                    S.documentTypeListItem('testimonial').title('Testimonial').icon(CommentIcon),
+                  ])
+              ),
+            // —— Media & Events ——
+            S.listItem()
+              .title('Media & Events')
+              .icon(DocumentVideoIcon)
+              .child(
+                S.list()
+                  .title('Media & Events')
+                  .items([
+                    S.documentTypeListItem('videos').title('Video').icon(DocumentVideoIcon),
+                    S.documentTypeListItem('eventCard').title('Events Card').icon(CalendarIcon),
+                  ])
+              ),
+            // —— Pages & Layout ——
+            S.listItem()
+              .title('Pages & Layout')
+              .icon(HomeIcon)
+              .child(
+                S.list()
+                  .title('Pages & Layout')
+                  .items([
+                    S.documentTypeListItem('homeSettings').title('Home Page').icon(HomeIcon),
+                    S.documentTypeListItem('footer').title('Footer').icon(LinkIcon),
+                  ])
+              ),
+            // —— Settings ——
             S.listItem()
               .title('Site Configuration')
-              .icon(ControlsIcon)
+              .icon(CogIcon)
               .child(
                 S.document()
                   .schemaType('siteSetting')
                   .documentId('siteSetting'),
               ),
-            S.documentTypeListItem('customContent').title('Custom Content'),
-            // S.documentTypeListItem('testimonial').title('Testimonial'),
-            // ...S.documentTypeListItems().filter(
-            //   (listItem) => !['homeSettings'].includes(listItem.getId()) && !['globalSettings'].includes(listItem.getId())&& !['post'].includes(listItem.getId()),
-            // )
           ]),
     }),
 
