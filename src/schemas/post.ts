@@ -28,6 +28,14 @@ export default defineType({
   ],
   fields: [
     defineField({
+      name: 'partner',
+      title: 'Partner',
+      type: 'reference',
+      to: [{ type: 'partner' }],
+      description: 'Content is bound to this partner. Defaults to DEO.',
+      initialValue: () => ({ _type: 'reference', _ref: 'partners.deo' }),
+    }),
+    defineField({
       name: 'contentType',
       title: 'Content Type',
       type: 'string',
@@ -44,16 +52,6 @@ export default defineType({
       },
       validation: (Rule) => Rule.required().error('Content type is required.'),
     }),
-
-    defineField({
-      name: 'partner',
-      title: 'Partner',
-      type: 'reference',
-      to: [{ type: 'partner' }],
-      description: 'Content is bound to this partner. Defaults to DEO.',
-      initialValue: () => ({ _type: 'reference', _ref: 'partners.deo' }),
-    }),
-
     defineField({
       name: 'title',
       title: 'Title',

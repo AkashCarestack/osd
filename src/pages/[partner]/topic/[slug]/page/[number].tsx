@@ -18,7 +18,7 @@ import { getClient } from '~/lib/sanity.client'
 import { urlForImage } from '~/lib/sanity.image'
 import {
   getArticlesCount,
-  getCategories,
+  getCategoriesForPartner,
   getCategory,
   getEbooksCount,
   getFooterData,
@@ -44,7 +44,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const [tag, category, allTags] = await Promise.all([
     getTag(client, slug),
-    getCategory(client, slug),
+    getCategory(client, slug, partnerSlug),
     getTags(client),
   ])
 
@@ -73,7 +73,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getArticlesCount(client, region),
     getEbooksCount(client, region),
     getHomeSettings(client, region, partnerSlug),
-    getCategories(client),
+    getCategoriesForPartner(client, partnerSlug),
     getFooterData(client, region),
     getSiteSettings(client),
   ])
@@ -106,11 +106,11 @@ export const getStaticPaths = async () => {
   const client = getClient()
   const basePaths = await getPartnerPaths(client)
   const locale = getDefaultLocale()
-  const categories = await getCategories(client)
   const cardsPerPage = siteConfig.pagination.childItemsPerPage || 5
   const paths: { params: { partner: string; slug: string; number: string } }[] =
     []
   for (const { params: p } of basePaths) {
+    const categories = await getCategoriesForPartner(client, p.partner)
     for (const cat of categories) {
       const slug = cat.slug?.current
       if (!slug) continue

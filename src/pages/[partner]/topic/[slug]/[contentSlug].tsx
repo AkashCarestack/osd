@@ -24,6 +24,7 @@ import { getClient } from '~/lib/sanity.client'
 import { urlForImage } from '~/lib/sanity.image'
 import {
   getCategories,
+  getCategoriesForPartner,
   getCategory,
   getFooterData,
   getHomeSettings,
@@ -50,11 +51,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }[] = []
 
   for (const { params: p } of basePaths) {
-    const categories = await getCategories(client)
+    const categories = await getCategoriesForPartner(client, p.partner)
     for (const category of categories) {
       const categoryWithContent = await getCategory(
         client,
         category.slug?.current,
+        p.partner,
       )
       if (!categoryWithContent || !category.slug?.current) continue
 
@@ -109,7 +111,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const partnerSlug = params?.partner as string
   if (!partnerSlug || !categorySlug || !contentSlug) return { notFound: true }
 
-  const category = await getCategory(client, categorySlug)
+  const category = await getCategory(client, categorySlug, partnerSlug)
 
   if (!category) {
     return {

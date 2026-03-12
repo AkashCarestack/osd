@@ -12,9 +12,8 @@ import TagSelect from '~/contentUtils/TagSelector'
 import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { getClient } from '~/lib/sanity.client'
 import {
-  catsSlugsQuery,
   getArticlesCount,
-  getCategories,
+  getCategoriesForPartner,
   getCategory,
   getEbooksCount,
   getFooterData,
@@ -40,7 +39,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const partnerSlug = params?.partner as string
   if (!slug || !partnerSlug) return { notFound: true }
 
-  const categoryPromise = getCategory(client, slug)
+  const categoryPromise = getCategory(client, slug, partnerSlug)
   const siteSettingsPromise = getSiteSettings(client)
   const homeSettingsPromise = getHomeSettings(client, region, partnerSlug)
 
@@ -76,7 +75,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getArticlesCount(client, region),
     getEbooksCount(client, region),
     getTags(client),
-    getCategories(client),
+    getCategoriesForPartner(client, partnerSlug),
     getFooterData(client, region),
   ])
 
@@ -249,15 +248,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 export const getStaticPaths = async () => {
   const client = getClient()
   const basePaths = await getPartnerPaths(client)
-  const locale = getDefaultLocale()
-  const data = await client.fetch(catsSlugsQuery, { locale })
-  const slugList = (data || []).map((item: any) => ({ slug: item.slug }))
-  const paths = basePaths.flatMap((p) =>
-    slugList.map((item: any) => ({
-      params: { partner: p.params.partner, slug: item.slug },
-    })),
-  )
-  return { paths, fallback: 'blocking' }
+  const allPaths: { params: { partner: string; slug: string } }[] = []
+  for (const { params: p } of basePaths) {
+    const categories = await getCategoriesForPartner(client, p.partner)
+    for (const category of categories) {
+      const slug = category?.slug?.current
+      if (slug) {
+        allPaths.push({ params: { partner: p.partner, slug } })
+      }
+    }
+  }
+  return { paths: allPaths, fallback: 'blocking' }
 }
 
 export default function TagPage({

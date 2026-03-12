@@ -5,7 +5,6 @@ import { useRouter } from 'next/router'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import Layout from '~/components/Layout'
 import { Post } from '~/interfaces/post'
-import DynamicPages from '~/layout/DynamicPages'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
@@ -16,6 +15,7 @@ import {
   getEvents,
   getFooterData,
   getHomeSettings,
+  getPartnersWithHomeSettings,
   getPodcasts,
   getPosts,
   getReleaseNotes,
@@ -49,6 +49,7 @@ interface IndexPageProps {
   homeSettings: any
   faqCategories: any[]
   events: any[]
+  partners: { slug: string; partnerName?: string }[]
 }
 
 export const getStaticProps: GetStaticProps<
@@ -75,6 +76,7 @@ export const getStaticProps: GetStaticProps<
       podcasts,
       faqCategories,
       events,
+      partners,
     ] = await Promise.all([
       getPosts(client, 5),
       getPosts(client),
@@ -92,6 +94,7 @@ export const getStaticProps: GetStaticProps<
       getPodcasts(client, 0, undefined, region),
       getAllFAQs(client),
       getEvents(client, region),
+      getPartnersWithHomeSettings(client),
     ])
 
     // Filter categories that have FAQs
@@ -120,6 +123,7 @@ export const getStaticProps: GetStaticProps<
         podcasts: podcasts || [],
         faqCategories: categoriesWithFAQs,
         events: events || [],
+        partners: partners ?? [],
       },
     }
   } catch (error) {
@@ -140,6 +144,7 @@ export const getStaticProps: GetStaticProps<
         categories: [],
         faqCategories: [],
         events: [],
+        partners: [],
         error: true,
       },
     }
@@ -156,12 +161,17 @@ export default function IndexPage(props: IndexPageProps) {
   const defaultUrl =
     !locale || locale === 'en' ? baseUrl : `${baseUrl}/${locale}`
 
+  const heroBg =
+    homeSettings?.heroSection?.backgroundImage ||
+    'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png'
+
   return (
     <GlobalDataProvider
       data={props?.categories}
       featuredTags={homeSettings?.featuredTags}
       homeSettings={homeSettings}
       footerData={props?.footerData}
+      partners={props?.partners ?? []}
     >
       <Layout>
         {siteSettings?.map((e: any) => {
@@ -174,20 +184,10 @@ export default function IndexPage(props: IndexPageProps) {
           <link rel="alternate" href={baseUrl + '/en-GB'} hrefLang="en-GB" />
           <link rel="alternate" href={baseUrl + '/en-AU'} hrefLang="en-AU" />
         </Head>
-        <DynamicPages
-          posts={props.posts}
-          tags={props.tags}
-          testimonials={props.testimonials}
-          homeSettings={homeSettings}
-          podcasts={props?.podcasts}
-          latestPosts={latestPosts}
-          ebooks={props?.ebooks}
-          webinars={props?.webinars}
-          releaseNotes={props?.releaseNotes}
-          eventCards={eventCards}
-          categories={props?.categories}
-          faqCategories={props?.faqCategories}
-          events={props?.events}
+        {/* Default landing: hero bg only (partner links shown in Header when on /) */}
+        <div
+          className="min-h-screen w-full bg-[#18181b] bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroBg})` }}
         />
       </Layout>
     </GlobalDataProvider>

@@ -169,6 +169,48 @@ export const categoriesQuery = groq`*[_type == "category" ]  | order(categoryNam
     }
   },
 }`
+
+/** Categories visible for a partner: partner is unset (site-wide) or matches partner slug. */
+export const categoriesForPartnerQuery = groq`*[_type == "category" && (!defined(partner) || partner->slug.current == $partnerSlug)] | order(categoryName asc) {
+  _id,
+  categoryName,
+  categoryDescription,
+  slug,
+  "associatedContent": associatedContent[]-> {
+    _id,
+    title,
+    slug,
+    contentType,
+    excerpt,
+    date,
+    language,
+    ${imageFragment},
+  },
+  "glossary": glossary-> {
+    _id,
+    mainHeading,
+    subheading,
+    terms[] {
+      term,
+      value
+    }
+  },
+  "faq": faq-> {
+    _id,
+    name,
+    "author": author-> {
+      _id,
+      name,
+      slug,
+      ${authorImageFragment},
+    },
+    faqs[] {
+      question,
+      answer
+    }
+  },
+}`
+
 export const tagsByOrderQuery = groq`*[_type == "tag" ] | order(tagName asc) {_id, slug, tagName}`
 
 export const eventCardQuery = groq`
@@ -919,10 +961,35 @@ export const homeSettingsByPartnerQuery = groq`
 
 export const partnersSlugsQuery = groq`*[_type == "partner" && defined(slug.current)]{ "slug": slug.current }`
 
+/** Partners with slug + name for default landing partner links. */
+export const partnersListQuery = groq`*[_type == "partner" && defined(slug.current)] | order(partnerName asc) {
+  "slug": slug.current,
+  partnerName
+}`
+
+/** Only partners that have at least one homeSettings document (so they have a home page). */
+export const partnersWithHomeSettingsQuery = groq`*[_type == "partner" && defined(slug.current) && count(*[_type == "homeSettings" && references(^._id)]) > 0] | order(partnerName asc) {
+  "slug": slug.current,
+  partnerName
+}`
+
 export async function getPartnersSlugs(
   client: SanityClient,
 ): Promise<{ slug: string }[]> {
   return await client.fetch(partnersSlugsQuery)
+}
+
+export async function getPartnersList(
+  client: SanityClient,
+): Promise<{ slug: string; partnerName?: string }[]> {
+  return await client.fetch(partnersListQuery)
+}
+
+/** Partners that have home settings (home page). Use for default landing partner links. */
+export async function getPartnersWithHomeSettings(
+  client: SanityClient,
+): Promise<{ slug: string; partnerName?: string }[]> {
+  return await client.fetch(partnersWithHomeSettingsQuery)
 }
 
 const siteSettingsQuery = groq`*[_type == "siteSetting"] | order(date desc) {
@@ -973,6 +1040,14 @@ export async function getTags(client: SanityClient): Promise<Tag[]> {
 }
 export async function getCategories(client: SanityClient): Promise<any[]> {
   return await client.fetch(categoriesQuery)
+}
+
+/** Categories for a given partner (site-wide + partner-specific). Use for topic/browse routes. */
+export async function getCategoriesForPartner(
+  client: SanityClient,
+  partnerSlug: string,
+): Promise<any[]> {
+  return await client.fetch(categoriesForPartnerQuery, { partnerSlug })
 }
 
 export const allFAQsQuery = groq`
@@ -1911,11 +1986,12 @@ export const tagBySlugQuery = groq`
   }
 `
 export const getCategoryBySlugQuery = groq`
-  *[_type == "category" && slug.current == $slug][0] {
+  *[_type == "category" && slug.current == $slug && (!defined($partnerSlug) || (!defined(partner) || partner->slug.current == $partnerSlug))] | order(defined(partner) desc)[0] {
     _id,
     categoryName,
     categoryDescription,
     slug,
+    "partner": partner-> { _id, "slug": slug.current, partnerName },
     "associatedContent": associatedContent[]-> {
       _id,
       title,
@@ -2118,9 +2194,11 @@ export async function getTag(client: SanityClient, slug: string): Promise<any> {
 export async function getCategory(
   client: SanityClient,
   slug: string,
+  partnerSlug?: string,
 ): Promise<any> {
   return await client.fetch(getCategoryBySlugQuery, {
     slug,
+    partnerSlug: partnerSlug ?? null,
   })
 }
 

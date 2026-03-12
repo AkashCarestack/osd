@@ -251,11 +251,20 @@ export default defineConfig({
                 .title('Tags')
                 .icon(TagIcon)
                 .child(S.documentTypeList('tag').title('Tags')),
-              // Categories
+              // Categories (filtered by partner: site-wide + this partner only)
               S.listItem()
                 .title('Categories')
                 .icon(ThListIcon)
-                .child(S.documentTypeList('category').title('Categories')),
+                .child(
+                  S.documentList()
+                    .apiVersion(apiVersion)
+                    .title(`Categories — ${partnerTitle}`)
+                    .filter(
+                      '_type == "category" && (!defined(partner) || partner->slug.current == $partnerSlug)',
+                    )
+                    .params({ partnerSlug })
+                    .schemaType('category'),
+                ),
             ])
 
         return S.list()

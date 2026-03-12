@@ -36,10 +36,12 @@ export const navigationLinks = [
 ]
 
 const Header = () => {
-  let { featuredTags, homeSettings } = useGlobalData()
+  let { featuredTags, homeSettings, partners } = useGlobalData()
   const router = useRouter()
   const { locale } = router.query
   const [showMenu, setShowMenu] = useState(false)
+  const isDefaultLanding =
+    router.asPath === '/' || router.asPath?.replace(/\?.*$/, '') === '/'
   const [headerFixed, setHeaderFixed] = useState(false)
   const [navPopoverId, setNavPopoverId] = useState('nav-popover')
   const [activeSection, setActiveSection] = useState<string>('')
@@ -164,7 +166,6 @@ const Header = () => {
 
           <div className={`z-10  bg-zinc-900 text-white  px-4 `}>
             <div className="max-w-7xl mx-auto">
-              {/* <div className={`flex flex-col gap-3 justify-between py-[10px] transition-all duration-300 ease-linear relative  ${headerFixed ? '!lg:py-3' : 'lg:py-6'}`}> */}
               <div
                 className={`flex flex-col gap-3 justify-between py-0 transition-all duration-300 ease-linear`}
               >
@@ -178,6 +179,20 @@ const Header = () => {
                   >
                     <VoiceStackResources />
                   </Link>
+                  {isDefaultLanding && Array.isArray(partners) && partners.length > 0 ? (
+                    <nav className="flex flex-wrap items-center justify-end gap-4 md:gap-8">
+                      {partners.map((p: { slug: string; partnerName?: string }) => (
+                        <Link
+                          key={p.slug}
+                          href={`/${p.slug}`}
+                          className="text-zinc-400 hover:text-white font-medium transition-colors text-base"
+                        >
+                          {p.partnerName || p.slug}
+                        </Link>
+                      ))}
+                    </nav>
+                  ) : (
+                    <>
                   <div
                     className={`flex lg:gap-10   justify-between rounded-xl items-center`}
                   >
@@ -269,6 +284,8 @@ const Header = () => {
                     setShowMenu={setShowMenu}
                     className="z-10"
                   />
+                    </>
+                  )}
                 </div>
               </div>
             </div>
