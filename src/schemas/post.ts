@@ -50,7 +50,8 @@ export default defineType({
       title: 'Partner',
       type: 'reference',
       to: [{ type: 'partner' }],
-      description: 'Optionally link this content to a partner.',
+      description: 'Content is bound to this partner. Defaults to DEO.',
+      initialValue: () => ({ _type: 'reference', _ref: 'partners.deo' }),
     }),
 
     defineField({

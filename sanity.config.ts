@@ -158,85 +158,122 @@ export default defineConfig({
           S.view.component(Iframe).options(iframeOptions).title('Preview'),
         ])
       },
-      structure: (S) =>
-        S.list()
+      structure: (S) => {
+        // Ensure the DEO partner document has _id "partners.deo" (in Manage Partners) so new content defaults to DEO.
+
+        // Build the same sub-panel for each partner: Resources, Page Settings, Home, Footer, Tags, Categories
+        const buildPartnerPanel = (partnerSlug: string, partnerTitle: string, options?: { listAllContentUnderPartner?: boolean }) =>
+          S.list()
+            .title(partnerTitle)
+            .items([
+              // Resources: Content (posts), Content Repo, Custom Content
+              S.listItem()
+                .title('Resources')
+                .icon(FolderIcon)
+                .child(
+                  S.list()
+                    .title(`Resources — ${partnerTitle}`)
+                    .items([
+                      S.listItem()
+                        .title('Content')
+                        .icon(DocumentIcon)
+                        .child(
+                          options?.listAllContentUnderPartner
+                            ? // DEO: list ALL content (articles, etc.) – everything is under DEO
+                              S.documentList()
+                                .apiVersion(apiVersion)
+                                .title(`Content — ${partnerTitle}`)
+                                .filter('_type == "post"')
+                                .schemaType('post')
+                            : // Other partners: only content linked to this partner
+                              S.documentList()
+                                .apiVersion(apiVersion)
+                                .title(`Content — ${partnerTitle}`)
+                                .filter('_type == "post" && partner->slug.current == $partnerSlug')
+                                .params({ partnerSlug })
+                                .schemaType('post'),
+                        ),
+                      S.listItem()
+                        .title('Content Repo')
+                        .icon(FolderIcon)
+                        .child(
+                          S.list()
+                            .title('Content Repo')
+                            .items([
+                              S.documentTypeListItem('glossary').title('Glossary'),
+                              S.documentTypeListItem('faq').title('FAQ'),
+                              S.documentTypeListItem('event').title('Events'),
+                            ]),
+                        ),
+                      S.documentTypeListItem('customContent').title('Custom Content').icon(ComposeIcon),
+                    ]),
+                ),
+              // Page Settings (site-wide)
+              S.listItem()
+                .title('Page Settings')
+                .icon(CogIcon)
+                .child(
+                  S.document()
+                    .schemaType('siteSetting')
+                    .documentId('siteSetting'),
+                ),
+              // Home (partner-scoped)
+              S.listItem()
+                .title('Home')
+                .icon(HomeIcon)
+                .child(
+                  S.documentList()
+                    .apiVersion(apiVersion)
+                    .title(`Home — ${partnerTitle}`)
+                    .filter(
+                      '_type == "homeSettings" && (!defined(partner) || partner->slug.current == $partnerSlug)',
+                    )
+                    .params({ partnerSlug })
+                    .schemaType('homeSettings'),
+                ),
+              // Footer
+              S.listItem()
+                .title('Footer')
+                .icon(LinkIcon)
+                .child(
+                  S.documentTypeList('footer').title('Footer'),
+                ),
+              // Tags
+              S.listItem()
+                .title('Tags')
+                .icon(TagIcon)
+                .child(
+                  S.documentTypeList('tag').title('Tags'),
+                ),
+              // Categories
+              S.listItem()
+                .title('Categories')
+                .icon(ThListIcon)
+                .child(
+                  S.documentTypeList('category').title('Categories'),
+                ),
+            ])
+
+        return S.list()
           .title('Base')
           .items([
-            // —— Content ——
+            // —— Partners (root): DEO & Fortune each have Resources, Page Settings, Home, Footer, Tags, Categories
             S.listItem()
-              .title('Content')
-              .icon(DocumentsIcon)
-              .child(
-                S.list()
-                  .title('Content')
-                  .items([
-                    S.documentTypeListItem('post').title('All Content').icon(DocumentIcon),
-                    S.listItem()
-                      .title('Content Repo')
-                      .icon(FolderIcon)
-                      .child(
-                        S.list()
-                          .title('Content Repo')
-                          .items([
-                            S.documentTypeListItem('glossary').title('Glossary'),
-                            S.documentTypeListItem('faq').title('FAQ'),
-                            S.documentTypeListItem('event').title('Events'),
-                          ])
-                      ),
-                    S.documentTypeListItem('customContent').title('Custom Content').icon(ComposeIcon),
-                  ])
-              ),
-            // —— Taxonomy ——
-            S.listItem()
-              .title('Taxonomy')
-              .icon(TagIcon)
-              .child(
-                S.list()
-                  .title('Taxonomy')
-                  .items([
-                    S.documentTypeListItem('tag').title('Tag').icon(TagIcon),
-                    S.documentTypeListItem('partner').title('Partners').icon(UsersIcon),
-                    S.documentTypeListItem('category').title('Category').icon(ThListIcon),
-                  ])
-              ),
-            // —— People & Social ——
-            S.listItem()
-              .title('People & Social')
+              .title('Partners')
               .icon(UsersIcon)
               .child(
                 S.list()
-                  .title('People & Social')
+                  .title('Partners')
                   .items([
-                    S.documentTypeListItem('author').title('Author').icon(UserIcon),
-                    S.documentTypeListItem('customer').title('Customer').icon(UsersIcon),
-                    S.documentTypeListItem('testimonial').title('Testimonial').icon(CommentIcon),
-                  ])
+                    S.listItem()
+                      .title('DEO')
+                      .child(buildPartnerPanel('deo', 'DEO', { listAllContentUnderPartner: true })),
+                    S.listItem()
+                      .title('Fortune')
+                      .child(buildPartnerPanel('fortune', 'Fortune')),
+                  ]),
               ),
-            // —— Media & Events ——
-            S.listItem()
-              .title('Media & Events')
-              .icon(DocumentVideoIcon)
-              .child(
-                S.list()
-                  .title('Media & Events')
-                  .items([
-                    S.documentTypeListItem('videos').title('Video').icon(DocumentVideoIcon),
-                    S.documentTypeListItem('eventCard').title('Events Card').icon(CalendarIcon),
-                  ])
-              ),
-            // —— Pages & Layout ——
-            S.listItem()
-              .title('Pages & Layout')
-              .icon(HomeIcon)
-              .child(
-                S.list()
-                  .title('Pages & Layout')
-                  .items([
-                    S.documentTypeListItem('homeSettings').title('Home Page').icon(HomeIcon),
-                    S.documentTypeListItem('footer').title('Footer').icon(LinkIcon),
-                  ])
-              ),
-            // —— Settings ——
+            // Site Configuration (single doc, kept at root for quick access)
             S.listItem()
               .title('Site Configuration')
               .icon(CogIcon)
@@ -245,7 +282,15 @@ export default defineConfig({
                   .schemaType('siteSetting')
                   .documentId('siteSetting'),
               ),
-          ]),
+            // Manage partner documents (add/edit DEO, Fortune, etc.)
+            S.listItem()
+              .title('Manage Partners')
+              .icon(UsersIcon)
+              .child(
+                S.documentTypeList('partner').title('Partners'),
+              ),
+          ])
+      },
     }),
 
     media({
