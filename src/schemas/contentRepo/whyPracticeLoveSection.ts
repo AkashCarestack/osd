@@ -18,7 +18,8 @@ export default {
       description: 'The description text displayed below the title',
       initialValue:
         'Clinical Dashboards give your practice a powerful, visual snapshot of key clinical performance metrics and insights all in one easy-to-use view. No spreadsheets. No guesswork. Just clear insights that help you move faster and improve performance.',
-      validation: (Rule: any) => Rule.required().error('Description is required'),
+      validation: (Rule: any) =>
+        Rule.required().error('Description is required'),
     },
     {
       name: 'features',
@@ -51,7 +52,8 @@ export default {
           },
         },
       ],
-      validation: (Rule: any) => Rule.max(4).error('Maximum 4 features allowed'),
+      validation: (Rule: any) =>
+        Rule.max(4).error('Maximum 4 features allowed'),
     },
     {
       name: 'ctaTitle',

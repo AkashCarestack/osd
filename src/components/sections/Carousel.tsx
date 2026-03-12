@@ -4,7 +4,7 @@ import 'swiper/css/pagination'
 
 import { ArrowRightIcon } from '@sanity/icons'
 import { ArrowLeftIcon } from '@sanity/icons'
-import React, { useEffect,useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -53,9 +53,8 @@ const Carousel: React.FC<CarouselProps> = ({ items }) => {
           swiperRef.current = swiper
         }}
       >
-        
         {items.map((item, index) => (
-          <SwiperSlide key={item._id+index} className="!h-auto">
+          <SwiperSlide key={item._id + index} className="!h-auto">
             <Card cardType="ebook-card" post={item} index={index} />
           </SwiperSlide>
         ))}

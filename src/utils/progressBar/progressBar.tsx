@@ -1,5 +1,5 @@
 import Router from 'next/router'
-import { useEffect, useRef,useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import styles from './progressBar.module.scss'
 
@@ -12,10 +12,11 @@ export default function Progress() {
     const start = (url: any) => {
       if (url !== previousUrlRef.current) {
         // Suppress progress bar for topic redirects (e.g., /topic/slug -> /topic/slug/content)
-        const isTopicRedirect = previousUrlRef.current.includes('/topic/') && 
-                                 url.includes('/topic/') && 
-                                 url.split('/').length > previousUrlRef.current.split('/').length
-        
+        const isTopicRedirect =
+          previousUrlRef.current.includes('/topic/') &&
+          url.includes('/topic/') &&
+          url.split('/').length > previousUrlRef.current.split('/').length
+
         if (!isTopicRedirect) {
           previousUrlRef.current = url
           setProgress(1)

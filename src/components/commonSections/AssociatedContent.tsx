@@ -64,7 +64,7 @@ const AssociatedContent = ({
             const href = baseUrl
               ? `${baseUrl}/${contentSlug}`
               : `/${locale}/${siteConfig.pageURLs[item?.contentType as keyof typeof siteConfig.pageURLs] || 'article'}/${contentSlug}`
-            
+
             const isActive = contentSlug === currentSlug
 
             return (

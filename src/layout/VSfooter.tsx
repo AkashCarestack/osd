@@ -1,40 +1,43 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-import VoiceStackResources from '~/assets/reactiveAssets/VoiceStackResources';
-import Anchor from '~/components/commonSections/Anchor';
-import { useGlobalData } from '~/components/Context/GlobalDataContext';
-import Section from '~/components/Section';
+import VoiceStackResources from '~/assets/reactiveAssets/VoiceStackResources'
+import Anchor from '~/components/commonSections/Anchor'
+import { useGlobalData } from '~/components/Context/GlobalDataContext'
+import Section from '~/components/Section'
 
-import Wrapper from './Wrapper';
+import Wrapper from './Wrapper'
 
-const Footer = ({className}:any) => {
+const Footer = ({ className }: any) => {
+  let { footerData } = useGlobalData()
 
-  let {footerData } = useGlobalData()
+  const CopyrightYear = new Date().getFullYear()
 
-    
+  const router = useRouter()
 
-  const CopyrightYear = new Date().getFullYear();
+  const [isUk, setIsUk] = useState(false)
+  const [isAu, setIsAu] = useState(false)
 
-  const router = useRouter();
-
-  const [isUk, setIsUk] = useState(false);
-  const [isAu, setIsAu] = useState(false);
-
-  useEffect(()=>{
-    setIsUk(router.locale == "en-GB");
-    setIsAu(router.locale == "en-AU");
-  },[router.locale])
+  useEffect(() => {
+    setIsUk(router.locale == 'en-GB')
+    setIsAu(router.locale == 'en-AU')
+  }, [router.locale])
 
   return (
-    <Section  className={`bg-zinc-900 justify-center flex-1  md:pt-12 ${className}`}>
+    <Section
+      className={`bg-zinc-900 justify-center flex-1  md:pt-12 ${className}`}
+    >
       <Wrapper className="flex justify-center self-end">
         <div className="w-full ">
-          <div className='md:flex-row flex-col items-center flex md:justify-between w-full pb-6'>
+          <div className="md:flex-row flex-col items-center flex md:justify-between w-full pb-6">
             <div>
               {/* Logo */}
-              <Anchor elementId='footer-logo' href="/" className="xl:flex-1 flex-shrink-0 text-2xl font-extrabold bg-gradient-text bg-clip-text text-transparent font-monrope tracking-tighterText">
-              <VoiceStackResources/>
+              <Anchor
+                elementId="footer-logo"
+                href="/"
+                className="xl:flex-1 flex-shrink-0 text-2xl font-extrabold bg-gradient-text bg-clip-text text-transparent font-monrope tracking-tighterText"
+              >
+                <VoiceStackResources />
               </Anchor>
             </div>
             {/* Social media   */}
@@ -160,9 +163,11 @@ const Footer = ({className}:any) => {
               </ul>
             </div> */}
           </div>
-          <div className='py-6 border-gray-800 border-t'>
-            <div className='flex flex-col md:flex-row gap-3 items-center justify-between'>
-              <span className='text-gray-600 font-inter text-sm font-medium leading-[115%]'>&copy; OS Dental {CopyrightYear}</span>
+          <div className="py-6 border-gray-800 border-t">
+            <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
+              <span className="text-gray-600 font-inter text-sm font-medium leading-[115%]">
+                &copy; OS Dental {CopyrightYear}
+              </span>
               {/* <span className='text-gray-600 font-inter text-sm font-medium leading-[115%]'>Made with ♥︎ in Good Methods Global</span> */}
               {/* {isUk ? (
                 <ul className='flex items-center gap-4'>
@@ -201,17 +206,25 @@ const Footer = ({className}:any) => {
                 </li>
               </ul>
               )} */}
-              <ul className='flex items-center gap-4'>
-                {footerData?.links && footerData?.links.length > 0 &&(
-                  footerData.links.map((linkItem:any, index:number) => {
-                    return(
-                      <li className='text-gray-600 font-inter text-sm font-medium leading-[115%]' key={index}>
-                        <Anchor href={linkItem.link}  target={linkItem.newTab ? '_blank' : '_self'}>{linkItem.text}</Anchor>
+              <ul className="flex items-center gap-4">
+                {footerData?.links &&
+                  footerData?.links.length > 0 &&
+                  footerData.links.map((linkItem: any, index: number) => {
+                    return (
+                      <li
+                        className="text-gray-600 font-inter text-sm font-medium leading-[115%]"
+                        key={index}
+                      >
+                        <Anchor
+                          href={linkItem.link}
+                          target={linkItem.newTab ? '_blank' : '_self'}
+                        >
+                          {linkItem.text}
+                        </Anchor>
                       </li>
                     )
-                  })
-                )}
-                  {/* <li className='text-gray-600 font-inter text-sm font-medium leading-[115%]'>
+                  })}
+                {/* <li className='text-gray-600 font-inter text-sm font-medium leading-[115%]'>
                     <Anchor href="/system-requirements" target='_blank' locale={router.locale}>System Requirements</Anchor>
                   </li>
                   <li className='text-gray-600 font-inter text-sm font-medium leading-[115%]'>
@@ -220,7 +233,7 @@ const Footer = ({className}:any) => {
                   <li className='text-gray-600 font-inter text-sm font-medium leading-[115%]'>
                     <Anchor href="https://www.voicestack.com/legal/uk/2024-11/terms-and-conditions" target='_blank'>Terms of Service</Anchor>
                   </li> */}
-                </ul>
+              </ul>
             </div>
           </div>
         </div>

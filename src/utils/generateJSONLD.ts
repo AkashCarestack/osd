@@ -74,8 +74,15 @@ export function generateJSONLD(post: any) {
           '@context': 'https://schema.org',
           '@type': 'Article',
           headline: post.title,
-          image: post.articleImage ? urlForImage(post.articleImage._id) : (post.mainImage ? urlForImage(post.mainImage._id) : ''),
-          url: sanitizeUrl(post.articleUrl || `https://osdental.io/article/${post.slug?.current || ''}`),
+          image: post.articleImage
+            ? urlForImage(post.articleImage._id)
+            : post.mainImage
+              ? urlForImage(post.mainImage._id)
+              : '',
+          url: sanitizeUrl(
+            post.articleUrl ||
+              `https://osdental.io/article/${post.slug?.current || ''}`,
+          ),
           author: {
             '@type': 'Person',
             name: (author && author[0]?.name) || 'Unknown Author',
@@ -217,18 +224,18 @@ export function breadCrumbJsonLd(
         '@type': 'ListItem',
         position: i + 2,
         name: e?.label ?? '',
-        item: sanitizeUrl(`${sanitizedBaseUrl}${e?.href}`)
+        item: sanitizeUrl(`${sanitizedBaseUrl}${e?.href}`),
       }
     }),
   }
 
   JsonLdItems.itemListElement.unshift(home)
-  return JsonLdItems;
+  return JsonLdItems
 }
 
 /**
  * Generate JSON-LD schema for FAQ Page
- * 
+ *
  * SEO Implementation Notes:
  * - Uses FAQPage schema type from schema.org (https://schema.org/FAQPage)
  * - FAQPage requires mainEntity array containing Question objects
@@ -239,17 +246,22 @@ export function breadCrumbJsonLd(
  * - This structured data enables rich snippets in Google search results
  * - Google recommends 5-8 FAQs per page for optimal SEO value
  * - FAQs must be visible to users on the page (not hidden markup)
- * 
+ *
  * Data Format:
  * - faqData.faqs should be an array of objects with 'question' and 'answer' properties
  * - Example: [{ question: "What is X?", answer: "X is..." }, ...]
- * 
+ *
  * @param faqData - FAQ data object containing name and faqs array
  * @param url - Canonical URL of the FAQ page (used for proper indexing)
  * @returns JSON stringified FAQPage schema ready for <script type="application/ld+json">
  */
 export function generateFAQJSONLD(faqData: any, url: string) {
-  if (!faqData || !faqData.faqs || !Array.isArray(faqData.faqs) || faqData.faqs.length === 0) {
+  if (
+    !faqData ||
+    !faqData.faqs ||
+    !Array.isArray(faqData.faqs) ||
+    faqData.faqs.length === 0
+  ) {
     return '{}'
   }
 
@@ -273,7 +285,7 @@ export function generateFAQJSONLD(faqData: any, url: string) {
 
 /**
  * Generate JSON-LD schema for Glossary Page
- * 
+ *
  * SEO Implementation Notes:
  * - Uses ItemList schema type from schema.org (https://schema.org/ItemList)
  * - ItemList is ideal for structured lists of terms/definitions
@@ -281,22 +293,27 @@ export function generateFAQJSONLD(faqData: any, url: string) {
  * - DefinedTerm provides semantic meaning for term-definition pairs
  * - This helps search engines understand the glossary structure and content
  * - Can improve visibility in knowledge panels and featured snippets
- * 
+ *
  * Alternative Schema Options:
  * - Could also use CollectionPage for glossary pages
  * - DefinedTerm is preferred for individual glossary entries
- * 
+ *
  * Data Format:
  * - glossaryData.terms should be an array of objects with 'term' and 'value' properties
  * - Example: [{ term: "API", value: "Application Programming Interface" }, ...]
  * - Position is automatically assigned based on array index (1-based)
- * 
+ *
  * @param glossaryData - Glossary data object containing mainHeading, subheading, and terms array
  * @param url - Canonical URL of the Glossary page (used for proper indexing)
  * @returns JSON stringified ItemList schema ready for <script type="application/ld+json">
  */
 export function generateGlossaryJSONLD(glossaryData: any, url: string) {
-  if (!glossaryData || !glossaryData.terms || !Array.isArray(glossaryData.terms) || glossaryData.terms.length === 0) {
+  if (
+    !glossaryData ||
+    !glossaryData.terms ||
+    !Array.isArray(glossaryData.terms) ||
+    glossaryData.terms.length === 0
+  ) {
     return '{}'
   }
 

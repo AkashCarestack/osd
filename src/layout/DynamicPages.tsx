@@ -12,8 +12,8 @@ import ReleaseNotesHeroSection from '~/components/sections/ReleaseNotesHeroSecti
 import ShortBannerSection from '~/components/sections/ShortBannerSection'
 import SliderSection from '~/components/sections/SliderSection'
 import TestimonialSection from '~/components/sections/TestimonialSection'
-import WhyPracticeLoveSection from '~/components/sections/WhyPracticeLoveSection'
 import UpcomingEventsSection from '~/components/sections/UpcomingEventsSection'
+import WhyPracticeLoveSection from '~/components/sections/WhyPracticeLoveSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Tag } from '~/interfaces/post'
 import { getUniqueData, getUniqueReorderedCarouselItems } from '~/utils/common'
@@ -34,6 +34,7 @@ interface DynamicProps {
   releaseNotes?: any
   categories?: any[]
   faqCategories?: any[]
+  events?: any[]
 }
 
 const DynamicPages = ({
@@ -49,9 +50,10 @@ const DynamicPages = ({
   podcasts,
   categories,
   faqCategories,
+  events,
 }: DynamicProps) => {
   const featuredBlog = homeSettings?.FeaturedBlog || posts[0]
-  const customBrowseContent = homeSettings?.customBrowseContent 
+  const customBrowseContent = homeSettings?.customBrowseContent
   const featuredBlogs = homeSettings?.popularBlogs || []
 
   const featuredContents = [...featuredBlogs, ...posts].slice(0, 4)
@@ -59,7 +61,7 @@ const DynamicPages = ({
   const featuredEvent =
     (homeSettings?.featuredEvent && [homeSettings?.featuredEvent]) || []
 
-  const eventCardData = eventCards &&  [...featuredEvent, ...eventCards]
+  const eventCardData = eventCards && [...featuredEvent, ...eventCards]
 
   const uniqueEventCards = getUniqueData(eventCardData)
 
@@ -74,33 +76,39 @@ const DynamicPages = ({
     : testimonials.slice(0, 1)
 
   const baseUrl = `/${siteConfig.pageURLs.home}`
-  
+
   // Use podcasts prop if available, otherwise filter from posts
-  const podcastPosts = Array.isArray(podcasts) && podcasts.length > 0
-    ? podcasts
-    : Array.isArray(posts) 
-      ? posts.filter((post: any) => {
-          const isPodcast = post && (post.contentType === 'podcast' || post.contentType === 'Podcast')
-          return isPodcast
-        })
-      : []
+  const podcastPosts =
+    Array.isArray(podcasts) && podcasts.length > 0
+      ? podcasts
+      : Array.isArray(posts)
+        ? posts.filter((post: any) => {
+            const isPodcast =
+              post &&
+              (post.contentType === 'podcast' || post.contentType === 'Podcast')
+            return isPodcast
+          })
+        : []
 
   return (
     <>
       <BaseUrlProvider baseUrl={baseUrl}>
         <TagSelect tags={tags} tagLimit={7} />
-         <EventCarousel allEventCards={uniqueEventCards} />
-         <div id="topics-section">
+        <EventCarousel allEventCards={uniqueEventCards} />
+        <div id="topics-section">
           <HeroSection heroData={homeSettings?.heroSection} />
         </div>
-        <WhyPracticeLoveSection 
-          data={homeSettings?.whyPracticeLoveSection} 
+        <WhyPracticeLoveSection
+          data={homeSettings?.whyPracticeLoveSection}
           heroPrimaryButtonLink={homeSettings?.heroSection?.primaryButtonLink}
         />
 
-         {/* <CategoryCardsSection categories={categories} /> */}
-         <SliderSection items={reorderedCarouselItems} categories={categories} />
-         <UpcomingEventsSection data={homeSettings?.upcomingEventsSection} />
+        {/* <CategoryCardsSection categories={categories} /> */}
+        <SliderSection items={reorderedCarouselItems} categories={categories} />
+        <UpcomingEventsSection
+          data={homeSettings?.upcomingEventsSection}
+          cmsEvents={events}
+        />
         {/* <LatestBlogs contents={latestPosts} /> */}
         {/* <FeaturedAndPopularBlogs
           featuredBlog={featuredBlog

@@ -8,7 +8,8 @@ export default {
       title: 'Event Title',
       type: 'string',
       description: 'The title of the event',
-      validation: (Rule: any) => Rule.required().error('Event title is required'),
+      validation: (Rule: any) =>
+        Rule.required().error('Event title is required'),
     },
     {
       name: 'eventType',
@@ -22,7 +23,8 @@ export default {
         ],
       },
       initialValue: 'Offline',
-      validation: (Rule: any) => Rule.required().error('Event type is required'),
+      validation: (Rule: any) =>
+        Rule.required().error('Event type is required'),
     },
     {
       name: 'location',
@@ -35,7 +37,8 @@ export default {
       title: 'Event Date',
       type: 'date',
       description: 'Date of the event',
-      validation: (Rule: any) => Rule.required().error('Event date is required'),
+      validation: (Rule: any) =>
+        Rule.required().error('Event date is required'),
     },
     {
       name: 'description',
@@ -67,7 +70,8 @@ export default {
         : ''
       return {
         title: title || 'Untitled Event',
-        subtitle: `${eventType || ''} ${formattedDate ? `• ${formattedDate}` : ''}`.trim(),
+        subtitle:
+          `${eventType || ''} ${formattedDate ? `• ${formattedDate}` : ''}`.trim(),
       }
     },
   },

@@ -6,7 +6,11 @@ interface SubTextProps {
 }
 function SubText({ className, children }: SubTextProps) {
   return (
-    <span className={`uppercase text-zinc-500 text-xs lg:text-sm font-medium ${className}`}>{children}</span>
+    <span
+      className={`uppercase text-zinc-500 text-xs lg:text-sm font-medium ${className}`}
+    >
+      {children}
+    </span>
   )
 }
 

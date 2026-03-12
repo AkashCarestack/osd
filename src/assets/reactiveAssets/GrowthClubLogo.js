@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 const SVGComponent = (props) => (
   <svg
     width={165}
@@ -26,5 +26,5 @@ const SVGComponent = (props) => (
       </linearGradient>
     </defs>
   </svg>
-);
-export default SVGComponent;
+)
+export default SVGComponent

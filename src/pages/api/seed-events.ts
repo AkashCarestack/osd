@@ -10,7 +10,8 @@ const dummyEvents = [
     eventType: 'Offline',
     location: 'Dallas, TX',
     date: '2026-02-26',
-    description: 'This update brings enhanced features and improved performance for a smoother experience.',
+    description:
+      'This update brings enhanced features and improved performance for a smoother experience.',
     link: '#',
     language: 'en',
   },
@@ -20,7 +21,8 @@ const dummyEvents = [
     eventType: 'Offline',
     location: 'Dallas, TX',
     date: '2026-02-26',
-    description: 'Join us for an empowering conference focused on growth and leadership in the DSO industry.',
+    description:
+      'Join us for an empowering conference focused on growth and leadership in the DSO industry.',
     link: '#',
     language: 'en',
   },
@@ -37,7 +39,7 @@ export default async function handler(
   try {
     // Check if events already exist
     const existingEvents = await sanityClient.fetch('*[_type == "event"]')
-    
+
     if (existingEvents.length > 0) {
       return res.status(200).json({
         message: `Found ${existingEvents.length} existing events. Skipping seed.`,

@@ -18,9 +18,7 @@
         "name": "Krishnan RV",
         "jobTitle": "Founder",
         "url": "https://voicestack.com/company/leadership-team",
-        "sameAs": [
-          "https://www.linkedin.com/company/voice-stack/"
-        ]
+        "sameAs": ["https://www.linkedin.com/company/voice-stack/"]
       },
 
       "address": {
@@ -54,7 +52,7 @@
       ],
 
       "hasProduct": {
-      "@id": "https://voicestack.com/#software"
+        "@id": "https://voicestack.com/#software"
       },
 
       "sameAs": [

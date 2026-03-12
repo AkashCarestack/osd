@@ -52,7 +52,9 @@ const BannerBlock: React.FC<BannerBlockProps> = ({
 
   if (componentType === 'commonBannerBlock') {
     activeBannerBlock = commonBannerBlock
-    demoUrl = commonBannerBlock?.buttonLink || 'https://voicestack.com/demo?practiceType=Dental'
+    demoUrl =
+      commonBannerBlock?.buttonLink ||
+      'https://voicestack.com/demo?practiceType=Dental'
   } else if (componentType === 'bannerBlockUS' || !componentType) {
     activeBannerBlock = bannerBlockUS || bannerBlock
     demoUrl = 'https://voicestack.com/demo?practiceType=Dental'
@@ -77,7 +79,9 @@ const BannerBlock: React.FC<BannerBlockProps> = ({
     <div className="flex flex-1 bg-zinc-800 md:flex-row flex-col rounded-lg p-6 md:p-8 my-8 gap-6 justify-between">
       <div className="flex flex-col justify-center">
         <H3Medium className="!text-white !mt-0 !text-3xl !font-semibold leading-[110%] block !mb-[6px]">
-          {activeBannerBlock?.title ? activeBannerBlock?.title : 'Book a demo with us!'}
+          {activeBannerBlock?.title
+            ? activeBannerBlock?.title
+            : 'Book a demo with us!'}
         </H3Medium>
         <DescriptionText className="!text-zinc-300  !text-base !m-0">
           {activeBannerBlock?.description

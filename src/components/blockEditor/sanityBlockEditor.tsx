@@ -75,7 +75,7 @@ const SanityPortableText: React.FC<SanityPortableTextProps> = ({
           console.warn('SanityBlockEditor: image asset is null or undefined')
           return null
         }
-        
+
         return (
           <ImageLoader
             image={value.asset}
@@ -85,7 +85,7 @@ const SanityPortableText: React.FC<SanityPortableTextProps> = ({
             imageClassName="w-full"
             fixed={false}
             client={getClient(draftMode ? { token } : undefined)}
-             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         )
       },

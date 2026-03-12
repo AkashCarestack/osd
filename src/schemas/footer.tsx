@@ -1,7 +1,7 @@
-import { SlugValidationContext } from "sanity";
+import { SlugValidationContext } from 'sanity'
 
-import { apiVersion } from "~/lib/sanity.api";
-import { showCountryFlag } from "~/utils/common";
+import { apiVersion } from '~/lib/sanity.api'
+import { showCountryFlag } from '~/utils/common'
 
 export default {
   name: 'footer',
@@ -13,7 +13,7 @@ export default {
       title: 'Title',
       type: 'string',
     },
-    
+
     {
       name: 'links',
       title: 'Footer Links',
@@ -27,42 +27,40 @@ export default {
             {
               name: 'text',
               title: 'Text',
-              type: 'string'
+              type: 'string',
             },
             {
               name: 'link',
               title: 'Link',
-              type: 'string'
+              type: 'string',
             },
             {
               name: 'newTab',
               title: 'Open In New Tab',
-              type: 'boolean'
-            }
-          ]
+              type: 'boolean',
+            },
+          ],
         },
         // Add any other content types you need
-      ]
+      ],
     },
     {
       name: 'language',
       type: 'string',
       readOnly: true,
       hidden: true,
-      
-    }
+    },
   ],
   preview: {
-      select: {
-        title: 'title',
-        language:'language',
-      },
-      prepare(selection) {
-        return {
-          title: ` ${selection?.title}`,
-          media:<img src={showCountryFlag(selection?.language)}/>
-        };
-      },
+    select: {
+      title: 'title',
+      language: 'language',
     },
+    prepare(selection) {
+      return {
+        title: ` ${selection?.title}`,
+        media: <img src={showCountryFlag(selection?.language)} />,
+      }
+    },
+  },
 }
-

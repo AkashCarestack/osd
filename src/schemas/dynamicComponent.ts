@@ -83,13 +83,15 @@ export default {
           name: 'formId',
           title: 'Form ID',
           type: 'string',
-          description: 'HubSpot form ID (optional - will use site default if not provided)',
+          description:
+            'HubSpot form ID (optional - will use site default if not provided)',
         },
         {
           name: 'meetingLink',
           title: 'Meeting Link',
           type: 'url',
-          description: 'Meeting link to redirect to after form submission (optional)',
+          description:
+            'Meeting link to redirect to after form submission (optional)',
         },
         {
           name: 'eventName',
@@ -113,7 +115,8 @@ export default {
           name: 'videoLink',
           title: 'Video Link',
           type: 'url',
-          description: 'Video URL to open in new tab after form submission (optional)',
+          description:
+            'Video URL to open in new tab after form submission (optional)',
         },
         {
           name: 'sidebarTitle',

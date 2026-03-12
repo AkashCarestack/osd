@@ -1,11 +1,11 @@
-import { GetStaticProps } from 'next';
-import React from 'react';
+import { GetStaticProps } from 'next'
+import React from 'react'
 
-import Button from '~/components/commonSections/Button';
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext';
-import Layout from '~/components/Layout';
-import Section from '~/components/Section';
-import Wrapper from '~/layout/Wrapper';
+import Button from '~/components/commonSections/Button'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import Layout from '~/components/Layout'
+import Section from '~/components/Section'
+import Wrapper from '~/layout/Wrapper'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
@@ -19,18 +19,18 @@ import {
 import type { SharedPageProps } from '~/pages/_app'
 
 // import { GlobalDataProvider } from '../context/GlobalDataProvider';
-import Header from '../layout/Header';
+import Header from '../layout/Header'
 
 interface IndexPageProps {
-  footerData: unknown;
-  categories: any;
+  footerData: unknown
+  categories: any
   tags: Array<any>
   homeSettings: any
 }
 
-export const getStaticProps: GetStaticProps<
-  SharedPageProps
-> = async ({ draftMode = false }) => {
+export const getStaticProps: GetStaticProps<SharedPageProps> = async ({
+  draftMode = false,
+}) => {
   const client = getClient(draftMode ? { token: readToken } : undefined)
 
   try {
@@ -40,14 +40,14 @@ export const getStaticProps: GetStaticProps<
       homeSettings,
       siteSettings,
       categories,
-      footerData
+      footerData,
     ] = await Promise.all([
       getTags(client),
       getTagsByOrder(client),
       getHomeSettings(client),
       getSiteSettings(client),
       getCategories(client),
-      getFooterData(client)
+      getFooterData(client),
     ])
 
     return {
@@ -59,7 +59,7 @@ export const getStaticProps: GetStaticProps<
         homeSettings,
         siteSettings,
         categories,
-        footerData
+        footerData,
       },
     }
   } catch (error) {
@@ -79,33 +79,36 @@ export const getStaticProps: GetStaticProps<
 
 const Custom404 = (props: IndexPageProps) => {
   const homeSettings = props?.homeSettings
-  
-  
 
-   return (
+  return (
     <GlobalDataProvider
       data={props?.categories}
       featuredTags={homeSettings?.featuredTags}
       homeSettings={homeSettings}
       footerData={props?.footerData}
     >
-    
-      <Layout >
+      <Layout>
         <Section className="justify-center ">
           <Wrapper className={`flex-col `}>
-          <div className='min-h-[40vh] flex flex-col justify-center  items-center text-center gap-10'>
-              <h1 className='text-xl md:text-2xl text-zinc-800'><span className='font-bold md:text-3xl'>404</span> - This page could not be found.</h1>
-              <div className='self-center flex justify-center'>
-                <Button className='bg-zinc-900  hover:bg-zinc-700 !no-underline' link="/">
-                  <span className='text-base font-medium'>Go to Home Page</span>
+            <div className="min-h-[40vh] flex flex-col justify-center  items-center text-center gap-10">
+              <h1 className="text-xl md:text-2xl text-zinc-800">
+                <span className="font-bold md:text-3xl">404</span> - This page
+                could not be found.
+              </h1>
+              <div className="self-center flex justify-center">
+                <Button
+                  className="bg-zinc-900  hover:bg-zinc-700 !no-underline"
+                  link="/"
+                >
+                  <span className="text-base font-medium">Go to Home Page</span>
                 </Button>
               </div>
-          </div>
+            </div>
           </Wrapper>
         </Section>
       </Layout>
     </GlobalDataProvider>
-   );
-};
+  )
+}
 
-export default Custom404;
+export default Custom404

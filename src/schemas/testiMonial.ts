@@ -1,4 +1,4 @@
-import {DashboardIcon} from '@sanity/icons'
+import { DashboardIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 export default defineType({
   name: 'testimonial',
@@ -88,7 +88,7 @@ export default defineType({
       customer: 'customer.name',
     },
     prepare(selection) {
-      const { title, media,language,customer } = selection
+      const { title, media, language, customer } = selection
       return {
         title,
         subtitle: `${customer} - ${language}`,

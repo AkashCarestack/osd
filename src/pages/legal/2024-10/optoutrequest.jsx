@@ -1,4 +1,3 @@
-
 import HubspotFormLegal from '~/components/commonSections/HubspotLegalForm'
 import Section from '~/components/Section'
 
@@ -8,8 +7,8 @@ function UsOptOutRequest() {
       <Section className=" w-full md:max-w-5xl flex flex-col">
         <div className="flex flex-col text-center justify-center mb-10">
           <h1 className="text-4xl font-semibold">
-          Good Methods Global Inc. dba VoiceStack <br/>
-          Sale of Personal Information Opt-Out Request Form
+            Good Methods Global Inc. dba VoiceStack <br />
+            Sale of Personal Information Opt-Out Request Form
           </h1>
           {/* <h2 className="text-3xl font-semibold">United Kingdom (the “DPA”)</h2>  */}
         </div>
@@ -35,15 +34,17 @@ function UsOptOutRequest() {
                   You do not have to use this form, but using this form should
                   make it easier for you to make sure you have provided us with
                   all relevant information and for us to process your request.
-                  You may also submit your opt-out request via email at <a href="mailto:privacyconcerns@voicestack.com">
+                  You may also submit your opt-out request via email at{' '}
+                  <a href="mailto:privacyconcerns@voicestack.com">
                     privacyconcerns@voicestack.com
                   </a>
                   .
                 </p>
                 <p class="legal__text">
                   For more information regarding VoiceStack’s privacy practices
-                  please review our Privacy Policy available at: <a href="https://www.voicestack.com/legal/2025-01/privacy-policy">
-                  https://www.voicestack.com/legal/2025-01/privacy-policy
+                  please review our Privacy Policy available at:{' '}
+                  <a href="https://www.voicestack.com/legal/2025-01/privacy-policy">
+                    https://www.voicestack.com/legal/2025-01/privacy-policy
                   </a>
                   .
                 </p>
@@ -63,7 +64,7 @@ function UsOptOutRequest() {
                   our response.
                 </p>
               </span>
-              <HubspotFormLegal formId="29261e6e-3d10-4ca1-b909-7f0b1fa722d1"/>
+              <HubspotFormLegal formId="29261e6e-3d10-4ca1-b909-7f0b1fa722d1" />
               <span>
                 <h2 class="legal__section-title">
                   2. Requests Made by an Authorized Agent on a Resident’s Behalf
@@ -74,7 +75,7 @@ function UsOptOutRequest() {
                   the Resident’s behalf.
                 </p>
               </span>
-              <HubspotFormLegal formId="0a29f8e8-0d49-4d8a-a207-1c7fa5da452f"/>
+              <HubspotFormLegal formId="0a29f8e8-0d49-4d8a-a207-1c7fa5da452f" />
             </div>
           </div>
         </div>

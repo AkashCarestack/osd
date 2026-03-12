@@ -20,7 +20,8 @@ export default {
           type: 'eventObject',
         },
       ],
-      validation: (Rule: any) => Rule.max(10).error('Maximum 10 events allowed'),
+      validation: (Rule: any) =>
+        Rule.max(10).error('Maximum 10 events allowed'),
     },
   ],
   preview: {

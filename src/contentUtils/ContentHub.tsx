@@ -3,7 +3,7 @@ import siteConfig from 'config/siteConfig'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo,useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import TrapezIcon from '~/assets/reactiveAssets/trapezIcon'
 import Anchor from '~/components/commonSections/Anchor'
@@ -13,116 +13,174 @@ import H2Large from '~/components/typography/H2Large'
 import Wrapper from '~/layout/Wrapper'
 import { generateHref } from '~/utils/common'
 
-
 interface ContentHubProps {
   contentCount?: Record<string, number>
   categories?: any[]
   featuredDescription?: string
 }
 
-export default function ContentHub({ contentCount, categories, featuredDescription }: ContentHubProps) {
-  const [categoriesData, setCategories] = useState([]);
-  const [currentCategory, setCurrentCategory] = useState(null);
-  const [isMainPage, setIsMainPage] = useState(false);
+export default function ContentHub({
+  contentCount,
+  categories,
+  featuredDescription,
+}: ContentHubProps) {
+  const [categoriesData, setCategories] = useState([])
+  const [currentCategory, setCurrentCategory] = useState(null)
+  const [isMainPage, setIsMainPage] = useState(false)
   const pathname = usePathname()
-  const categoriesCopy = useMemo(() => categories && [...categories], [categories]);
-  const router = useRouter();
-  const { locale } = router.query;
+  const categoriesCopy = useMemo(
+    () => categories && [...categories],
+    [categories],
+  )
+  const router = useRouter()
+  const { locale, partner } = router.query
+  const partnerSlug = typeof partner === 'string' ? partner : undefined
 
   useEffect(() => {
-    const allTopic = { 'slug': `${siteConfig.categoryBaseUrls.base}`, 'categoryName': 'All Topics' }
-    let finalCategories = categoriesCopy;
-    
-    // Always add "All Topics" button if it doesn't exist
-    if (!finalCategories || !finalCategories?.find(category => category.categoryName === 'All Topics')) {
-      finalCategories = finalCategories || [];
-      finalCategories.unshift(allTopic);
+    const allTopic = {
+      slug: `${siteConfig.categoryBaseUrls.base}`,
+      categoryName: 'All Topics',
     }
-    
-    setCategories(finalCategories);
-  }, [categories, categoriesCopy]);
+    let finalCategories = categoriesCopy
+
+    // Always add "All Topics" button if it doesn't exist
+    if (
+      !finalCategories ||
+      !finalCategories?.find(
+        (category) => category.categoryName === 'All Topics',
+      )
+    ) {
+      finalCategories = finalCategories || []
+      finalCategories.unshift(allTopic)
+    }
+
+    setCategories(finalCategories)
+  }, [categories, categoriesCopy])
 
   useEffect(() => {
     if (!categoriesData || categoriesData.length === 0) {
-      setCurrentCategory(null);
-      return;
+      setCurrentCategory(null)
+      return
     }
-    
+
     // Extract the category slug from pathname for nested routes like /topic/category-slug/content-slug
-    // or /topic/category-slug
-    const topicBasePath = `/${siteConfig.categoryBaseUrls.base}/`;
-    const topicIndex = pathname.indexOf(topicBasePath);
-    
+    // or /{partner}/topic/category-slug
+    const topicBasePath = partnerSlug
+      ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}/`
+      : `/${siteConfig.categoryBaseUrls.base}/`
+    const topicIndex = pathname.indexOf(topicBasePath)
+
     if (topicIndex !== -1) {
-      const pathAfterTopic = pathname.substring(topicIndex + topicBasePath.length);
-      const categorySlug = pathAfterTopic.split('/')[0]; // Get first segment after /topic/
-      
-      const currentCategory = categoriesData.find(category => {
-        const slug = category?.slug?.current;
-        return slug && (pathname.includes(`/${slug}/`) || pathname.endsWith(`/${slug}`) || categorySlug === slug);
-      });
-      setCurrentCategory(currentCategory || null);
+      const pathAfterTopic = pathname.substring(
+        topicIndex + topicBasePath.length,
+      )
+      const categorySlug = pathAfterTopic.split('/')[0] // Get first segment after /topic/
+
+      const currentCategory = categoriesData.find((category) => {
+        const slug = category?.slug?.current
+        return (
+          slug &&
+          (pathname.includes(`/${slug}/`) ||
+            pathname.endsWith(`/${slug}`) ||
+            categorySlug === slug)
+        )
+      })
+      setCurrentCategory(currentCategory || null)
     } else {
-      setCurrentCategory(null);
+      setCurrentCategory(null)
     }
-  }, [categoriesData, pathname]);
+  }, [categoriesData, pathname, partnerSlug])
 
   useEffect(() => {
-    if (pathname.endsWith(`/${siteConfig.categoryBaseUrls.base}`)) {
-      setIsMainPage(true);
+    const topicEnd = partnerSlug
+      ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}`
+      : `/${siteConfig.categoryBaseUrls.base}`
+    if (pathname.endsWith(topicEnd)) {
+      setIsMainPage(true)
     } else {
-      setIsMainPage(false);
+      setIsMainPage(false)
     }
-  }, [pathname]);
-
+  }, [pathname, partnerSlug])
 
   return (
-    <Section className={`bg-zinc-900 relative h-full justify-center ${categoriesData ? 'md:pt-24 pb-16' : 'md:pt-12 pb-6'} md:pt-headerSpacer pt-headerSpacerMob`}>
-      {categoriesData && <div className='absolute top-0 right-0 h-full 2xl:visible invisible   '>
-      <TrapezIcon/>
-      </div>}
-      <Wrapper className={`flex-col ${categoriesData ? 'gap-12' : 'gap-3'}   w-full`}>
-        <div className='flex flex-col gap-3'>
-          <H2Large className="text-zinc-100">{categoriesData?.length > 0 && isMainPage ? 'All Topics' : categoriesData?.length > 0 && !isMainPage ? currentCategory?.categoryName : 'Browse Content'}</H2Large>
+    <Section
+      className={`bg-zinc-900 relative h-full justify-center ${categoriesData ? 'md:pt-24 pb-16' : 'md:pt-12 pb-6'} md:pt-headerSpacer pt-headerSpacerMob`}
+    >
+      {categoriesData && (
+        <div className="absolute top-0 right-0 h-full 2xl:visible invisible   ">
+          <TrapezIcon />
+        </div>
+      )}
+      <Wrapper
+        className={`flex-col ${categoriesData ? 'gap-12' : 'gap-3'}   w-full`}
+      >
+        <div className="flex flex-col gap-3">
+          <H2Large className="text-zinc-100">
+            {categoriesData?.length > 0 && isMainPage
+              ? 'All Topics'
+              : categoriesData?.length > 0 && !isMainPage
+                ? currentCategory?.categoryName
+                : 'Browse Content'}
+          </H2Large>
           {(featuredDescription || currentCategory) && (
-            <DescriptionText className='text-white opacity-70 md:max-w-[598px] w-full'>
+            <DescriptionText className="text-white opacity-70 md:max-w-[598px] w-full">
               {featuredDescription || currentCategory.categoryDescription}
             </DescriptionText>
           )}
         </div>
         {categoriesData && categoriesData.length > 0 ? (
-          <div className='flex flex-wrap gap-[10px] '>
+          <div className="flex flex-wrap gap-[10px] ">
             {categoriesData.map((category, index) => {
-              let hrefTemplate = `/${category?.categoryName === 'All Topics'
-                 ? `${siteConfig.categoryBaseUrls.base}` : category?.categoryName 
-                 ? `${siteConfig.categoryBaseUrls.base}/${category?.slug?.current || ''} ` 
-                 : siteConfig.categoryBaseUrls.base}`
-            return (
-              <Anchor
-              className={`text-zinc-300 flex items-center  text-sm font-normal py-2 px-3 
-                rounded-full bg-zinc-800 hover:bg-zinc-700 transition-all ease-out duration-300 ${pathname.endsWith(`/${siteConfig.categoryBaseUrls.base}`) && index === 0 ? '!bg-zinc-600 !text-zinc-50' : pathname.includes(category?.slug?.current) ? '!bg-zinc-600 !text-zinc-50' : ''}`}
-              href={generateHref(locale as string, hrefTemplate)}
-              key={index}
-              >
-              {category.categoryName}
-              </Anchor>
-            )})}
+              const topicPath =
+                category?.categoryName === 'All Topics'
+                  ? siteConfig.categoryBaseUrls.base
+                  : category?.categoryName
+                    ? `${siteConfig.categoryBaseUrls.base}/${category?.slug?.current || ''}`.trim()
+                    : siteConfig.categoryBaseUrls.base
+              const hrefTemplate = partnerSlug
+                ? `/${partnerSlug}/${topicPath}`
+                : `/${topicPath}`
+              const topicEnd = partnerSlug
+                ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}`
+                : `/${siteConfig.categoryBaseUrls.base}`
+              return (
+                <Anchor
+                  className={`text-zinc-300 flex items-center  text-sm font-normal py-2 px-3 
+                rounded-full bg-zinc-800 hover:bg-zinc-700 transition-all ease-out duration-300 ${pathname.endsWith(topicEnd) && index === 0 ? '!bg-zinc-600 !text-zinc-50' : pathname.includes(category?.slug?.current) ? '!bg-zinc-600 !text-zinc-50' : ''}`}
+                  href={
+                    partnerSlug
+                      ? hrefTemplate
+                      : generateHref(locale as string, `/${topicPath}`)
+                  }
+                  key={index}
+                >
+                  {category.categoryName}
+                </Anchor>
+              )
+            })}
           </div>
-
         ) : (
           <div className="flex-1 overflow-hidden">
-            <div className={`flex md:gap-x-8 relative md:justify-between flex-wrap gap-6 justify-center`}>
+            <div
+              className={`flex md:gap-x-8 relative md:justify-between flex-wrap gap-6 justify-center`}
+            >
               <div className="text-zinc-400 flex flex-wrap gap-3">
-                {Object.entries(contentCount).length > 0 ? ( 
+                {Object.entries(contentCount).length > 0 ? (
                   Object.entries(contentCount).map(([key, count], index) => {
-                    const singularKey = key.endsWith('s') ? key.slice(0, -1) : key
+                    const singularKey = key.endsWith('s')
+                      ? key.slice(0, -1)
+                      : key
                     const url = siteConfig.pageURLs[singularKey] || '/'
                     return (
-                      <Anchor href={generateHref(locale as string, url)} key={index} className="hover:text-zinc-300 text-sm md:text-base">
-                        {count}{' '}
-                        {key.charAt(0).toUpperCase() + key.slice(1)}
+                      <Anchor
+                        href={generateHref(locale as string, url)}
+                        key={index}
+                        className="hover:text-zinc-300 text-sm md:text-base"
+                      >
+                        {count} {key.charAt(0).toUpperCase() + key.slice(1)}
                         <span className="hidden md:inline ml-3 ">
-                          {index < Object.entries(contentCount).length - 1 && ' • '}
+                          {index < Object.entries(contentCount).length - 1 &&
+                            ' • '}
                         </span>
                       </Anchor>
                     )
@@ -132,7 +190,10 @@ export default function ContentHub({ contentCount, categories, featuredDescripti
                 )}
               </div>
               <Anchor
-                href={ generateHref(locale as string, siteConfig.paginationBaseUrls.base)}
+                href={generateHref(
+                  locale as string,
+                  siteConfig.paginationBaseUrls.base,
+                )}
                 className=" text-[14px] group font-medium leading-[1.5] justify-center  flex items-center gap-x-1 group"
               >
                 <span className="hidden md:inline mr-3">{' • '}</span>

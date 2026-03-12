@@ -1,7 +1,9 @@
 import { CloseIcon } from '@sanity/icons'
 import * as React from 'react'
-import Button from './Button'
+
 import useMediaQuery from '~/utils/useMediaQueryHook'
+
+import Button from './Button'
 
 type VideoPlatform = 'vimeo' | 'vidyard' | 'youtube'
 
@@ -53,7 +55,7 @@ const VideoIframe: React.FC<VideoItem> = ({
   if (!platformToUse) {
     return null
   }
-  
+
   return (
     <iframe
       src={getIframeUrl(platformToUse, videoId)}
@@ -101,13 +103,19 @@ export const VideoModal: React.FC<VideoProps> = ({
           ? 'fixed top-0 left-0 w-full h-full flex items-center justify-center overflow-hidden'
           : ''
       } ${className}`}
-      style={isPopup ? { 
-        backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        zIndex: 20,
-    
-      } : undefined}
+      style={
+        isPopup
+          ? {
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              zIndex: 20,
+            }
+          : undefined
+      }
     >
-      <div className=" md:max-w-[750px] w-full relative rounded-[12px] md:border-[8px] border-[3px] border-[#ffffffde]" ref={toggleRef}>
+      <div
+        className=" md:max-w-[750px] w-full relative rounded-[12px] md:border-[8px] border-[3px] border-[#ffffffde]"
+        ref={toggleRef}
+      >
         {isPopup && onClose && (
           <button
             style={{
@@ -118,7 +126,7 @@ export const VideoModal: React.FC<VideoProps> = ({
               background: '#ffffff',
               cursor: 'pointer',
               right: isMobile ? '8px' : '-18px',
-              top:  '-46px',
+              top: '-46px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -143,7 +151,10 @@ export const VideoModal: React.FC<VideoProps> = ({
           {Array.isArray(videoData) ? (
             videoData.map((item) => (
               <VideoIframe
-                key={item._id || `${item.videoPlatform || item.platform}-${item.videoId}`}
+                key={
+                  item._id ||
+                  `${item.videoPlatform || item.platform}-${item.videoId}`
+                }
                 {...item}
               />
             ))

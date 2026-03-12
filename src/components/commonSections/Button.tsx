@@ -41,7 +41,7 @@ interface ButtonProps {
   alter?: 'bgWhite' | 'borderWhite' | 'disabled' | 'default'
   children?: React.ReactNode
   link?: any
-  target?: '_blank' | '_self' | '_parent' | '_top' | '';
+  target?: '_blank' | '_self' | '_parent' | '_top' | ''
   isDemo?: boolean
   [x: string]: any
   className?: string
@@ -59,35 +59,36 @@ const Button: React.FunctionComponent<ButtonProps> = ({
   ...rest
 }) => {
   const baseClasses = `bg-zinc-500 hover:bg-zinc-600 text-white px-6 py-[14px] text-base leading-[1.5] font-medium rounded-[5px] flex items-center whitespace-nowrap  ${className}`
-  const router = useRouter();
+  const router = useRouter()
 
   const { Track, trackEvent } = useTracking({}, {})
-  const [newLink, setNewLink] = useState("#");
-  const trackCtx = useTrackUser();
-
+  const [newLink, setNewLink] = useState('#')
+  const trackCtx = useTrackUser()
 
   useEffect(() => {
-
     const { query } = router
 
-    const queryParams: Record<string, string> = Object.entries(query).reduce((acc: any, [key, value]) => {
-      if (value !== undefined && key !== "slug") {
-        acc[key] = value.toString();
-      }
-      return acc;
-    }, {});
+    const queryParams: Record<string, string> = Object.entries(query).reduce(
+      (acc: any, [key, value]) => {
+        if (value !== undefined && key !== 'slug') {
+          acc[key] = value.toString()
+        }
+        return acc
+      },
+      {},
+    )
 
-    const noParams = Object.keys(queryParams).length === 0;
+    const noParams = Object.keys(queryParams).length === 0
 
-    const urlSearchParams = new URLSearchParams(queryParams);
+    const urlSearchParams = new URLSearchParams(queryParams)
 
     // Get the existing URL parameters from href
-    const existingParams = href?.includes('?') ? href?.split('?')[1] : '';
+    const existingParams = href?.includes('?') ? href?.split('?')[1] : ''
 
     // Merge existing parameters with updated URL params
-    let updatedParams = `${existingParams ? (noParams ? existingParams : existingParams + '&') : ""}${urlSearchParams.toString()}`;
+    let updatedParams = `${existingParams ? (noParams ? existingParams : existingParams + '&') : ''}${urlSearchParams.toString()}`
     // Append updated URL params to href
-    const countryVersion: any = getCookie("__cs_ver");
+    const countryVersion: any = getCookie('__cs_ver')
 
     // if (href.includes('https://') && (countryVersion != 2)) {
     //   const host = window?.location?.host;
@@ -99,22 +100,20 @@ const Button: React.FunctionComponent<ButtonProps> = ({
     //   }
     // }
 
-    if (router.asPath.startsWith("/lp")) {
-      setNewLink(`${href}`);
+    if (router.asPath.startsWith('/lp')) {
+      setNewLink(`${href}`)
+    } else if (router.asPath.startsWith('/uk')) {
+      setNewLink(`${href}`)
+    } else {
+      setNewLink(
+        `${href?.split('?')[0]}${updatedParams.length > 0 ? '?' + updatedParams : ''}`,
+      )
     }
-    else if (router.asPath.startsWith("/uk")) {
-      setNewLink(`${href}`);
-    }
-    else {
-
-      setNewLink(`${href?.split('?')[0]}${updatedParams.length > 0 ? "?" + updatedParams : ""}`);
-    }
-  }, [href, router, trackCtx]);
+  }, [href, router, trackCtx])
 
   if (link) {
     return (
-      <Anchor  
-      href={link} className={baseClasses} target={target} {...rest}>
+      <Anchor href={link} className={baseClasses} target={target} {...rest}>
         {children}
       </Anchor>
     )

@@ -20,7 +20,8 @@ const dummyEvents = [
     eventType: 'Offline',
     location: 'Dallas, TX',
     date: '2026-02-26',
-    description: 'This update brings enhanced features and improved performance for a smoother experience.',
+    description:
+      'This update brings enhanced features and improved performance for a smoother experience.',
     link: 'https://example.com/event1',
     language: 'en',
   },
@@ -30,7 +31,8 @@ const dummyEvents = [
     eventType: 'Offline',
     location: 'Dallas, TX',
     date: '2026-02-26',
-    description: 'Join us for an empowering conference focused on growth and leadership in the DSO industry.',
+    description:
+      'Join us for an empowering conference focused on growth and leadership in the DSO industry.',
     link: 'https://example.com/event2',
     language: 'en',
   },
@@ -50,7 +52,8 @@ const dummyEvents = [
     eventType: 'Offline',
     location: 'Dallas, TX',
     date: '2026-02-26',
-    description: 'Join us for an empowering conference focused on growth and leadership in the DSO industry.',
+    description:
+      'Join us for an empowering conference focused on growth and leadership in the DSO industry.',
     link: 'https://example.com/event4',
     language: 'en',
   },
@@ -69,12 +72,14 @@ const dummyEvents = [
 async function seedEvents() {
   try {
     console.log('Starting to seed events...')
-    
+
     // Check if events already exist
     const existingEvents = await client.fetch('*[_type == "event"]')
-    
+
     if (existingEvents.length > 0) {
-      console.log(`Found ${existingEvents.length} existing events. Skipping seed.`)
+      console.log(
+        `Found ${existingEvents.length} existing events. Skipping seed.`,
+      )
       console.log('To re-seed, delete existing events first.')
       return
     }
@@ -91,7 +96,9 @@ async function seedEvents() {
     console.log('\nNext steps:')
     console.log('1. Go to http://localhost:3000/studio/structure/contentRepo')
     console.log('2. Click on "Events" to see your events')
-    console.log('3. Go to Home Settings and add events to the Upcoming Events Section')
+    console.log(
+      '3. Go to Home Settings and add events to the Upcoming Events Section',
+    )
   } catch (error) {
     console.error('Error seeding events:', error)
     process.exit(1)
