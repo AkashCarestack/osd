@@ -1,3 +1,4 @@
+import siteConfig from 'config/siteConfig'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import React, { useRef } from 'react'
@@ -11,9 +12,9 @@ import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection
 import LatestBlogs from '~/components/sections/LatestBlogSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Ebooks } from '~/interfaces/post'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import {
   getCategories,
   getEbooks,
@@ -22,11 +23,9 @@ import {
   getHomeSettings,
   getTags,
 } from '~/lib/sanity.queries'
-import { mergeAndRemoveDuplicates } from '~/utils/common'
-import { CustomHead,customMetaTag } from '~/utils/customHead'
-
-import siteConfig from 'config/siteConfig'
 import { SharedPageProps } from '~/pages/_app'
+import { mergeAndRemoveDuplicates } from '~/utils/common'
+import { CustomHead, customMetaTag } from '~/utils/customHead'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
@@ -53,9 +52,8 @@ export const getStaticProps: GetStaticProps<
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
 
-
   if (!ebooks || ebooks.length === 0) {
-    return { notFound: true };
+    return { notFound: true }
   }
 
   return {
@@ -68,7 +66,7 @@ export const getStaticProps: GetStaticProps<
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
@@ -80,7 +78,7 @@ const EbooksPage = ({
   tags,
   homeSettings,
   categories,
-  footerData
+  footerData,
 }: {
   ebooks: Ebooks[]
   latestEbooks: Ebooks[]
@@ -106,13 +104,17 @@ const EbooksPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {ebooks?.map((e, i) => {
             return <CustomHead props={e} type="articleExpanded" key={i} />
           })}
-          <TagSelect tags={tags} tagLimit={7}  />
+          <TagSelect tags={tags} tagLimit={7} />
           {customMetaTag('ebook', true)}
           <LatestBlogs
             className={'pt-11 pr-9 pb-16 pl-9'}

@@ -1,5 +1,5 @@
 import siteConfig from 'config/siteConfig'
-import { GetStaticPaths,GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 
 import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
 import AuthorInfo from '~/components/commonSections/AuthorInfo'
@@ -14,9 +14,9 @@ import PodcastNavigator from '~/contentUtils/PodcastNavigator'
 import { Podcasts } from '~/interfaces/post'
 import SEOHead from '~/layout/SeoHead'
 import Wrapper from '~/layout/Wrapper'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { urlForImage } from '~/lib/sanity.image'
 import {
   getAllPodcastSlugs,
@@ -80,7 +80,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   const { current, totalPodcasts, previous, next } = await getAllPodcastSlugs(
     client,
     currentSlug,
-    region
+    region,
   )
 
   const tagIds = podcast.tags?.map((tag: any) => tag?._id) || []
@@ -90,13 +90,12 @@ export const getStaticProps: GetStaticProps<Props> = async ({
     tagIds,
     podcast.contentType,
     undefined,
-    region
+    region,
   )
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client, region, partnerSlug)
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
-
 
   return {
     props: {
@@ -111,7 +110,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
@@ -127,7 +126,7 @@ const PodcastPage = ({
   draftMode,
   token,
   categories,
-  footerData
+  footerData,
 }: Props) => {
   if (!podcast) {
     return <div>Podcast not found</div>
@@ -136,14 +135,15 @@ const PodcastPage = ({
   const prodUrl = 'https://osdental.io'
 
   const seoTitle = podcast.seoTitle || podcast.title
-  const seoDescription = (podcast?.seoDescription && !podcast.seoDescription.includes('Test titlw')) 
-    ? podcast.seoDescription 
-    : podcast?.excerpt || ''
+  const seoDescription =
+    podcast?.seoDescription && !podcast.seoDescription.includes('Test titlw')
+      ? podcast.seoDescription
+      : podcast?.excerpt || ''
   const seoKeywords = podcast.seoKeywords || ''
   const seoRobots = podcast.seoRobots || 'index,follow'
   const seoCanonical = sanitizeUrl(
     podcast.seoCanonical ||
-    `${prodUrl}/${siteConfig.pageURLs.podcast}/${podcast.slug.current}`
+      `${prodUrl}/${siteConfig.pageURLs.podcast}/${podcast.slug.current}`,
   )
   const jsonLD: any = generateJSONLD(podcast)
 
@@ -159,7 +159,11 @@ const PodcastPage = ({
         ogImage={urlForImage(podcast?.mainImage)}
         contentType={podcast?.contentType}
       />
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+      <GlobalDataProvider
+        data={categories}
+        featuredTags={homeSettings?.featuredTags}
+        footerData={footerData}
+      >
         <Layout>
           <MainImageSection
             isAudio={true}
@@ -212,7 +216,7 @@ const PodcastPage = ({
                   </div>
                 </div>
               </div>
-              {podcast?.tags && <RelatedTag tags={podcast?.tags}/>}
+              {podcast?.tags && <RelatedTag tags={podcast?.tags} />}
             </Wrapper>
           </Section>
           {relatedContents.length > 0 && (

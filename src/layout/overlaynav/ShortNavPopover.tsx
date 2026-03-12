@@ -1,12 +1,8 @@
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  CloseIcon,
-} from '@sanity/icons'
+import { ChevronLeftIcon, ChevronRightIcon, CloseIcon } from '@sanity/icons'
 import siteConfig from 'config/siteConfig'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect,useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import GrowthClubLogo from '~/assets/reactiveAssets/GrowthClubLogo'
 import Anchor from '~/components/commonSections/Anchor'
@@ -39,7 +35,6 @@ export const ShortNavPopover = ({
   const router = useRouter()
   const locale = (router.query.locale as string) || 'en'
 
-
   useEffect(() => {
     const handleRouteChange = () => {
       if (showMenu) {
@@ -68,17 +63,15 @@ export const ShortNavPopover = ({
     }
 
     // document.addEventListener('mousedown', handleClickOutside)
-    document.addEventListener('scroll',handleClickOutside) // can be used if needed
+    document.addEventListener('scroll', handleClickOutside) // can be used if needed
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('scroll',handleClickOutside)
+      document.removeEventListener('scroll', handleClickOutside)
     }
   }, [showMenu, setShowMenu])
 
-
-
   useEffect(() => {
-    if (data) setTagData(data) 
+    if (data) setTagData(data)
   }, [tagData, data])
 
   const closeMenu = () => {
@@ -94,13 +87,11 @@ export const ShortNavPopover = ({
     setShowTags(false)
   }
 
-
-
   const handleMouseLeave = (event: any) => {
     // if (!navPopoverRef.current.contains(event.target as Node)) {
-      setShowMenu(false);
+    setShowMenu(false)
     // }
-  };
+  }
 
   return (
     <section
@@ -114,10 +105,9 @@ export const ShortNavPopover = ({
       ${className}
     `}
     >
-    <div className="absolute bg-white w-10 h-10 border-l-3 border-t-3 border-b-3 border-b-transparent transform top-[-1px] left-6 rotate-45 skew-x-10 skew-y-10  bottom-0"></div>
+      <div className="absolute bg-white w-10 h-10 border-l-3 border-t-3 border-b-3 border-b-transparent transform top-[-1px] left-6 rotate-45 skew-x-10 skew-y-10  bottom-0"></div>
       <Wrapper>
         <div className={`${className} w-full lg:pt-0 pt-14`}>
-
           <div
             className={`lg:hidden flex fixed top-0 left-0 w-full py-4 px-4 z-20 bg-zinc-900 h-[56px] items-center justify-between`}
           >
@@ -157,26 +147,26 @@ export const ShortNavPopover = ({
               className={`w-full transform transition-all duration-200}`}
             >
               <nav className="flex flex-col   lg:gap-x-10 flex-wrap rounded-[6px] ">
-              {tagData &&
-                    tagData.length > 0 &&
-                    tagData.map((tag, index) => {
-                      // Get first associated content item for the link
-                      const firstContent = tag?.associatedContent?.[0]
-                      const categorySlug = tag?.slug?.current
-                      const contentSlug = firstContent?.slug?.current
+                {tagData &&
+                  tagData.length > 0 &&
+                  tagData.map((tag, index) => {
+                    // Get first associated content item for the link
+                    const firstContent = tag?.associatedContent?.[0]
+                    const categorySlug = tag?.slug?.current
+                    const contentSlug = firstContent?.slug?.current
 
-                      // Build the URL: topic/{category-slug}/{content-slug} if content exists,
-                      // otherwise just link to the category page
-                      let href = ''
-                      if (contentSlug && categorySlug) {
-                        href = `${siteConfig.categoryBaseUrls.base}/${categorySlug}/${contentSlug}`
-                      } else if (categorySlug) {
-                        href = `${siteConfig.categoryBaseUrls.base}/${categorySlug}`
-                      } else {
-                        href = siteConfig.categoryBaseUrls.base
-                      }
-                      
-                      const cleanHref = normalizePath(href);
+                    // Build the URL: topic/{category-slug}/{content-slug} if content exists,
+                    // otherwise just link to the category page
+                    let href = ''
+                    if (contentSlug && categorySlug) {
+                      href = `${siteConfig.categoryBaseUrls.base}/${categorySlug}/${contentSlug}`
+                    } else if (categorySlug) {
+                      href = `${siteConfig.categoryBaseUrls.base}/${categorySlug}`
+                    } else {
+                      href = siteConfig.categoryBaseUrls.base
+                    }
+
+                    const cleanHref = normalizePath(href)
                     return (
                       <div className="break-inside-avoid p-2 " key={index}>
                         <Anchor
@@ -184,10 +174,13 @@ export const ShortNavPopover = ({
                           scroll={false}
                           className="text-zinc-500 font-medium text-sm hover:text-zinc-600 transition-colors inline-flex "
                         >
-                          <span className='hover:underline underline-offset-4'>{tag?.categoryName}</span>
+                          <span className="hover:underline underline-offset-4">
+                            {tag?.categoryName}
+                          </span>
                         </Anchor>
                       </div>
-                    )})}
+                    )
+                  })}
               </nav>
               {/* <div className="px-[10px] py-6 lg:p-6 lg:block hidden">
                 <div className="text-zinc-400 pb-6 font-medium text-sm uppercase">
@@ -247,19 +240,20 @@ export const ShortNavPopover = ({
                   } else {
                     href = siteConfig.categoryBaseUrls.base
                   }
-                  
-                  const cleanHref = normalizePath(href);
-                  return(
-                  <div className="break-inside-avoid" key={index}>
-                    <Anchor
-                      href={generateHref(locale, cleanHref)}
-                      scroll={false}
-                      className="text-zinc-500 pb-[14px] font-medium text-sm flex hover:text-zinc-600 transition-colors"
-                    >
-                      <span>{tag?.categoryName}</span>
-                    </Anchor>
-                  </div>
-                )})}
+
+                  const cleanHref = normalizePath(href)
+                  return (
+                    <div className="break-inside-avoid" key={index}>
+                      <Anchor
+                        href={generateHref(locale, cleanHref)}
+                        scroll={false}
+                        className="text-zinc-500 pb-[14px] font-medium text-sm flex hover:text-zinc-600 transition-colors"
+                      >
+                        <span>{tag?.categoryName}</span>
+                      </Anchor>
+                    </div>
+                  )
+                })}
             </div>
           </div>
         </div>

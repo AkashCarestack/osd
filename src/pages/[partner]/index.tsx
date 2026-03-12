@@ -1,5 +1,9 @@
 import siteConfig from 'config/siteConfig'
-import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
+import type {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType,
+} from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
@@ -7,9 +11,9 @@ import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import Layout from '~/components/Layout'
 import { Post } from '~/interfaces/post'
 import DynamicPages from '~/layout/DynamicPages'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import {
   getAllFAQs,
   getCategories,
@@ -105,7 +109,8 @@ export const getStaticProps: GetStaticProps<
     ])
 
     const categoriesWithFAQs = faqCategories.filter(
-      (category) => category.faq && category.faq.faqs && category.faq.faqs.length > 0,
+      (category) =>
+        category.faq && category.faq.faqs && category.faq.faqs.length > 0,
     )
 
     return {

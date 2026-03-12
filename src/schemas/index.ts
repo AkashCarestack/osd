@@ -2,6 +2,12 @@ import { SchemaTypeDefinition } from 'sanity'
 
 import blockContent from './blockContent'
 import category from './category'
+import event from './contentRepo/event'
+import eventObject from './contentRepo/eventObject'
+import faq from './contentRepo/faq'
+import glossary from './contentRepo/glossary'
+import upcomingEventsSection from './contentRepo/upcomingEventsSection'
+import whyPracticeLoveSection from './contentRepo/whyPracticeLoveSection'
 import customContent from './customContent'
 import dynamicComponent from './dynamicComponent'
 import eventCard from './eventCard'
@@ -12,6 +18,7 @@ import htmlCode from './htmlCode'
 import iframe from './iframe'
 import link from './link'
 import newContent from './newContent'
+import partner from './partner'
 import post from './post'
 import asideBannerBlock from './sections/asideBannerBlock'
 import author from './sections/author'
@@ -23,18 +30,11 @@ import demoBannerBlockUS from './sections/demoBannerBlockUS'
 import faqSection from './sections/faqSection'
 import heroSection from './sections/heroSection'
 import testimonialCard from './sections/testimonialCard'
-import partner from './partner'
 import siteSetting from './siteSetting'
 import table from './table'
 import tag from './tag'
 import testiMonial from './testiMonial'
 import videos from './videos'
-import glossary from './contentRepo/glossary'
-import faq from './contentRepo/faq'
-import whyPracticeLoveSection from './contentRepo/whyPracticeLoveSection'
-import event from './contentRepo/event'
-import eventObject from './contentRepo/eventObject'
-import upcomingEventsSection from './contentRepo/upcomingEventsSection'
 
 export const schemaTypes = [
   post,
@@ -71,7 +71,7 @@ export const schemaTypes = [
   whyPracticeLoveSection,
   event,
   eventObject,
-  upcomingEventsSection
+  upcomingEventsSection,
 ]
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -109,6 +109,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     whyPracticeLoveSection,
     event,
     eventObject,
-    upcomingEventsSection
+    upcomingEventsSection,
   ],
 }

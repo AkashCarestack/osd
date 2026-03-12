@@ -12,9 +12,9 @@ import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection
 import LatestBlogs from '~/components/sections/LatestBlogSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Podcasts } from '~/interfaces/post'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import {
   getCategories,
   getFooterData,
@@ -25,9 +25,7 @@ import {
 } from '~/lib/sanity.queries'
 import { SharedPageProps } from '~/pages/_app'
 import { mergeAndRemoveDuplicates } from '~/utils/common'
-import { CustomHead,customMetaTag } from '~/utils/customHead'
-
-
+import { CustomHead, customMetaTag } from '~/utils/customHead'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
@@ -35,7 +33,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: 'blocking' }
 }
 
-export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (context) => {
+export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
+  context,
+) => {
   const draftMode = context.preview || false
   const client = getClient(draftMode ? { token: readToken } : undefined)
   const locale = getDefaultLocale()
@@ -43,22 +43,28 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (conte
   if (!partnerSlug) return { notFound: true }
   const itemsPerPage = siteConfig.pagination.childItemsPerPage
 
-  const [podcasts, latestPodcasts, totalPodcasts, tags, homeSettings, categories, footerData] =
-    await Promise.all([
-      getPodcasts(client, 0, itemsPerPage, locale),
-      getPodcasts(client, 0, 5, locale),
-      getPodcastsCount(client, locale),
-      getTags(client),
-      getHomeSettings(client, locale, partnerSlug),
+  const [
+    podcasts,
+    latestPodcasts,
+    totalPodcasts,
+    tags,
+    homeSettings,
+    categories,
+    footerData,
+  ] = await Promise.all([
+    getPodcasts(client, 0, itemsPerPage, locale),
+    getPodcasts(client, 0, 5, locale),
+    getPodcastsCount(client, locale),
+    getTags(client),
+    getHomeSettings(client, locale, partnerSlug),
     getCategories(client),
-    getFooterData(client, locale)
+    getFooterData(client, locale),
   ])
 
   const totalPages = Math.ceil(totalPodcasts / itemsPerPage)
 
-    
   if (!podcasts || podcasts.length === 0) {
-    return { notFound: true };
+    return { notFound: true }
   }
 
   return {
@@ -71,11 +77,10 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (conte
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
-
 
 const PodcastsPage = ({
   podcasts,
@@ -84,7 +89,7 @@ const PodcastsPage = ({
   tags,
   homeSettings,
   categories,
-  footerData
+  footerData,
 }: {
   podcasts: Podcasts[]
   latestPodcasts: Podcasts[]
@@ -95,7 +100,7 @@ const PodcastsPage = ({
   footerData: any
 }) => {
   const router = useRouter()
-  const baseUrl = `/${siteConfig.pageURLs.podcast}`;
+  const baseUrl = `/${siteConfig.pageURLs.podcast}`
   if (!podcasts) return null
 
   const featuredPodcast = homeSettings?.featuredPodcast || []
@@ -112,13 +117,17 @@ const PodcastsPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {podcasts?.map((e, i) => {
             return <CustomHead props={e} key={i} type="podcast" />
           })}
-          <TagSelect tags={tags} tagLimit={7}  />
+          <TagSelect tags={tags} tagLimit={7} />
           {customMetaTag('podcast', true)}
           <LatestBlogs
             className={'pt-11 pr-9 pb-16 pl-9'}

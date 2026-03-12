@@ -47,7 +47,7 @@ export default async function preview(
         { id, draftId: `drafts.${id}` },
       )
     }
-    
+
     // Fall back to slug if id didn't work or wasn't provided
     if (!document) {
       document = await authClient.fetch(
@@ -59,11 +59,11 @@ export default async function preview(
     if (document) {
       const actualContentType = document.contentType || document._type
       const locale = document.language || 'en'
-      
+
       // Build the preview path with locale
       const previewPath = `${actualContentType}/${slug}`
       const previewUrl = generateHref(locale, previewPath)
-      
+
       if (Object.values(siteConfig.pageURLs).includes(actualContentType)) {
         res.setDraftMode({ enable: true })
         res.writeHead(307, { Location: previewUrl })

@@ -1,5 +1,5 @@
 import siteConfig from 'config/siteConfig'
-import { GetStaticPaths,GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 
 import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
@@ -16,9 +16,9 @@ import { Toc } from '~/contentUtils/sanity-toc'
 import { Articles } from '~/interfaces/post'
 import SEOHead from '~/layout/SeoHead'
 import Wrapper from '~/layout/Wrapper'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { urlForImage } from '~/lib/sanity.image'
 import {
   articleSlugsQuery,
@@ -45,7 +45,6 @@ interface Props {
   footerData: any
 }
 
-
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
   const basePaths = await getPartnerPaths(client)
@@ -64,7 +63,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   draftMode = false,
   params = {},
 }) => {
-  const client = getClient(draftMode ? { token: readToken } : undefined) 
+  const client = getClient(draftMode ? { token: readToken } : undefined)
   const region = getDefaultLocale()
   const partnerSlug = params.partner as string
   if (!partnerSlug) return { notFound: true }
@@ -87,9 +86,6 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
 
-
-  
-
   return {
     props: {
       draftMode,
@@ -99,7 +95,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
@@ -112,28 +108,33 @@ const ArticlePage = ({
   draftMode,
   token,
   categories,
-  footerData
+  footerData,
 }: Props) => {
   if (!articles) {
     return null
   }
-  
+
   const prodUrl = 'https://osdental.io'
   const seoTitle = articles?.seoTitle || articles?.title || 'Article'
-  const seoDescription = (articles?.seoDescription && !articles.seoDescription.includes('Test titlw')) 
-    ? articles.seoDescription 
-    : articles?.excerpt || ''
+  const seoDescription =
+    articles?.seoDescription && !articles.seoDescription.includes('Test titlw')
+      ? articles.seoDescription
+      : articles?.excerpt || ''
   const seoKeywords = articles?.seoKeywords || ''
   const seoRobots = articles?.seoRobots || 'index,follow'
   const seoCanonical = sanitizeUrl(
     articles?.seoCanonical ||
-    `${prodUrl}/${siteConfig.pageURLs.article}/${articles?.slug?.current || ''}`
+      `${prodUrl}/${siteConfig.pageURLs.article}/${articles?.slug?.current || ''}`,
   )
   const jsonLD: any = generateJSONLD(articles)
 
   return (
     <>
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+      <GlobalDataProvider
+        data={categories}
+        featuredTags={homeSettings?.featuredTags}
+        footerData={footerData}
+      >
         <SEOHead
           title={seoTitle}
           description={seoDescription}
@@ -142,7 +143,11 @@ const ArticlePage = ({
           canonical={seoCanonical}
           jsonLD={jsonLD}
           contentType={articles?.contentType}
-          ogImage={articles?.mainImage?._id ? urlForImage(articles.mainImage._id) : undefined}
+          ogImage={
+            articles?.mainImage?._id
+              ? urlForImage(articles.mainImage._id)
+              : undefined
+          }
         />
 
         <Layout>
@@ -162,7 +167,7 @@ const ArticlePage = ({
                 <div className="flex flex-col gap-8 md:mt-12 bg-red relative md:w-1/3 md:max-w-[410px] w-full">
                   <div className="sticky top-24 flex flex-col-reverse md:flex-col gap-8 md:overflow-auto">
                     <Toc headings={articles?.headings} title="Contents" />
-                    <div className='flex-col gap-8 flex'>
+                    <div className="flex-col gap-8 flex">
                       {articles?.author && (
                         <div>
                           <AuthorInfo author={articles?.author} />
@@ -173,7 +178,7 @@ const ArticlePage = ({
                   </div>
                 </div>
               </div>
-              {articles?.tags && <RelatedTag tags={articles?.tags}/>}
+              {articles?.tags && <RelatedTag tags={articles?.tags} />}
             </Wrapper>
           </Section>
           {relatedContents && relatedContents.length > 0 && (

@@ -1,3 +1,4 @@
+import siteConfig from 'config/siteConfig'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import React, { useRef } from 'react'
@@ -12,9 +13,9 @@ import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection
 import LatestBlogs from '~/components/sections/LatestBlogSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Webinars } from '~/interfaces/post'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import {
   getCategories,
   getFooterData,
@@ -23,13 +24,9 @@ import {
   getWebinars,
   getWebinarsCount,
 } from '~/lib/sanity.queries'
-import { mergeAndRemoveDuplicates } from '~/utils/common'
-import { CustomHead,customMetaTag } from '~/utils/customHead'
-
-import siteConfig from 'config/siteConfig'
 import { SharedPageProps } from '~/pages/_app'
-
-
+import { mergeAndRemoveDuplicates } from '~/utils/common'
+import { CustomHead, customMetaTag } from '~/utils/customHead'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
@@ -37,7 +34,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: 'blocking' }
 }
 
-export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (context) => {
+export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
+  context,
+) => {
   const draftMode = context.preview || false
   const client = getClient(draftMode ? { token: readToken } : undefined)
   const region = getDefaultLocale()
@@ -47,21 +46,28 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (conte
   }
   const itemsPerPage = siteConfig.pagination.childItemsPerPage
 
-  const [webinars, latestWebinars, totalWebinars, tags, homeSettings, categories, footerData] =
-    await Promise.all([
-      getWebinars(client, 0, itemsPerPage, region),
-      getWebinars(client, 0, 5, region),
-      getWebinarsCount(client, region),
-      getTags(client),
-      getHomeSettings(client, region, partnerSlug),
+  const [
+    webinars,
+    latestWebinars,
+    totalWebinars,
+    tags,
+    homeSettings,
+    categories,
+    footerData,
+  ] = await Promise.all([
+    getWebinars(client, 0, itemsPerPage, region),
+    getWebinars(client, 0, 5, region),
+    getWebinarsCount(client, region),
+    getTags(client),
+    getHomeSettings(client, region, partnerSlug),
     getCategories(client),
-    getFooterData(client, region)
+    getFooterData(client, region),
   ])
 
   const totalPages = Math.ceil(totalWebinars / itemsPerPage)
 
   if (!webinars || webinars.length === 0) {
-    return { notFound: true };
+    return { notFound: true }
   }
 
   return {
@@ -74,11 +80,10 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (conte
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
-
 
 const WebinarsPage = ({
   webinars,
@@ -87,7 +92,7 @@ const WebinarsPage = ({
   totalPages,
   tags,
   categories,
-  footerData
+  footerData,
 }: {
   webinars: Webinars[]
   latestWebinars: Webinars[]
@@ -116,7 +121,11 @@ const WebinarsPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           <CustomHead props={webinars} type="webinar" />

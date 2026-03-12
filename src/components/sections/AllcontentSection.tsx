@@ -20,11 +20,11 @@ interface LatestBlogsProps {
   hideHeader?: boolean
   className?: string
   cardType?:
-  | 'podcast-card'
-  | 'ebook-card'
-  | 'featured'
-  | 'top-image-smallCard'
-  | 'left-image-card'
+    | 'podcast-card'
+    | 'ebook-card'
+    | 'featured'
+    | 'top-image-smallCard'
+    | 'left-image-card'
   redirect?: boolean
   itemsPerPage?: number
   customBrowseContent?: any
@@ -56,16 +56,15 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
   compIndex,
   customHeading,
   customButtonText,
-  headingWithLineBreak = false
+  headingWithLineBreak = false,
 }) => {
   const postsToShow = itemsPerPage || siteConfig.pagination.childItemsPerPage
   const [selectedTag, setSelectedTag] = useState('')
   const pathname = usePathname()
   const router = useRouter()
   const baseUrl = useBaseUrl()
-  const { locale } = router.query; 
+  const { locale } = router.query
   let { homeSettings } = useGlobalData()
-
 
   const totalCount = allItemCount ? allItemCount : allContent.length
 
@@ -84,30 +83,39 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
         ? `Posts By ${authorName}`
         : 'Explore All'
 
-  const uniqueCategories = allContent && Object.values(allContent.reduce((acc, item) => {
-    acc[item?.category?.categoryName] = item?.category;
-    return acc;
-  }, {}));
+  const uniqueCategories =
+    allContent &&
+    Object.values(
+      allContent.reduce((acc, item) => {
+        acc[item?.category?.categoryName] = item?.category
+        return acc
+      }, {}),
+    )
 
-  const catName =  uniqueCategories && uniqueCategories?.map((item: any) => item?.categoryName).join(', ');
-  const catUrl = uniqueCategories && uniqueCategories?.map((item: any) => item?.slug?.current).join(', ');
-  const catDescription = uniqueCategories &&  uniqueCategories?.map((item: any) => item?.categoryDescription).join(', ');
+  const catName =
+    uniqueCategories &&
+    uniqueCategories?.map((item: any) => item?.categoryName).join(', ')
+  const catUrl =
+    uniqueCategories &&
+    uniqueCategories?.map((item: any) => item?.slug?.current).join(', ')
+  const catDescription =
+    uniqueCategories &&
+    uniqueCategories?.map((item: any) => item?.categoryDescription).join(', ')
 
-  
   const revampClass = uiType && uiType === 'category' ? true : false
 
-  let categoryName =  revampClass ? catName : 'All Content'
+  let categoryName = revampClass ? catName : 'All Content'
   // For topic index page, always redirect to topic index instead of category page
-  let categoryUrl = revampClass 
+  let categoryUrl = revampClass
     ? `/${siteConfig.categoryBaseUrls.base}`
-    : `/${categoryName ? `${siteConfig.categoryBaseUrls.base}/${catUrl} `: siteConfig.paginationBaseUrls.base}`
+    : `/${categoryName ? `${siteConfig.categoryBaseUrls.base}/${catUrl} ` : siteConfig.paginationBaseUrls.base}`
 
-  const isBrowsePath = router.pathname.includes('browse/') || router.pathname.startsWith('/[locale]/browse')
-  
+  const isBrowsePath =
+    router.pathname.includes('browse/') ||
+    router.pathname.startsWith('/[locale]/browse')
 
   useEffect(() => {
     const updateSelectedTag = () => {
-
       if (isBrowsePath) {
         const pathParts = router.asPath.split('/')
         const isPageRoute = pathParts.includes('page')
@@ -144,15 +152,16 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
     }
 
     updateSelectedTag()
-  }, [router.pathname, router.asPath,isBrowsePath])  
+  }, [router.pathname, router.asPath, isBrowsePath])
 
-  if((allContent?.length <= 2) && !isBrowsePath && uiType !== 'category' ) return null
-
+  if (allContent?.length <= 2 && !isBrowsePath && uiType !== 'category')
+    return null
 
   const renderPosts = () => {
     const posts = []
     const slicedContent = allContent.slice(0, postsToShow)
-    const isHomePage = pathname === `${siteConfig.pageURLs.home}` || pathname === `/${locale}`
+    const isHomePage =
+      pathname === `${siteConfig.pageURLs.home}` || pathname === `/${locale}`
 
     slicedContent.forEach((post, index) => {
       const isVaryingIndex =
@@ -184,64 +193,78 @@ const AllcontentSection: React.FC<LatestBlogsProps> = ({
 
     return posts
   }
-  
+
   return (
-    <Section className={`justify-center ${headingWithLineBreak ? 'bg-zinc-100' : ''} ${revampClass && compIndex === 0 ? 'md:pt-16' : revampClass ? 'md:pt-9' : 'md:pt-24'} ${!homeSettings?.eventCarousel && 'md:pb-24'} ${className}`}>  
-      <Wrapper className={`flex-col ${revampClass && 'bg-zinc-100 md:p-12 p-6'}`}>
-      {!hideHeader && (
-        <div className={`md:flex-row flex-col gap-8 flex ${revampClass ? 'items-start' : 'items-center'} justify-between pb-12 `}>
-          {!pathname.includes(`/${siteConfig.categoryBaseUrls.base}/`) &&  <div className='flex flex-col gap-4'>
-            <H2Large className={`tracking-tighterText select-none ${headingWithLineBreak ? 'md:max-w-[450px]' : 'w-full'}`}>
-              {`${selectedTag ? selectedTag : revampClass ? categoryName: browseHeading } `}
-            </H2Large>
-            {revampClass && <DescriptionText className='text-zinc-600 md:max-w-[659px] w-full'>
-              {catDescription}
-            </DescriptionText>}
-          </div>
-          }
-          {redirect ? (
-            <Anchor
-              href={generateHref(locale,categoryUrl)}
-              className="shrink-0"
-            >
-              <div className="flex items-center gap-3 transform group duration-300 cursor-pointer">
-                <span className="text-base font-medium">{customButtonText || 'Browse All'}</span>
-                <span className="text-xl">
-                  <ArrowTopRightIcon
-                    className="group-hover:translate-y-[-2px] transition-transform duration-300"
-                    height={20}
-                    width={20}
-                  />
-                </span>
+    <Section
+      className={`justify-center ${headingWithLineBreak ? 'bg-zinc-100' : ''} ${revampClass && compIndex === 0 ? 'md:pt-16' : revampClass ? 'md:pt-9' : 'md:pt-24'} ${!homeSettings?.eventCarousel && 'md:pb-24'} ${className}`}
+    >
+      <Wrapper
+        className={`flex-col ${revampClass && 'bg-zinc-100 md:p-12 p-6'}`}
+      >
+        {!hideHeader && (
+          <div
+            className={`md:flex-row flex-col gap-8 flex ${revampClass ? 'items-start' : 'items-center'} justify-between pb-12 `}
+          >
+            {!pathname.includes(`/${siteConfig.categoryBaseUrls.base}/`) && (
+              <div className="flex flex-col gap-4">
+                <H2Large
+                  className={`tracking-tighterText select-none ${headingWithLineBreak ? 'md:max-w-[450px]' : 'w-full'}`}
+                >
+                  {`${selectedTag ? selectedTag : revampClass ? categoryName : browseHeading} `}
+                </H2Large>
+                {revampClass && (
+                  <DescriptionText className="text-zinc-600 md:max-w-[659px] w-full">
+                    {catDescription}
+                  </DescriptionText>
+                )}
               </div>
-            </Anchor>
-          ) : (
-            !showCount  && (
-              <div className="text-zinc-700 font-normal text-base shrink-0">{`${totalCount} ${totalCount > 1 ? 'results' : 'result'}`}</div>
-            )
-          )}
-        </div>
-      )}
-      <div
-        className={`grid 
-          ${cardType === 'left-image-card'
-            ? 'grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-x-6 xl:gap-x-16 gap-y-6 md:gap-y-12'
-            : cardType === 'podcast-card'
-              ? 'lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8'
-              : 'lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6 md:gap-10'
+            )}
+            {redirect ? (
+              <Anchor
+                href={generateHref(locale, categoryUrl)}
+                className="shrink-0"
+              >
+                <div className="flex items-center gap-3 transform group duration-300 cursor-pointer">
+                  <span className="text-base font-medium">
+                    {customButtonText || 'Browse All'}
+                  </span>
+                  <span className="text-xl">
+                    <ArrowTopRightIcon
+                      className="group-hover:translate-y-[-2px] transition-transform duration-300"
+                      height={20}
+                      width={20}
+                    />
+                  </span>
+                </div>
+              </Anchor>
+            ) : (
+              !showCount && (
+                <div className="text-zinc-700 font-normal text-base shrink-0">{`${totalCount} ${totalCount > 1 ? 'results' : 'result'}`}</div>
+              )
+            )}
+          </div>
+        )}
+        <div
+          className={`grid 
+          ${
+            cardType === 'left-image-card'
+              ? 'grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-x-6 xl:gap-x-16 gap-y-6 md:gap-y-12'
+              : cardType === 'podcast-card'
+                ? 'lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8'
+                : 'lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6 md:gap-10'
           }
           }
         `}
-      >
-        {allContent && allContent.length > 0 ? (
-          renderPosts()
-        ) : (
-          <div className="py-10 text-xl">
-            <p>{`No matching posts found`}.</p>
-          </div>
-        )}
-      </div>
-    </Wrapper>
+        >
+          {allContent && allContent.length > 0 ? (
+            renderPosts()
+          ) : (
+            <div className="py-10 text-xl">
+              <p>{`No matching posts found`}.</p>
+            </div>
+          )}
+        </div>
+      </Wrapper>
     </Section>
   )
 }

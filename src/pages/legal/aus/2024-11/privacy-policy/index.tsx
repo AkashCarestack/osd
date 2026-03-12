@@ -44,7 +44,10 @@ function AusPrivacyPolicy() {
             <span className="c12">
               This Privacy Policy applies to information collected and handled
               in our interactions with you, including information that we may
-              collect about you on our website (located at <a href="https://www.voicestack.com/en-AU">https://www.voicestack.com/en-AU</a>
+              collect about you on our website (located at{' '}
+              <a href="https://www.voicestack.com/en-AU">
+                https://www.voicestack.com/en-AU
+              </a>
             </span>
             <span className="c1">&nbsp;)</span>
             <span className="c12">&nbsp;(</span>

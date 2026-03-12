@@ -1,5 +1,9 @@
 import siteConfig from 'config/siteConfig'
-import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
+import type {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType,
+} from 'next'
 import { useRouter } from 'next/router'
 
 import Pagination from '~/components/commonSections/Pagination'
@@ -10,8 +14,8 @@ import AllcontentSection from '~/components/sections/AllcontentSection'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
 import ContentHub from '~/contentUtils/ContentHub'
 import TagSelect from '~/contentUtils/TagSelector'
-import { getClient } from '~/lib/sanity.client'
 import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
+import { getClient } from '~/lib/sanity.client'
 import {
   getArticlesCount,
   getCategories,
@@ -31,7 +35,6 @@ interface Query {
   [key: string]: string
 }
 
-
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
   const paths = await getPartnerPaths(client)
@@ -43,7 +46,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const region = getDefaultLocale()
   const partnerSlug = params?.partner as string
   if (!partnerSlug) return { notFound: true }
-  
+
   const pageNumber = params?.pageNumber
     ? parseInt(params.pageNumber as string, 10)
     : 1
@@ -62,21 +65,20 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     totalEbooks,
     homeSettings,
     categories,
-    footerData
+    footerData,
   ] = await Promise.all([
     getTags(client),
-    getPostsByLimit(client, startLimit, cardsPerPage,undefined,region),
-    getPosts(client,undefined,region),
+    getPostsByLimit(client, startLimit, cardsPerPage, undefined, region),
+    getPosts(client, undefined, region),
     getSiteSettings(client),
-    getPodcastsCount(client,region),
-    getWebinarsCount(client,region),
-    getArticlesCount(client,region),
-    getEbooksCount(client,region),
+    getPodcastsCount(client, region),
+    getWebinarsCount(client, region),
+    getArticlesCount(client, region),
+    getEbooksCount(client, region),
     getHomeSettings(client, region, partnerSlug),
     getCategories(client),
-    getFooterData(client, region)
+    getFooterData(client, region),
   ])
-  
 
   const totalPages = Math.ceil(totalPosts.length / cardsPerPage)
 
@@ -119,12 +121,12 @@ export default function ProjectSlugRoute(
     siteSettings,
     homeSettings,
     categories,
-    footerData
+    footerData,
   } = props
   const totalCount: any = totalPosts.length ?? 0
 
   const baseUrl = `/${siteConfig.paginationBaseUrls.base}`
-  const Url:string = process.env.NEXT_PUBLIC_BASE_URL+baseUrl
+  const Url: string = process.env.NEXT_PUBLIC_BASE_URL + baseUrl
 
   const handlePageChange = (page: number) => {
     //   if (page === 1) {
@@ -134,15 +136,18 @@ export default function ProjectSlugRoute(
     //   }
   }
   const siteSettingWithImage = siteSettings?.find((e: any) => e?.openGraphImage)
-  
 
   return (
     <>
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+      <GlobalDataProvider
+        data={categories}
+        featuredTags={homeSettings?.featuredTags}
+        footerData={footerData}
+      >
         <BaseUrlProvider baseUrl={baseUrl}>
           <Layout>
             {siteSettingWithImage ? (
-              defaultMetaTag(siteSettingWithImage,Url)
+              defaultMetaTag(siteSettingWithImage, Url)
             ) : (
               <></>
             )}

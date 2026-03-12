@@ -15,7 +15,8 @@ export default {
       title: 'Description',
       type: 'text',
       description: 'A brief description or subtext',
-      initialValue: 'Looking for the best AI-powered phone system for your dental practice?',
+      initialValue:
+        'Looking for the best AI-powered phone system for your dental practice?',
     },
     {
       name: 'buttonText',
@@ -37,4 +38,3 @@ export default {
     },
   },
 }
-

@@ -11,10 +11,7 @@ function cleanUrl(url: string): string {
   return url.split(' ')[0].trim()
 }
 
-function generateSiteMap(
-  posts: any[],
-  partners: { slug: string }[],
-): string {
+function generateSiteMap(posts: any[], partners: { slug: string }[]): string {
   const urlSet = new Set<string>()
 
   // Root home

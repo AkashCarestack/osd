@@ -1,6 +1,6 @@
+import siteConfig from 'config/siteConfig'
 import type { SanityClient } from 'next-sanity'
 
-import siteConfig from 'config/siteConfig'
 import { getPartnersSlugs } from '~/lib/sanity.queries'
 
 const DEFAULT_LOCALE = 'en'

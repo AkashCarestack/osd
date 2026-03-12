@@ -16,16 +16,12 @@ export default function Layout({
   className,
   fullWidth = false,
 }: LayoutProps) {
-
-  const { homeSettings } = useGlobalData();
+  const { homeSettings } = useGlobalData()
 
   return (
-    <div
-      className={`flex flex-col w-full h-full items-center min-h-[100vh]`}
-    >
+    <div className={`flex flex-col w-full h-full items-center min-h-[100vh]`}>
       <Header />
-      <main className="w-full flex flex-col">
-      {children}</main>
+      <main className="w-full flex flex-col">{children}</main>
       <VSfooter className={`w-full flex content-center `} />
     </div>
   )

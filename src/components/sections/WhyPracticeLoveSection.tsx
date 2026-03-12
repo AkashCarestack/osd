@@ -63,7 +63,10 @@ const FeatureCard: React.FC<{ feature: Feature }> = ({ feature }) => {
   )
 }
 
-const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data, heroPrimaryButtonLink }) => {
+const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({
+  data,
+  heroPrimaryButtonLink,
+}) => {
   // Default data
   const defaultData: WhyPracticeLoveData = {
     title: 'Why Practices Love Clinical Dashboards',
@@ -121,7 +124,8 @@ const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({ data, h
       ctaDescription: sanityData.ctaDescription || defaultData.ctaDescription,
       ctaButtonText: sanityData.ctaButtonText || defaultData.ctaButtonText,
       ctaButtonLink: sanityData.ctaButtonLink || defaultData.ctaButtonLink,
-      ctaBackgroundImage: sanityData.ctaBackgroundImage || defaultData.ctaBackgroundImage,
+      ctaBackgroundImage:
+        sanityData.ctaBackgroundImage || defaultData.ctaBackgroundImage,
     }
   }
 

@@ -9,8 +9,8 @@ import AllcontentSection from '~/components/sections/AllcontentSection'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
 import ContentHub from '~/contentUtils/ContentHub'
 import TagSelect from '~/contentUtils/TagSelector'
-import { getClient } from '~/lib/sanity.client'
 import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
+import { getClient } from '~/lib/sanity.client'
 import {
   catsSlugsQuery,
   getArticlesCount,
@@ -49,14 +49,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     siteSettingsPromise,
     homeSettingsPromise,
   ])
-  
+
   if (!category) {
     return {
       notFound: true,
-    };
+    }
   }
-  
-  const cardsPerPage = siteConfig.pagination.childItemsPerPage || 5;
+
+  const cardsPerPage = siteConfig.pagination.childItemsPerPage || 5
 
   const [
     categoryPostsFromRefs,
@@ -67,7 +67,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     totalEbooks,
     allTags,
     categories,
-    footerData
+    footerData,
   ] = await Promise.all([
     getPostsByCategoryAndLimit(client, category._id, 0, cardsPerPage, region),
     getPostsByTag(client, category._id, region),
@@ -77,24 +77,27 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getEbooksCount(client, region),
     getTags(client),
     getCategories(client),
-    getFooterData(client, region)
-  ]);
+    getFooterData(client, region),
+  ])
 
   // Combine posts from category references AND associatedContent
   // Filter associatedContent by region if it has a language field
-  let associatedContentPosts = [];
-  if (category?.associatedContent && Array.isArray(category.associatedContent)) {
+  let associatedContentPosts = []
+  if (
+    category?.associatedContent &&
+    Array.isArray(category.associatedContent)
+  ) {
     associatedContentPosts = category.associatedContent
       .filter((content: any) => {
         // Filter by language if it exists
-        const matchesLanguage = !content.language || content.language === region;
+        const matchesLanguage = !content.language || content.language === region
         // Ensure content has a slug
-        const hasSlug = content?.slug?.current || content?.slug;
-        return matchesLanguage && hasSlug;
+        const hasSlug = content?.slug?.current || content?.slug
+        return matchesLanguage && hasSlug
       })
       .map((content: any) => {
         // Ensure slug is properly structured
-        const contentSlug = content?.slug?.current || content?.slug;
+        const contentSlug = content?.slug?.current || content?.slug
         return {
           ...content,
           slug: content.slug?.current ? content.slug : { current: contentSlug },
@@ -103,109 +106,120 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             categoryName: category.categoryName,
             categoryDescription: category.categoryDescription,
             slug: category.slug,
-          }
-        };
-      });
+          },
+        }
+      })
   }
 
   // Merge posts from both sources, removing duplicates by _id
-  const allCategoryPostsMap = new Map();
-  
+  const allCategoryPostsMap = new Map()
+
   // Add posts from category references (add category info if not present)
   if (categoryPostsFromRefs && Array.isArray(categoryPostsFromRefs)) {
     categoryPostsFromRefs.forEach((post: any) => {
       if (post?._id) {
         // Ensure slug is properly structured
-        const postSlug = post?.slug?.current || post?.slug;
+        const postSlug = post?.slug?.current || post?.slug
         const postWithCategory = {
           ...post,
-          slug: post.slug?.current ? post.slug : (postSlug ? { current: postSlug } : post.slug),
+          slug: post.slug?.current
+            ? post.slug
+            : postSlug
+              ? { current: postSlug }
+              : post.slug,
           category: post.category || {
             _id: category._id,
             categoryName: category.categoryName,
             categoryDescription: category.categoryDescription,
             slug: category.slug,
-          }
-        };
-        allCategoryPostsMap.set(post._id, postWithCategory);
+          },
+        }
+        allCategoryPostsMap.set(post._id, postWithCategory)
       }
-    });
+    })
   }
-  
+
   // Add posts from associatedContent
   associatedContentPosts.forEach((post: any) => {
     if (post?._id) {
-      allCategoryPostsMap.set(post._id, post);
+      allCategoryPostsMap.set(post._id, post)
     }
-  });
+  })
 
   // Convert back to array and sort by date
   const categoryPosts = Array.from(allCategoryPostsMap.values())
     .sort((a: any, b: any) => {
-      const dateA = a.date ? new Date(a.date).getTime() : 0;
-      const dateB = b.date ? new Date(b.date).getTime() : 0;
-      return dateB - dateA; // Descending order
+      const dateA = a.date ? new Date(a.date).getTime() : 0
+      const dateB = b.date ? new Date(b.date).getTime() : 0
+      return dateB - dateA // Descending order
     })
-    .slice(0, cardsPerPage);
+    .slice(0, cardsPerPage)
 
   // Calculate total count including both sources
   // Combine allPostsForTag (from category references) with associatedContent
-  const allPostsForCategorySet = new Set();
-  
+  const allPostsForCategorySet = new Set()
+
   // Add posts from category references (allPostsForTag)
   if (allPostsForTag && Array.isArray(allPostsForTag)) {
     allPostsForTag.forEach((post: any) => {
       if (post?._id) {
-        allPostsForCategorySet.add(post._id);
+        allPostsForCategorySet.add(post._id)
       }
-    });
+    })
   }
-  
+
   // Add posts from associatedContent
   associatedContentPosts.forEach((post: any) => {
     if (post?._id) {
-      allPostsForCategorySet.add(post._id);
+      allPostsForCategorySet.add(post._id)
     }
-  });
-  
-  const totalPostCount = allPostsForCategorySet.size;
-  const totalPages = Math.ceil(totalPostCount / cardsPerPage);
+  })
+
+  const totalPostCount = allPostsForCategorySet.size
+  const totalPages = Math.ceil(totalPostCount / cardsPerPage)
 
   // Get posts for all categories to determine which have content
   const allCategoryPosts = await Promise.all(
-    categories.map((cat) => getPostsByCategoryAndLimit(client, cat._id, 0, 3, region))
-  );
-  
+    categories.map((cat) =>
+      getPostsByCategoryAndLimit(client, cat._id, 0, 3, region),
+    ),
+  )
+
   // For ContentHub, show ALL categories (not just those with posts)
   // This allows users to see and navigate to all categories
-  const categoriesForContentHub = categories || [];
-  
+  const categoriesForContentHub = categories || []
+
   // Filter categories to show those with either associatedContent OR posts from getPostsByCategoryAndLimit
   // Also filter associatedContent by region if it has a language field
   const categoriesWithPosts = categories
     .map((cat, index) => {
       // Filter associatedContent by region if it exists
-      let filteredAssociatedContent = cat?.associatedContent;
-      if (filteredAssociatedContent && Array.isArray(filteredAssociatedContent)) {
+      let filteredAssociatedContent = cat?.associatedContent
+      if (
+        filteredAssociatedContent &&
+        Array.isArray(filteredAssociatedContent)
+      ) {
         filteredAssociatedContent = filteredAssociatedContent.filter(
-          (content: any) => !content.language || content.language === region
-        );
+          (content: any) => !content.language || content.language === region,
+        )
       }
-      
-      const hasAssociatedContent = filteredAssociatedContent && filteredAssociatedContent.length > 0;
-      const hasPosts = allCategoryPosts[index] && allCategoryPosts[index].length > 0;
-      const isCurrentCategory = cat._id === category._id;
-      
+
+      const hasAssociatedContent =
+        filteredAssociatedContent && filteredAssociatedContent.length > 0
+      const hasPosts =
+        allCategoryPosts[index] && allCategoryPosts[index].length > 0
+      const isCurrentCategory = cat._id === category._id
+
       // Return category with filtered associatedContent if it has content or is current category
       if (hasAssociatedContent || hasPosts || isCurrentCategory) {
         return {
           ...cat,
-          associatedContent: filteredAssociatedContent || cat.associatedContent
-        };
+          associatedContent: filteredAssociatedContent || cat.associatedContent,
+        }
       }
-      return null;
+      return null
     })
-    .filter(Boolean); // Remove null entries
+    .filter(Boolean) // Remove null entries
 
   return {
     props: {
@@ -229,8 +243,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       homeSettings,
       footerData,
     },
-  };
-};
+  }
+}
 
 export const getStaticPaths = async () => {
   const client = getClient()
@@ -263,27 +277,34 @@ export default function TagPage({
   const handlePageChange = (page: number) => {
     // Page change handler
   }
-  const baseUrl =
-    `/${siteConfig.categoryBaseUrls.base}/${category?.slug?.current}`;
-  let siteSettingWithImage = siteSettings && siteSettings?.find((e: any) => e?.openGraphImage);
+  const baseUrl = `/${siteConfig.categoryBaseUrls.base}/${category?.slug?.current}`
+  let siteSettingWithImage =
+    siteSettings && siteSettings?.find((e: any) => e?.openGraphImage)
 
   if (siteSettingWithImage) {
-    siteSettingWithImage.siteTitle = slugToCapitalized(category?.slug?.current);
+    siteSettingWithImage.siteTitle = slugToCapitalized(category?.slug?.current)
   }
 
   // Default category listing view
   return (
-    <GlobalDataProvider data={categoriesWithPosts} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categoriesWithPosts}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {siteSettingWithImage ? defaultMetaTag(siteSettingWithImage) : <></>}
-          <ContentHub categories={categoriesForContentHub} contentCount={contentCount}   />
-          <TagSelect
-            tags={allTags}
-            tagLimit={5}
-            className="mt-12"
+          <ContentHub
+            categories={categoriesForContentHub}
+            contentCount={contentCount}
           />
-          <AllcontentSection  uiType='category' allItemCount={totalPostCount} allContent={categoryPosts} />
+          <TagSelect tags={allTags} tagLimit={5} className="mt-12" />
+          <AllcontentSection
+            uiType="category"
+            allItemCount={totalPostCount}
+            allContent={categoryPosts}
+          />
           <Pagination
             totalPages={totalPages}
             onPageChange={handlePageChange}

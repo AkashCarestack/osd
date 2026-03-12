@@ -1,5 +1,5 @@
 import siteConfig from 'config/siteConfig'
-import { GetStaticPaths,GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 
 import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
@@ -16,9 +16,9 @@ import { Toc } from '~/contentUtils/sanity-toc'
 import { Articles } from '~/interfaces/post'
 import SEOHead from '~/layout/SeoHead'
 import Wrapper from '~/layout/Wrapper'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { urlForImage } from '~/lib/sanity.image'
 import {
   getCategories,
@@ -45,7 +45,6 @@ interface Props {
   footerData: any
 }
 
-
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
   const basePaths = await getPartnerPaths(client)
@@ -64,11 +63,15 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   draftMode = false,
   params = {},
 }) => {
-  const client = getClient(draftMode ? { token: readToken } : undefined) 
+  const client = getClient(draftMode ? { token: readToken } : undefined)
   const region = getDefaultLocale()
   const partnerSlug = params.partner as string
   if (!partnerSlug) return { notFound: true }
-  const releaseNote = await getReleaseNote(client, params.slug as string, region)
+  const releaseNote = await getReleaseNote(
+    client,
+    params.slug as string,
+    region,
+  )
   if (!releaseNote) return { notFound: true }
   const tagIds = releaseNote?.tags?.map((tag: any) => tag?._id) || []
   const relatedContents = await getTagRelatedContents(
@@ -93,7 +96,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
@@ -106,28 +109,34 @@ const ReleaseNotePage = ({
   draftMode,
   token,
   categories,
-  footerData
+  footerData,
 }: Props) => {
   if (!releaseNote) {
     return null
   }
-  
+
   const prodUrl = 'https://osdental.io'
   const seoTitle = releaseNote?.seoTitle || releaseNote?.title || 'Release Note'
-  const seoDescription = (releaseNote?.seoDescription && !releaseNote.seoDescription.includes('Test titlw')) 
-    ? releaseNote.seoDescription 
-    : releaseNote?.excerpt || ''
+  const seoDescription =
+    releaseNote?.seoDescription &&
+    !releaseNote.seoDescription.includes('Test titlw')
+      ? releaseNote.seoDescription
+      : releaseNote?.excerpt || ''
   const seoKeywords = releaseNote?.seoKeywords || ''
   const seoRobots = releaseNote?.seoRobots || 'index,follow'
   const seoCanonical = sanitizeUrl(
     releaseNote?.seoCanonical ||
-    `${prodUrl}/${siteConfig.pageURLs.releaseNotes}/${releaseNote?.slug?.current || ''}`
+      `${prodUrl}/${siteConfig.pageURLs.releaseNotes}/${releaseNote?.slug?.current || ''}`,
   )
   const jsonLD: any = generateJSONLD(releaseNote)
 
   return (
     <>
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+      <GlobalDataProvider
+        data={categories}
+        featuredTags={homeSettings?.featuredTags}
+        footerData={footerData}
+      >
         <SEOHead
           title={seoTitle}
           description={seoDescription}
@@ -136,7 +145,11 @@ const ReleaseNotePage = ({
           canonical={seoCanonical}
           jsonLD={jsonLD}
           contentType={releaseNote?.contentType}
-          ogImage={releaseNote?.mainImage?._id ? urlForImage(releaseNote.mainImage._id) : undefined}
+          ogImage={
+            releaseNote?.mainImage?._id
+              ? urlForImage(releaseNote.mainImage._id)
+              : undefined
+          }
         />
 
         <Layout>
@@ -156,7 +169,7 @@ const ReleaseNotePage = ({
                 <div className="flex flex-col gap-8 md:mt-12 bg-red relative md:w-1/3 md:max-w-[410px] w-full">
                   <div className="sticky top-24 flex flex-col-reverse md:flex-col gap-8 md:overflow-auto">
                     <Toc headings={releaseNote?.headings} title="Contents" />
-                    <div className='flex-col gap-8 flex'>
+                    <div className="flex-col gap-8 flex">
                       {releaseNote?.author && (
                         <div>
                           <AuthorInfo author={releaseNote?.author} />
@@ -167,7 +180,7 @@ const ReleaseNotePage = ({
                   </div>
                 </div>
               </div>
-              {releaseNote?.tags && <RelatedTag tags={releaseNote?.tags}/>}
+              {releaseNote?.tags && <RelatedTag tags={releaseNote?.tags} />}
             </Wrapper>
           </Section>
           {relatedContents && relatedContents.length > 0 && (

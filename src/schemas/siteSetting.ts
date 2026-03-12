@@ -172,7 +172,8 @@ export default defineType({
     defineField({
       name: 'selectedBlogs',
       title: 'Selected Blogs',
-      description: 'Choose which blogs/content should be available via the API. Make sure to enable "Expose to API" on the posts you want to include.',
+      description:
+        'Choose which blogs/content should be available via the API. Make sure to enable "Expose to API" on the posts you want to include.',
       type: 'array',
       of: [
         {

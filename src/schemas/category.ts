@@ -1,4 +1,4 @@
-import {ProjectsIcon} from '@sanity/icons'
+import { ProjectsIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 
 export default defineType({
@@ -30,7 +30,8 @@ export default defineType({
     defineField({
       name: 'associatedContent',
       title: 'Associated Content',
-      description: 'Select content/blog posts related to this category. The first item will be auto-selected when visiting this topic page.',
+      description:
+        'Select content/blog posts related to this category. The first item will be auto-selected when visiting this topic page.',
       type: 'array',
       of: [
         {
@@ -42,14 +43,16 @@ export default defineType({
     defineField({
       name: 'glossary',
       title: 'Glossary',
-      description: 'Select a glossary from the content repository to associate with this category.',
+      description:
+        'Select a glossary from the content repository to associate with this category.',
       type: 'reference',
       to: [{ type: 'glossary' }],
     }),
     defineField({
       name: 'faq',
       title: 'FAQ',
-      description: 'Select an FAQ from the content repository to associate with this category.',
+      description:
+        'Select an FAQ from the content repository to associate with this category.',
       type: 'reference',
       to: [{ type: 'faq' }],
     }),

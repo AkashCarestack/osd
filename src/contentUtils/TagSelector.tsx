@@ -48,10 +48,10 @@ export default function TagSelect({
     }
   }
 
-  return showTags && (
-  <Section className="bg-zinc-900 justify-center !py-0">
-      <Wrapper>
-        
+  return (
+    showTags && (
+      <Section className="bg-zinc-900 justify-center !py-0">
+        <Wrapper>
           <div className="flex flex-col md:flex-row gap-2 md:gap-6 pt-6 md:pt-6 pb-6 w-full md:items-center">
             {/* {showHeading && selectedTag && (
             <h2 className="md:text-5xl text-xl text-center font-manrope font-extrabold text-cs-zinc-900">
@@ -81,7 +81,8 @@ export default function TagSelect({
               </div>
             </div>
           </div>
-      </Wrapper>
-    </Section>
+        </Wrapper>
+      </Section>
+    )
   )
 }

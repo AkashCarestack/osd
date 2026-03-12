@@ -1,5 +1,5 @@
 import siteConfig from 'config/siteConfig'
-import { GetStaticPaths,GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 
 import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
 import AuthorInfo from '~/components/commonSections/AuthorInfo'
@@ -16,9 +16,9 @@ import { Toc } from '~/contentUtils/sanity-toc'
 import { CaseStudies } from '~/interfaces/post'
 import SEOHead from '~/layout/SeoHead'
 import Wrapper from '~/layout/Wrapper'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { urlForImage } from '~/lib/sanity.image'
 import {
   caseStudySlugsQuery,
@@ -82,7 +82,6 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   const homeSettings = await getHomeSettings(client, region, partnerSlug)
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
-  
 
   return {
     props: {
@@ -93,7 +92,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
@@ -106,7 +105,7 @@ const CaseStudyPage = ({
   draftMode,
   token,
   categories,
-  footerData
+  footerData,
 }: Props) => {
   if (!caseStudy) {
     return null
@@ -114,20 +113,26 @@ const CaseStudyPage = ({
 
   const prodUrl = 'https://osdental.io'
   const seoTitle = caseStudy.seoTitle || caseStudy.title
-  const seoDescription = (caseStudy?.seoDescription && !caseStudy.seoDescription.includes('Test titlw')) 
-    ? caseStudy.seoDescription 
-    : caseStudy?.excerpt || ''
+  const seoDescription =
+    caseStudy?.seoDescription &&
+    !caseStudy.seoDescription.includes('Test titlw')
+      ? caseStudy.seoDescription
+      : caseStudy?.excerpt || ''
   const seoKeywords = caseStudy.seoKeywords || ''
   const seoRobots = caseStudy.seoRobots || 'index,follow'
   const seoCanonical = sanitizeUrl(
     caseStudy.seoCanonical ||
-    `${prodUrl}/${siteConfig.pageURLs.caseStudy}/${caseStudy.slug.current}`
+      `${prodUrl}/${siteConfig.pageURLs.caseStudy}/${caseStudy.slug.current}`,
   )
   const jsonLD: any = generateJSONLD(caseStudy)
 
   return (
     <>
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+      <GlobalDataProvider
+        data={categories}
+        featuredTags={homeSettings?.featuredTags}
+        footerData={footerData}
+      >
         <SEOHead
           title={seoTitle}
           description={seoDescription}
@@ -184,7 +189,7 @@ const CaseStudyPage = ({
                   </div>
                 </div>
               </div>
-              {caseStudy?.tags && <RelatedTag tags={caseStudy?.tags}/>}
+              {caseStudy?.tags && <RelatedTag tags={caseStudy?.tags} />}
             </Wrapper>
           </Section>
           {relatedContents.length > 0 && (

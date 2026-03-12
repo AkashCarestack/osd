@@ -995,4 +995,4 @@ function UkDpa() {
   )
 }
 
-export default UkDpa;
+export default UkDpa

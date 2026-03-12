@@ -1,3 +1,4 @@
+import siteConfig from 'config/siteConfig'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -12,9 +13,9 @@ import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection
 import ReviewsGrid from '~/components/sections/ReviewCards'
 import TagSelect from '~/contentUtils/TagSelector'
 import { CaseStudies } from '~/interfaces/post'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import {
   getCaseStudies,
   getCaseStudiesCount,
@@ -24,12 +25,9 @@ import {
   getTags,
   getTestiMonials,
 } from '~/lib/sanity.queries'
+import { SharedPageProps } from '~/pages/_app'
 import { getUniqueData, mergeAndRemoveDuplicates } from '~/utils/common'
 import { CustomHead, customMetaTag } from '~/utils/customHead'
-
-import siteConfig from 'config/siteConfig'
-import { SharedPageProps } from '~/pages/_app'
-
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
@@ -56,9 +54,9 @@ export const getStaticProps: GetStaticProps<
   const homeSettings = await getHomeSettings(client, region, partnerSlug)
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
-  
+
   if (!caseStudies || caseStudies.length === 0) {
-    return { notFound: true };
+    return { notFound: true }
   }
 
   return {
@@ -72,7 +70,7 @@ export const getStaticProps: GetStaticProps<
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
@@ -85,7 +83,7 @@ const CaseStudiesPage = ({
   testimonials,
   tags,
   categories,
-  footerData
+  footerData,
 }: {
   caseStudies: CaseStudies[]
   latestCaseStudies: CaseStudies[]
@@ -129,10 +127,14 @@ const CaseStudiesPage = ({
   )
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
-          <TagSelect tags={tags} tagLimit={7}  />
+          <TagSelect tags={tags} tagLimit={7} />
           <MainImageSection landing={true} post={heroData} />
           {caseStudies?.map((e, i) => {
             return <CustomHead props={e} type="caseStudy" key={i} />

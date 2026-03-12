@@ -101,9 +101,9 @@ export default defineType({
       type: 'slug',
       validation: (Rule) => Rule.required(),
       options: {
-        source: 'title', 
-        isUnique: isUniqueAcrossAllDocuments
-      }
+        source: 'title',
+        isUnique: isUniqueAcrossAllDocuments,
+      },
     }),
     defineField({
       name: 'region',
@@ -270,14 +270,18 @@ export default defineType({
       options: {
         hotspot: true,
       },
-      hidden: ({ parent }) => parent.contentType !== 'article' && parent.contentType !== 'release-notes',
+      hidden: ({ parent }) =>
+        parent.contentType !== 'article' &&
+        parent.contentType !== 'release-notes',
       description: 'Additional image for article schema',
     }),
     defineField({
       name: 'articleUrl',
       title: 'Article URL',
       type: 'url',
-      hidden: ({ parent }) => parent.contentType !== 'article' && parent.contentType !== 'release-notes',
+      hidden: ({ parent }) =>
+        parent.contentType !== 'article' &&
+        parent.contentType !== 'release-notes',
       description: 'URL for the article',
     }),
     defineField({
@@ -330,7 +334,8 @@ export default defineType({
     defineField({
       name: 'exposeToAPI',
       title: 'Expose to API',
-      description: 'Enable this to make this content available via the API endpoint. Only published content with this enabled will be accessible.',
+      description:
+        'Enable this to make this content available via the API endpoint. Only published content with this enabled will be accessible.',
       type: 'boolean',
       initialValue: false,
     }),
@@ -346,12 +351,11 @@ export default defineType({
       language: 'language',
     },
     prepare(selection) {
-      const { title, contentType, author, tag, date,language } = selection
+      const { title, contentType, author, tag, date, language } = selection
       return {
         title,
         subtitle: `${selection.contentType.toUpperCase()} - ${language} `,
         media: selection.media,
-        
       }
     },
   },

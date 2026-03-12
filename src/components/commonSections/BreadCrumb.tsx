@@ -1,7 +1,7 @@
 import { ArrowRightIcon } from '@sanity/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Fragment, useEffect, useMemo, useRef,useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 
 import { removeUnwantedCharacters } from '~/utils/common'
 import { CustomHead } from '~/utils/customHead'
@@ -19,7 +19,7 @@ const Breadcrumb = ({ className }: BreadCrumbProps) => {
   const pathSegments = useRef(
     router.asPath.split('/').filter((segment) => segment !== ''),
   )
-  const excludedSegments = useMemo(() => ['en', 'en-GB', 'en-AU'], []);
+  const excludedSegments = useMemo(() => ['en', 'en-GB', 'en-AU'], [])
 
   const breadcrumbLabels = useMemo(
     () => ({
@@ -32,12 +32,14 @@ const Breadcrumb = ({ className }: BreadCrumbProps) => {
   )
 
   useEffect(() => {
-    pathSegments.current = router.asPath.split('/').filter((segment) => segment !== '')
+    pathSegments.current = router.asPath
+      .split('/')
+      .filter((segment) => segment !== '')
   }, [router.asPath])
 
   useEffect(() => {
     const breadcrumbList = pathSegments?.current
-      .filter((segment) => !excludedSegments.includes(segment)) 
+      .filter((segment) => !excludedSegments.includes(segment))
       .map((segment, index) => {
         const href = `/${pathSegments?.current.slice(0, index + 1).join('/')}`
         const label = (breadcrumbLabels[segment] || segment).replace(/-/g, ' ')
@@ -56,7 +58,10 @@ const Breadcrumb = ({ className }: BreadCrumbProps) => {
       >
         <div className="line-clamdiv-1 uppercase overflow-hidden text-ellipsis flex items-center flex-wrap">
           <span className="flex items-center">
-            <Anchor href="/" className="zinc-300 text-xs font-500">{`Home`}</Anchor>
+            <Anchor
+              href="/"
+              className="zinc-300 text-xs font-500"
+            >{`Home`}</Anchor>
             <span className="mx-3 text-zinc-500 uppercase">
               <ArrowRightIcon width={24} height={24} />
             </span>

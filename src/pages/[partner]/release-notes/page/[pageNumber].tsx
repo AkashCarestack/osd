@@ -1,4 +1,5 @@
-import { GetStaticPaths,GetStaticProps } from 'next'
+import siteConfig from 'config/siteConfig'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import React, { useContext, useRef } from 'react'
 
@@ -9,9 +10,9 @@ import Layout from '~/components/Layout'
 import AllcontentSection from '~/components/sections/AllcontentSection'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
 import { Articles } from '~/interfaces/post'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import {
   getCategories,
   getFooterData,
@@ -21,10 +22,8 @@ import {
   getSiteSettings,
   getTags,
 } from '~/lib/sanity.queries'
-import { CustomHead, customMetaTag } from '~/utils/customHead'
-
-import siteConfig from 'config/siteConfig'
 import { SharedPageProps } from '~/pages/_app'
+import { CustomHead, customMetaTag } from '~/utils/customHead'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
@@ -34,8 +33,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const totalPages = Math.ceil(
     releaseNotes.length / siteConfig.pagination.childItemsPerPage,
   )
-  const pageNumbers = Array.from({ length: Math.max(0, totalPages - 1) }, (_, i) =>
-    (i + 2).toString(),
+  const pageNumbers = Array.from(
+    { length: Math.max(0, totalPages - 1) },
+    (_, i) => (i + 2).toString(),
   )
   const paths = basePaths.flatMap((p) =>
     pageNumbers.map((pageNumber) => ({
@@ -58,15 +58,22 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
   const skip = (pageNumber - 1) * itemsPerPage
 
   try {
-    const [releaseNotes, totalReleaseNotes, tags, homeSettings, siteSettings, categories, footerData] =
-      await Promise.all([
-        getReleaseNotes(client, skip, itemsPerPage, locale),
-        getReleaseNotesCount(client, locale),
-        getTags(client),
-        getHomeSettings(client, locale, partnerSlug),
+    const [
+      releaseNotes,
+      totalReleaseNotes,
+      tags,
+      homeSettings,
+      siteSettings,
+      categories,
+      footerData,
+    ] = await Promise.all([
+      getReleaseNotes(client, skip, itemsPerPage, locale),
+      getReleaseNotesCount(client, locale),
+      getTags(client),
+      getHomeSettings(client, locale, partnerSlug),
       getSiteSettings(client),
       getCategories(client),
-      getFooterData(client, locale)
+      getFooterData(client, locale),
     ])
 
     const totalPages = Math.ceil(totalReleaseNotes / itemsPerPage)
@@ -82,7 +89,7 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
         homeSettings,
         siteSettings,
         categories,
-        footerData
+        footerData,
       },
     }
   } catch (error) {
@@ -96,9 +103,9 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
         totalPages: 1,
         tags: [],
         homeSettings: [],
-        siteSettings:[],
+        siteSettings: [],
         categories: [],
-        footerData: []
+        footerData: [],
       },
     }
   }
@@ -112,7 +119,7 @@ const PaginatedReleaseNotesPage = ({
   totalPages,
   siteSettings,
   categories,
-  footerData
+  footerData,
 }: {
   releaseNotes: Articles[]
   tags: any
@@ -126,7 +133,7 @@ const PaginatedReleaseNotesPage = ({
   const router = useRouter()
   const baseUrl = `/${siteConfig.pageURLs.releaseNotes}`
   const url = process.env.NEXT_PUBLIC_BASE_URL
-    const currentPageUrl =`${url}${baseUrl}/page/${pageNumber}`
+  const currentPageUrl = `${url}${baseUrl}/page/${pageNumber}`
 
   const handlePageChange = (page: number) => {
     // debugger
@@ -138,7 +145,11 @@ const PaginatedReleaseNotesPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {customMetaTag('release-notes', false, currentPageUrl)}

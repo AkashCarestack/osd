@@ -1,5 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
+import type {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType,
+} from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -7,8 +11,8 @@ import { useEffect, useState } from 'react'
 import Anchor from '~/components/commonSections/Anchor'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import Layout from '~/components/Layout'
-import { getClient } from '~/lib/sanity.client'
 import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
+import { getClient } from '~/lib/sanity.client'
 import {
   getAllFAQs,
   getCategories,
@@ -33,7 +37,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: false }
 }
 
-export const getStaticProps: GetStaticProps<FAQPageProps> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<FAQPageProps> = async ({
+  params,
+}) => {
   const client = getClient()
   const region = getDefaultLocale()
   const partnerSlug = params?.partner as string
@@ -50,7 +56,8 @@ export const getStaticProps: GetStaticProps<FAQPageProps> = async ({ params }) =
 
   // Filter categories that have FAQs
   const categoriesWithFAQs = faqCategories.filter(
-    (category) => category.faq && category.faq.faqs && category.faq.faqs.length > 0,
+    (category) =>
+      category.faq && category.faq.faqs && category.faq.faqs.length > 0,
   )
 
   return {
@@ -219,7 +226,6 @@ const CategoryButton = ({
   )
 }
 
-
 export default function FAQPage({
   faqCategories,
   categories,
@@ -239,7 +245,9 @@ export default function FAQPage({
   const canonicalUrl = partner ? `${baseUrl}/${partner}/faq` : `${baseUrl}/faq`
 
   // Get active category data
-  const activeCategoryData = faqCategories.find((cat) => cat._id === activeCategory)
+  const activeCategoryData = faqCategories.find(
+    (cat) => cat._id === activeCategory,
+  )
   const activeQuestions = activeCategoryData?.faq?.faqs || []
 
   // Initialize first question as open when category changes
@@ -266,11 +274,12 @@ export default function FAQPage({
   }, [isDropdownOpen])
 
   // Generate FAQ JSON-LD for all FAQs
-  const allFAQsForJSONLD = faqCategories.flatMap((category) =>
-    category.faq?.faqs?.map((faq: any) => ({
-      question: faq.question,
-      answer: faq.answer,
-    })) || [],
+  const allFAQsForJSONLD = faqCategories.flatMap(
+    (category) =>
+      category.faq?.faqs?.map((faq: any) => ({
+        question: faq.question,
+        answer: faq.answer,
+      })) || [],
   )
 
   const faqJSONLD =
@@ -346,11 +355,12 @@ export default function FAQPage({
                 {/* Right Side - Description */}
                 <div className="flex-1 lg:max-w-[50%]">
                   <p className="text-gray-600 text-base leading-relaxed">
-                    If you have a question about OS Dental University, then someone else has likely
-                    already asked about the same topic. We&apos;ve collected a list of the most
-                    frequently asked questions, so feel free to browse by topic to find an answer.
-                    And please don&apos;t hesitate to contact our support team for additional
-                    information!
+                    If you have a question about OS Dental University, then
+                    someone else has likely already asked about the same topic.
+                    We&apos;ve collected a list of the most frequently asked
+                    questions, so feel free to browse by topic to find an
+                    answer. And please don&apos;t hesitate to contact our
+                    support team for additional information!
                   </p>
                 </div>
               </div>
@@ -443,7 +453,9 @@ export default function FAQPage({
                             !isQuestionOpen ? 'bg-white' : '!bg-[#F9FAFB]'
                           }`}
                           whileHover={
-                            !isQuestionOpen ? { backgroundColor: '#F9FAFB' } : {}
+                            !isQuestionOpen
+                              ? { backgroundColor: '#F9FAFB' }
+                              : {}
                           }
                           transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
                         >
@@ -454,7 +466,10 @@ export default function FAQPage({
                             <div className="flex-shrink-0">
                               <motion.div
                                 animate={{ rotate: isQuestionOpen ? 0 : 0 }}
-                                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                                transition={{
+                                  duration: 0.3,
+                                  ease: [0.4, 0, 0.2, 1],
+                                }}
                               >
                                 <AnimatePresence mode="wait">
                                   {isQuestionOpen ? (
@@ -463,7 +478,10 @@ export default function FAQPage({
                                       initial={{ opacity: 0, rotate: -90 }}
                                       animate={{ opacity: 1, rotate: 0 }}
                                       exit={{ opacity: 0, rotate: 90 }}
-                                      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                                      transition={{
+                                        duration: 0.2,
+                                        ease: [0.4, 0, 0.2, 1],
+                                      }}
                                     >
                                       <MinusIcon className="w-5 h-5 text-gray-950" />
                                     </motion.div>
@@ -473,7 +491,10 @@ export default function FAQPage({
                                       initial={{ opacity: 0, rotate: 90 }}
                                       animate={{ opacity: 1, rotate: 0 }}
                                       exit={{ opacity: 0, rotate: -90 }}
-                                      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                                      transition={{
+                                        duration: 0.2,
+                                        ease: [0.4, 0, 0.2, 1],
+                                      }}
                                     >
                                       <PlusIcon className="w-5 h-5 text-gray-950" />
                                     </motion.div>

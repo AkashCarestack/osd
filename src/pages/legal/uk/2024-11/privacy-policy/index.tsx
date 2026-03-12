@@ -346,25 +346,25 @@ function UkPrivacyPolicy() {
             </span>
           </p>
           <table>
-          <tbody>
-            <tr className="c24">
-              <td className="c25" colSpan={1} rowSpan={1}>
-                <p>
-                  <strong>Information Commissioner&rsquo;s Office</strong>
-                </p>
+            <tbody>
+              <tr className="c24">
+                <td className="c25" colSpan={1} rowSpan={1}>
+                  <p>
+                    <strong>Information Commissioner&rsquo;s Office</strong>
+                  </p>
 
-                <div>Wycliffe House</div>
-                <div>Water Lane</div>
-                <div>Wilmslow</div>
-                <div>Cheshire</div>
-                <div>SK9 5AF</div>
-                <div>UK</div>
+                  <div>Wycliffe House</div>
+                  <div>Water Lane</div>
+                  <div>Wilmslow</div>
+                  <div>Cheshire</div>
+                  <div>SK9 5AF</div>
+                  <div>UK</div>
 
-                <div>
-                  <a href="https://ico.org.uk/">www.ico.org.uk</a>
-                </div>
-              </td>
-            </tr>
+                  <div>
+                    <a href="https://ico.org.uk/">www.ico.org.uk</a>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
           <p className="c14">
@@ -376,4 +376,4 @@ function UkPrivacyPolicy() {
   )
 }
 
-export default UkPrivacyPolicy;
+export default UkPrivacyPolicy

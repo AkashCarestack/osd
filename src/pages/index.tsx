@@ -53,9 +53,9 @@ interface IndexPageProps {
 
 export const getStaticProps: GetStaticProps<
   SharedPageProps & { posts: Post[] }
-> = async ({ draftMode = false}) => {
+> = async ({ draftMode = false }) => {
   const client = getClient(draftMode ? { token: readToken } : undefined)
-  const region:any = 'en'; 
+  const region: any = 'en'
 
   try {
     const [
@@ -96,7 +96,8 @@ export const getStaticProps: GetStaticProps<
 
     // Filter categories that have FAQs
     const categoriesWithFAQs = faqCategories.filter(
-      (category) => category.faq && category.faq.faqs && category.faq.faqs.length > 0,
+      (category) =>
+        category.faq && category.faq.faqs && category.faq.faqs.length > 0,
     )
 
     return {
@@ -152,7 +153,8 @@ export default function IndexPage(props: IndexPageProps) {
   const eventCards = props?.allEventCards
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://osdental.io'
   const locale = useRouter().query.locale as string
-  const defaultUrl = !locale || locale === 'en' ? baseUrl : `${baseUrl}/${locale}`
+  const defaultUrl =
+    !locale || locale === 'en' ? baseUrl : `${baseUrl}/${locale}`
 
   return (
     <GlobalDataProvider
@@ -168,9 +170,9 @@ export default function IndexPage(props: IndexPageProps) {
         <Head>
           <link rel="canonical" href={baseUrl} key="canonical" />
           <link rel="alternate" href={defaultUrl} hrefLang="x-default" />
-          <link rel="alternate" href={baseUrl + '/en'} hrefLang="en-US" /> 
-          <link rel="alternate" href={baseUrl + '/en-GB'} hrefLang="en-GB" /> 
-          <link rel="alternate" href={baseUrl + '/en-AU'} hrefLang="en-AU" /> 
+          <link rel="alternate" href={baseUrl + '/en'} hrefLang="en-US" />
+          <link rel="alternate" href={baseUrl + '/en-GB'} hrefLang="en-GB" />
+          <link rel="alternate" href={baseUrl + '/en-AU'} hrefLang="en-AU" />
         </Head>
         <DynamicPages
           posts={props.posts}

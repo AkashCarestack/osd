@@ -40,17 +40,20 @@ The system handles these content types:
 For each content type, the system revalidates:
 
 ### Individual Content Pages
+
 - `/content-type/slug` (default locale)
 - `/en-GB/content-type/slug` (UK locale)
 - `/en-AU/content-type/slug` (Australia locale)
 
 ### Listing Pages
+
 - `/content-type` (main listing)
 - `/content-type/page/2` (pagination)
 - `/content-type/page/3` (pagination)
 - Locale-specific versions for all locales
 
 ### Global Pages
+
 - `/` (home page for all locales)
 - `/browse` (browse page for all locales)
 - `/topic` (topic page for all locales)
@@ -58,9 +61,11 @@ For each content type, the system revalidates:
 ## API Endpoints
 
 ### `/api/revalidate`
+
 Main revalidation endpoint that handles webhook requests from Sanity.
 
 **Request Body:**
+
 ```json
 {
   "_type": "post",
@@ -72,6 +77,7 @@ Main revalidation endpoint that handles webhook requests from Sanity.
 ```
 
 **Response:**
+
 ```json
 {
   "message": "Revalidation completed",
@@ -86,6 +92,7 @@ Main revalidation endpoint that handles webhook requests from Sanity.
 ```
 
 ### `/api/test-webhook`
+
 Test endpoint for verifying the revalidation system.
 
 **GET Request:**
@@ -97,11 +104,13 @@ Simulates a webhook payload and calls the revalidation endpoint.
 ## Testing
 
 ### Local Testing
+
 1. Start the development server: `npm run dev`
 2. Navigate to any page with the `TestRevalidation` component
 3. Use the test buttons to verify revalidation
 
 ### Production Testing
+
 1. Deploy to staging environment
 2. Set up ngrok for local development: `ngrok http 3000`
 3. Update Sanity webhook URL to your ngrok URL
@@ -138,7 +147,9 @@ The system includes comprehensive error handling:
 ## Monitoring
 
 ### Console Logs
+
 The system provides detailed console logging:
+
 ```
 🔄 Revalidation requested for post (article): my-article
 🌍 Language: en
@@ -149,7 +160,9 @@ The system provides detailed console logging:
 ```
 
 ### Response Tracking
+
 Each revalidation request returns detailed results including:
+
 - Total paths processed
 - Successfully revalidated paths
 - Failed paths with error messages
@@ -160,11 +173,13 @@ Each revalidation request returns detailed results including:
 ### Common Issues
 
 1. **Webhook not triggering**
+
    - Check webhook configuration in Sanity Studio
    - Verify URL is accessible
    - Check deployment logs
 
 2. **Revalidation not working**
+
    - Ensure content has `_publishedAt` field
    - Check if paths exist in your application
    - Verify ISR is enabled in Next.js config
@@ -194,4 +209,4 @@ Each revalidation request returns detailed results including:
 - **Webhook signature validation**: Verify requests come from Sanity
 - **Selective revalidation**: Only revalidate affected pages
 - **Background processing**: Queue revalidation requests for large sites
-- **Metrics collection**: Track revalidation performance and success rates 
+- **Metrics collection**: Track revalidation performance and success rates

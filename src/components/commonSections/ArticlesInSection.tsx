@@ -27,7 +27,7 @@ const ArticlesInSection: React.FC<ArticlesInSectionProps> = ({
 
   // Build items array: glossary first, then articles, then FAQ last
   const items: any[] = []
-  
+
   // Add glossary as first item if it exists
   if (glossary && glossary._id) {
     items.push({
@@ -38,7 +38,7 @@ const ArticlesInSection: React.FC<ArticlesInSectionProps> = ({
       termCount: glossary.terms?.length || 0,
     })
   }
-  
+
   // Add articles
   if (associatedContent && associatedContent.length > 0) {
     associatedContent.forEach((content) => {
@@ -49,7 +49,7 @@ const ArticlesInSection: React.FC<ArticlesInSectionProps> = ({
       })
     })
   }
-  
+
   // Add FAQ as last item if it exists
   if (faq && faq._id) {
     items.push({
@@ -74,24 +74,36 @@ const ArticlesInSection: React.FC<ArticlesInSectionProps> = ({
       </div>
       <div className="flex flex-col gap-3 items-start w-full">
         {items.map((item, index) => {
-          const itemSlug = item.type === 'glossary' ? 'glossary' : item.type === 'faq' ? 'faq' : (item?.slug?.current || item?.slug)
+          const itemSlug =
+            item.type === 'glossary'
+              ? 'glossary'
+              : item.type === 'faq'
+                ? 'faq'
+                : item?.slug?.current || item?.slug
           const title = item?.title || 'Untitled'
-          
-          // Build the URL for the content: /{partner}/topic/{categorySlug}/{itemSlug} when on partner page
-          const href = categorySlug && itemSlug
-            ? (partnerSlug ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}/${categorySlug}/${itemSlug}` : `${siteConfig.categoryBaseUrls.base}/${categorySlug}/${itemSlug}`)
-            : '#'
 
-          const isActive = itemSlug === currentContentSlug || 
+          // Build the URL for the content: /{partner}/topic/{categorySlug}/{itemSlug} when on partner page
+          const href =
+            categorySlug && itemSlug
+              ? partnerSlug
+                ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}/${categorySlug}/${itemSlug}`
+                : `${siteConfig.categoryBaseUrls.base}/${categorySlug}/${itemSlug}`
+              : '#'
+
+          const isActive =
+            itemSlug === currentContentSlug ||
             (item.type === 'glossary' && currentContentSlug === 'glossary') ||
             (item.type === 'faq' && currentContentSlug === 'faq')
 
           return (
-            <div key={item?._id || index} className="flex gap-1.5 items-start w-full">
-              <p 
+            <div
+              key={item?._id || index}
+              className="flex gap-1.5 items-start w-full"
+            >
+              <p
                 className={`shrink-0 text-sm leading-[150%] opacity-100 ${
-                  isActive 
-                    ? 'text-[#93C5FD] font-medium' 
+                  isActive
+                    ? 'text-[#93C5FD] font-medium'
                     : 'text-zinc-600 font-normal'
                 }`}
               >
@@ -100,8 +112,8 @@ const ArticlesInSection: React.FC<ArticlesInSectionProps> = ({
               <Anchor
                 href={partnerSlug ? href : generateHref(locale as string, href)}
                 className={`flex-1 text-sm leading-[150%] opacity-100 ${
-                  isActive 
-                    ? 'text-[#93C5FD] font-medium hover:text-[#7DD3FC]' 
+                  isActive
+                    ? 'text-[#93C5FD] font-medium hover:text-[#7DD3FC]'
                     : 'text-zinc-600 font-normal hover:underline'
                 }`}
               >

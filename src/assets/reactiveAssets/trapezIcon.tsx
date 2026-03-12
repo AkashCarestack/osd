@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 const TrapezIcon = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -13,5 +13,5 @@ const TrapezIcon = (props) => (
       fill="#27272A"
     />
   </svg>
-);
-export default TrapezIcon;
+)
+export default TrapezIcon

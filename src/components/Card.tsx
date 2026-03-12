@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import router from 'next/router'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
 
 import ChordIcon from '~/assets/reactiveAssets/ChordIcon'
@@ -32,15 +32,15 @@ import SubText from './typography/SubText'
 interface CardProps {
   post: Post
   cardType?:
-  | 'top-image-card'
-  | 'text-only-card'
-  | 'left-image-card'
-  | 'ebook-card'
-  | 'featured'
-  | 'top-image-smallCard'
-  | 'podcast-card'
-  | 'top-image-contentType-card'
-  | 'review-card'
+    | 'top-image-card'
+    | 'text-only-card'
+    | 'left-image-card'
+    | 'ebook-card'
+    | 'featured'
+    | 'top-image-smallCard'
+    | 'podcast-card'
+    | 'top-image-contentType-card'
+    | 'review-card'
   className?: string
   cardColor?: string
   showPlayIcon?: boolean
@@ -50,13 +50,13 @@ interface CardProps {
   index?: number
   baseUrl?: string
   contentType?:
-  | 'ebook'
-  | 'topic'
-  | 'article'
-  | 'podcast'
-  | 'webinar'
-  | 'case-study'
-  | 'press-release'
+    | 'ebook'
+    | 'topic'
+    | 'article'
+    | 'podcast'
+    | 'webinar'
+    | 'case-study'
+    | 'press-release'
   minHeight?: number
   alignCard?: any
 }
@@ -80,7 +80,7 @@ export default function Card({
   const [color, setColor] = useState<string | null>(null)
   const [isPageUrl, setIsPageUrl] = useState<boolean>(false)
   const pathname = usePathname()
-  const router = useRouter();
+  const router = useRouter()
 
   const bgImages = [
     {
@@ -117,70 +117,109 @@ export default function Card({
 
   useEffect(() => {
     if (router.isReady && post?.slug) {
-      const { locale = 'en', partner } = router.query;
-      const partnerSlug = typeof partner === 'string' ? partner : undefined;
-      const contentSlug = post?.slug?.current?.replace(/^\/+/, '').replace(/\/+$/, '') || '';
+      const { locale = 'en', partner } = router.query
+      const partnerSlug = typeof partner === 'string' ? partner : undefined
+      const contentSlug =
+        post?.slug?.current?.replace(/^\/+/, '').replace(/\/+$/, '') || ''
 
       // Topic base: on partner pages use /{partner}/topic, else /topic or /{locale}/topic
-      const topicBase = partnerSlug ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}` : `/${siteConfig.categoryBaseUrls.base}`;
-      const topicBaseWithLocale = locale !== 'en' ? `/${locale}/${siteConfig.categoryBaseUrls.base}` : `/${siteConfig.categoryBaseUrls.base}`;
+      const topicBase = partnerSlug
+        ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}`
+        : `/${siteConfig.categoryBaseUrls.base}`
+      const topicBaseWithLocale =
+        locale !== 'en'
+          ? `/${locale}/${siteConfig.categoryBaseUrls.base}`
+          : `/${siteConfig.categoryBaseUrls.base}`
 
       const buildTopicUrl = (catSlug: string, withContent: boolean) => {
         if (partnerSlug) {
-          return withContent ? `${topicBase}/${catSlug}/${contentSlug}` : `${topicBase}/${catSlug}`;
+          return withContent
+            ? `${topicBase}/${catSlug}/${contentSlug}`
+            : `${topicBase}/${catSlug}`
         }
         return varyingIndex
-          ? (locale === 'en' ? `${topicBaseWithLocale}/${catSlug}` : `/${locale}/${siteConfig.categoryBaseUrls.base}/${catSlug}`)
-          : (locale === 'en' ? `${topicBaseWithLocale}/${catSlug}/${contentSlug}` : `/${locale}/${siteConfig.categoryBaseUrls.base}/${catSlug}/${contentSlug}`);
-      };
+          ? locale === 'en'
+            ? `${topicBaseWithLocale}/${catSlug}`
+            : `/${locale}/${siteConfig.categoryBaseUrls.base}/${catSlug}`
+          : locale === 'en'
+            ? `${topicBaseWithLocale}/${catSlug}/${contentSlug}`
+            : `/${locale}/${siteConfig.categoryBaseUrls.base}/${catSlug}/${contentSlug}`
+      }
 
       // Check if we're on the topic index page (partner or non-partner)
-      const isTopicIndexPage = pathname === `/${siteConfig.categoryBaseUrls.base}` ||
-                               pathname === `/${locale}/${siteConfig.categoryBaseUrls.base}` ||
-                               pathname.endsWith(`/${siteConfig.categoryBaseUrls.base}`) ||
-                               (partnerSlug && pathname === `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}`);
+      const isTopicIndexPage =
+        pathname === `/${siteConfig.categoryBaseUrls.base}` ||
+        pathname === `/${locale}/${siteConfig.categoryBaseUrls.base}` ||
+        pathname.endsWith(`/${siteConfig.categoryBaseUrls.base}`) ||
+        (partnerSlug &&
+          pathname === `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}`)
 
       // If on topic index page, prioritize topic route format
       if (isTopicIndexPage) {
-        const hasCategory = post?.category && post.category.slug?.current;
+        const hasCategory = post?.category && post.category.slug?.current
         if (hasCategory) {
-          const categorySlug = post.category.slug.current.replace(/^\/+/, '').replace(/\/+$/, '');
-          setLinkUrl(buildTopicUrl(categorySlug, !varyingIndex));
-          return;
+          const categorySlug = post.category.slug.current
+            .replace(/^\/+/, '')
+            .replace(/\/+$/, '')
+          setLinkUrl(buildTopicUrl(categorySlug, !varyingIndex))
+          return
         }
       }
 
       // Check if content type is topic/article - these need category slug in URL
-      const contentTypePath = getBasePath(router, post.contentType);
-      const isTopicContent = post.contentType === 'topic' || post.contentType === 'article';
+      const contentTypePath = getBasePath(router, post.contentType)
+      const isTopicContent =
+        post.contentType === 'topic' || post.contentType === 'article'
 
       if (isTopicContent) {
-        const hasCategory = post?.category && post.category.slug?.current;
+        const hasCategory = post?.category && post.category.slug?.current
         if (hasCategory) {
-          const categorySlug = post.category.slug.current.replace(/^\/+/, '').replace(/\/+$/, '');
-          setLinkUrl(buildTopicUrl(categorySlug, !varyingIndex));
-          return;
+          const categorySlug = post.category.slug.current
+            .replace(/^\/+/, '')
+            .replace(/\/+$/, '')
+          setLinkUrl(buildTopicUrl(categorySlug, !varyingIndex))
+          return
         }
       }
 
       // Otherwise, content type route (podcast, webinar, etc.) – use partner prefix when on partner page
       if (contentTypePath) {
-        const normalizedContentPath = contentTypePath.replace(/^\/+/, '').replace(/\/+$/, '');
+        const normalizedContentPath = contentTypePath
+          .replace(/^\/+/, '')
+          .replace(/\/+$/, '')
         const newLinkUrl = partnerSlug
-          ? (varyingIndex ? `/${partnerSlug}/${normalizedContentPath}` : `/${partnerSlug}/${normalizedContentPath}/${contentSlug}`)
+          ? varyingIndex
+            ? `/${partnerSlug}/${normalizedContentPath}`
+            : `/${partnerSlug}/${normalizedContentPath}/${contentSlug}`
           : varyingIndex
-            ? (locale === 'en' ? `/${normalizedContentPath}` : `/${locale}/${normalizedContentPath}`)
-            : (locale === 'en' ? `/${normalizedContentPath}/${contentSlug}` : `/${locale}/${normalizedContentPath}/${contentSlug}`);
-        setLinkUrl(newLinkUrl);
+            ? locale === 'en'
+              ? `/${normalizedContentPath}`
+              : `/${locale}/${normalizedContentPath}`
+            : locale === 'en'
+              ? `/${normalizedContentPath}/${contentSlug}`
+              : `/${locale}/${normalizedContentPath}/${contentSlug}`
+        setLinkUrl(newLinkUrl)
       } else {
-        const hasCategory = post?.category && post.category.slug?.current;
+        const hasCategory = post?.category && post.category.slug?.current
         if (hasCategory) {
-          const categorySlug = post.category.slug.current.replace(/^\/+/, '').replace(/\/+$/, '');
-          setLinkUrl(buildTopicUrl(categorySlug, !varyingIndex));
+          const categorySlug = post.category.slug.current
+            .replace(/^\/+/, '')
+            .replace(/\/+$/, '')
+          setLinkUrl(buildTopicUrl(categorySlug, !varyingIndex))
         }
       }
     }
-  }, [router.isReady, post?.contentType, post?.slug, post?.category, varyingIndex, router.query.locale, router.query.partner, router, pathname]);
+  }, [
+    router.isReady,
+    post?.contentType,
+    post?.slug,
+    post?.category,
+    varyingIndex,
+    router.query.locale,
+    router.query.partner,
+    router,
+    pathname,
+  ])
 
   if (!post || !linkUrl) {
     return null
@@ -194,9 +233,13 @@ export default function Card({
     <React.Fragment>
       {cardType === 'top-image-card' ? (
         <Anchor href={linkUrl} className="h-full">
-          <AnimatingWrapper transitionType="slide-in" delay={0.8} immediate={index < 2}>
+          <AnimatingWrapper
+            transitionType="slide-in"
+            delay={0.8}
+            immediate={index < 2}
+          >
             <div
-              className={`flex ${ alignCard ? 'md:!flex-row flex-col'  : `flex-col`} w-full h-full gap-1 overflow-hidden ${reverse ? 'flex-col-reverse ' : ''}  group rounded-lg text-white`}
+              className={`flex ${alignCard ? 'md:!flex-row flex-col' : `flex-col`} w-full h-full gap-1 overflow-hidden ${reverse ? 'flex-col-reverse ' : ''}  group rounded-lg text-white`}
             >
               <div
                 className={`flex w-full h-full overflow-hidden`}
@@ -224,15 +267,27 @@ export default function Card({
               </div>
               <div
                 style={{
-                  backgroundColor: cardColor === '#2f6fa5' ? '#2f6fa5' : (color && color ? color : '#18181B'),
+                  backgroundColor:
+                    cardColor === '#2f6fa5'
+                      ? '#2f6fa5'
+                      : color && color
+                        ? color
+                        : '#18181B',
                 }}
-                className={`flex w-full h-full ${reverse ? 'rounded-t-lg' : 'rounded-b-lg'} ${ alignCard &&  'rounded-tl-none rounded-bl-none'  } ${cardColor === '#2f6fa5' ? 'pb-9 pt-[42px] px-9' : 'p-6 md:p-9'} flex-col items-start ${cardColor === '#2f6fa5' ? 'gap-6' : 'gap-10'} ${!alignCard && 'flex-1'} `}
+                className={`flex w-full h-full ${reverse ? 'rounded-t-lg' : 'rounded-b-lg'} ${alignCard && 'rounded-tl-none rounded-bl-none'} ${cardColor === '#2f6fa5' ? 'pb-9 pt-[42px] px-9' : 'p-6 md:p-9'} flex-col items-start ${cardColor === '#2f6fa5' ? 'gap-6' : 'gap-10'} ${!alignCard && 'flex-1'} `}
               >
-                <div className={`flex flex-col ${cardColor === '#2f6fa5' ? 'gap-6' : 'gap-3'} w-full`}>
+                <div
+                  className={`flex flex-col ${cardColor === '#2f6fa5' ? 'gap-6' : 'gap-3'} w-full`}
+                >
                   {/* Label: Category | Date */}
-                  <div className={`flex items-start gap-3 text-sm font-inter font-medium leading-[1.5] tracking-[0.7px] uppercase ${cardColor === '#2f6fa5' ? 'text-white' : '!text-white'}`}>
+                  <div
+                    className={`flex items-start gap-3 text-sm font-inter font-medium leading-[1.5] tracking-[0.7px] uppercase ${cardColor === '#2f6fa5' ? 'text-white' : '!text-white'}`}
+                  >
                     <span>
-                      {post.category?.categoryName || tag?.tagName || post.contentType || 'Knowledge Guides'}
+                      {post.category?.categoryName ||
+                        tag?.tagName ||
+                        post.contentType ||
+                        'Knowledge Guides'}
                     </span>
                     {post.date || post._createdAt ? (
                       <>
@@ -240,7 +295,20 @@ export default function Card({
                         <span>
                           {(() => {
                             const date = new Date(post.date || post._createdAt)
-                            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                            const months = [
+                              'Jan',
+                              'Feb',
+                              'Mar',
+                              'Apr',
+                              'May',
+                              'Jun',
+                              'Jul',
+                              'Aug',
+                              'Sep',
+                              'Oct',
+                              'Nov',
+                              'Dec',
+                            ]
                             return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
                           })()}
                         </span>
@@ -248,7 +316,9 @@ export default function Card({
                     ) : null}
                   </div>
                   {/* Title */}
-                  <h3 className={`font-manrope font-bold text-[36px] leading-[1.1] tracking-[-0.72px] !text-white group-hover:underline underline-offset-4 whitespace-pre-wrap ${cardColor === '#2f6fa5' ? '' : ''}`}>
+                  <h3
+                    className={`font-manrope font-bold text-[36px] leading-[1.1] tracking-[-0.72px] !text-white group-hover:underline underline-offset-4 whitespace-pre-wrap ${cardColor === '#2f6fa5' ? '' : ''}`}
+                  >
                     {post.title}
                   </h3>
                   {cardColor !== '#2f6fa5' && (
@@ -281,8 +351,12 @@ export default function Card({
           </AnimatingWrapper>
         </Anchor>
       ) : cardType === 'left-image-card' ? (
-        <Anchor href={linkUrl} className='w-full'>
-          <AnimatingWrapper transitionType="slide-in" delay={0.2} immediate={index < 2}>
+        <Anchor href={linkUrl} className="w-full">
+          <AnimatingWrapper
+            transitionType="slide-in"
+            delay={0.2}
+            immediate={index < 2}
+          >
             <div
               className={`flex flex-col md:flex-row gap-3 xl:gap-6 relative group hover:transition duration-500 ${className}`}
             >
@@ -337,8 +411,8 @@ export default function Card({
                   contentType={post.contentType}
                   duration={
                     post.contentType === 'podcast' ||
-                      post.contentType === 'webinar' ||
-                      post.contentType === 'ebook'
+                    post.contentType === 'webinar' ||
+                    post.contentType === 'ebook'
                       ? post?.duration
                       : post?.estimatedReadingTime
                   }
@@ -353,14 +427,21 @@ export default function Card({
           className={`flex flex-col flex-1 w-full group hover:scale-100 transform duration-300 ${className} `}
         >
           <Anchor href={linkUrl}>
-            <AnimatingWrapper transitionType="slide-in" delay={0.8} immediate={index < 2}>
+            <AnimatingWrapper
+              transitionType="slide-in"
+              delay={0.8}
+              immediate={index < 2}
+            >
               <div
                 className={`${!isLast ? `border-b border-[rgba(24,24,27,0.2)]` : ''} py-8 flex flex-col gap-3 !text-black`}
               >
                 {/* Label: Category | Date */}
                 <div className="flex items-start gap-3 text-[#71717a] text-sm font-inter font-medium leading-[1.5] tracking-[0.7px] uppercase">
                   <span>
-                    {post.category?.categoryName || tag?.tagName || post.contentType || 'Knowledge Guides'}
+                    {post.category?.categoryName ||
+                      tag?.tagName ||
+                      post.contentType ||
+                      'Knowledge Guides'}
                   </span>
                   {post.date || post._createdAt ? (
                     <>
@@ -368,7 +449,20 @@ export default function Card({
                       <span>
                         {(() => {
                           const date = new Date(post.date || post._createdAt)
-                          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                          const months = [
+                            'Jan',
+                            'Feb',
+                            'Mar',
+                            'Apr',
+                            'May',
+                            'Jun',
+                            'Jul',
+                            'Aug',
+                            'Sep',
+                            'Oct',
+                            'Nov',
+                            'Dec',
+                          ]
                           return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
                         })()}
                       </span>
@@ -380,7 +474,10 @@ export default function Card({
                   {post.title}
                 </h3>
                 {isPageUrl && post.contentType === 'podcast' && (
-                  <CreaterInfo creater={post?.author} duration={post?.duration} />
+                  <CreaterInfo
+                    creater={post?.author}
+                    duration={post?.duration}
+                  />
                 )}
               </div>
             </AnimatingWrapper>
@@ -466,13 +563,20 @@ export default function Card({
                 />
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
-                
+
                 {/* Watch badge - top left */}
-                {(post.contentType === 'podcast' || post.contentType === 'webinar') && (
+                {(post.contentType === 'podcast' ||
+                  post.contentType === 'webinar') && (
                   <div className="absolute top-6 left-6 flex items-center gap-2.5 z-10">
                     <div className="bg-white rounded-full p-2 flex items-center justify-center">
                       {post.contentType === 'webinar' ? (
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 14 14"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
                           <path
                             fillRule="evenodd"
                             clipRule="evenodd"
@@ -481,7 +585,11 @@ export default function Card({
                           />
                         </svg>
                       ) : (
-                        <Image src={SoundIcon} alt="soundIcon" className="w-3.5 h-3.5" />
+                        <Image
+                          src={SoundIcon}
+                          alt="soundIcon"
+                          className="w-3.5 h-3.5"
+                        />
                       )}
                     </div>
                     <span className="text-white text-sm font-medium leading-[1.5]">
@@ -491,13 +599,16 @@ export default function Card({
                 )}
               </div>
             )}
-            
+
             {/* Content below image */}
             <div className="flex flex-col gap-3">
               {/* Category and Date */}
               <div className="flex items-start gap-3 text-[#71717a] text-sm font-medium leading-[1.5] tracking-[0.7px] uppercase">
                 <span>
-                  {post.category?.categoryName || tag?.tagName || post.contentType || 'Knowledge Guides'}
+                  {post.category?.categoryName ||
+                    tag?.tagName ||
+                    post.contentType ||
+                    'Knowledge Guides'}
                 </span>
                 {post.date || post._createdAt ? (
                   <>
@@ -505,14 +616,27 @@ export default function Card({
                     <span>
                       {(() => {
                         const date = new Date(post.date || post._createdAt)
-                        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                        const months = [
+                          'Jan',
+                          'Feb',
+                          'Mar',
+                          'Apr',
+                          'May',
+                          'Jun',
+                          'Jul',
+                          'Aug',
+                          'Sep',
+                          'Oct',
+                          'Nov',
+                          'Dec',
+                        ]
                         return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
                       })()}
                     </span>
                   </>
                 ) : null}
               </div>
-              
+
               {/* Title */}
               <h3 className="font-bold text-2xl leading-[1.3] text-[#18181b] tracking-[-0.24px] line-clamp-2 overflow-hidden text-ellipsis h-[62px]">
                 {post.title}
@@ -521,141 +645,146 @@ export default function Card({
           </div>
         </Anchor>
       ) : //ebook card
-        cardType === 'ebook-card' ? (
-          <div className={`flex flex-col w-full h-full group`}>
-            <Anchor href={linkUrl} className="flex-1 flex">
-              <div className="relative flex flex-col w-full">
-                {(post.mainImage || post.image) && (
-                  <div className="overflow-hidden absolute left-0 right-0 top-0 bottom-0 rounded-[10px]">
-                    <ImageLoader
-                      className="h-full overflow-hidden"
-                      image={bgImages[imageIndex].src}
-                      alt={post.title || 'Blog Image'}
-                      // useClientWidth={true}
-                      imageClassName="h-full w-full group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                  </div>
-                )}
-                <div className="flex flex-col gap-1 relative p-4 md:p-8 flex-1">
-                  <div className="bg-white rounded p-4 md:p-5 h-full flex flex-col justify-between gap-2">
-                    <div>
-                      {post.contentType && (
-                        <span
-                          className={`rounded mb-2 bg-zinc-500 text-xs md:text-sm text-white font-medium leading-[1.5] uppercase inline-flex px-2 py-1`}
-                        >
-                          {post.contentType}
-                        </span>
-                      )}
-                      <H4Medium
-                        className={`group-hover: group-hover:underline underline-offset-4`}
-                      >
-                        {post.title}
-                      </H4Medium>
-                    </div>
-                    {/* {post.author && post.author.length > 0 && (
-                              <span className='text-[12px] font-medium'>{`by ${post.author[0].name ? post.author[0].name : ''}`}</span>
-                            )} */}
+      cardType === 'ebook-card' ? (
+        <div className={`flex flex-col w-full h-full group`}>
+          <Anchor href={linkUrl} className="flex-1 flex">
+            <div className="relative flex flex-col w-full">
+              {(post.mainImage || post.image) && (
+                <div className="overflow-hidden absolute left-0 right-0 top-0 bottom-0 rounded-[10px]">
+                  <ImageLoader
+                    className="h-full overflow-hidden"
+                    image={bgImages[imageIndex].src}
+                    alt={post.title || 'Blog Image'}
+                    // useClientWidth={true}
+                    imageClassName="h-full w-full group-hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
+              )}
+              <div className="flex flex-col gap-1 relative p-4 md:p-8 flex-1">
+                <div className="bg-white rounded p-4 md:p-5 h-full flex flex-col justify-between gap-2">
+                  <div>
                     {post.contentType && (
-                      <span className="text-[14px] md:text-[16px] font-medium inline-flex items-center gap-1">
-                        {`${post.contentType === 'webinar' ? 'Watch Now' : 'Read Now'}`}
-                        <ArrowTopRightIcon className="" height={20} width={20} />
+                      <span
+                        className={`rounded mb-2 bg-zinc-500 text-xs md:text-sm text-white font-medium leading-[1.5] uppercase inline-flex px-2 py-1`}
+                      >
+                        {post.contentType}
                       </span>
                     )}
+                    <H4Medium
+                      className={`group-hover: group-hover:underline underline-offset-4`}
+                    >
+                      {post.title}
+                    </H4Medium>
                   </div>
+                  {/* {post.author && post.author.length > 0 && (
+                              <span className='text-[12px] font-medium'>{`by ${post.author[0].name ? post.author[0].name : ''}`}</span>
+                            )} */}
+                  {post.contentType && (
+                    <span className="text-[14px] md:text-[16px] font-medium inline-flex items-center gap-1">
+                      {`${post.contentType === 'webinar' ? 'Watch Now' : 'Read Now'}`}
+                      <ArrowTopRightIcon className="" height={20} width={20} />
+                    </span>
+                  )}
                 </div>
               </div>
-            </Anchor>
-          </div>
-        ) : (
-          // default card
-          <div className={`flex flex-col relative h-full`}>
-            <Anchor href={linkUrl} className="flex flex-col h-full group">
-              <AnimatingWrapper transitionType="slide-in" delay={0.8} immediate={index < 2}>
-                {(post.mainImage || post.customImage) && (
-                  <div
-                    className={`overflow-hidden ${varyingIndex ? 'rounded-t-lg  flex-1' : 'rounded-lg'} relative min-h-[234px]  w-full`}
-                  >
-                    <ImageLoader
-                      className="h-full"
-                      imageClassName="group-hover:scale-105 transition-transform duration-300 w-full h-full inline"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      image={
-                        varyingIndex && post?.customImage
-                          ? post?.customImage
-                          : post?.mainImage
-                      }
-                    />
-                    {!varyingIndex && post.contentType === 'podcast' ? (
-                      <div className="absolute bottom-6 left-6 flex items-center gap-2">
-                        <Image src={SoundIcon} alt="soundIcon" />
-                        <span className="text-white text-sm font-medium">
-                          {' '}
-                          {`Listen Now`}
-                        </span>
-                      </div>
-                    ) : post.contentType === 'webinar' ? (
-                      <div className="absolute bottom-6 left-6 flex items-center gap-2">
-                        <PlayIcon />
-                        <span className="text-white text-sm font-medium">{`Watch`}</span>
-                      </div>
-                    ) : (
-                      ''
-                    )}
-                  </div>
-                )}
-                {
-                  <div
-                    className={`${varyingIndex ? 'p-8 bg-indigo-900 text-white rounded-b-lg mt-1' : 'mt-6'} flex flex-col gap-1 `}
-                  >
-                    <div className="flex flex-col ">
-                      {post.contentType && (
-                        <SubText
-                          className={`${varyingIndex ? '!text-white' : ''} mb-2`}
-                        >
-                          {post.contentType === 'press-release'
-                            ? 'press release'
-                            : post.contentType}
-                        </SubText>
-                      )}
-                      <H4Medium className="group-hover:group-hover:underline underline-offset-4 line-clamp-3 text-ellipsis overflow-hidden">
-                        {post.title}
-                      </H4Medium>
+            </div>
+          </Anchor>
+        </div>
+      ) : (
+        // default card
+        <div className={`flex flex-col relative h-full`}>
+          <Anchor href={linkUrl} className="flex flex-col h-full group">
+            <AnimatingWrapper
+              transitionType="slide-in"
+              delay={0.8}
+              immediate={index < 2}
+            >
+              {(post.mainImage || post.customImage) && (
+                <div
+                  className={`overflow-hidden ${varyingIndex ? 'rounded-t-lg  flex-1' : 'rounded-lg'} relative min-h-[234px]  w-full`}
+                >
+                  <ImageLoader
+                    className="h-full"
+                    imageClassName="group-hover:scale-105 transition-transform duration-300 w-full h-full inline"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    image={
+                      varyingIndex && post?.customImage
+                        ? post?.customImage
+                        : post?.mainImage
+                    }
+                  />
+                  {!varyingIndex && post.contentType === 'podcast' ? (
+                    <div className="absolute bottom-6 left-6 flex items-center gap-2">
+                      <Image src={SoundIcon} alt="soundIcon" />
+                      <span className="text-white text-sm font-medium">
+                        {' '}
+                        {`Listen Now`}
+                      </span>
                     </div>
-
-                    {varyingIndex ? (
-                      <div className="flex items-center gap-2 pt-8">
-                        <span className="text-base font-medium">{`${post.contentType === 'podcast'
-                            ? 'Listen Now'
-                            : post.contentType === 'webinar'
-                              ? 'Watch'
-                              : 'Read Now'
-                          }`}</span>
-                        <ArrowTopRightIcon
-                          className="group-hover:translate-y-[-2px] transition-transform duration-300"
-                          height={20}
-                          width={20}
-                        />
-                      </div>
-                    ) : (
-                      <DurationSection
-                        className={'!text-zinc-500'}
-                        contentType={post.contentType}
-                        duration={
-                          post.contentType === 'podcast' ||
-                            post.contentType === 'webinar'
-                            ? post?.duration
-                            : post?.estimatedReadingTime
-                        }
-                        date={post?.date ? post?.date : ''}
-                      ></DurationSection>
+                  ) : post.contentType === 'webinar' ? (
+                    <div className="absolute bottom-6 left-6 flex items-center gap-2">
+                      <PlayIcon />
+                      <span className="text-white text-sm font-medium">{`Watch`}</span>
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                </div>
+              )}
+              {
+                <div
+                  className={`${varyingIndex ? 'p-8 bg-indigo-900 text-white rounded-b-lg mt-1' : 'mt-6'} flex flex-col gap-1 `}
+                >
+                  <div className="flex flex-col ">
+                    {post.contentType && (
+                      <SubText
+                        className={`${varyingIndex ? '!text-white' : ''} mb-2`}
+                      >
+                        {post.contentType === 'press-release'
+                          ? 'press release'
+                          : post.contentType}
+                      </SubText>
                     )}
+                    <H4Medium className="group-hover:group-hover:underline underline-offset-4 line-clamp-3 text-ellipsis overflow-hidden">
+                      {post.title}
+                    </H4Medium>
                   </div>
-                }
-              </AnimatingWrapper>
-            </Anchor>
-          </div>
-        )}
+
+                  {varyingIndex ? (
+                    <div className="flex items-center gap-2 pt-8">
+                      <span className="text-base font-medium">{`${
+                        post.contentType === 'podcast'
+                          ? 'Listen Now'
+                          : post.contentType === 'webinar'
+                            ? 'Watch'
+                            : 'Read Now'
+                      }`}</span>
+                      <ArrowTopRightIcon
+                        className="group-hover:translate-y-[-2px] transition-transform duration-300"
+                        height={20}
+                        width={20}
+                      />
+                    </div>
+                  ) : (
+                    <DurationSection
+                      className={'!text-zinc-500'}
+                      contentType={post.contentType}
+                      duration={
+                        post.contentType === 'podcast' ||
+                        post.contentType === 'webinar'
+                          ? post?.duration
+                          : post?.estimatedReadingTime
+                      }
+                      date={post?.date ? post?.date : ''}
+                    ></DurationSection>
+                  )}
+                </div>
+              }
+            </AnimatingWrapper>
+          </Anchor>
+        </div>
+      )}
     </React.Fragment>
   )
 }

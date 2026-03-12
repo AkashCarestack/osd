@@ -1,6 +1,6 @@
 import { DocumentTextIcon } from '@sanity/icons'
 import siteConfig from 'config/siteConfig'
-import { GetStaticPaths,GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 
 import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
 import AuthorInfo from '~/components/commonSections/AuthorInfo'
@@ -16,9 +16,9 @@ import SidebarTitle from '~/components/typography/SidebarTitle'
 import { PressRelease } from '~/interfaces/post'
 import SEOHead from '~/layout/SeoHead'
 import Wrapper from '~/layout/Wrapper'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { urlForImage } from '~/lib/sanity.image'
 import {
   getCategories,
@@ -66,7 +66,11 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   const region = getDefaultLocale()
   const partnerSlug = params.partner as string
   if (!partnerSlug) return { notFound: true }
-  const pressRelease = await getPressRelease(client, params.slug as string, region)
+  const pressRelease = await getPressRelease(
+    client,
+    params.slug as string,
+    region,
+  )
   if (!pressRelease) return { notFound: true }
   const tagIds = pressRelease.tags?.map((tag: any) => tag?._id) || []
   const relatedContents = await getTagRelatedContents(
@@ -91,7 +95,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
@@ -104,38 +108,47 @@ const PressReleasePage = ({
   draftMode,
   token,
   categories,
-  footerData
+  footerData,
 }: Props) => {
-
-  if(!pressRelease) return null
+  if (!pressRelease) return null
 
   const prodUrl = 'https://osdental.io'
 
   const seoTitle = pressRelease.seoTitle || pressRelease.title
-  const seoDescription = (pressRelease?.seoDescription && !pressRelease.seoDescription.includes('Test titlw')) 
-    ? pressRelease.seoDescription 
-    : pressRelease?.excerpt || ''
+  const seoDescription =
+    pressRelease?.seoDescription &&
+    !pressRelease.seoDescription.includes('Test titlw')
+      ? pressRelease.seoDescription
+      : pressRelease?.excerpt || ''
   const seoKeywords = pressRelease.seoKeywords || ''
   const seoRobots = pressRelease.seoRobots || 'index,follow'
   const seoCanonical = sanitizeUrl(
     pressRelease.seoCanonical ||
-    `${prodUrl}/${siteConfig.pageURLs.pressRelease}/${pressRelease.slug.current}`
+      `${prodUrl}/${siteConfig.pageURLs.pressRelease}/${pressRelease.slug.current}`,
   )
   const jsonLD: any = generateJSONLD(pressRelease)
 
   return (
     <>
       <SEOHead
-          title={seoTitle}
-          description={seoDescription}
-          keywords={seoKeywords}
-          robots={seoRobots}
-          canonical={seoCanonical}
-          jsonLD={jsonLD}
-          contentType={pressRelease?.contentType}
-          ogImage={pressRelease?.mainImage?._id ? urlForImage(pressRelease.mainImage._id) : undefined}
-        />
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+        title={seoTitle}
+        description={seoDescription}
+        keywords={seoKeywords}
+        robots={seoRobots}
+        canonical={seoCanonical}
+        jsonLD={jsonLD}
+        contentType={pressRelease?.contentType}
+        ogImage={
+          pressRelease?.mainImage?._id
+            ? urlForImage(pressRelease.mainImage._id)
+            : undefined
+        }
+      />
+      <GlobalDataProvider
+        data={categories}
+        featuredTags={homeSettings?.featuredTags}
+        footerData={footerData}
+      >
         <Layout>
           <MainImageSection enableDate={true} post={pressRelease} />
           <Section className="justify-center !pt-24 !pb-12">
@@ -190,7 +203,7 @@ const PressReleasePage = ({
                   </div>
                 </div>
               </div>
-              {pressRelease?.tags && <RelatedTag tags={pressRelease?.tags}/>}
+              {pressRelease?.tags && <RelatedTag tags={pressRelease?.tags} />}
             </Wrapper>
           </Section>
           {relatedContents.length > 0 && (

@@ -7,13 +7,14 @@ export const sanityClient = createClient({
   useCdn: true, // `false` if you want to ensure fresh data
 })
 
-
 export async function isUniqueAcrossAllDocuments(slug, context) {
-  const {document, getClient} = context
-  const client = getClient({apiVersion: '2022-11-28'})
+  const { document, getClient } = context
+  const client = getClient({ apiVersion: '2022-11-28' })
   const id = document._id.replace(/^drafts\./, '')
   const region = document.language
-  const conType = document.contentType ? document.contentType : document._type || 'article'
+  const conType = document.contentType
+    ? document.contentType
+    : document._type || 'article'
   const docType = document._type || 'post'
   const params = {
     draft: `drafts.${id}`,
@@ -21,16 +22,15 @@ export async function isUniqueAcrossAllDocuments(slug, context) {
     slug: slug?.current || slug,
     type: docType,
     contentType: conType,
-    language: region
+    language: region,
   }
 
- const query = `!defined(*[
+  const query = `!defined(*[
     !(_id in [$draft, $published]) && 
     _type == $type && 
     contentType == $contentType &&  language == $language &&
     slug.current == $slug
   ][0]._id)`
-
 
   try {
     const result = await client.fetch(query, params)

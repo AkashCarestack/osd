@@ -1,4 +1,3 @@
-
 import HubspotFormLegal from '~/components/commonSections/HubspotLegalForm'
 import Section from '~/components/Section'
 
@@ -8,8 +7,8 @@ function UsAccessOrDeletionRequest() {
       <Section className=" w-full md:max-w-5xl flex flex-col">
         <div className="flex flex-col text-center justify-center mb-10">
           <h1 className="text-4xl font-semibold">
-          Good Methods Global Inc. dba VoiceStack California Verifiable
-          Consumer Access or Deletion Request Form
+            Good Methods Global Inc. dba VoiceStack California Verifiable
+            Consumer Access or Deletion Request Form
           </h1>
           {/* <h2 className="text-3xl font-semibold">United Kingdom (the “DPA”)</h2>  */}
         </div>
@@ -20,9 +19,9 @@ function UsAccessOrDeletionRequest() {
               <span>
                 <p class="legal__text">
                   Each California resident (“Resident”) has the right to access
-                  or delete the personal information held by Good Methods Global 
-                  Inc. (“VoiceStack”) about that Resident, including the right to
-                  know and access specific information or categories of
+                  or delete the personal information held by Good Methods Global
+                  Inc. (“VoiceStack”) about that Resident, including the right
+                  to know and access specific information or categories of
                   information that VoiceStack may collect about such Resident,
                   and to have that information provided to you or deleted.
                 </p>
@@ -38,7 +37,8 @@ function UsAccessOrDeletionRequest() {
                   this form but using this form should make it easier for you to
                   make sure you have provided us with all relevant information
                   and for us to process your request. You may also submit your
-                  request via email at <a href="mailto:privacyconcerns@voicestack.com">
+                  request via email at{' '}
+                  <a href="mailto:privacyconcerns@voicestack.com">
                     privacyconcerns@voicestack.com
                   </a>
                   .
@@ -59,7 +59,7 @@ function UsAccessOrDeletionRequest() {
                   keep a record of your request and our response.
                 </p>
               </span>
-              <HubspotFormLegal formId="412535aa-add6-4b91-935f-31510710d94e"/>
+              <HubspotFormLegal formId="412535aa-add6-4b91-935f-31510710d94e" />
               <span>
                 <h2 class="legal__section-title">
                   2. Proof of Resident’s Identity
@@ -84,11 +84,11 @@ function UsAccessOrDeletionRequest() {
                   the Resident’s behalf.
                 </p>
               </span>
-              <HubspotFormLegal formId="349de032-905c-4fe6-8e33-2adbec438ce7"/>
+              <HubspotFormLegal formId="349de032-905c-4fe6-8e33-2adbec438ce7" />
               <span>
                 <h2 class="legal__section-title">4. Resident Request</h2>
               </span>
-              <HubspotFormLegal formId="c2cbc9c8-3f7d-49f6-af56-2c9fb4c9c60d"/>
+              <HubspotFormLegal formId="c2cbc9c8-3f7d-49f6-af56-2c9fb4c9c60d" />
             </div>
           </div>
         </div>

@@ -12,9 +12,9 @@ import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection
 import { Author, Post } from '~/interfaces/post'
 import SEOHead from '~/layout/SeoHead'
 import Wrapper from '~/layout/Wrapper'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { urlForImage } from '~/lib/sanity.image'
 import {
   authorSlugsQuery,
@@ -25,9 +25,8 @@ import {
   getHomeSettings,
   getTags,
 } from '~/lib/sanity.queries'
-import { CustomHead, metaTagDataForAuthor } from '~/utils/customHead'
-
 import { SharedPageProps } from '~/pages/_app'
+import { CustomHead, metaTagDataForAuthor } from '~/utils/customHead'
 
 interface Query {
   [key: string]: string
@@ -53,14 +52,18 @@ export const getStaticProps: GetStaticProps<
   const authorId = author?._id
   const tags = await getTags(client)
   const homeSettings = await getHomeSettings(client, region, partnerSlug)
-  const relatedContents = await getauthorRelatedContents(client, authorId, undefined,region)  
+  const relatedContents = await getauthorRelatedContents(
+    client,
+    authorId,
+    undefined,
+    region,
+  )
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
 
   if (!author || author.length === 0) {
-    return { notFound: true };
+    return { notFound: true }
   }
-
 
   return {
     props: {
@@ -71,7 +74,7 @@ export const getStaticProps: GetStaticProps<
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
@@ -96,26 +99,32 @@ export default function AuthorPage({
   tags,
   homeSettings,
   categories,
-  footerData
+  footerData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  if(!author) return null
+  if (!author) return null
   const baseUrl = `/${siteConfig.pageURLs.author}`
   const url = process.env.NEXT_PUBLIC_BASE_URL + baseUrl
-  
+
   const seoTitle = author?.name || 'Author Profile'
-  const seoDescription = author?.bio || `Learn more about ${author?.name} and their contributions to OS Dental.`
+  const seoDescription =
+    author?.bio ||
+    `Learn more about ${author?.name} and their contributions to OS Dental.`
   const seoCanonical = `${url}/${author?.slug?.current || ''}`
   const jsonLD = JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": author?.name,
-    "description": author?.bio,
-    "image": author?.picture ? urlForImage(author.picture._id) : undefined,
-    "url": seoCanonical
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: author?.name,
+    description: author?.bio,
+    image: author?.picture ? urlForImage(author.picture._id) : undefined,
+    url: seoCanonical,
   })
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <SEOHead
           title={seoTitle}
@@ -125,12 +134,16 @@ export default function AuthorPage({
           canonical={seoCanonical}
           jsonLD={jsonLD}
           contentType="author"
-          ogImage={author?.picture?._id ? urlForImage(author.picture._id) : undefined}
+          ogImage={
+            author?.picture?._id ? urlForImage(author.picture._id) : undefined
+          }
         />
         <CustomHead props={author} type="author" />
         <Layout>
           <Section className="justify-center">
-            <Wrapper className={`flex-col md:pt-headerSpacer pt-headerSpacerMob`}>
+            <Wrapper
+              className={`flex-col md:pt-headerSpacer pt-headerSpacerMob`}
+            >
               <div className="flex md:flex-row justify-between flex-col gap-8 md:gap-16">
                 <div className="md:min-w-[360px] md:h-full min-h-[370px]  ">
                   {author.picture && (

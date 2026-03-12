@@ -1,5 +1,5 @@
 import siteConfig from 'config/siteConfig'
-import { GetStaticPaths,GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import React, { useRef } from 'react'
 
@@ -8,10 +8,10 @@ import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import { BaseUrlProvider } from '~/components/Context/UrlContext'
 import Layout from '~/components/Layout'
 import AllcontentSection from '~/components/sections/AllcontentSection'
-import {  Podcasts } from '~/interfaces/post'
+import { Podcasts } from '~/interfaces/post'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import {
   getCategories,
   getFooterData,
@@ -31,8 +31,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const totalPages = Math.ceil(
     podcasts.length / siteConfig.pagination.childItemsPerPage,
   )
-  const pageNumbers = Array.from({ length: Math.max(0, totalPages - 1) }, (_, i) =>
-    (i + 2).toString(),
+  const pageNumbers = Array.from(
+    { length: Math.max(0, totalPages - 1) },
+    (_, i) => (i + 2).toString(),
   )
   const paths = basePaths.flatMap((p) =>
     pageNumbers.map((pageNumber) => ({
@@ -66,11 +67,9 @@ export const getStaticProps: GetStaticProps<
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
 
-    
   if (!podcasts || podcasts.length === 0) {
-    return { notFound: true };
+    return { notFound: true }
   }
-
 
   return {
     props: {
@@ -81,7 +80,7 @@ export const getStaticProps: GetStaticProps<
       totalPages,
       tags,
       homeSettings,
-      categories
+      categories,
     },
   }
 }
@@ -93,7 +92,7 @@ const PaginatedEbookPage = ({
   homeSettings,
   totalPages,
   categories,
-  footerData
+  footerData,
 }: {
   podcasts: Podcasts[]
   tags: any
@@ -105,8 +104,8 @@ const PaginatedEbookPage = ({
 }) => {
   const router = useRouter()
   const baseUrl = `/${siteConfig.pageURLs.podcast}`
-  const url = process.env.NEXT_PUBLIC_BASE_URL;
-  const currentPageUrl =`${url}${baseUrl}/page/${pageNumber}`
+  const url = process.env.NEXT_PUBLIC_BASE_URL
+  const currentPageUrl = `${url}${baseUrl}/page/${pageNumber}`
 
   const handlePageChange = (page: number) => {
     // if (page === 1) {
@@ -117,7 +116,11 @@ const PaginatedEbookPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           {podcasts?.map((e, i) => {

@@ -2,14 +2,14 @@ import { useTracking } from 'cs-tracker'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-import { downloadPDF } from '~/utils/downloadHelper';
+import { downloadPDF } from '~/utils/downloadHelper'
 import { getCookie } from '~/utils/tracker/cookie'
-import useMediaQuery from '~/utils/useMediaQueryHook';
+import useMediaQuery from '~/utils/useMediaQueryHook'
 
 declare global {
   interface Window {
-    hbspt?: any;
-    dataLayer: any[];
+    hbspt?: any
+    dataLayer: any[]
     type?: string
   }
 }
@@ -23,7 +23,7 @@ const HubSpotForm = ({
   type,
   title = 'Download the Full Report for Free',
   sidebarTitle,
-  pdfUrl
+  pdfUrl,
 }: {
   onSubmitSuccess?: () => void
   id?: string
@@ -35,16 +35,15 @@ const HubSpotForm = ({
   sidebarTitle?: string
   pdfUrl?: string
 }) => {
-  const { trackEvent } = useTracking({}, {});  
-  const router = useRouter();
-  const isMobile = useMediaQuery(767);
-  const [isFormLoaded, setIsFormLoaded] = useState(false);
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
-  
+  const { trackEvent } = useTracking({}, {})
+  const router = useRouter()
+  const isMobile = useMediaQuery(767)
+  const [isFormLoaded, setIsFormLoaded] = useState(false)
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false)
 
   useEffect(() => {
     const window2 = window
-   const loadHubSpotScript = async () => {
+    const loadHubSpotScript = async () => {
       // Ensure script is only fetched once
       if (
         !document.querySelector(`script[src="//js.hsforms.net/forms/v2.js"]`)
@@ -56,20 +55,19 @@ const HubSpotForm = ({
 
         // Append the script to the document body
         document.body.appendChild(scriptEl)
-        
 
         // Wait for the script to load
         scriptEl.onload = () => {
-          setIsScriptLoaded(true);
+          setIsScriptLoaded(true)
           if (window?.hbspt) {
             // Create the form
             window.hbspt.forms.create({
               portalId: '4832409',
               region: 'na1',
               formId: id || '6b2d6906-028e-4d65-9cd1-34d528e0d5c0',
-              
+
               // formId: "f2fbfea3-a1e5-4e17-a506-a9d341a45458",
-              
+
               target: '#hubspotForm',
               inlineMessage: `
               <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -96,113 +94,120 @@ const HubSpotForm = ({
                     emailInput.focus()
                   }
                 }
-                
+
                 // Add a small delay to ensure form is fully rendered
                 setTimeout(() => {
-                  setIsFormLoaded(true);
-                }, 100);
+                  setIsFormLoaded(true)
+                }, 100)
               },
               onFormSubmit: function (form) {
-                const formData = new FormData(form); 
+                const formData = new FormData(form)
                 const allowedFields = [
-                  "email",
-                  "company",
-                  "firstname",
-                  "lastname",
-                  "mobilephone",
-                  "practicename",
-                ]; // List of valid form field names
-                const params = new URLSearchParams();
-              
+                  'email',
+                  'company',
+                  'firstname',
+                  'lastname',
+                  'mobilephone',
+                  'practicename',
+                ] // List of valid form field names
+                const params = new URLSearchParams()
+
                 // Filter only the allowed fields from the formData
                 for (const [key, value] of formData.entries()) {
                   if (allowedFields.includes(key)) {
-                    params.append(key, value as string);
+                    params.append(key, value as string)
                   }
                 }
-                
+
                 const email = form.querySelector('input[name="email"]').value
                 window2.dataLayer.push({
                   email: email,
                   event: eventName || 'resource_download',
-                });
-                if(meetingLink){
-                  document.getElementById("successMessage").style.display = "block";
+                })
+                if (meetingLink) {
+                  document.getElementById('successMessage').style.display =
+                    'block'
                 }
-                
+
                 trackEvent({
                   e_name: eventName || 'resource_download',
-                  e_type: "form-submission",
+                  e_type: 'form-submission',
                   e_time: new Date(),
                   e_path: window?.location.href,
-                  user_segment:getCookie("__cs_vs"),
+                  user_segment: getCookie('__cs_vs'),
                   url_params: { email, ...params },
                   current_path: window?.location.href,
                   base_path: window.location.origin + window.location.pathname,
                   domain: window.location.origin,
                   destination_url: null,
                   referrer_url: window.document.referrer,
-                });
+                })
                 if (onSubmitSuccess) {
-                  onSubmitSuccess();
+                  onSubmitSuccess()
                 }
 
-                const urlParams = new URLSearchParams(window.location.search);
+                const urlParams = new URLSearchParams(window.location.search)
 
-                
                 // Only include video_link if sidebar title indicates playbook download
-                const isPlaybookDownload = sidebarTitle && sidebarTitle.toLowerCase().includes('download this resource for free');
-                
-                let query;
+                const isPlaybookDownload =
+                  sidebarTitle &&
+                  sidebarTitle
+                    .toLowerCase()
+                    .includes('download this resource for free')
+
+                let query
                 if (isPlaybookDownload) {
                   // For playbook downloads, only send essential parameters
                   query = new URLSearchParams({
                     email: email,
                     page_url: window.location.href,
                     video_link: videoLink || '',
-                    sidebar_title: sidebarTitle || ''
-                  });
+                    sidebar_title: sidebarTitle || '',
+                  })
                 } else {
                   // For regular forms, send all tracking parameters
                   query = new URLSearchParams({
                     email: email,
-                    source: urlParams.get("utm_source") || '',
-                    campaign: urlParams.get("utm_campaign") || '',
-                    medium: urlParams.get("utm_medium") || '',
-                    term: urlParams.get("utm_term") || '',
-                    lead_source: urlParams.get("lead_source") || '',
-                    page_url: window.location.href
-                  });
+                    source: urlParams.get('utm_source') || '',
+                    campaign: urlParams.get('utm_campaign') || '',
+                    medium: urlParams.get('utm_medium') || '',
+                    term: urlParams.get('utm_term') || '',
+                    lead_source: urlParams.get('lead_source') || '',
+                    page_url: window.location.href,
+                  })
                 }
-                
 
-                
                 setTimeout(async () => {
                   try {
-                    const response = await fetch(`/api/hs?${query.toString()}`);
-                    const responseData = await response.json();
-                    
+                    const response = await fetch(`/api/hs?${query.toString()}`)
+                    const responseData = await response.json()
+
                     // Handle meeting link redirect
                     if (meetingLink) {
-                      const meetingUrl = `${meetingLink}?${params.toString()}`;
-                      router.push(meetingUrl);
+                      const meetingUrl = `${meetingLink}?${params.toString()}`
+                      router.push(meetingUrl)
                     }
-                    
+
                     // Handle video link - only for non-playbook downloads
                     if (videoLink && !isPlaybookDownload) {
-                      window.open(videoLink, '_blank');
+                      window.open(videoLink, '_blank')
                     }
-                    
+
                     // Handle PDF download for playbook downloads
-                    if (responseData.downloadInfo && responseData.downloadInfo.shouldDownload) {
-                      downloadPDF(responseData.downloadInfo.pdfUrl, responseData.downloadInfo.filename);
+                    if (
+                      responseData.downloadInfo &&
+                      responseData.downloadInfo.shouldDownload
+                    ) {
+                      downloadPDF(
+                        responseData.downloadInfo.pdfUrl,
+                        responseData.downloadInfo.filename,
+                      )
                     }
                   } catch (error) {
-                    console.error('Failed to send HubSpot data:', error);
+                    console.error('Failed to send HubSpot data:', error)
                   }
-                }, 3000);
+                }, 3000)
               },
-              
             } as any)
           }
         }
@@ -218,7 +223,16 @@ const HubSpotForm = ({
       )
       if (hubspotScript) hubspotScript.remove()
     }
-  }, [id, eventName, router, trackEvent, meetingLink, videoLink, sidebarTitle, onSubmitSuccess])
+  }, [
+    id,
+    eventName,
+    router,
+    trackEvent,
+    meetingLink,
+    videoLink,
+    sidebarTitle,
+    onSubmitSuccess,
+  ])
 
   return (
     <>
@@ -227,7 +241,7 @@ const HubSpotForm = ({
         <h2 className="text-2xl font-bold text-black mb-6 text-center">
           {title}
         </h2>
-        
+
         {/* Loading Indicator */}
         {!isFormLoaded && (
           <div className="flex justify-center items-center py-8">
@@ -235,14 +249,17 @@ const HubSpotForm = ({
             <span className="ml-3 text-gray-600">Loading form...</span>
           </div>
         )}
-        
+
         {/* HubSpot Form Target - Only render when script is loaded */}
         {isScriptLoaded && (
-          <div id="hubspotForm" className={`hubspot-form-wrapper ${!isFormLoaded ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100 h-auto transition-all duration-500 ease-in-out'}`}></div>
+          <div
+            id="hubspotForm"
+            className={`hubspot-form-wrapper ${!isFormLoaded ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100 h-auto transition-all duration-500 ease-in-out'}`}
+          ></div>
         )}
-        
+
         {/* Success Message */}
-        <div id="successMessage" style={{display: 'none', marginTop: '20px'}}>
+        <div id="successMessage" style={{ display: 'none', marginTop: '20px' }}>
           Please wait..
         </div>
       </div>
@@ -338,7 +355,7 @@ const HubSpotForm = ({
 
         #hubspotForm .actions {
           margin-top: 1.5rem;
-          margin-bottom: ${type !== "embedForm" && !isMobile ? "16px" : "0"};
+          margin-bottom: ${type !== 'embedForm' && !isMobile ? '16px' : '0'};
         }
 
         #hubspotForm .hs-button {

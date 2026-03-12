@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
 import Anchor from '~/components/commonSections/Anchor'
+import { VideoModal } from '~/components/commonSections/VideoModal'
 import Section from '~/components/Section'
 import Wrapper from '~/layout/Wrapper'
-import { VideoModal } from '~/components/commonSections/VideoModal'
 
 interface HeroData {
   title: string
@@ -33,7 +33,8 @@ const extractVideoInfo = (videoUrl: string): VideoInfo => {
 
   try {
     // YouTube
-    const youtubeRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
+    const youtubeRegex =
+      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
     const youtubeMatch = videoUrl.match(youtubeRegex)
     if (youtubeMatch && youtubeMatch[1]) {
       return { platform: 'youtube', videoId: youtubeMatch[1] }
@@ -47,7 +48,8 @@ const extractVideoInfo = (videoUrl: string): VideoInfo => {
     }
 
     // Vidyard (handles share.vidyard.com, vidyard.com, and play.vidyard.com)
-    const vidyardRegex = /(?:share\.vidyard\.com\/watch\/|vidyard\.com\/watch\/|play\.vidyard\.com\/)([a-zA-Z0-9]+)(?:\?|$|\/)/
+    const vidyardRegex =
+      /(?:share\.vidyard\.com\/watch\/|vidyard\.com\/watch\/|play\.vidyard\.com\/)([a-zA-Z0-9]+)(?:\?|$|\/)/
     const vidyardMatch = videoUrl.match(vidyardRegex)
     if (vidyardMatch && vidyardMatch[1]) {
       return { platform: 'vidyard', videoId: vidyardMatch[1] }
@@ -65,7 +67,7 @@ const generateVideoThumbnail = (videoUrl: string): string | null => {
   if (!videoUrl) return null
 
   const videoInfo = extractVideoInfo(videoUrl)
-  
+
   if (!videoInfo.platform || !videoInfo.videoId) return null
 
   switch (videoInfo.platform) {
@@ -151,7 +153,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
 
     return {
       title: sanityData.title || defaultHeroData.title,
-      titleHighlight: sanityData.titleHighlight || defaultHeroData.titleHighlight,
+      titleHighlight:
+        sanityData.titleHighlight || defaultHeroData.titleHighlight,
       description: sanityData.description || defaultHeroData.description,
       primaryButtonText:
         sanityData.primaryButtonText || defaultHeroData.primaryButtonText,
@@ -172,11 +175,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
   const data = transformedData || defaultHeroData
 
   // Extract video info for embedding
-  const videoInfo = data.videoLink ? extractVideoInfo(data.videoLink) : { platform: null, videoId: null }
+  const videoInfo = data.videoLink
+    ? extractVideoInfo(data.videoLink)
+    : { platform: null, videoId: null }
   const canEmbedVideo = videoInfo.platform && videoInfo.videoId
 
   // Placeholder image URL
-  const placeholderImage = 'https://cdn.sanity.io/images/rcbknqsy/production/4c9eae156681fce630a561f64177da5bb8703bc1-990x800.png'
+  const placeholderImage =
+    'https://cdn.sanity.io/images/rcbknqsy/production/4c9eae156681fce630a561f64177da5bb8703bc1-990x800.png'
 
   // Prepare video data for VideoModal
   const videoModalData = canEmbedVideo
@@ -216,7 +222,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                     {data.titleHighlight && (
                       <>
                         <br aria-hidden="true" />
-                        <span className="text-white/50">{data.titleHighlight}</span>
+                        <span className="text-white/50">
+                          {data.titleHighlight}
+                        </span>
                       </>
                     )}
                   </h1>
@@ -239,7 +247,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
               </div>
 
               {/* Right Content - Clickable Placeholder Image */}
-              <div 
+              <div
                 className="w-full lg:w-[495px] shrink-0 rounded-[18px] overflow-hidden relative cursor-pointer group"
                 style={{ aspectRatio: '990/800' }}
                 onClick={() => {

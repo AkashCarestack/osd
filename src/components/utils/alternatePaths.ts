@@ -47,10 +47,10 @@ export function formatHreflang(locale: string): string {
     'EN-US': 'en-US',
     'EN-GB': 'en-GB',
     'EN-AU': 'en-AU',
-    'en': 'en-US',
-    '': 'en-US'
-  };
-  return localeMap[locale] || 'en-US';
+    en: 'en-US',
+    '': 'en-US',
+  }
+  return localeMap[locale] || 'en-US'
 }
 
 /**
@@ -68,7 +68,7 @@ export function removeLocale(pathname: string, locales: string[]): string {
 
   // Use the same regex pattern as sitemap
   const basePath = pathname.replace(/^\/(en-[A-Z]{2}\/)?/, '')
-  
+
   // Ensure path starts with /
   return basePath ? `/${basePath}` : '/'
 }
@@ -83,7 +83,7 @@ export function removeLocale(pathname: string, locales: string[]): string {
 export function buildUrl(
   locale: string,
   path: string,
-  baseUrl: string
+  baseUrl: string,
 ): string {
   // Remove leading slash from path for generateHref
   const cleanPath = path.startsWith('/') ? path.slice(1) : path
@@ -102,10 +102,7 @@ export function getBaseUrl(): string {
   }
 
   // Fallback to env var or production URL
-  return (
-    process.env.NEXT_PUBLIC_BASE_URL || 
-    'https://osdental.io'
-  )
+  return process.env.NEXT_PUBLIC_BASE_URL || 'https://osdental.io'
 }
 
 /**
@@ -114,7 +111,7 @@ export function getBaseUrl(): string {
 function isPathAvailableForLocale(
   path: string,
   locale: string,
-  locales: string[]
+  locales: string[],
 ): boolean {
   // Root path is always available
   if (path === '/') {
@@ -155,9 +152,13 @@ export function useAlternatePaths(): {
     if (!router.isReady) return
 
     const baseUrl = getBaseUrl()
-    const pathname = (router.asPath || router.pathname || '/').split('?')[0].split('#')[0]
+    const pathname = (router.asPath || router.pathname || '/')
+      .split('?')[0]
+      .split('#')[0]
     // Current path is the canonical URL (no locale variants)
-    const url = pathname ? `${baseUrl}${pathname.startsWith('/') ? pathname : `/${pathname}`}` : baseUrl
+    const url = pathname
+      ? `${baseUrl}${pathname.startsWith('/') ? pathname : `/${pathname}`}`
+      : baseUrl
     setDefaultUrl(url)
   }, [router.asPath, router.pathname, router.isReady])
 
@@ -166,4 +167,3 @@ export function useAlternatePaths(): {
     defaultUrl,
   }
 }
-

@@ -81,31 +81,31 @@ export default defineConfig({
         { id: 'en-AU', title: 'Australia English' },
       ],
       schemaTypes: [
-        "post",
-            "newContent",
-            "tag",
-            "partner",
-            "dynamicComponent",
-            "demoBannerBlockUS",
-            "demoBannerBlockGB",
-            "demoBannerBlockAU",
-            "author",
-            "homeSettings",
-            "customer",
-            "link",
-            "globalSettings",
-            "table",
-            "asideBannerBlock",
-            "testimonialCard",
-            "videos",
-            "siteSetting",
-            "customContent",
-            "eventCard",
-            "category",
-            'testimonial',
-            'footer',
-            'glossary',
-            'faq'
+        'post',
+        'newContent',
+        'tag',
+        'partner',
+        'dynamicComponent',
+        'demoBannerBlockUS',
+        'demoBannerBlockGB',
+        'demoBannerBlockAU',
+        'author',
+        'homeSettings',
+        'customer',
+        'link',
+        'globalSettings',
+        'table',
+        'asideBannerBlock',
+        'testimonialCard',
+        'videos',
+        'siteSetting',
+        'customContent',
+        'eventCard',
+        'category',
+        'testimonial',
+        'footer',
+        'glossary',
+        'faq',
       ],
     }),
 
@@ -162,7 +162,11 @@ export default defineConfig({
         // Ensure the DEO partner document has _id "partners.deo" (in Manage Partners) so new content defaults to DEO.
 
         // Build the same sub-panel for each partner: Resources, Page Settings, Home, Footer, Tags, Categories
-        const buildPartnerPanel = (partnerSlug: string, partnerTitle: string, options?: { listAllContentUnderPartner?: boolean }) =>
+        const buildPartnerPanel = (
+          partnerSlug: string,
+          partnerTitle: string,
+          options?: { listAllContentUnderPartner?: boolean },
+        ) =>
           S.list()
             .title(partnerTitle)
             .items([
@@ -189,7 +193,9 @@ export default defineConfig({
                               S.documentList()
                                 .apiVersion(apiVersion)
                                 .title(`Content — ${partnerTitle}`)
-                                .filter('_type == "post" && partner->slug.current == $partnerSlug')
+                                .filter(
+                                  '_type == "post" && partner->slug.current == $partnerSlug',
+                                )
                                 .params({ partnerSlug })
                                 .schemaType('post'),
                         ),
@@ -200,12 +206,16 @@ export default defineConfig({
                           S.list()
                             .title('Content Repo')
                             .items([
-                              S.documentTypeListItem('glossary').title('Glossary'),
+                              S.documentTypeListItem('glossary').title(
+                                'Glossary',
+                              ),
                               S.documentTypeListItem('faq').title('FAQ'),
                               S.documentTypeListItem('event').title('Events'),
                             ]),
                         ),
-                      S.documentTypeListItem('customContent').title('Custom Content').icon(ComposeIcon),
+                      S.documentTypeListItem('customContent')
+                        .title('Custom Content')
+                        .icon(ComposeIcon),
                     ]),
                 ),
               // Page Settings (site-wide)
@@ -235,23 +245,17 @@ export default defineConfig({
               S.listItem()
                 .title('Footer')
                 .icon(LinkIcon)
-                .child(
-                  S.documentTypeList('footer').title('Footer'),
-                ),
+                .child(S.documentTypeList('footer').title('Footer')),
               // Tags
               S.listItem()
                 .title('Tags')
                 .icon(TagIcon)
-                .child(
-                  S.documentTypeList('tag').title('Tags'),
-                ),
+                .child(S.documentTypeList('tag').title('Tags')),
               // Categories
               S.listItem()
                 .title('Categories')
                 .icon(ThListIcon)
-                .child(
-                  S.documentTypeList('category').title('Categories'),
-                ),
+                .child(S.documentTypeList('category').title('Categories')),
             ])
 
         return S.list()
@@ -267,7 +271,11 @@ export default defineConfig({
                   .items([
                     S.listItem()
                       .title('DEO')
-                      .child(buildPartnerPanel('deo', 'DEO', { listAllContentUnderPartner: true })),
+                      .child(
+                        buildPartnerPanel('deo', 'DEO', {
+                          listAllContentUnderPartner: true,
+                        }),
+                      ),
                     S.listItem()
                       .title('Fortune')
                       .child(buildPartnerPanel('fortune', 'Fortune')),
@@ -286,9 +294,7 @@ export default defineConfig({
             S.listItem()
               .title('Manage Partners')
               .icon(UsersIcon)
-              .child(
-                S.documentTypeList('partner').title('Partners'),
-              ),
+              .child(S.documentTypeList('partner').title('Partners')),
           ])
       },
     }),

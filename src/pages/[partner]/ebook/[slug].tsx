@@ -1,5 +1,5 @@
 import siteConfig from 'config/siteConfig'
-import { GetStaticPaths,GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 
 import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
 import RelatedTag from '~/components/commonSections/RelatedTag'
@@ -14,9 +14,9 @@ import DownloadEbook from '~/contentUtils/EbookDownloader'
 import { Ebooks } from '~/interfaces/post'
 import SEOHead from '~/layout/SeoHead'
 import Wrapper from '~/layout/Wrapper'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { urlForImage } from '~/lib/sanity.image'
 import {
   ebookSlugsQuery,
@@ -90,7 +90,7 @@ export const getStaticProps: GetStaticProps<EbookProps> = async ({
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
@@ -102,26 +102,31 @@ const EbookPage = ({
   draftMode,
   token,
   categories,
-  footerData
+  footerData,
 }: EbookProps) => {
-  if(!ebook) return null
+  if (!ebook) return null
   const prodUrl = 'https://osdental.io'
 
   const seoTitle = ebook.seoTitle || ebook.title
-  const seoDescription = (ebook?.seoDescription && !ebook.seoDescription.includes('Test titlw')) 
-    ? ebook.seoDescription 
-    : ebook?.excerpt || ''
+  const seoDescription =
+    ebook?.seoDescription && !ebook.seoDescription.includes('Test titlw')
+      ? ebook.seoDescription
+      : ebook?.excerpt || ''
   const seoKeywords = ebook.seoKeywords || ''
   const seoRobots = ebook.seoRobots || 'index,follow'
   const seoCanonical = sanitizeUrl(
     ebook.seoCanonical ||
-    `${prodUrl}/${siteConfig.pageURLs.ebook}/${ebook.slug.current}`
+      `${prodUrl}/${siteConfig.pageURLs.ebook}/${ebook.slug.current}`,
   )
   const jsonLD: any = generateJSONLD(ebook)
 
   return (
     <>
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+      <GlobalDataProvider
+        data={categories}
+        featuredTags={homeSettings?.featuredTags}
+        footerData={footerData}
+      >
         <SEOHead
           title={seoTitle}
           description={seoDescription}
@@ -130,7 +135,9 @@ const EbookPage = ({
           canonical={seoCanonical}
           jsonLD={jsonLD}
           contentType={ebook?.contentType}
-          ogImage={ebook?.mainImage?._id ? urlForImage(ebook.mainImage._id) : undefined}
+          ogImage={
+            ebook?.mainImage?._id ? urlForImage(ebook.mainImage._id) : undefined
+          }
         />
         <Layout>
           <MainImageSection post={ebook} enableDate={true} />
@@ -158,7 +165,7 @@ const EbookPage = ({
                   </div>
                 </div>
               </div>
-              {ebook?.tags && <RelatedTag tags={ebook?.tags}/>}
+              {ebook?.tags && <RelatedTag tags={ebook?.tags} />}
             </Wrapper>
           </Section>
           {relatedContents && relatedContents.length > 0 && (

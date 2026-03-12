@@ -1,7 +1,11 @@
 import siteConfig from 'config/siteConfig'
-import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
+import type {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType,
+} from 'next'
 import { useRouter } from 'next/router'
-import { useEffect,useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
 import { BaseUrlProvider } from '~/components/Context/UrlContext'
@@ -9,8 +13,8 @@ import Layout from '~/components/Layout'
 import AllcontentSection from '~/components/sections/AllcontentSection'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
 import ContentHub from '~/contentUtils/ContentHub'
-import { getClient } from '~/lib/sanity.client'
 import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
+import { getClient } from '~/lib/sanity.client'
 import {
   getArticlesCount,
   getCategories,
@@ -60,25 +64,25 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     totalArticles,
     totalEbooks,
     homeSettings,
-    footerData
+    footerData,
   ] = await Promise.all([
     getTags(client),
     getCategories(client),
-    getPostsByLimit(client, startLimit, cardsPerPage,region),
-    getPosts(client,undefined,region),
+    getPostsByLimit(client, startLimit, cardsPerPage, region),
+    getPosts(client, undefined, region),
     getSiteSettings(client),
-    getPodcastsCount(client,region),
-    getWebinarsCount(client,region),
-    getArticlesCount(client,region),
-    getEbooksCount(client,region),
+    getPodcastsCount(client, region),
+    getWebinarsCount(client, region),
+    getArticlesCount(client, region),
+    getEbooksCount(client, region),
     getHomeSettings(client, region, partnerSlug),
-    getFooterData(client, region)
+    getFooterData(client, region),
   ])
 
-  const categoryPosts = await Promise.all( 
+  const categoryPosts = await Promise.all(
     categories.map((category) => {
-      return getPostsByCategoryAndLimit(client, category._id, 0, 3,region)
-    })
+      return getPostsByCategoryAndLimit(client, category._id, 0, 3, region)
+    }),
   )
 
   // Filter categories to show those with either associatedContent OR posts from getPostsByCategoryAndLimit
@@ -86,28 +90,32 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const categoriesWithPosts = categories
     .map((category, index) => {
       // Filter associatedContent by region if it exists
-      let filteredAssociatedContent = category?.associatedContent;
-      if (filteredAssociatedContent && Array.isArray(filteredAssociatedContent)) {
+      let filteredAssociatedContent = category?.associatedContent
+      if (
+        filteredAssociatedContent &&
+        Array.isArray(filteredAssociatedContent)
+      ) {
         filteredAssociatedContent = filteredAssociatedContent.filter(
-          (content: any) => !content.language || content.language === region
-        );
+          (content: any) => !content.language || content.language === region,
+        )
       }
-      
-      const hasAssociatedContent = filteredAssociatedContent && filteredAssociatedContent.length > 0;
-      const hasPosts = categoryPosts[index] && categoryPosts[index].length > 0;
-      
+
+      const hasAssociatedContent =
+        filteredAssociatedContent && filteredAssociatedContent.length > 0
+      const hasPosts = categoryPosts[index] && categoryPosts[index].length > 0
+
       // Return category with filtered associatedContent if it has content
       if (hasAssociatedContent || hasPosts) {
         return {
           ...category,
-          associatedContent: filteredAssociatedContent || category.associatedContent
-        };
+          associatedContent:
+            filteredAssociatedContent || category.associatedContent,
+        }
       }
-      return null;
+      return null
     })
-    .filter(Boolean); // Remove null entries
-  
-  
+    .filter(Boolean) // Remove null entries
+
   const totalPages = Math.ceil(totalPosts.length / cardsPerPage)
 
   return {
@@ -128,11 +136,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       },
       siteSettings: siteSettings,
       homeSettings: homeSettings,
-      footerData: footerData
+      footerData: footerData,
     },
   }
 }
-
 
 export default function ProjectSlugRoute(
   props: InferGetStaticPropsType<typeof getStaticProps> & {
@@ -152,7 +159,7 @@ export default function ProjectSlugRoute(
     homeSettings,
     categories,
     categoriesWithPosts,
-    categoryPosts
+    categoryPosts,
   } = props
 
   const baseUrl = `/${siteConfig.paginationBaseUrls.base}`
@@ -161,7 +168,11 @@ export default function ProjectSlugRoute(
 
   return (
     <>
-      <GlobalDataProvider data={categoriesWithPosts} featuredTags={homeSettings?.featuredTags} footerData={props?.footerData}>
+      <GlobalDataProvider
+        data={categoriesWithPosts}
+        featuredTags={homeSettings?.featuredTags}
+        footerData={props?.footerData}
+      >
         <BaseUrlProvider baseUrl={baseUrl}>
           <Layout>
             {siteSettingWithImage ? (
@@ -169,41 +180,63 @@ export default function ProjectSlugRoute(
             ) : (
               <></>
             )}
-            <ContentHub featuredDescription={homeSettings?.topicDescription} categories={categoriesWithPosts} contentCount={contentCount} />
-            {categoriesWithPosts && categoriesWithPosts.length > 0 && categoriesWithPosts.map((category: any, index: number) => {
-              // Use associatedContent if available, otherwise use posts from getPostsByCategoryAndLimit
-              const categoryIndex = categories.findIndex((cat: any) => cat._id === category._id);
-              let contentToShow = category?.associatedContent && category.associatedContent.length > 0
-                ? category.associatedContent
-                : categoryPosts[categoryIndex] || [];
-              
-              // Add category information to each content item if it doesn't have it
-              contentToShow = contentToShow.map((content: any) => {
-                // Ensure content has a slug
-                const contentSlug = content?.slug?.current || content?.slug;
-                if (!contentSlug) {
-                  return null; // Skip items without slugs
-                }
-                
-                return {
-                  ...content,
-                  // Ensure slug is properly structured
-                  slug: content.slug?.current ? content.slug : { current: contentSlug },
-                  category: content.category || {
-                    categoryName: category.categoryName,
-                    slug: category.slug,
-                    categoryDescription: category.categoryDescription,
-                    _id: category._id
-                  }
-                };
-              }).filter(Boolean); // Remove null entries
-              
-              return contentToShow?.length > 0 && (
-                <div key={category._id || index}>
-                  <AllcontentSection redirect={true} uiType="category" allContent={contentToShow} compIndex={index} className=''  />
-                </div> 
-              )
-            })}
+            <ContentHub
+              featuredDescription={homeSettings?.topicDescription}
+              categories={categoriesWithPosts}
+              contentCount={contentCount}
+            />
+            {categoriesWithPosts &&
+              categoriesWithPosts.length > 0 &&
+              categoriesWithPosts.map((category: any, index: number) => {
+                // Use associatedContent if available, otherwise use posts from getPostsByCategoryAndLimit
+                const categoryIndex = categories.findIndex(
+                  (cat: any) => cat._id === category._id,
+                )
+                let contentToShow =
+                  category?.associatedContent &&
+                  category.associatedContent.length > 0
+                    ? category.associatedContent
+                    : categoryPosts[categoryIndex] || []
+
+                // Add category information to each content item if it doesn't have it
+                contentToShow = contentToShow
+                  .map((content: any) => {
+                    // Ensure content has a slug
+                    const contentSlug = content?.slug?.current || content?.slug
+                    if (!contentSlug) {
+                      return null // Skip items without slugs
+                    }
+
+                    return {
+                      ...content,
+                      // Ensure slug is properly structured
+                      slug: content.slug?.current
+                        ? content.slug
+                        : { current: contentSlug },
+                      category: content.category || {
+                        categoryName: category.categoryName,
+                        slug: category.slug,
+                        categoryDescription: category.categoryDescription,
+                        _id: category._id,
+                      },
+                    }
+                  })
+                  .filter(Boolean) // Remove null entries
+
+                return (
+                  contentToShow?.length > 0 && (
+                    <div key={category._id || index}>
+                      <AllcontentSection
+                        redirect={true}
+                        uiType="category"
+                        allContent={contentToShow}
+                        compIndex={index}
+                        className=""
+                      />
+                    </div>
+                  )
+                )
+              })}
             <BannerSubscribeSection hideBanner={true} />
           </Layout>
         </BaseUrlProvider>

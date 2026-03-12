@@ -30,14 +30,16 @@ export default defineType({
               name: 'term',
               title: 'Term',
               type: 'string',
-              validation: (Rule) => Rule.required().error('Term name is required'),
+              validation: (Rule) =>
+                Rule.required().error('Term name is required'),
             }),
             defineField({
               name: 'value',
               title: 'Value',
               type: 'text',
               description: 'Description or definition of the term',
-              validation: (Rule) => Rule.required().error('Term value is required'),
+              validation: (Rule) =>
+                Rule.required().error('Term value is required'),
             }),
           ],
           preview: {

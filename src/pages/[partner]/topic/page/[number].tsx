@@ -1,17 +1,17 @@
-import siteConfig from 'config/siteConfig';
-import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import { useRouter } from 'next/router';
+import siteConfig from 'config/siteConfig'
+import { GetStaticProps, InferGetStaticPropsType } from 'next'
+import { useRouter } from 'next/router'
 
-import Pagination from '~/components/commonSections/Pagination';
-import { GlobalDataProvider } from '~/components/Context/GlobalDataContext';
-import { BaseUrlProvider } from '~/components/Context/UrlContext';
-import Layout from '~/components/Layout';
-import AllcontentSection from '~/components/sections/AllcontentSection';
-import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection';
-import ContentHub from '~/contentUtils/ContentHub';
-import TagSelect from '~/contentUtils/TagSelector';
-import { getClient } from '~/lib/sanity.client'
+import Pagination from '~/components/commonSections/Pagination'
+import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
+import { BaseUrlProvider } from '~/components/Context/UrlContext'
+import Layout from '~/components/Layout'
+import AllcontentSection from '~/components/sections/AllcontentSection'
+import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
+import ContentHub from '~/contentUtils/ContentHub'
+import TagSelect from '~/contentUtils/TagSelector'
 import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
+import { getClient } from '~/lib/sanity.client'
 import {
   getArticlesCount,
   getCategories,
@@ -46,7 +46,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     totalEbooks,
     homeSettings,
     categories,
-    footerData
+    footerData,
   ] = await Promise.all([
     getPostsByLimit(client, startLimit, cardsPerPage, region),
     getPosts(client, undefined, region),
@@ -57,10 +57,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getEbooksCount(client, region),
     getHomeSettings(client, region, partnerSlug),
     getCategories(client),
-    getFooterData(client, region)
-  ]);
+    getFooterData(client, region),
+  ])
 
-  const totalPages = Math.ceil(totalPosts.length / cardsPerPage);
+  const totalPages = Math.ceil(totalPosts.length / cardsPerPage)
 
   return {
     props: {
@@ -79,9 +79,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         ebooks: totalEbooks,
       },
     },
-    
-  };
-};
+  }
+}
 
 export const getStaticPaths = async () => {
   const client = getClient()
@@ -90,8 +89,9 @@ export const getStaticPaths = async () => {
   const slugs = await client.fetch(postSlugsQuery, { locale })
   const cardsPerPage = siteConfig.pagination.childItemsPerPage || 5
   const numberOfPages = Math.ceil(slugs.length / cardsPerPage)
-  const pageNumbers = Array.from({ length: Math.max(0, numberOfPages - 1) }, (_, i) =>
-    (i + 2).toString(),
+  const pageNumbers = Array.from(
+    { length: Math.max(0, numberOfPages - 1) },
+    (_, i) => (i + 2).toString(),
   )
   const paths = basePaths.flatMap((p) =>
     pageNumbers.map((number) => ({
@@ -110,21 +110,25 @@ export default function TagPagePaginated({
   homeSettings,
   categories,
   contentCount,
-  footerData
+  footerData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const router = useRouter();
+  const router = useRouter()
 
-  const baseUrl = `/${siteConfig.paginationBaseUrls.base}`;
+  const baseUrl = `/${siteConfig.paginationBaseUrls.base}`
   const handlePageChange = (page: number) => {
     // if (page === 1) {
     //   router.push(baseUrl);
     // } else {
     //   router.push(`${baseUrl}/page/${page}`);
     // }
-  };
+  }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           <ContentHub contentCount={contentCount} />
@@ -142,5 +146,5 @@ export default function TagPagePaginated({
         </Layout>
       </BaseUrlProvider>
     </GlobalDataProvider>
-  );
+  )
 }

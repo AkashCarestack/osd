@@ -39,7 +39,7 @@ const siteConfig = {
     podcastHeroCover:
       'https://cdn.sanity.io/images/bbmnn1wc/production/cfc2c520a6ab1da036ded9f234c066d7166d05ef-6000x4000.jpg',
   },
-  locales: ['en','en-GB','en-AU']
+  locales: ['en', 'en-GB', 'en-AU'],
 }
 
 export default siteConfig

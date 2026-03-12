@@ -12,9 +12,9 @@ import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection
 import LatestBlogs from '~/components/sections/LatestBlogSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Articles } from '~/interfaces/post'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import {
   getCategories,
   getFooterData,
@@ -25,7 +25,7 @@ import {
 } from '~/lib/sanity.queries'
 import { SharedPageProps } from '~/pages/_app'
 import { mergeAndRemoveDuplicates } from '~/utils/common'
-import { CustomHead,customMetaTag } from '~/utils/customHead'
+import { CustomHead, customMetaTag } from '~/utils/customHead'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
@@ -45,14 +45,20 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
   const totalReleaseNotes = await getReleaseNotesCount(client, locale)
   const totalPages = Math.ceil(totalReleaseNotes / itemsPerPage)
 
-  const [releaseNotes, latestReleaseNotes, tags, homeSettings, categories, footerData] =
-    await Promise.all([
-      getReleaseNotes(client, 0, itemsPerPage, locale),
-      getReleaseNotes(client, 0, 5, locale),
-      getTags(client),
-      getHomeSettings(client, locale, partnerSlug),
+  const [
+    releaseNotes,
+    latestReleaseNotes,
+    tags,
+    homeSettings,
+    categories,
+    footerData,
+  ] = await Promise.all([
+    getReleaseNotes(client, 0, itemsPerPage, locale),
+    getReleaseNotes(client, 0, 5, locale),
+    getTags(client),
+    getHomeSettings(client, locale, partnerSlug),
     getCategories(client),
-    getFooterData(client, locale)
+    getFooterData(client, locale),
   ])
   return {
     props: {
@@ -64,7 +70,7 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
@@ -76,7 +82,7 @@ const ReleaseNotesPage = ({
   tags,
   homeSettings,
   categories,
-  footerData
+  footerData,
 }: {
   releaseNotes: Articles[]
   latestReleaseNotes: Articles[]
@@ -105,11 +111,15 @@ const ReleaseNotesPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           <CustomHead props={releaseNotes} type="articleExpanded" />
-          <TagSelect tags={tags} tagLimit={7}  />
+          <TagSelect tags={tags} tagLimit={7} />
           {customMetaTag('release-notes', true)}
           <LatestBlogs
             className={'pt-11 pr-9 pb-16 pl-9'}

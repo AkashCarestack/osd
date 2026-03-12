@@ -10,8 +10,8 @@ import AllcontentSection from '~/components/sections/AllcontentSection'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
 import ContentHub from '~/contentUtils/ContentHub'
 import TagSelect from '~/contentUtils/TagSelector'
-import { getClient } from '~/lib/sanity.client'
 import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
+import { getClient } from '~/lib/sanity.client'
 import {
   getArticlesCount,
   getCategories,
@@ -47,7 +47,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     totalEbooks,
     homeSettings,
     categories,
-    footerData
+    footerData,
   ] = await Promise.all([
     getPostsByLimit(client, startLimit, endLimit, undefined, region),
     getPosts(client, undefined, region),
@@ -58,8 +58,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getEbooksCount(client, region),
     getHomeSettings(client, region, partnerSlug),
     getCategories(client),
-    getFooterData(client, region)
-  ]);
+    getFooterData(client, region),
+  ])
 
   return {
     props: {
@@ -78,17 +78,20 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         ebooks: totalEbooks,
       },
     },
-  };
-};
+  }
+}
 
 export const getStaticPaths = async () => {
   const client = getClient()
   const basePaths = await getPartnerPaths(client)
   const locale = getDefaultLocale()
   const slugs = await client.fetch(postSlugsQuery, { locale })
-  const numberOfPages = Math.ceil(slugs.length / (siteConfig.pagination.childItemsPerPage || 5))
-  const pageNumbers = Array.from({ length: Math.max(0, numberOfPages - 1) }, (_, i) =>
-    (i + 2).toString(),
+  const numberOfPages = Math.ceil(
+    slugs.length / (siteConfig.pagination.childItemsPerPage || 5),
+  )
+  const pageNumbers = Array.from(
+    { length: Math.max(0, numberOfPages - 1) },
+    (_, i) => (i + 2).toString(),
   )
   const paths = basePaths.flatMap((p) =>
     pageNumbers.map((number) => ({
@@ -97,7 +100,6 @@ export const getStaticPaths = async () => {
   )
   return { paths, fallback: 'blocking' }
 }
-
 
 export default function TagPagePaginated({
   tags,
@@ -108,12 +110,12 @@ export default function TagPagePaginated({
   totalPosts,
   homeSettings,
   categories,
-  footerData
+  footerData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const router = useRouter()
   const totalCount: any = totalPosts?.length ?? 0
 
-  const baseUrl = `/${siteConfig.paginationBaseUrls.base}`;
+  const baseUrl = `/${siteConfig.paginationBaseUrls.base}`
   const handlePageChange = (page: number) => {
     // if (page === 1) {
     //   router.push(baseUrl)
@@ -123,7 +125,11 @@ export default function TagPagePaginated({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           <ContentHub contentCount={contentCount} />

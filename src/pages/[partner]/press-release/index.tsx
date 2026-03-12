@@ -1,3 +1,4 @@
+import siteConfig from 'config/siteConfig'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import React, { useRef } from 'react'
 
@@ -10,9 +11,9 @@ import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection
 import LatestBlogs from '~/components/sections/LatestBlogSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Podcasts, PressRelease } from '~/interfaces/post'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import {
   getCategories,
   getFooterData,
@@ -21,11 +22,9 @@ import {
   getPressReleasesCount,
   getTags,
 } from '~/lib/sanity.queries'
-import { mergeAndRemoveDuplicates } from '~/utils/common'
-import { CustomHead,customMetaTag } from '~/utils/customHead'
-
-import siteConfig from 'config/siteConfig'
 import { SharedPageProps } from '~/pages/_app'
+import { mergeAndRemoveDuplicates } from '~/utils/common'
+import { CustomHead, customMetaTag } from '~/utils/customHead'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
@@ -44,7 +43,12 @@ export const getStaticProps: GetStaticProps<
   if (!partnerSlug || !siteConfig.locales.includes(region)) {
     return { notFound: true }
   }
-  const pressReleases: any = await getPressReleases(client, 0, itemsPerPage, region)
+  const pressReleases: any = await getPressReleases(
+    client,
+    0,
+    itemsPerPage,
+    region,
+  )
   const latestPressReleases: any = await getPressReleases(client, 0, 5, region)
   const totalPressReleases = await getPressReleasesCount(client, region)
   const totalPages = Math.ceil(totalPressReleases / itemsPerPage)
@@ -53,9 +57,8 @@ export const getStaticProps: GetStaticProps<
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
 
-  
   if (!pressReleases || pressReleases.length === 0) {
-    return { notFound: true };
+    return { notFound: true }
   }
 
   return {
@@ -68,7 +71,7 @@ export const getStaticProps: GetStaticProps<
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
@@ -80,7 +83,7 @@ const PressReleasePage = ({
   tags,
   homeSettings,
   categories,
-  footerData
+  footerData,
 }: {
   pressReleases: Podcasts[]
   latestPressReleases: Podcasts[]
@@ -90,7 +93,7 @@ const PressReleasePage = ({
   categories: any
   footerData: any
 }) => {
-  const baseUrl = `/${siteConfig.pageURLs.pressRelease}`;
+  const baseUrl = `/${siteConfig.pageURLs.pressRelease}`
   if (!pressReleases) return null
 
   const featuredPressRelease = homeSettings?.featuredPressRelease || []
@@ -109,13 +112,17 @@ const PressReleasePage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         {pressReleases?.map((e, i) => {
           return <CustomHead props={e} type="pressRelease" key={i} />
         })}
         <Layout>
-          <TagSelect tags={tags} tagLimit={7}  />
+          <TagSelect tags={tags} tagLimit={7} />
           {customMetaTag('pressRelease', true)}
           <LatestBlogs
             className={'pt-11 pr-9 pb-16 pl-9'}

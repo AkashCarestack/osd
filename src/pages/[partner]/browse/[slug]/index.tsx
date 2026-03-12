@@ -9,9 +9,9 @@ import AllcontentSection from '~/components/sections/AllcontentSection'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
 import ContentHub from '~/contentUtils/ContentHub'
 import TagSelect from '~/contentUtils/TagSelector'
-import { Post,Tag } from '~/interfaces/post'
-import { getClient } from '~/lib/sanity.client'
+import { Post, Tag } from '~/interfaces/post'
 import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
+import { getClient } from '~/lib/sanity.client'
 import {
   getArticlesCount,
   getCategories,
@@ -34,7 +34,6 @@ import { defaultMetaTag } from '~/utils/customHead'
 interface Query {
   slug: string
 }
-
 
 export const getStaticProps: GetStaticProps<
   SharedPageProps & {
@@ -75,7 +74,7 @@ export const getStaticProps: GetStaticProps<
       siteSettings,
       homeSettings,
       categories,
-      footerData
+      footerData,
     ] = await Promise.all([
       getTags(client),
       getPostsByTagAndLimit(client, tag._id, 0, cardsPerPage, region),
@@ -87,7 +86,7 @@ export const getStaticProps: GetStaticProps<
       getSiteSettings(client),
       getHomeSettings(client, region, partnerSlug),
       getCategories(client),
-      getFooterData(client, region)
+      getFooterData(client, region),
     ])
 
     const totalPages = Math.ceil(allPostsForTag.length / cardsPerPage)
@@ -110,7 +109,7 @@ export const getStaticProps: GetStaticProps<
         siteSettings,
         homeSettings,
         categories,
-        footerData
+        footerData,
       },
     }
   } catch (error) {
@@ -147,23 +146,30 @@ export default function TagPage({
   siteSettings,
   homeSettings,
   categories,
-  footerData
+  footerData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const handlePageChange = (page: number) => {
     // Page change handler
   }
-  const baseUrl =
-    `/${siteConfig.paginationBaseUrls.base}/${tag?.slug?.current}`;
+  const baseUrl = `/${siteConfig.paginationBaseUrls.base}/${tag?.slug?.current}`
   let siteSettingWithImage = siteSettings?.find((e: any) => e?.openGraphImage)
   siteSettingWithImage.siteTitle = slugToCapitalized(tag?.slug?.current)
 
-  const pageUrl = process.env.NEXT_PUBLIC_BASE_URL+baseUrl
+  const pageUrl = process.env.NEXT_PUBLIC_BASE_URL + baseUrl
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
-          {siteSettingWithImage ? defaultMetaTag(siteSettingWithImage,pageUrl) : <></>}
+          {siteSettingWithImage ? (
+            defaultMetaTag(siteSettingWithImage, pageUrl)
+          ) : (
+            <></>
+          )}
           <ContentHub contentCount={contentCount} />
           <TagSelect
             tags={allTags}

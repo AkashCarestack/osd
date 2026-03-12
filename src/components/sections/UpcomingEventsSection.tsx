@@ -75,7 +75,20 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
     if (!dateString) return ''
     try {
       const date = new Date(dateString)
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      const months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ]
       return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
     } catch {
       return dateString
@@ -85,8 +98,10 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   const eventType = event.eventType || 'Offline'
   // Ensure link from CMS is a string; use # when missing so we don't navigate
   const rawLink = event.link
-  const link = typeof rawLink === 'string' && rawLink.trim() !== '' ? rawLink.trim() : '#'
-  const isExternal = link !== '#' && (link.startsWith('http://') || link.startsWith('https://'))
+  const link =
+    typeof rawLink === 'string' && rawLink.trim() !== '' ? rawLink.trim() : '#'
+  const isExternal =
+    link !== '#' && (link.startsWith('http://') || link.startsWith('https://'))
 
   const cardContent = (
     <>
@@ -147,10 +162,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
 
   if (link !== '#') {
     return (
-      <Anchor
-        href={link}
-        className={cardClass}
-      >
+      <Anchor href={link} className={cardClass}>
         {cardContent}
       </Anchor>
     )
@@ -170,7 +182,10 @@ const mapCmsEventToEvent = (e: CmsEvent): Event => ({
   link: typeof e.link === 'string' ? e.link.trim() : undefined,
 })
 
-const UpcomingEventsSection: React.FC<UpcomingEventsSectionProps> = ({ data, cmsEvents }) => {
+const UpcomingEventsSection: React.FC<UpcomingEventsSectionProps> = ({
+  data,
+  cmsEvents,
+}) => {
   const defaultEvents: Event[] = [
     {
       title: 'DEO Treatment Closing Academy',
@@ -190,14 +205,15 @@ const UpcomingEventsSection: React.FC<UpcomingEventsSectionProps> = ({ data, cms
 
   // Prefer Content Repo events (cmsEvents) when available; then Home Settings section; else default
   const hasContentRepoEvents = Array.isArray(cmsEvents) && cmsEvents.length > 0
-  const sectionFromCms = data != null && (data.title != null || (data.events?.length ?? 0) > 0)
+  const sectionFromCms =
+    data != null && (data.title != null || (data.events?.length ?? 0) > 0)
   const hasSectionEvents = Boolean(sectionFromCms && data?.events?.length)
 
   const title = (sectionFromCms && data?.title) || defaultTitle
   const events: Event[] = hasContentRepoEvents
     ? cmsEvents.map(mapCmsEventToEvent)
     : hasSectionEvents
-      ? (data?.events ?? [])
+      ? data?.events ?? []
       : defaultEvents
 
   const sectionData: UpcomingEventsData = { title, events }

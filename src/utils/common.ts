@@ -8,7 +8,6 @@ import enAu from '../../public/assets/countryFlags/EN-AU.png'
 import enGb from '../../public/assets/countryFlags/EN-GB.png'
 import en from '../../public/assets/countryFlags/EN-usa.png'
 
-
 export const fetchAuthor = (post) => {
   let authorData: any = []
   post &&
@@ -205,22 +204,39 @@ export const getUniqueData = (data) => {
 }
 
 export function capitalizeFirst(str) {
-  const minorWords = ["and", "or", "but", "of", "to", "in", "on", "for", "at", "by", "with", "a", "an", "the","is","if"];
-  
+  const minorWords = [
+    'and',
+    'or',
+    'but',
+    'of',
+    'to',
+    'in',
+    'on',
+    'for',
+    'at',
+    'by',
+    'with',
+    'a',
+    'an',
+    'the',
+    'is',
+    'if',
+  ]
+
   return str
     .toLowerCase()
-    .split(" ")
+    .split(' ')
     .map((word, index) => {
       if (
-        index === 0 || 
-        index === str.split(" ").length - 1 || 
+        index === 0 ||
+        index === str.split(' ').length - 1 ||
         !minorWords.includes(word)
       ) {
-        return word.charAt(0).toUpperCase() + word.slice(1);
+        return word.charAt(0).toUpperCase() + word.slice(1)
       }
-      return word; 
+      return word
     })
-    .join(" ");
+    .join(' ')
 }
 
 export function slugToCapitalized(slug) {
@@ -232,55 +248,55 @@ export function slugToCapitalized(slug) {
 }
 
 export const normalizePath = (path) => {
-  if (!path) return '';
+  if (!path) return ''
   // Remove all multiple slashes and ensure single slashes
-  return path.replace(/\/+/g, '/').replace(/^\/+/, '').replace(/\/+$/, '');
-};
-
+  return path.replace(/\/+/g, '/').replace(/^\/+/, '').replace(/\/+$/, '')
+}
 
 export function generateHref(locale: any, linkHref: string): string {
-  if (!linkHref) return '/';
-  
-  const isValidHref = locale && locale !== 'en' && siteConfig.locales.includes(locale);
+  if (!linkHref) return '/'
+
+  const isValidHref =
+    locale && locale !== 'en' && siteConfig.locales.includes(locale)
 
   // Normalize path: remove leading/trailing slashes and multiple slashes
-  const cleanPath = normalizePath(linkHref);
+  const cleanPath = normalizePath(linkHref)
 
   if (!cleanPath || cleanPath === '') {
-    return '/';
+    return '/'
   }
 
   if (locale === 'en' || !isValidHref) {
-    return `/${cleanPath}`;
+    return `/${cleanPath}`
   }
 
-  return `/${locale}/${cleanPath}`;
+  return `/${locale}/${cleanPath}`
 }
-export const removeNumberPrefix = (id: any) => id.replace(/^\d+\.\s*/, '');
+export const removeNumberPrefix = (id: any) => id.replace(/^\d+\.\s*/, '')
 
 export const generateId = (...args) => {
-  if (!args.length) return '';
+  if (!args.length) return ''
   // Use a deterministic ID based on the href to avoid hydration mismatches
-  const href = args[0] || '';
-  const pathPart = href?.split('/').pop() || 'link';
+  const href = args[0] || ''
+  const pathPart = href?.split('/').pop() || 'link'
   // Create a simple hash from the href for consistent IDs
-  let hash = 0;
+  let hash = 0
   for (let i = 0; i < href.length; i++) {
-    const char = href.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32-bit integer
+    const char = href.charCodeAt(i)
+    hash = (hash << 5) - hash + char
+    hash = hash & hash // Convert to 32-bit integer
   }
-  return `${pathPart}-${Math.abs(hash).toString(36)}`;
-};
+  return `${pathPart}-${Math.abs(hash).toString(36)}`
+}
 
 export const cookieSelector = (consentString, field) => {
-  const regex = new RegExp(`${field}:(\\w+)`);
-  const match = consentString && consentString.match(regex);
-  return match && match[1] ? match[1] : "false";
-};
+  const regex = new RegExp(`${field}:(\\w+)`)
+  const match = consentString && consentString.match(regex)
+  return match && match[1] ? match[1] : 'false'
+}
 
-export const  showCountryFlag = (region: string)=> {
-  if(!region) return en.src
+export const showCountryFlag = (region: string) => {
+  if (!region) return en.src
   if (region === 'en') {
     return en.src
   } else if (region === 'en-GB') {
@@ -290,23 +306,22 @@ export const  showCountryFlag = (region: string)=> {
   }
 }
 
-
 export function download_file(fileURL, fileName) {
   fetch(fileURL)
-    .then(response => response.blob())
-    .then(blob => {
-      const blobUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = fileName || 'ebook.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl); 
+    .then((response) => response.blob())
+    .then((blob) => {
+      const blobUrl = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = blobUrl
+      link.download = fileName || 'ebook.pdf'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(blobUrl)
     })
-    .catch(error => {
-      console.error('Download failed:', error);
-    });
+    .catch((error) => {
+      console.error('Download failed:', error)
+    })
 }
 
 /**
@@ -315,13 +330,13 @@ export function download_file(fileURL, fileName) {
  * @returns The sanitized URL with production domain
  */
 export function sanitizeUrl(url: string | undefined | null): string {
-  if (!url) return 'https://osdental.io';
-  
+  if (!url) return 'https://osdental.io'
+
   // Replace any Vercel URLs with production URL
-  const vercelUrlPattern = /https?:\/\/[^/]*vercel\.app[^/]*/gi;
-  const sanitized = url.replace(vercelUrlPattern, 'https://osdental.io');
-  
+  const vercelUrlPattern = /https?:\/\/[^/]*vercel\.app[^/]*/gi
+  const sanitized = url.replace(vercelUrlPattern, 'https://osdental.io')
+
   // Also handle URLs without protocol
-  const vercelUrlPatternNoProtocol = /[^/]*vercel\.app[^/]*/gi;
-  return sanitized.replace(vercelUrlPatternNoProtocol, 'osdental.io');
+  const vercelUrlPatternNoProtocol = /[^/]*vercel\.app[^/]*/gi
+  return sanitized.replace(vercelUrlPatternNoProtocol, 'osdental.io')
 }

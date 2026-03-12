@@ -7,7 +7,7 @@ import { urlForImage } from '~/lib/sanity.image'
 
 import ogMetaData from '../../public/ogData.json'
 import organizationSchema from '../../public/organizationSchema.json'
-import { sanitizeUrl,slugToCapitalized } from './common'
+import { sanitizeUrl, slugToCapitalized } from './common'
 import { breadCrumbJsonLd, generateJSONLD } from './generateJSONLD'
 
 const head = (data: any, i: string, id: string = '') => {
@@ -77,10 +77,10 @@ const canonicalTag = (type: string) => {
 export const customMetaTag = (
   type: string,
   showCanonical: boolean = false,
-  isPaginatedPage: string = ''
+  isPaginatedPage: string = '',
 ) => {
   if (type) {
-    const metaData = ogMetaData[type];
+    const metaData = ogMetaData[type]
     if (metaData) {
       return (
         <Head>
@@ -109,18 +109,24 @@ export const customMetaTag = (
             <meta property={key} content={metaData[key]} key={key} />
           ))}
         </Head>
-      );
+      )
     }
   }
-  return null;
-};
+  return null
+}
 
-export const defaultMetaTag = (params: any, pageUrl?: string) => {  
-  const defaultTitle = params?.siteTitle?.trim() || 'Resources | On-Demand Learning Resources | OS Dental'
-  const defaultDescription = params?.siteDescription || 'Whether you\'re looking for e-Books, webinars, podcasts, or articles, OS Dental Resources are full of helpful & informative topics to improve your practice.'
-  const defaultKeywords = params?.keywords ? params.keywords.reduce((ac: string, reducer: string) => {
-    return ac + ',' + reducer
-  }) : 'os dental resources, os dental articles, os dental webinars, os dental blogs'
+export const defaultMetaTag = (params: any, pageUrl?: string) => {
+  const defaultTitle =
+    params?.siteTitle?.trim() ||
+    'Resources | On-Demand Learning Resources | OS Dental'
+  const defaultDescription =
+    params?.siteDescription ||
+    "Whether you're looking for e-Books, webinars, podcasts, or articles, OS Dental Resources are full of helpful & informative topics to improve your practice."
+  const defaultKeywords = params?.keywords
+    ? params.keywords.reduce((ac: string, reducer: string) => {
+        return ac + ',' + reducer
+      })
+    : 'os dental resources, os dental articles, os dental webinars, os dental blogs'
   const defaultAuthor = 'OS Dental'
   const defaultRobots = 'index, follow, archive'
 
@@ -154,16 +160,16 @@ export const defaultMetaTag = (params: any, pageUrl?: string) => {
         <></>
       )}
       {params?.openGraphImage ? (
-        <meta property="twitter:image" content={urlForImage(params.openGraphImage?.asset?._ref)} />
+        <meta
+          property="twitter:image"
+          content={urlForImage(params.openGraphImage?.asset?._ref)}
+        />
       ) : (
         <></>
       )}
     </Head>
   )
 }
-
-
-
 
 export const metaTagDataForAuthor = (props: any, pageUrl: string) => {
   return (
@@ -214,12 +220,12 @@ const getLocaleLinks = (url: string, lang: string) => (
     <link rel="alternate" href={url} hrefLang="x-default" />
     <link rel="alternate" href={url} hrefLang={lang} />
   </>
-);
+)
 
 export const generateMetaData = (params: any, canonicalLink?: string) => {
-  if (!params || !canonicalLink) return null;
+  if (!params || !canonicalLink) return null
 
-  const sanitizedCanonical = sanitizeUrl(canonicalLink);
+  const sanitizedCanonical = sanitizeUrl(canonicalLink)
 
   return (
     <Head>
@@ -232,8 +238,14 @@ export const generateMetaData = (params: any, canonicalLink?: string) => {
 
       {params?.mainImage && (
         <>
-          <meta property="og:image" content={urlForImage(params.mainImage._id)} />
-          <meta property="twitter:image" content={urlForImage(params.mainImage._id)} />
+          <meta
+            property="og:image"
+            content={urlForImage(params.mainImage._id)}
+          />
+          <meta
+            property="twitter:image"
+            content={urlForImage(params.mainImage._id)}
+          />
         </>
       )}
 
@@ -252,8 +264,8 @@ export const generateMetaData = (params: any, canonicalLink?: string) => {
         </>
       )}
     </Head>
-  );
-};
+  )
+}
 export function CustomHead({
   props,
   type = null,
@@ -275,25 +287,23 @@ export function CustomHead({
     )
   }
 
-  const videoObjectJson =(props:any)=>{ 
-    const metadata ={
-      "@context": "http://schema.org",
-      "@type": "VideoObject",
-      "name": props?.title,
-      "description": props?.excerpt,
-      "thumbnailUrl": urlForImage(props?.mainImage?._id),
-      "uploadDate": props?.date + "T00:00:00Z",
-      "duration": props?.duration,
+  const videoObjectJson = (props: any) => {
+    const metadata = {
+      '@context': 'http://schema.org',
+      '@type': 'VideoObject',
+      name: props?.title,
+      description: props?.excerpt,
+      thumbnailUrl: urlForImage(props?.mainImage?._id),
+      uploadDate: props?.date + 'T00:00:00Z',
+      duration: props?.duration,
       // "embedUrl": props?.videos?.map((video:any) => {
       //   return getIframeUrl(video?.platform, video?.videoId)
       // }),
-      "contentUrl": props?.videos?.map((video:any) => {
+      contentUrl: props?.videos?.map((video: any) => {
         return getIframeUrl(video?.platform, video?.videoId)
       }),
-  
     }
     return metadata
-    
   }
 
   const breadCrumbJson = (data: any) => {
@@ -418,50 +428,49 @@ export function CustomHead({
     }
     return head(metaData, randomId, type + randomId)
   } else if (props && type === 'webinar') {
-    
-    const metaData = [{
-      '@context': 'https://schema.org',
-      '@type': 'Event',
-      name: props.title,
-      description: props.excerpt,
-      eventStatus: 'https://schema.org/EventScheduled',
-      eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
-      startDate: props?.date,
-      endDate: props?.date,
+    const metaData = [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        name: props.title,
+        description: props.excerpt,
+        eventStatus: 'https://schema.org/EventScheduled',
+        eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+        startDate: props?.date,
+        endDate: props?.date,
 
-      url: props?.videos?.map((video) => {
-        return getIframeUrl(video?.platform, video?.videoId)
-      }),
-      image: urlForImage(props.mainImage?._id),
-      location: {
-        '@type': 'VirtualLocation',
         url: props?.videos?.map((video) => {
           return getIframeUrl(video?.platform, video?.videoId)
         }),
+        image: urlForImage(props.mainImage?._id),
+        location: {
+          '@type': 'VirtualLocation',
+          url: props?.videos?.map((video) => {
+            return getIframeUrl(video?.platform, video?.videoId)
+          }),
+        },
+        organizer: {
+          '@type': 'Organization',
+          name: 'OS Dental',
+          url: 'https://osdental.io',
+        },
+        performer: {
+          '@type': 'Person',
+          name: props?.author?.map((e: any) => {
+            return e.name
+          }),
+        },
+        offers: {
+          '@type': 'Offer',
+          url: props?.videos?.map((video) => {
+            return getIframeUrl(video?.platform, video?.videoId)
+          }),
+          availability: 'https://schema.org/InStock',
+        },
       },
-      organizer: {
-        '@type': 'Organization',
-        name: 'OS Dental',
-        url: 'https://osdental.io',
-      },
-      performer: {
-        '@type': 'Person',
-        name: props?.author?.map((e: any) => {
-          return e.name
-        }),
-      },
-      offers: {
-        '@type': 'Offer',
-        url: props?.videos?.map((video) => {
-          return getIframeUrl(video?.platform, video?.videoId)
-        }),
-        availability: 'https://schema.org/InStock',
-      },
-     
-    },
-    videoObjectJson(props)
-  ]
- 
+      videoObjectJson(props),
+    ]
+
     return head(metaData, randomId, type + randomId)
   } else if (props && type === 'breadCrumbs') {
     return breadCrumbJson(props)

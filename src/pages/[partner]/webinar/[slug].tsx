@@ -1,5 +1,5 @@
 import siteConfig from 'config/siteConfig'
-import { GetStaticPaths,GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 
 import SanityPortableText from '~/components/blockEditor/sanityBlockEditor'
 import AuthorInfo from '~/components/commonSections/AuthorInfo'
@@ -15,9 +15,9 @@ import SidebarTitle from '~/components/typography/SidebarTitle'
 import { Podcasts } from '~/interfaces/post'
 import SEOHead from '~/layout/SeoHead'
 import Wrapper from '~/layout/Wrapper'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { urlForImage } from '~/lib/sanity.image'
 import {
   getCategories,
@@ -86,7 +86,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
   const footerData = await getFooterData(client, region)
 
   if (!webinar || webinar.length === 0) {
-    return { notFound: true };
+    return { notFound: true }
   }
 
   return {
@@ -98,7 +98,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
       relatedContents,
       tags,
       homeSettings,
-      categories
+      categories,
     },
   }
 }
@@ -111,39 +111,48 @@ const WebinarPage = ({
   homeSettings,
   token,
   categories,
-  footerData
+  footerData,
 }: Props) => {
-  if(!webinar) {
-    return null 
+  if (!webinar) {
+    return null
   }
 
   const prodUrl = 'https://osdental.io'
 
   const seoTitle = webinar.seoTitle || webinar.title
-  const seoDescription = (webinar?.seoDescription && !webinar.seoDescription.includes('Test titlw')) 
-    ? webinar.seoDescription 
-    : webinar?.excerpt || ''
+  const seoDescription =
+    webinar?.seoDescription && !webinar.seoDescription.includes('Test titlw')
+      ? webinar.seoDescription
+      : webinar?.excerpt || ''
   const seoKeywords = webinar.seoKeywords || ''
   const seoRobots = webinar.seoRobots || 'index,follow'
   const seoCanonical = sanitizeUrl(
     webinar.seoCanonical ||
-    `${prodUrl}/${siteConfig.pageURLs.webinar}/${webinar.slug.current}`
+      `${prodUrl}/${siteConfig.pageURLs.webinar}/${webinar.slug.current}`,
   )
   const jsonLD: any = generateJSONLD(webinar)
 
   return (
     <>
       <SEOHead
-          title={seoTitle}
-          description={seoDescription}
-          keywords={seoKeywords}
-          robots={seoRobots}
-          canonical={seoCanonical}
-          jsonLD={jsonLD}
-          contentType={webinar?.contentType}
-          ogImage={webinar?.mainImage?._id ? urlForImage(webinar.mainImage._id) : undefined}
-        />
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+        title={seoTitle}
+        description={seoDescription}
+        keywords={seoKeywords}
+        robots={seoRobots}
+        canonical={seoCanonical}
+        jsonLD={jsonLD}
+        contentType={webinar?.contentType}
+        ogImage={
+          webinar?.mainImage?._id
+            ? urlForImage(webinar.mainImage._id)
+            : undefined
+        }
+      />
+      <GlobalDataProvider
+        data={categories}
+        featuredTags={homeSettings?.featuredTags}
+        footerData={footerData}
+      >
         <Layout>
           <MainImageSection
             isAuthor={true}
@@ -189,7 +198,7 @@ const WebinarPage = ({
                   </div>
                 </div>
               </div>
-              {webinar?.tags && <RelatedTag tags={webinar?.tags}/>}
+              {webinar?.tags && <RelatedTag tags={webinar?.tags} />}
             </Wrapper>
           </Section>
           {relatedContents.length > 0 && (

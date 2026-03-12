@@ -13,8 +13,8 @@ import TagSelect from '~/contentUtils/TagSelector'
 import { Post, Tag } from '~/interfaces/post'
 import SEOHead from '~/layout/SeoHead'
 import Wrapper from '~/layout/Wrapper'
-import { getClient } from '~/lib/sanity.client'
 import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
+import { getClient } from '~/lib/sanity.client'
 import { urlForImage } from '~/lib/sanity.image'
 import {
   getArticlesCount,
@@ -54,19 +54,29 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const startLimit = (pageNumber - 1) * cardsPerPage
   const endLimit = startLimit + cardsPerPage
 
-  const [posts, allPostsForTag, totalPodcasts, totalWebinars, totalArticles, totalEbooks, homeSettings, categories, footerData, siteSettings] =
-    await Promise.all([
-      getPostsByTagAndLimit(client, category._id, startLimit, endLimit, region),
-      getPostsByTag(client, category._id, region),
-      getPodcastsCount(client, region),
-      getWebinarsCount(client, region),
-      getArticlesCount(client, region),
-      getEbooksCount(client, region),
-      getHomeSettings(client, region, partnerSlug),
+  const [
+    posts,
+    allPostsForTag,
+    totalPodcasts,
+    totalWebinars,
+    totalArticles,
+    totalEbooks,
+    homeSettings,
+    categories,
+    footerData,
+    siteSettings,
+  ] = await Promise.all([
+    getPostsByTagAndLimit(client, category._id, startLimit, endLimit, region),
+    getPostsByTag(client, category._id, region),
+    getPodcastsCount(client, region),
+    getWebinarsCount(client, region),
+    getArticlesCount(client, region),
+    getEbooksCount(client, region),
+    getHomeSettings(client, region, partnerSlug),
     getCategories(client),
     getFooterData(client, region),
-    getSiteSettings(client)
-  ]);
+    getSiteSettings(client),
+  ])
 
   return {
     props: {
@@ -89,8 +99,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         ebooks: totalEbooks,
       },
     },
-  };
-};
+  }
+}
 
 export const getStaticPaths = async () => {
   const client = getClient()
@@ -98,7 +108,8 @@ export const getStaticPaths = async () => {
   const locale = getDefaultLocale()
   const categories = await getCategories(client)
   const cardsPerPage = siteConfig.pagination.childItemsPerPage || 5
-  const paths: { params: { partner: string; slug: string; number: string } }[] = []
+  const paths: { params: { partner: string; slug: string; number: string } }[] =
+    []
   for (const { params: p } of basePaths) {
     for (const cat of categories) {
       const slug = cat.slug?.current
@@ -114,7 +125,6 @@ export const getStaticPaths = async () => {
   }
   return { paths, fallback: 'blocking' }
 }
-
 
 export default function TagPagePaginated({
   tag,
@@ -133,15 +143,22 @@ export default function TagPagePaginated({
     // Page change handler
   }
 
-  const baseUrl = 
-    `/${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current}`;
+  const baseUrl = `/${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current}`
 
   // SEO Configuration
   const prodUrl = 'https://osdental.io'
-  const pageUrl = sanitizeUrl(`${prodUrl}${baseUrl}${currentPage > 1 ? `/page/${currentPage}` : ''}`)
-  const seoTitle = tag?.categoryName ? `${tag.categoryName} - OS Dental Resources` : 'OS Dental Resources'
-  const seoDescription = tag?.categoryDescription || `Explore ${tag?.categoryName || 'our'} content and resources on OS Dental`
-  const seoKeywords = tag?.categoryName ? `${tag.categoryName}, OS Dental, resources, content` : 'OS Dental, resources, content'
+  const pageUrl = sanitizeUrl(
+    `${prodUrl}${baseUrl}${currentPage > 1 ? `/page/${currentPage}` : ''}`,
+  )
+  const seoTitle = tag?.categoryName
+    ? `${tag.categoryName} - OS Dental Resources`
+    : 'OS Dental Resources'
+  const seoDescription =
+    tag?.categoryDescription ||
+    `Explore ${tag?.categoryName || 'our'} content and resources on OS Dental`
+  const seoKeywords = tag?.categoryName
+    ? `${tag.categoryName}, OS Dental, resources, content`
+    : 'OS Dental, resources, content'
   const siteSettingWithImage = siteSettings?.find((e: any) => e?.openGraphImage)
 
   return (
@@ -152,31 +169,38 @@ export default function TagPagePaginated({
         keywords={seoKeywords}
         robots="index,follow"
         canonical={pageUrl}
-        ogImage={siteSettingWithImage?.openGraphImage ? urlForImage(siteSettingWithImage.openGraphImage.asset._ref) : undefined}
+        ogImage={
+          siteSettingWithImage?.openGraphImage
+            ? urlForImage(siteSettingWithImage.openGraphImage.asset._ref)
+            : undefined
+        }
         jsonLD=""
       />
-      <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+      <GlobalDataProvider
+        data={categories}
+        featuredTags={homeSettings?.featuredTags}
+        footerData={footerData}
+      >
         <BaseUrlProvider baseUrl={baseUrl}>
           <Layout>
-          <ContentHub categories={categories} contentCount={contentCount}   />
-        <TagSelect
-            tags={allTags}
-            tagLimit={5}
-            className="mt-12"
-          />
-          <AllcontentSection allItemCount={totalPostCount} allContent={posts} />
-          <Pagination
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-            currentPage={currentPage}
-            enablePageSlug={true}
-            content={posts}
-            type="custom"
-          />
-          <BannerSubscribeSection />
-        </Layout>
-      </BaseUrlProvider>
-    </GlobalDataProvider>
+            <ContentHub categories={categories} contentCount={contentCount} />
+            <TagSelect tags={allTags} tagLimit={5} className="mt-12" />
+            <AllcontentSection
+              allItemCount={totalPostCount}
+              allContent={posts}
+            />
+            <Pagination
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              currentPage={currentPage}
+              enablePageSlug={true}
+              content={posts}
+              type="custom"
+            />
+            <BannerSubscribeSection />
+          </Layout>
+        </BaseUrlProvider>
+      </GlobalDataProvider>
     </>
   )
 }

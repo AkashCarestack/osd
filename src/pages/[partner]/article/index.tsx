@@ -12,9 +12,9 @@ import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection
 import LatestBlogs from '~/components/sections/LatestBlogSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Articles } from '~/interfaces/post'
+import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import {
   getArticles,
   getArticlesCount,
@@ -25,7 +25,7 @@ import {
 } from '~/lib/sanity.queries'
 import { SharedPageProps } from '~/pages/_app'
 import { mergeAndRemoveDuplicates } from '~/utils/common'
-import { CustomHead,customMetaTag } from '~/utils/customHead'
+import { CustomHead, customMetaTag } from '~/utils/customHead'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const client = getClient()
@@ -51,9 +51,9 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
       getArticles(client, 0, 5, locale),
       getTags(client),
       getHomeSettings(client, locale, partnerSlug),
-    getCategories(client),
-    getFooterData(client, locale)
-  ])
+      getCategories(client),
+      getFooterData(client, locale),
+    ])
   return {
     props: {
       draftMode,
@@ -64,7 +64,7 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
       tags,
       homeSettings,
       categories,
-      footerData
+      footerData,
     },
   }
 }
@@ -76,7 +76,7 @@ const ArticlesPage = ({
   tags,
   homeSettings,
   categories,
-  footerData
+  footerData,
 }: {
   articles: Articles[]
   latestArticles: Articles[]
@@ -105,11 +105,15 @@ const ArticlesPage = ({
   }
 
   return (
-    <GlobalDataProvider data={categories} featuredTags={homeSettings?.featuredTags} footerData={footerData}>
+    <GlobalDataProvider
+      data={categories}
+      featuredTags={homeSettings?.featuredTags}
+      footerData={footerData}
+    >
       <BaseUrlProvider baseUrl={baseUrl}>
         <Layout>
           <CustomHead props={articles} type="articleExpanded" />
-          <TagSelect tags={tags} tagLimit={7}  />
+          <TagSelect tags={tags} tagLimit={7} />
           {customMetaTag('article', true)}
           <LatestBlogs
             className={'pt-11 pr-9 pb-16 pl-9'}

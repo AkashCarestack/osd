@@ -34,7 +34,8 @@ export default defineType({
               name: 'question',
               title: 'Question',
               type: 'string',
-              validation: (Rule) => Rule.required().error('Question is required'),
+              validation: (Rule) =>
+                Rule.required().error('Question is required'),
             }),
             defineField({
               name: 'answer',
