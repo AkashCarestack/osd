@@ -304,6 +304,7 @@ export default defineConfig({
               .title('Manage Partners')
               .icon(UsersIcon)
               .child(S.documentTypeList('partner').title('Partners')),
+              
           ])
       },
     }),
