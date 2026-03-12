@@ -25,10 +25,7 @@ function Terms() {
               WEBSITE (at the URL:
             </span>
             <span className="c7 c8">
-              <a
-                className="c3"
-                href="https://www.voicestack.com"
-              >
+              <a className="c3" href="https://www.voicestack.com">
                 https://www.voicestack.com
               </a>
             </span>

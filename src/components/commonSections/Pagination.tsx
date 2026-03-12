@@ -27,14 +27,14 @@ const Pagination = ({
 }) => {
   const baseUrl = useBaseUrl()
   const router = useRouter()
-  const { locale } = router.query;
+  const { locale } = router.query
 
   useEffect(() => {
-    const pageFromUrl = parseInt(router.query.page as string) || 1; // Get page from URL
+    const pageFromUrl = parseInt(router.query.page as string) || 1 // Get page from URL
     if (pageFromUrl !== currentPage) {
-      onPageChange(pageFromUrl); // Update currentPage if it differs
+      onPageChange(pageFromUrl) // Update currentPage if it differs
     }
-  }, [router.query.page, currentPage, onPageChange]);
+  }, [router.query.page, currentPage, onPageChange])
 
   if (totalPages === 1) return null
 
@@ -78,10 +78,12 @@ const Pagination = ({
           : `${generateHref(locale, baseUrl)}/${page}`
       }
 
-      if ((page == 0) || (page == 1)) {
+      if (page == 0 || page == 1) {
         return generateHref(locale, baseUrl)
       } else {
-        return enablePageSlug ? `${generateHref(locale, baseUrl)}/page/${page}` : `${generateHref(locale, baseUrl)}/${page}`
+        return enablePageSlug
+          ? `${generateHref(locale, baseUrl)}/page/${page}`
+          : `${generateHref(locale, baseUrl)}/${page}`
       }
     }
   }
@@ -104,9 +106,10 @@ const Pagination = ({
           px-2 md:px-3 py-1
           rounded-md
           transition-all duration-300 ease-in-out
-          ${currentPage === number
-            ? 'text-zinc-900 font-semibold'
-            : 'text-zinc-600 hover:bg-zinc-100'
+          ${
+            currentPage === number
+              ? 'text-zinc-900 font-semibold'
+              : 'text-zinc-600 hover:bg-zinc-100'
           }
         `}
       >
@@ -148,7 +151,9 @@ const Pagination = ({
         <Wrapper className="justify-center">
           <div className="flex items-center space-x-2 flex-wrap">
             <Anchor
-              href={currentPage <= 1 ? '#' : getPageUrl(currentPage, 'previous')}
+              href={
+                currentPage <= 1 ? '#' : getPageUrl(currentPage, 'previous')
+              }
               onClick={() => handlePageChange(currentPage - 1)}
               className={arrowLinkClass}
             >
@@ -158,19 +163,20 @@ const Pagination = ({
             {renderPageNumbers()}
             <Anchor
               aria-disabled={currentPage >= totalPages}
-              href={currentPage < totalPages ? getPageUrl(currentPage + 1) : "#"}
+              href={
+                currentPage < totalPages ? getPageUrl(currentPage + 1) : '#'
+              }
               onClick={(e) => {
                 if (currentPage >= totalPages) {
-                  e.preventDefault(); // Prevent navigation when on the last page
+                  e.preventDefault() // Prevent navigation when on the last page
                 } else {
-                  handlePageChange(currentPage + 1);
+                  handlePageChange(currentPage + 1)
                 }
               }}
               className={nextArrowLinkClass}
             >
               <ArrowRightIcon height={25} className={iconClass} />
             </Anchor>
-
           </div>
         </Wrapper>
       </Section>

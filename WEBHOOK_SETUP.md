@@ -18,11 +18,13 @@ This document explains how to set up the webhook in Sanity Studio to trigger ISR
 ## Setting up the Webhook in Sanity Studio
 
 1. **Go to Sanity Studio API Settings:**
+
    - Navigate to your Sanity project
    - Go to "API" section
    - Click on "Webhooks" in the left sidebar
 
 2. **Create a New Webhook:**
+
    - Click "Create webhook"
    - Set the following values:
      - **Name:** `isr-revalidation`
@@ -40,11 +42,13 @@ This document explains how to set up the webhook in Sanity Studio to trigger ISR
 The system automatically revalidates:
 
 ### For Each Content Type:
+
 - **Individual content pages** for all locales
-- **Listing pages** for all locales  
+- **Listing pages** for all locales
 - **Pagination pages** (first 3 pages) for all locales
 
 ### Content Types Supported:
+
 - **Articles** (`contentType: 'article'`)
 - **Podcasts** (`contentType: 'podcast'`)
 - **Webinars** (`contentType: 'webinar'`)
@@ -57,12 +61,15 @@ The system automatically revalidates:
 - **Categories** (`_type: 'category'`)
 
 ### Locales Supported:
+
 - **English (US)** - `en` (default)
 - **English (UK)** - `en-GB`
 - **English (Australia)** - `en-AU`
 
 ### Example Revalidation Paths:
+
 When an article is published, these paths get revalidated:
+
 - `/article/my-article`
 - `/en-GB/article/my-article`
 - `/en-AU/article/my-article`
@@ -79,15 +86,18 @@ When an article is published, these paths get revalidated:
 ## Testing the Webhook
 
 ### 1. Test the endpoint:
+
 ```
 GET https://your-domain.com/api/test-webhook
 ```
 
 ### 2. Test with the test component:
+
 - Add `<TestRevalidation />` to any page
 - Use the test buttons to verify revalidation
 
 ### 3. Publish content in Sanity Studio:
+
 - Create or edit content
 - Click "Publish" button
 - Check your deployment logs to see revalidation results
@@ -95,7 +105,9 @@ GET https://your-domain.com/api/test-webhook
 ## Monitoring Revalidation
 
 ### Console Logs
+
 The system provides detailed logging:
+
 ```
 🔄 Revalidation requested for post (article): my-article
 🌍 Language: en
@@ -106,7 +118,9 @@ The system provides detailed logging:
 ```
 
 ### Response Details
+
 Each webhook returns detailed information:
+
 ```json
 {
   "message": "Revalidation completed",
@@ -123,21 +137,25 @@ Each webhook returns detailed information:
 ## Troubleshooting
 
 ### Webhook not triggering:
+
 - Check if the webhook is enabled in Sanity Studio
 - Verify the URL is correct and accessible
 - Check deployment logs for any errors
 
 ### Revalidation not working:
+
 - Check deployment logs for webhook errors
 - Verify the content has `_publishedAt` field (only published content triggers revalidation)
 - Check if the paths being revalidated are correct
 
 ### Partial revalidation:
+
 - Check for failed paths in the response
 - Verify all locales are configured correctly
 - Ensure content types match expected values
 
 ### Testing:
+
 - Use the test endpoint: `GET https://your-domain.com/api/test-webhook`
 - Check deployment logs when publishing content
 - Use the test component for comprehensive testing
@@ -161,22 +179,26 @@ Each webhook returns detailed information:
 For local testing with ngrok:
 
 1. **Install ngrok:**
+
    ```bash
    brew install ngrok  # macOS
    # or download from https://ngrok.com/download
    ```
 
 2. **Start your development server:**
+
    ```bash
    npm run dev
    ```
 
 3. **Start ngrok:**
+
    ```bash
    ngrok http 3000
    ```
 
 4. **Update Sanity webhook URL:**
+
    - Copy the ngrok URL (e.g., `https://abc123.ngrok.io`)
    - Update webhook URL to: `https://abc123.ngrok.io/api/revalidate`
 
@@ -189,4 +211,4 @@ For local testing with ngrok:
 3. **Test the webhook** by publishing content
 4. **Monitor logs** to ensure revalidation is working correctly
 
-The system is now ready to automatically update your entire application when content is published! 
+The system is now ready to automatically update your entire application when content is published!

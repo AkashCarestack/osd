@@ -1,8 +1,8 @@
-import { DocumentIcon, HomeIcon, TagIcon } from '@sanity/icons';
-import {ProjectsIcon} from '@sanity/icons'
-import { defineField } from 'sanity';
+import { DocumentIcon, HomeIcon, TagIcon } from '@sanity/icons'
+import { ProjectsIcon } from '@sanity/icons'
+import { defineField } from 'sanity'
 
-import { uniqueTestimonialsValidation } from '~/utils/customValidation';
+import { uniqueTestimonialsValidation } from '~/utils/customValidation'
 export default {
   name: 'homeSettings',
   title: 'Home Settings',
@@ -39,6 +39,14 @@ export default {
     },
   ],
   fields: [
+    defineField({
+      name: 'partner',
+      title: 'Partner',
+      type: 'reference',
+      to: [{ type: 'partner' }],
+      description:
+        'Leave empty for default/site-wide home settings. Set to show this layout for a specific partner.',
+    }),
     {
       name: 'featuredTags',
       title: 'Featured Tags',
@@ -214,8 +222,7 @@ export default {
       name: 'eventCarousel',
       title: 'Event Carousel',
       type: 'boolean',
-      description:
-        'Enable this to Display Event banner on the home page',
+      description: 'Enable this to Display Event banner on the home page',
     },
     {
       name: 'topicDescription',
@@ -243,14 +250,16 @@ export default {
     {
       name: 'heroSection',
       title: 'Hero Section',
-      description: 'Configure the Hero section with title, description, and buttons',
+      description:
+        'Configure the Hero section with title, description, and buttons',
       type: 'heroSection',
       group: 'hero',
     },
     {
       name: 'whyPracticeLoveSection',
       title: 'Why Practices Love Section',
-      description: 'Configure the Why Practices Love section with features and CTA',
+      description:
+        'Configure the Why Practices Love section with features and CTA',
       type: 'whyPracticeLoveSection',
       group: 'whyPracticeLove',
     },
@@ -270,12 +279,15 @@ export default {
   ],
   preview: {
     select: {
-      language: 'language',
+      partnerName: 'partner.partnerName',
     },
     prepare(selection) {
-      const { language } = selection
+      const { partnerName } = selection
+      const title = partnerName
+        ? `Home Settings - ${partnerName}`
+        : 'Home Settings'
       return {
-        title: `Home Settings - ${language}`,
+        title,
         media: ProjectsIcon,
       }
     },

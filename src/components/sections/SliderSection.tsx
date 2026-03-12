@@ -7,7 +7,7 @@ import { ArrowLeftIcon } from '@sanity/icons'
 import { ArrowTopRightIcon } from '@sanity/icons'
 import siteConfig from 'config/siteConfig'
 import { useRouter } from 'next/router'
-import React, { useEffect,useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -26,8 +26,9 @@ interface BannerBlockProps {
 
 const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
   const router = useRouter()
-  const { locale } = router.query
+  const { locale, partner } = router.query
   const swiperRef = useRef(null)
+  const partnerSlug = typeof partner === 'string' ? partner : undefined
 
   // Background images for category cards (cycling through)
   const bgImages = [
@@ -50,21 +51,27 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
   // Handle categories
   if (categories) {
     // Filter categories that have associated content, or show all categories if none have content
-    const categoriesWithContent = categories?.filter(
-      (category) => category?.associatedContent && category.associatedContent.length > 0
-    ) || []
+    const categoriesWithContent =
+      categories?.filter(
+        (category) =>
+          category?.associatedContent && category.associatedContent.length > 0,
+      ) || []
 
     // If no categories have associatedContent, show all categories (up to 4)
-    const displayCategories = categoriesWithContent.length > 0
-      ? categoriesWithContent.slice(0, 4)
-      : (categories || []).slice(0, 4)
+    const displayCategories =
+      categoriesWithContent.length > 0
+        ? categoriesWithContent.slice(0, 4)
+        : (categories || []).slice(0, 4)
 
     if (!displayCategories || displayCategories.length === 0) {
       return null
     }
 
     return (
-      <div className="flex w-full justify-center px-4 bg-zinc-100" id="knowledge-guides-section">
+      <div
+        className="flex w-full justify-center px-4 bg-zinc-100"
+        id="knowledge-guides-section"
+      >
         <section className="md:pt-16 md:pb-24 py-12 max-w-7xl w-full">
           <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-6 pb-12 items-start md:items-center">
             <div>
@@ -72,9 +79,13 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
             </div>
             <div className="flex flex-wrap gap-4 md:gap-6 lg:gap-9 items-center w-full md:w-auto">
               <Anchor
-                href="https://osdental.zendesk.com/hc/en-us"
-                target="_blank"
-                rel="noopener noreferrer"
+                href={
+                  partnerSlug
+                    ? `/${partnerSlug}/topic`
+                    : 'https://osdental.zendesk.com/hc/en-us'
+                }
+                target={partnerSlug ? undefined : '_blank'}
+                rel={partnerSlug ? undefined : 'noopener noreferrer'}
                 className="flex items-center gap-2 overflow-hidden relative rounded-[5px] shrink-0 transition-colors group"
               >
                 <span className="font-inter font-medium text-base leading-[1.6] text-zinc-900 text-center whitespace-nowrap">
@@ -139,19 +150,25 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
                 const categorySlug = category?.slug?.current
                 const contentSlug = firstContent?.slug?.current
 
-                // Build the URL: topic/{category-slug}/{content-slug} if content exists,
-                // otherwise just link to the category page
-                const href = contentSlug && categorySlug
-                  ? `/${siteConfig.categoryBaseUrls.base}/${categorySlug}/${contentSlug}`
-                  : categorySlug
-                    ? `/${siteConfig.categoryBaseUrls.base}/${categorySlug}`
-                    : `/${siteConfig.categoryBaseUrls.base}`
+                // Build the URL: when on partner page use /{partner}/topic/... else /topic/...
+                const topicBase = partnerSlug
+                  ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}`
+                  : `/${siteConfig.categoryBaseUrls.base}`
+                const href =
+                  contentSlug && categorySlug
+                    ? `${topicBase}/${categorySlug}/${contentSlug}`
+                    : categorySlug
+                      ? `${topicBase}/${categorySlug}`
+                      : topicBase
 
                 const imageIndex = index % bgImages.length
                 const colorIndex = index % bgColors.length
 
                 return (
-                  <SwiperSlide key={category._id || index} className="!h-auto !min-w-0">
+                  <SwiperSlide
+                    key={category._id || index}
+                    className="!h-auto !min-w-0"
+                  >
                     <div className="flex flex-col items-start overflow-hidden md:p-8 p-6 relative rounded-[10px] w-full h-full min-w-0">
                       {/* Background image with color overlay */}
                       <div
@@ -175,7 +192,13 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
 
                       {/* Content card */}
                       <Anchor
-                        href={router.isReady ? generateHref(locale as string, href) : '#'}
+                        href={
+                          router.isReady
+                            ? partnerSlug
+                              ? href
+                              : generateHref(locale as string, href)
+                            : '#'
+                        }
                         className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 justify-between relative rounded-[5px] w-full min-w-0 group h-full"
                       >
                         <div className="flex flex-col gap-2 items-start w-full">
@@ -223,7 +246,7 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
   if (!items || items.length === 0) return null
   return (
     <div className={` flex w-full justify-center px-4 `}>
-      <section className='max-w-7xl w-full'>
+      <section className="max-w-7xl w-full">
         <div className="flex justify-between gap-6 pb-9">
           <H2Large>{`Ebooks and Webinars`}</H2Large>
           <div className="flex gap-9 self-end">

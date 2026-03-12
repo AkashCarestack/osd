@@ -134,9 +134,7 @@ const CategoryButton = ({
       whileHover={{ x: 4 }}
       transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
       className={`font-geist text-base leading-[150%] tracking-normal p-3 !text-left rounded-[10px] ${
-        isActive 
-          ? 'text-gray-950 font-medium' 
-          : 'text-gray-500 font-normal'
+        isActive ? 'text-gray-950 font-medium' : 'text-gray-500 font-normal'
       }`}
     >
       <div className="flex flex-row gap-2 items-center">
@@ -173,7 +171,9 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqCategories = [] }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   // Get active category data
-  const activeCategoryData = faqCategories.find((cat) => cat._id === activeCategory)
+  const activeCategoryData = faqCategories.find(
+    (cat) => cat._id === activeCategory,
+  )
   const activeQuestions = activeCategoryData?.faq?.faqs || []
 
   // Keep all FAQs closed on mount and when category changes
@@ -311,14 +311,22 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqCategories = [] }) => {
                         onClick={() => toggleQuestion(questionId)}
                         key={questionId}
                         className={`cursor-pointer border md:rounded-[16px] rounded-[10px] md:p-6 p-4 border-[rgba(24,24,27,0.10)]`}
-                        style={isQuestionOpen ? { 
-                          backgroundColor: 'rgba(24, 24, 27, 0.05)',
-                        } : {
-                          backgroundColor: 'transparent',
-                        }}
-                        whileHover={isQuestionOpen ? {} : {
-                          backgroundColor: 'rgba(24, 24, 27, 0.02)',
-                        }}
+                        style={
+                          isQuestionOpen
+                            ? {
+                                backgroundColor: 'rgba(24, 24, 27, 0.05)',
+                              }
+                            : {
+                                backgroundColor: 'transparent',
+                              }
+                        }
+                        whileHover={
+                          isQuestionOpen
+                            ? {}
+                            : {
+                                backgroundColor: 'rgba(24, 24, 27, 0.02)',
+                              }
+                        }
                         transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
                       >
                         <button className="w-full text-left flex items-center justify-between rounded-[16px]">
@@ -328,7 +336,10 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqCategories = [] }) => {
                           <div className="flex-shrink-0">
                             <motion.div
                               animate={{ rotate: isQuestionOpen ? 0 : 0 }}
-                              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                              transition={{
+                                duration: 0.3,
+                                ease: [0.4, 0, 0.2, 1],
+                              }}
                             >
                               <AnimatePresence mode="wait">
                                 {isQuestionOpen ? (
@@ -337,7 +348,10 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqCategories = [] }) => {
                                     initial={{ opacity: 0, rotate: -90 }}
                                     animate={{ opacity: 1, rotate: 0 }}
                                     exit={{ opacity: 0, rotate: 90 }}
-                                    transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                                    transition={{
+                                      duration: 0.2,
+                                      ease: [0.4, 0, 0.2, 1],
+                                    }}
                                   >
                                     <MinusIcon className="w-5 h-5 text-gray-950" />
                                   </motion.div>
@@ -347,7 +361,10 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqCategories = [] }) => {
                                     initial={{ opacity: 0, rotate: 90 }}
                                     animate={{ opacity: 1, rotate: 0 }}
                                     exit={{ opacity: 0, rotate: -90 }}
-                                    transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                                    transition={{
+                                      duration: 0.2,
+                                      ease: [0.4, 0, 0.2, 1],
+                                    }}
                                   >
                                     <PlusIcon className="w-5 h-5 text-gray-950" />
                                   </motion.div>

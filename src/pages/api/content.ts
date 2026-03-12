@@ -115,14 +115,18 @@ export default async function handler(
     // Get query parameters
     const contentType = req.query.contentType as string | undefined
     const region = req.query.region as string | undefined
-    const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined
-    const skip = req.query.skip ? parseInt(req.query.skip as string, 10) : undefined
+    const limit = req.query.limit
+      ? parseInt(req.query.limit as string, 10)
+      : undefined
+    const skip = req.query.skip
+      ? parseInt(req.query.skip as string, 10)
+      : undefined
     const slug = req.query.slug as string | undefined
     const useSiteConfig = req.query.useSiteConfig !== 'false' // Default to true, set to 'false' to get all posts with exposeToAPI
 
     // Get Sanity client (only published content)
     const client = getClient()
-    
+
     // Always use site config by default (unless explicitly disabled)
     let selectedBlogIds: string[] = []
     if (useSiteConfig) {
@@ -133,8 +137,11 @@ export default async function handler(
         }
       }`
       const siteSetting = await client.fetch(siteSettingsQuery)
-      
-      if (siteSetting?.selectedBlogs && Array.isArray(siteSetting.selectedBlogs)) {
+
+      if (
+        siteSetting?.selectedBlogs &&
+        Array.isArray(siteSetting.selectedBlogs)
+      ) {
         selectedBlogIds = siteSetting.selectedBlogs
           .map((blog: any) => blog?._id)
           .filter(Boolean)
@@ -152,7 +159,9 @@ export default async function handler(
       const post = await client.fetch(query, { slug })
 
       if (!post) {
-        return res.status(404).json({ error: 'Post not found or not exposed to API' })
+        return res
+          .status(404)
+          .json({ error: 'Post not found or not exposed to API' })
       }
 
       // Format single post response - only essential fields
@@ -162,12 +171,16 @@ export default async function handler(
         contentType: post.contentType,
         title: post.title,
         categoryName: post.category?.categoryName || null,
-        mainImage: post.mainImage ? {
-          url: post.mainImage.url,
-          altText: post.mainImage.altText,
-          title: post.mainImage.title,
-        } : null,
-        url: post.slug?.current ? `${baseUrl}/${post.contentType}/${post.slug.current}` : null,
+        mainImage: post.mainImage
+          ? {
+              url: post.mainImage.url,
+              altText: post.mainImage.altText,
+              title: post.mainImage.title,
+            }
+          : null,
+        url: post.slug?.current
+          ? `${baseUrl}/${post.contentType}/${post.slug.current}`
+          : null,
         slug: post.slug?.current || null,
       }
 
@@ -193,7 +206,8 @@ export default async function handler(
           region: region || 'all',
           useSiteConfig: true,
         },
-        message: 'No blogs selected in site configuration. Please select blogs in Site Settings > Selected Blogs.',
+        message:
+          'No blogs selected in site configuration. Please select blogs in Site Settings > Selected Blogs.',
       })
     }
 
@@ -224,15 +238,21 @@ export default async function handler(
       }
       return base
     }
-    
+
     // Build query with proper groq template literals
     // We need to handle all combinations of filters and pagination
     const hasSiteConfigFilter = useSiteConfig && selectedBlogIds.length > 0
     let query
-    
+
     // Build pagination conditions
     if (skip !== undefined && limit !== undefined) {
-      if (hasSiteConfigFilter && contentType && contentType !== 'all' && region && region !== 'all') {
+      if (
+        hasSiteConfigFilter &&
+        contentType &&
+        contentType !== 'all' &&
+        region &&
+        region !== 'all'
+      ) {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && contentType == $contentType && language == $region] | order(date desc) [${skip}...${skip + limit}] {${contentFields}}`
       } else if (hasSiteConfigFilter && contentType && contentType !== 'all') {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && contentType == $contentType] | order(date desc) [${skip}...${skip + limit}] {${contentFields}}`
@@ -240,7 +260,12 @@ export default async function handler(
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && language == $region] | order(date desc) [${skip}...${skip + limit}] {${contentFields}}`
       } else if (hasSiteConfigFilter) {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds] | order(date desc) [${skip}...${skip + limit}] {${contentFields}}`
-      } else if (contentType && contentType !== 'all' && region && region !== 'all') {
+      } else if (
+        contentType &&
+        contentType !== 'all' &&
+        region &&
+        region !== 'all'
+      ) {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true && contentType == $contentType && language == $region] | order(date desc) [${skip}...${skip + limit}] {${contentFields}}`
       } else if (contentType && contentType !== 'all') {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true && contentType == $contentType] | order(date desc) [${skip}...${skip + limit}] {${contentFields}}`
@@ -250,7 +275,13 @@ export default async function handler(
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true] | order(date desc) [${skip}...${skip + limit}] {${contentFields}}`
       }
     } else if (limit !== undefined) {
-      if (hasSiteConfigFilter && contentType && contentType !== 'all' && region && region !== 'all') {
+      if (
+        hasSiteConfigFilter &&
+        contentType &&
+        contentType !== 'all' &&
+        region &&
+        region !== 'all'
+      ) {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && contentType == $contentType && language == $region] | order(date desc) [0...${limit}] {${contentFields}}`
       } else if (hasSiteConfigFilter && contentType && contentType !== 'all') {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && contentType == $contentType] | order(date desc) [0...${limit}] {${contentFields}}`
@@ -258,7 +289,12 @@ export default async function handler(
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && language == $region] | order(date desc) [0...${limit}] {${contentFields}}`
       } else if (hasSiteConfigFilter) {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds] | order(date desc) [0...${limit}] {${contentFields}}`
-      } else if (contentType && contentType !== 'all' && region && region !== 'all') {
+      } else if (
+        contentType &&
+        contentType !== 'all' &&
+        region &&
+        region !== 'all'
+      ) {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true && contentType == $contentType && language == $region] | order(date desc) [0...${limit}] {${contentFields}}`
       } else if (contentType && contentType !== 'all') {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true && contentType == $contentType] | order(date desc) [0...${limit}] {${contentFields}}`
@@ -268,7 +304,13 @@ export default async function handler(
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true] | order(date desc) [0...${limit}] {${contentFields}}`
       }
     } else if (skip !== undefined) {
-      if (hasSiteConfigFilter && contentType && contentType !== 'all' && region && region !== 'all') {
+      if (
+        hasSiteConfigFilter &&
+        contentType &&
+        contentType !== 'all' &&
+        region &&
+        region !== 'all'
+      ) {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && contentType == $contentType && language == $region] | order(date desc) [${skip}...] {${contentFields}}`
       } else if (hasSiteConfigFilter && contentType && contentType !== 'all') {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && contentType == $contentType] | order(date desc) [${skip}...] {${contentFields}}`
@@ -276,7 +318,12 @@ export default async function handler(
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && language == $region] | order(date desc) [${skip}...] {${contentFields}}`
       } else if (hasSiteConfigFilter) {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds] | order(date desc) [${skip}...] {${contentFields}}`
-      } else if (contentType && contentType !== 'all' && region && region !== 'all') {
+      } else if (
+        contentType &&
+        contentType !== 'all' &&
+        region &&
+        region !== 'all'
+      ) {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true && contentType == $contentType && language == $region] | order(date desc) [${skip}...] {${contentFields}}`
       } else if (contentType && contentType !== 'all') {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true && contentType == $contentType] | order(date desc) [${skip}...] {${contentFields}}`
@@ -287,7 +334,13 @@ export default async function handler(
       }
     } else {
       // When using site config, don't require exposeToAPI (selection is permission enough)
-      if (hasSiteConfigFilter && contentType && contentType !== 'all' && region && region !== 'all') {
+      if (
+        hasSiteConfigFilter &&
+        contentType &&
+        contentType !== 'all' &&
+        region &&
+        region !== 'all'
+      ) {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && contentType == $contentType && language == $region] | order(date desc) {${contentFields}}`
       } else if (hasSiteConfigFilter && contentType && contentType !== 'all') {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && contentType == $contentType] | order(date desc) {${contentFields}}`
@@ -295,7 +348,12 @@ export default async function handler(
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && language == $region] | order(date desc) {${contentFields}}`
       } else if (hasSiteConfigFilter) {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds] | order(date desc) {${contentFields}}`
-      } else if (contentType && contentType !== 'all' && region && region !== 'all') {
+      } else if (
+        contentType &&
+        contentType !== 'all' &&
+        region &&
+        region !== 'all'
+      ) {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true && contentType == $contentType && language == $region] | order(date desc) {${contentFields}}`
       } else if (contentType && contentType !== 'all') {
         query = groq`*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true && contentType == $contentType] | order(date desc) {${contentFields}}`
@@ -308,26 +366,37 @@ export default async function handler(
 
     // Fetch data from Sanity
     const data = await client.fetch(query, params)
-    
+
     // Format the response - add URL and simplify structure
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://resources.voicestack.com'
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || 'https://resources.voicestack.com'
     const formattedData = (data || []).map((post: any) => ({
       _id: post._id,
       contentType: post.contentType,
       title: post.title,
       categoryName: post.category?.categoryName || null,
-      mainImage: post.mainImage ? {
-        url: post.mainImage.url,
-        altText: post.mainImage.altText,
-        title: post.mainImage.title,
-      } : null,
-      url: post.slug?.current ? `${baseUrl}/${post.contentType}/${post.slug.current}` : null,
+      mainImage: post.mainImage
+        ? {
+            url: post.mainImage.url,
+            altText: post.mainImage.altText,
+            title: post.mainImage.title,
+          }
+        : null,
+      url: post.slug?.current
+        ? `${baseUrl}/${post.contentType}/${post.slug.current}`
+        : null,
       slug: post.slug?.current || null,
     }))
 
     // Get total count for pagination info
     let countQuery
-    if (hasSiteConfigFilter && contentType && contentType !== 'all' && region && region !== 'all') {
+    if (
+      hasSiteConfigFilter &&
+      contentType &&
+      contentType !== 'all' &&
+      region &&
+      region !== 'all'
+    ) {
       countQuery = groq`count(*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && contentType == $contentType && language == $region])`
     } else if (hasSiteConfigFilter && contentType && contentType !== 'all') {
       countQuery = groq`count(*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && contentType == $contentType])`
@@ -335,7 +404,12 @@ export default async function handler(
       countQuery = groq`count(*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds && language == $region])`
     } else if (hasSiteConfigFilter) {
       countQuery = groq`count(*[_type == "post" && defined(slug.current) && defined(date) && _id in $selectedBlogIds])`
-    } else if (contentType && contentType !== 'all' && region && region !== 'all') {
+    } else if (
+      contentType &&
+      contentType !== 'all' &&
+      region &&
+      region !== 'all'
+    ) {
       countQuery = groq`count(*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true && contentType == $contentType && language == $region])`
     } else if (contentType && contentType !== 'all') {
       countQuery = groq`count(*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true && contentType == $contentType])`
@@ -344,7 +418,7 @@ export default async function handler(
     } else {
       countQuery = groq`count(*[_type == "post" && defined(slug.current) && defined(date) && exposeToAPI == true])`
     }
-    
+
     const total = await client.fetch(countQuery, params)
 
     // Set CORS headers to allow external access
@@ -361,7 +435,10 @@ export default async function handler(
         total,
         limit: limit || total,
         skip: skip || 0,
-        hasMore: skip !== undefined && limit !== undefined ? skip + limit < total : false,
+        hasMore:
+          skip !== undefined && limit !== undefined
+            ? skip + limit < total
+            : false,
       },
       filters: {
         contentType: contentType || 'all',

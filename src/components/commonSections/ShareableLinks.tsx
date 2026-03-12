@@ -7,8 +7,9 @@ import Anchor from './Anchor'
 
 function ShareableLinks({ props }) {
   const { asPath: route } = useRouter()
-  const encodedUrl = encodeURIComponent(`${process.env.NEXT_PUBLIC_BASE_URL}${route}`)
-  
+  const encodedUrl = encodeURIComponent(
+    `${process.env.NEXT_PUBLIC_BASE_URL}${route}`,
+  )
 
   return (
     <div className="flex flex-col gap-3">

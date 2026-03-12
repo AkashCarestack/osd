@@ -14,7 +14,22 @@ import {
 } from 'sanity-plugin-iframe-pane'
 import { previewUrl } from 'sanity-plugin-iframe-pane/preview-url'
 import { table } from '@sanity/table'
-import { CogIcon, ControlsIcon, DesktopIcon, HomeIcon,GroqIcon } from '@sanity/icons'
+import {
+  CalendarIcon,
+  CogIcon,
+  CommentIcon,
+  ComposeIcon,
+  DocumentIcon,
+  DocumentVideoIcon,
+  DocumentsIcon,
+  FolderIcon,
+  HomeIcon,
+  LinkIcon,
+  TagIcon,
+  ThListIcon,
+  UserIcon,
+  UsersIcon,
+} from '@sanity/icons'
 // see https://www.sanity.io/docs/api-versioning for how versioning works
 import {
   apiVersion,
@@ -66,30 +81,31 @@ export default defineConfig({
         { id: 'en-AU', title: 'Australia English' },
       ],
       schemaTypes: [
-        "post",
-            "newContent",
-            "tag",
-            "dynamicComponent",
-            "demoBannerBlockUS",
-            "demoBannerBlockGB",
-            "demoBannerBlockAU",
-            "author",
-            "homeSettings",
-            "customer",
-            "link",
-            "globalSettings",
-            "table",
-            "asideBannerBlock",
-            "testimonialCard",
-            "videos",
-            "siteSetting",
-            "customContent",
-            "eventCard",
-            "category",
-            'testimonial',
-            'footer',
-            'glossary',
-            'faq'
+        'post',
+        'newContent',
+        'tag',
+        'partner',
+        'dynamicComponent',
+        'demoBannerBlockUS',
+        'demoBannerBlockGB',
+        'demoBannerBlockAU',
+        'author',
+        'homeSettings',
+        'customer',
+        'link',
+        'globalSettings',
+        'table',
+        'asideBannerBlock',
+        'testimonialCard',
+        'videos',
+        'siteSetting',
+        'customContent',
+        'eventCard',
+        'category',
+        'testimonial',
+        'footer',
+        'glossary',
+        'faq',
       ],
     }),
 
@@ -142,53 +158,154 @@ export default defineConfig({
           S.view.component(Iframe).options(iframeOptions).title('Preview'),
         ])
       },
-      structure: (S) =>
-        S.list()
+      structure: (S) => {
+        // Ensure the DEO partner document has _id "partners.deo" (in Manage Partners) so new content defaults to DEO.
+
+        // Build the same sub-panel for each partner: Resources, Page Settings, Home, Footer, Tags, Categories
+        const buildPartnerPanel = (
+          partnerSlug: string,
+          partnerTitle: string,
+          options?: { listAllContentUnderPartner?: boolean },
+        ) =>
+          S.list()
+            .title(partnerTitle)
+            .items([
+              // Resources: Content (posts), Content Repo, Custom Content
+              S.listItem()
+                .title('Resources')
+                .icon(FolderIcon)
+                .child(
+                  S.list()
+                    .title(`Resources — ${partnerTitle}`)
+                    .items([
+                      S.listItem()
+                        .title('Content')
+                        .icon(DocumentIcon)
+                        .child(
+                          options?.listAllContentUnderPartner
+                            ? // DEO: list ALL content (articles, etc.) – everything is under DEO
+                              S.documentList()
+                                .apiVersion(apiVersion)
+                                .title(`Content — ${partnerTitle}`)
+                                .filter('_type == "post"')
+                                .schemaType('post')
+                            : // Other partners: only content linked to this partner
+                              S.documentList()
+                                .apiVersion(apiVersion)
+                                .title(`Content — ${partnerTitle}`)
+                                .filter(
+                                  '_type == "post" && partner->slug.current == $partnerSlug',
+                                )
+                                .params({ partnerSlug })
+                                .schemaType('post'),
+                        ),
+                      S.listItem()
+                        .title('Content Repo')
+                        .icon(FolderIcon)
+                        .child(
+                          S.list()
+                            .title('Content Repo')
+                            .items([
+                              S.documentTypeListItem('glossary').title(
+                                'Glossary',
+                              ),
+                              S.documentTypeListItem('faq').title('FAQ'),
+                              S.documentTypeListItem('event').title('Events'),
+                            ]),
+                        ),
+                      S.documentTypeListItem('customContent')
+                        .title('Custom Content')
+                        .icon(ComposeIcon),
+                    ]),
+                ),
+              // Page Settings (site-wide)
+              S.listItem()
+                .title('Page Settings')
+                .icon(CogIcon)
+                .child(
+                  S.document()
+                    .schemaType('siteSetting')
+                    .documentId('siteSetting'),
+                ),
+              // Home (partner-scoped)
+              S.listItem()
+                .title('Home')
+                .icon(HomeIcon)
+                .child(
+                  S.documentList()
+                    .apiVersion(apiVersion)
+                    .title(`Home — ${partnerTitle}`)
+                    .filter(
+                      '_type == "homeSettings" && (!defined(partner) || partner->slug.current == $partnerSlug)',
+                    )
+                    .params({ partnerSlug })
+                    .schemaType('homeSettings'),
+                ),
+              // Footer
+              S.listItem()
+                .title('Footer')
+                .icon(LinkIcon)
+                .child(S.documentTypeList('footer').title('Footer')),
+              // Tags
+              S.listItem()
+                .title('Tags')
+                .icon(TagIcon)
+                .child(S.documentTypeList('tag').title('Tags')),
+              // Categories (filtered by partner: site-wide + this partner only)
+              S.listItem()
+                .title('Categories')
+                .icon(ThListIcon)
+                .child(
+                  S.documentList()
+                    .apiVersion(apiVersion)
+                    .title(`Categories — ${partnerTitle}`)
+                    .filter(
+                      '_type == "category" && (!defined(partner) || partner->slug.current == $partnerSlug)',
+                    )
+                    .params({ partnerSlug })
+                    .schemaType('category'),
+                ),
+            ])
+
+        return S.list()
           .title('Base')
           .items([
-            // S.listItem()
-            //   .title('Home Page')
-            //   .icon(HomeIcon)
-            //   .child(
-            //     S.document()
-            //       .schemaType('homeSettings')
-            //       .documentId('homeSettings'),
-            //   ),
-            S.documentTypeListItem('post').title('All Content'),
-            S.documentTypeListItem('author').title('Author'),
-            S.documentTypeListItem('tag').title('Tag'),
-            S.documentTypeListItem('category').title('Category'),
-            S.documentTypeListItem('customer').title('Customer'),
-            S.documentTypeListItem('testimonial').title('Testimonial'),
-            S.documentTypeListItem('videos').title('Video'),
-            S.documentTypeListItem('eventCard').title('Events Card'),
+            // —— Partners (root): DEO & Fortune each have Resources, Page Settings, Home, Footer, Tags, Categories
             S.listItem()
-              .title('Content Repo')
+              .title('Partners')
+              .icon(UsersIcon)
               .child(
                 S.list()
-                  .title('Content Repo')
+                  .title('Partners')
                   .items([
-                    S.documentTypeListItem('glossary').title('Glossary'),
-                    S.documentTypeListItem('faq').title('FAQ'),
-                    S.documentTypeListItem('event').title('Events'),
-                  ])
+                    S.listItem()
+                      .title('DEO')
+                      .child(
+                        buildPartnerPanel('deo', 'DEO', {
+                          listAllContentUnderPartner: true,
+                        }),
+                      ),
+                    S.listItem()
+                      .title('Fortune')
+                      .child(buildPartnerPanel('fortune', 'Fortune')),
+                  ]),
               ),
-            S.documentTypeListItem('homeSettings').title('Home Page').icon(HomeIcon),
-            S.documentTypeListItem('footer').title('Footer').icon(GroqIcon),
+            // Site Configuration (single doc, kept at root for quick access)
             S.listItem()
               .title('Site Configuration')
-              .icon(ControlsIcon)
+              .icon(CogIcon)
               .child(
                 S.document()
                   .schemaType('siteSetting')
                   .documentId('siteSetting'),
               ),
-            S.documentTypeListItem('customContent').title('Custom Content'),
-            // S.documentTypeListItem('testimonial').title('Testimonial'),
-            // ...S.documentTypeListItems().filter(
-            //   (listItem) => !['homeSettings'].includes(listItem.getId()) && !['globalSettings'].includes(listItem.getId())&& !['post'].includes(listItem.getId()),
-            // )
-          ]),
+            // Manage partner documents (add/edit DEO, Fortune, etc.)
+            S.listItem()
+              .title('Manage Partners')
+              .icon(UsersIcon)
+              .child(S.documentTypeList('partner').title('Partners')),
+          ])
+      },
     }),
 
     media({

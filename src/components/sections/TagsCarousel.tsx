@@ -7,7 +7,7 @@ import { ChevronRightIcon } from '@sanity/icons'
 import siteConfig from 'config/siteConfig'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect, useMemo,useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -30,21 +30,23 @@ const TagsCarousel: React.FC<TagsCarouselProps> = ({
   const swiperRef = useRef(null)
   const [isBeginning, setIsBeginning] = React.useState(true)
   const [isEnd, setIsEnd] = React.useState(false)
-  const router = useRouter();
-  const { locale } = router.query; 
+  const router = useRouter()
+  const { locale } = router.query
   const containerRef = useRef<HTMLDivElement>(null)
 
   const sortedTags = useMemo(() => {
     if (!tags?.length) return []
-    
+
     return [...tags].sort((a, b) => {
       const nameA = (a?.tagName ?? '').toLowerCase().trim()
       const nameB = (b?.tagName ?? '').toLowerCase().trim()
-      
-      return nameA.localeCompare(nameB, 'en', { numeric: true, sensitivity: 'base' })
+
+      return nameA.localeCompare(nameB, 'en', {
+        numeric: true,
+        sensitivity: 'base',
+      })
     })
   }, [tags])
-  
 
   useEffect(() => {
     if (swiperRef.current) {
@@ -81,12 +83,15 @@ const TagsCarousel: React.FC<TagsCarouselProps> = ({
   if (!tags) return null
 
   return (
-    <div className=' flex items-center justify-center w-full overflow-hidden' ref={containerRef}>
+    <div
+      className=" flex items-center justify-center w-full overflow-hidden"
+      ref={containerRef}
+    >
       <Swiper
         modules={[Navigation, Pagination]}
         // spaceBetween={30}
         slidesPerView="auto"
-        loop={false} 
+        loop={false}
         navigation={{
           nextEl: '.swiper-next',
           prevEl: '.swiper-prev',
@@ -109,28 +114,33 @@ const TagsCarousel: React.FC<TagsCarouselProps> = ({
           swiperRef.current = swiper
         }}
       >
-        {sortedTags && sortedTags?.map((tag,i) => {
-          let hrefTemplate = `/${siteConfig.paginationBaseUrls.base}/${tag?.slug?.current}`
-          return(
-          <SwiperSlide
-            key={tag._id}
-            className="!flex items-center justify-center px-2 md:px-3"
-          >
-            <span
-              onClick={() => onTagChanges(tag)}
-              className={`flex py-1 text-[14px] font-medium leading-[1.5] text-center cursor-pointer justify-center
+        {sortedTags &&
+          sortedTags?.map((tag, i) => {
+            let hrefTemplate = `/${siteConfig.paginationBaseUrls.base}/${tag?.slug?.current}`
+            return (
+              <SwiperSlide
+                key={tag._id}
+                className="!flex items-center justify-center px-2 md:px-3"
+              >
+                <span
+                  onClick={() => onTagChanges(tag)}
+                  className={`flex py-1 text-[14px] font-medium leading-[1.5] text-center cursor-pointer justify-center
                 ${
                   selectedTag === tag?.slug?.current
                     ? 'text-zinc-200'
                     : 'text-zinc-400 hover:text-zinc-300'
                 }`}
-            >
-              <Anchor   href={generateHref(locale as string, hrefTemplate)}scroll={false}>
-                <span>{tag?.tagName}</span>
-              </Anchor> 
-            </span>
-          </SwiperSlide>
-        )})}
+                >
+                  <Anchor
+                    href={generateHref(locale as string, hrefTemplate)}
+                    scroll={false}
+                  >
+                    <span>{tag?.tagName}</span>
+                  </Anchor>
+                </span>
+              </SwiperSlide>
+            )
+          })}
       </Swiper>
       <button
         disabled={isBeginning}

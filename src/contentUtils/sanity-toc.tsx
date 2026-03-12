@@ -122,40 +122,38 @@ export function RenderToc({
   elements: TreeNode[]
   level?: number
 }) {
-
-  const [activeSection, setActiveSection] = React.useState<number | null>(null);
+  const [activeSection, setActiveSection] = React.useState<number | null>(null)
 
   React.useEffect(() => {
-    let scrollTimeout: ReturnType<typeof setTimeout>;
-    
+    let scrollTimeout: ReturnType<typeof setTimeout>
+
     const handleScroll = () => {
       if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
+        clearTimeout(scrollTimeout)
       }
       scrollTimeout = setTimeout(() => {
-        const sections = document.querySelectorAll('h2[id]');
+        const sections = document.querySelectorAll('h2[id]')
         for (let i = 0; i < sections.length; i++) {
-          const section = sections[i];
-          const rect = section.getBoundingClientRect();
-  
+          const section = sections[i]
+          const rect = section.getBoundingClientRect()
+
           if (rect.top >= 0 && rect.top <= window.innerHeight) {
-            setActiveSection(i + 1);
-            break;
-          }
-          else {
-            setActiveSection(null);
+            setActiveSection(i + 1)
+            break
+          } else {
+            setActiveSection(null)
           }
         }
-      }, 50);
-    };
-  
-    window.addEventListener('scroll', handleScroll);
-  
+      }, 50)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(scrollTimeout);
-    };
-  }, []);
+      window.removeEventListener('scroll', handleScroll)
+      clearTimeout(scrollTimeout)
+    }
+  }, [])
   return (
     <ol
       className={` list-decimal ml-5 flex flex-col gap-3 text-sm lg:text-base  text-zinc-600`}

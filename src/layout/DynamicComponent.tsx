@@ -6,7 +6,9 @@ const componentMap = {
   bannerBlockUS: dynamic(() => import('../components/sections/BannerBlock')),
   bannerBlockGB: dynamic(() => import('../components/sections/BannerBlock')),
   bannerBlockAU: dynamic(() => import('../components/sections/BannerBlock')),
-  commonBannerBlock: dynamic(() => import('../components/sections/BannerBlock')),
+  commonBannerBlock: dynamic(
+    () => import('../components/sections/BannerBlock'),
+  ),
   testimonialCard: dynamic(
     () => import('../components/sections/TestimonialCard'),
   ),

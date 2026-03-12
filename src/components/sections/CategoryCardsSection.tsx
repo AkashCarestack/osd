@@ -13,9 +13,12 @@ interface CategoryCardsSectionProps {
   categories?: any[]
 }
 
-const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories }) => {
+const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({
+  categories,
+}) => {
   const router = useRouter()
-  const { locale } = router.query
+  const { locale, partner } = router.query
+  const partnerSlug = typeof partner === 'string' ? partner : undefined
 
   // Background images for cards (cycling through)
   const bgImages = [
@@ -30,15 +33,18 @@ const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories 
   const bgColors = ['#c241bd', '#ffcf23', '#3abfbf', '#c241bd', '#ffcf23']
 
   // Filter categories that have associated content, or show all categories if none have content
-  const categoriesWithContent = categories?.filter(
-    (category) => category?.associatedContent && category.associatedContent.length > 0
-  ) || []
+  const categoriesWithContent =
+    categories?.filter(
+      (category) =>
+        category?.associatedContent && category.associatedContent.length > 0,
+    ) || []
 
   // If no categories have associatedContent, show all categories (up to 4)
   // This ensures the section always renders if categories exist
-  const displayCategories = categoriesWithContent.length > 0
-    ? categoriesWithContent.slice(0, 4)
-    : (categories || []).slice(0, 4)
+  const displayCategories =
+    categoriesWithContent.length > 0
+      ? categoriesWithContent.slice(0, 4)
+      : (categories || []).slice(0, 4)
 
   if (!displayCategories || displayCategories.length === 0) {
     return null
@@ -50,16 +56,20 @@ const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories 
         <div className="flex flex-col gap-3 mb-12">
           <H2Large className="text-zinc-900">Major Topics</H2Large>
           <p className="text-zinc-900 opacity-80 text-base font-medium leading-[1.6] max-w-[601px]">
-            Articles that specifically refer to the dashboards available to the DEO.
+            Articles that specifically refer to the dashboards available to the
+            DEO.
           </p>
         </div>
         <div className="flex flex-wrap gap-8 items-start">
           {displayCategories.map((category, index) => {
-            // Build the URL to the category page only
+            // Build the URL to the category page: /{partner}/topic/{slug} when on partner page
             const categorySlug = category?.slug?.current
-            const href = categorySlug
-              ? `/${siteConfig.categoryBaseUrls.base}/${categorySlug}`
+            const topicBase = partnerSlug
+              ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}`
               : `/${siteConfig.categoryBaseUrls.base}`
+            const href = categorySlug
+              ? `${topicBase}/${categorySlug}`
+              : topicBase
 
             const imageIndex = index % bgImages.length
             const colorIndex = index % bgColors.length
@@ -91,7 +101,13 @@ const CategoryCardsSection: React.FC<CategoryCardsSectionProps> = ({ categories 
 
                 {/* Content card */}
                 <Anchor
-                  href={router.isReady ? generateHref(locale as string, href) : '#'}
+                  href={
+                    router.isReady
+                      ? partnerSlug
+                        ? href
+                        : generateHref(locale as string, href)
+                      : '#'
+                  }
                   className="backdrop-blur-[10px] bg-white flex flex-col gap-3 items-start p-5 relative rounded-[5px] shrink-0 w-full group"
                 >
                   <div className="flex flex-col gap-2 items-start w-full">

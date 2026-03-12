@@ -1,4 +1,4 @@
-import {TagsIcon} from '@sanity/icons'
+import { TagsIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 
 import { isUniqueAcrossAllDocuments } from '~/lib/sanity'

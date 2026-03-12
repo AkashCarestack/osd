@@ -8,7 +8,7 @@ import {
 import siteConfig from 'config/siteConfig'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect,useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import GrowthClubLogo from '~/assets/reactiveAssets/GrowthClubLogo'
 import VoiceStackResources from '~/assets/reactiveAssets/VoiceStackResources'
@@ -42,19 +42,19 @@ export const NavPopover = ({
   const buttonRef = useRef(null)
   const navPopoverRef = useRef(null)
   const router = useRouter()
+  const partnerSlug = router.query.partner as string | undefined
   const matchedRegion = regions.find((region) => {
-    return(
-      region.locale === router.locale || 
-      region.locale === router.query.locale || 
-      (region.url ===  router.pathname  && 'en' )
+    return (
+      region.locale === router.locale ||
+      region.locale === router.query.locale ||
+      (region.url === router.pathname && 'en')
     )
-   }
-   );
-   const [currentRegion, setCurrentRegion] = useState(null);
+  })
+  const [currentRegion, setCurrentRegion] = useState(null)
 
-   useEffect(()=>{
-    setCurrentRegion(router.locale || router.query.locale);  
-  },[router?.locale,router?.query.locale])
+  useEffect(() => {
+    setCurrentRegion(router.locale || router.query.locale)
+  }, [router?.locale, router?.query.locale])
 
   useEffect(() => {
     const handleRouteChange = () => {
@@ -103,7 +103,6 @@ export const NavPopover = ({
     if (data) setTagData(data)
   }, [tagData, data])
 
-
   const closeMenu = () => {
     setShowMenu(false)
     setShowTags(false)
@@ -130,10 +129,11 @@ export const NavPopover = ({
       ref={navPopoverRef}
       className={`pt-[10px] px-4 lg:px-[10px] pb-[20px] lg:rounded-[12px] bg-white shadow-custom 
     justify-center bg-transparent fixed lg:absolute lg:top-0 left-0 w-full h-[100vh] lg:h-auto 
-    lg:overflow-hidden top-0 transition-transform duration-300 linear z-20 lg:z-10 ${showMenu
-          ? 'flex lg:translate-y-0 opacity-100 visible'
-          : 'lg:-translate-y-3 opacity-0 invisible'
-        }`}
+    lg:overflow-hidden top-0 transition-transform duration-300 linear z-20 lg:z-10 ${
+      showMenu
+        ? 'flex lg:translate-y-0 opacity-100 visible'
+        : 'lg:-translate-y-3 opacity-0 invisible'
+    }`}
     >
       <Wrapper>
         <div className={`${className} w-full lg:pt-0 pt-14`}>
@@ -163,7 +163,7 @@ export const NavPopover = ({
                 href="/"
                 className="text-2xl font-extrabold bg-gradient-text bg-clip-text text-transparent font-monrope tracking-tighterText"
               >
-                <VoiceStackResources/> 
+                <VoiceStackResources />
               </Anchor>
             )}
             <CloseIcon
@@ -173,66 +173,76 @@ export const NavPopover = ({
               className="text-white"
             />
           </div>
-          <div className='flex flex-col h-full gap-40 flex-shrink-0'>
-          
-          <div id='mob-content'
-            className={`transition-all duration-300 ease ${showTags && '-translate-x-[105%]'} lg:translate-x-0`}
-          >
+          <div className="flex flex-col h-full gap-40 flex-shrink-0">
             <div
-              ref={contentRef}
-              className={`w-full transform transition-all duration-200}`}
+              id="mob-content"
+              className={`transition-all duration-300 ease ${showTags && '-translate-x-[105%]'} lg:translate-x-0`}
             >
-              <nav className="flex flex-col lg:flex-row gap-y-6 gap-x-6 lg:gap-x-10 flex-wrap rounded-[6px] py-[17px] lg:px-[20px] lg:bg-zinc-100">
-                {navigationLinks?.map((link) => {
-                  const scrollToSection = (sectionId: string) => {
-                    const element = document.getElementById(sectionId);
-                    if (element) {
-                      const headerOffset = 100;
-                      const elementPosition = element.getBoundingClientRect().top;
-                      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                      window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth',
-                      });
-                      setShowMenu(false);
+              <div
+                ref={contentRef}
+                className={`w-full transform transition-all duration-200}`}
+              >
+                <nav className="flex flex-col lg:flex-row gap-y-6 gap-x-6 lg:gap-x-10 flex-wrap rounded-[6px] py-[17px] lg:px-[20px] lg:bg-zinc-100">
+                  {navigationLinks?.map((link) => {
+                    const scrollToSection = (sectionId: string) => {
+                      const element = document.getElementById(sectionId)
+                      if (element) {
+                        const headerOffset = 100
+                        const elementPosition =
+                          element.getBoundingClientRect().top
+                        const offsetPosition =
+                          elementPosition + window.pageYOffset - headerOffset
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: 'smooth',
+                        })
+                        setShowMenu(false)
+                      }
                     }
-                  };
 
-                  return (
-                    <button
-                      key={link.id}
-                      onClick={() => scrollToSection(link.sectionId)}
-                      className="hover:text-zinc-500 self-start font-medium text-base lg:text-sm flex items-center gap-2 text-zinc-600 text-left"
-                    >
-                      {link.label}
-                    </button>
-                  );
-                })}
-              </nav>
-              <div className="px-[10px] py-6 lg:p-6 lg:block hidden">
-                <div className="text-zinc-400 pb-6 font-medium text-sm uppercase">
-                  Browse  Topics
+                    return (
+                      <button
+                        key={link.id}
+                        onClick={() => scrollToSection(link.sectionId)}
+                        className="hover:text-zinc-500 self-start font-medium text-base lg:text-sm flex items-center gap-2 text-zinc-600 text-left"
+                      >
+                        {link.label}
+                      </button>
+                    )
+                  })}
+                </nav>
+                <div className="px-[10px] py-6 lg:p-6 lg:block hidden">
+                  <div className="text-zinc-400 pb-6 font-medium text-sm uppercase">
+                    Browse Topics
+                  </div>
+                  <div className="lg:columns-3 gap-6">
+                    {tagData &&
+                      tagData.length > 0 &&
+                      tagData.map((tag) => {
+                        const basePath = `${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current || ''}`
+                        const cleanPath = normalizePath(basePath)
+                        const topicHref = partnerSlug
+                          ? `/${partnerSlug}/${cleanPath}`
+                          : generateHref(router.query.locale as string, cleanPath)
+                        return (
+                          <div
+                            className="break-inside-avoid pb-[14px]"
+                            key={tag?.slug?.current}
+                          >
+                            <Anchor
+                              href={topicHref}
+                              scroll={false}
+                              className="text-zinc-500 font-medium text-sm hover:text-zinc-600 transition-colors inlin-flex underline underline-offset-2"
+                            >
+                              <span>{tag?.categoryName}</span>
+                            </Anchor>
+                          </div>
+                        )
+                      })}
+                  </div>
                 </div>
-                <div className="lg:columns-3 gap-6">
-                  {tagData &&
-                    tagData.length > 0 &&
-                    tagData.map((tag, index) => {
-                      const basePath = `${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current || ''}`;
-                      return(
-                      <div className="break-inside-avoid pb-[14px]" key={tag?.slug?.current}>
-                        <Anchor
-                          href={generateHref(router.query.locale, basePath)}
-                          scroll={false}
-                          className="text-zinc-500 font-medium text-sm hover:text-zinc-600 transition-colors inlin-flex underline underline-offset-2"
-                        >
-                          <span>{tag?.categoryName}</span>
-                        </Anchor>
-                      </div>
-                    )})}
-                </div>
-              </div>
 
-              {/* <div // Hided 
+                {/* <div // Hided 
                 className="text-zinc-400 pt-3 font-medium text-sm uppercase lg:hidden flex items-center gap-1"
                 onClick={showTagsMob}
               >
@@ -243,10 +253,10 @@ export const NavPopover = ({
                   className="text-zinc-400"
                 />
               </div> */}
+              </div>
             </div>
-          </div>
-          {/* mob region switcher */}
-          {/* <div id='mob-region' className={`bg-white flex gap-5 justify-center items-center lg:hidden`}>
+            {/* mob region switcher */}
+            {/* <div id='mob-region' className={`bg-white flex gap-5 justify-center items-center lg:hidden`}>
             {regions.map((region: any, index: number) => {
               return (
                 currentRegion == region.locale ? (
@@ -287,13 +297,16 @@ export const NavPopover = ({
             <div className="columns-1 gap-6">
               {tagData &&
                 tagData.length > 0 &&
-                tagData.map((tag, index) => {
-                  const basePath = `${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current || ''}`;
+                tagData.map((tag) => {
+                  const basePath = `${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current || ''}`
                   const cleanHref = normalizePath(basePath)
+                  const topicHref = partnerSlug
+                    ? `/${partnerSlug}/${cleanHref}`
+                    : generateHref(router.query.locale as string, cleanHref)
                   return (
-                    <div className="break-inside-avoid" key={cleanHref}>
+                    <div className="break-inside-avoid" key={tag?.slug?.current ?? cleanHref}>
                       <Anchor
-                        href={generateHref(router.query.locale, cleanHref)}
+                        href={topicHref}
                         scroll={false}
                         className="text-zinc-500 pb-[14px] font-medium text-sm flex hover:text-zinc-600 transition-colors"
                       >
@@ -304,15 +317,21 @@ export const NavPopover = ({
                 })}
             </div>
             <Anchor
-              href={generateHref(router.query.locale, siteConfig.paginationBaseUrls.base)}
+              href={generateHref(
+                router.query.locale,
+                siteConfig.paginationBaseUrls.base,
+              )}
               className=" lg:flex text-[14px] group font-medium leading-[1.5] justify-center text-zinc-500 flex items-center gap-x-1 hover:text-zinc-300 group"
             >
               <span className="text-[14px] md:text-[16px] cursor-pointer text-zinc-500 font-medium text-sm hover:text-zinc-600 inline-flex items-center gap-1">
                 {'Browse All'}
-                <ArrowTopRightIcon className="group-hover:translate-y-[-2px] transition-transform duration-300" height={20} width={20} />
+                <ArrowTopRightIcon
+                  className="group-hover:translate-y-[-2px] transition-transform duration-300"
+                  height={20}
+                  width={20}
+                />
               </span>
             </Anchor>
-
           </div>
 
           {/* )} */}

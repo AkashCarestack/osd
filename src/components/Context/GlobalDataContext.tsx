@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode,useContext } from 'react'
+import React, { createContext, ReactNode, useContext } from 'react'
 
 const GlobalDataContext = createContext<any | null>(null)
 
@@ -8,6 +8,7 @@ export const GlobalDataProvider = ({
   eventCards,
   homeSettings,
   footerData,
+  partners,
   children,
 }: {
   data?: any
@@ -15,10 +16,13 @@ export const GlobalDataProvider = ({
   eventCards?: any
   homeSettings?: any
   footerData?: any
+  partners?: { slug: string; partnerName?: string }[]
   children: ReactNode
 }) => {
   return (
-    <GlobalDataContext.Provider value={{ data, featuredTags, eventCards, homeSettings,footerData }}>
+    <GlobalDataContext.Provider
+      value={{ data, featuredTags, eventCards, homeSettings, footerData, partners }}
+    >
       {children}
     </GlobalDataContext.Provider>
   )

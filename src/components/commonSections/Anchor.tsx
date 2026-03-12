@@ -12,7 +12,7 @@ import { useTrackUser } from '~/utils/tracker/intitialize'
 interface LinkProps {
   link?: any
   children?: React.ReactNode
-  target?: '_blank' | '_self' | '_parent' | '_top' | '';
+  target?: '_blank' | '_self' | '_parent' | '_top' | ''
   isDemo?: boolean
   [x: string]: any
   className?: string
@@ -27,36 +27,37 @@ const Anchor: React.FunctionComponent<LinkProps> = ({
   className,
   ...rest
 }) => {
-  const router = useRouter();
+  const router = useRouter()
 
   const { Track, trackEvent } = useTracking({}, {})
-  const [newLink, setNewLink] = useState("#");
-  const trackCtx = useTrackUser();
-  const [btnId, setBtnId] = useState<any>("");
-
+  const [newLink, setNewLink] = useState('#')
+  const trackCtx = useTrackUser()
+  const [btnId, setBtnId] = useState<any>('')
 
   useEffect(() => {
-
     const { query } = router
 
-    const queryParams: Record<string, string> = Object.entries(query).reduce((acc: any, [key, value]) => {
-      if (value !== undefined && key !== "slug") {
-        acc[key] = value.toString();
-      }
-      return acc;
-    }, {});
+    const queryParams: Record<string, string> = Object.entries(query).reduce(
+      (acc: any, [key, value]) => {
+        if (value !== undefined && key !== 'slug') {
+          acc[key] = value.toString()
+        }
+        return acc
+      },
+      {},
+    )
 
-    const noParams = Object.keys(queryParams).length === 0;
+    const noParams = Object.keys(queryParams).length === 0
 
-    const urlSearchParams = new URLSearchParams(queryParams);
+    const urlSearchParams = new URLSearchParams(queryParams)
 
     // Get the existing URL parameters from href
-    const existingParams = href?.includes('?') ? href?.split('?')[1] : '';
+    const existingParams = href?.includes('?') ? href?.split('?')[1] : ''
 
     // Merge existing parameters with updated URL params
-    let updatedParams = `${existingParams ? (noParams ? existingParams : existingParams + '&') : ""}${urlSearchParams.toString()}`;
+    let updatedParams = `${existingParams ? (noParams ? existingParams : existingParams + '&') : ''}${urlSearchParams.toString()}`
     // Append updated URL params to href
-    const countryVersion: any = getCookie("__cs_ver");
+    const countryVersion: any = getCookie('__cs_ver')
 
     // if (href.includes('https://') && (countryVersion != 2)) {
     //   const host = window?.location?.host;
@@ -68,33 +69,34 @@ const Anchor: React.FunctionComponent<LinkProps> = ({
     //   }
     // }
 
-    if (router.asPath.startsWith("/lp")) {
-      setNewLink(`${href}`);
+    if (router.asPath.startsWith('/lp')) {
+      setNewLink(`${href}`)
+    } else if (router.asPath.startsWith('/uk')) {
+      setNewLink(`${href}`)
+    } else {
+      setNewLink(
+        `${href?.split('?')[0]}${updatedParams.length > 0 ? '?' + updatedParams : ''}`,
+      )
     }
-    else if (router.asPath.startsWith("/uk")) {
-      setNewLink(`${href}`);
-    }
-    else {
+  }, [href, router, trackCtx])
 
-      setNewLink(`${href?.split('?')[0]}${updatedParams.length > 0 ? "?" + updatedParams : ""}`);
-    }
-  }, [href, router, trackCtx]);
-
-
-    return (
-      <Link id={generateId(href)}
+  return (
+    <Link
+      id={generateId(href)}
       onClick={(e) => {
-        const element = getCssSelectorShort(e.target as Element);
-        let e_name = "";
-        const utm_term = getQueryParamFromLink(newLink, 'utm_term');
+        const element = getCssSelectorShort(e.target as Element)
+        let e_name = ''
+        const utm_term = getQueryParamFromLink(newLink, 'utm_term')
         if (utm_term) {
-          e_name = utm_term;
+          e_name = utm_term
         } else {
           if (!newLink.includes('https://')) {
-            e_name = (rest.className?.split('_')[0] !== undefined ? `${rest.className?.split('_')[0]}` :
-              "internal-link")
+            e_name =
+              rest.className?.split('_')[0] !== undefined
+                ? `${rest.className?.split('_')[0]}`
+                : 'internal-link'
           } else {
-            e_name = "external-link"
+            e_name = 'external-link'
           }
         }
         const {
@@ -103,7 +105,7 @@ const Anchor: React.FunctionComponent<LinkProps> = ({
           utm_campaign = null,
           utm_medium = null,
           ...params
-        } = getParams();
+        } = getParams()
 
         trackEvent({
           e_type: 'click',
@@ -120,17 +122,17 @@ const Anchor: React.FunctionComponent<LinkProps> = ({
           url_params: params,
           base_path: window.location.origin + window.location.pathname,
           domain: window.location.origin,
-          referrer_url: window.document.referrer
-        });
-      }} 
-      href={href} className={className} target={target} {...rest}>
-        {children}
-      </Link>
-    )
-
-
+          referrer_url: window.document.referrer,
+        })
+      }}
+      href={href}
+      className={className}
+      target={target}
+      {...rest}
+    >
+      {children}
+    </Link>
+  )
 }
 
 export default Anchor
-
-

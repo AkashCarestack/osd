@@ -1,4 +1,4 @@
-import { ArrowLeftIcon,ArrowRightIcon } from '@sanity/icons'
+import { ArrowLeftIcon, ArrowRightIcon } from '@sanity/icons'
 import siteConfig from 'config/siteConfig'
 import Link from 'next/link'
 

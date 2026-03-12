@@ -24,7 +24,9 @@ const ReleaseNotesHeroSection: React.FC<ReleaseNotesHeroSectionProps> = ({
   const router = useRouter()
   const { locale } = router.query
   const baseUrl = siteConfig.pageURLs.releaseNotes
-  const linkUrl = buttonLink || (router.isReady ? generateHref(locale as string, baseUrl) : '#')
+  const linkUrl =
+    buttonLink ||
+    (router.isReady ? generateHref(locale as string, baseUrl) : '#')
 
   // Get first 3 release notes for the cards
   const featuredReleaseNotes = releaseNotes.slice(0, 3)
@@ -62,16 +64,22 @@ const ReleaseNotesHeroSection: React.FC<ReleaseNotesHeroSectionProps> = ({
               {featuredReleaseNotes.length > 0 && (
                 <div className="flex flex-col md:flex-row gap-8 md:gap-[32px] items-stretch relative shrink-0 w-full">
                   {featuredReleaseNotes.map((releaseNote, index) => {
-                    const releaseNoteWithDate = releaseNote as Articles & { date?: any; desc?: string }
+                    const releaseNoteWithDate = releaseNote as Articles & {
+                      date?: any
+                      desc?: string
+                    }
                     const releaseDate = releaseNoteWithDate.date
                       ? formatDateShort(releaseNoteWithDate.date).trim()
                       : ''
-                    
+
                     // Use articleUrl if available, otherwise fall back to slug-based URL
-                    const href = releaseNote.articleUrl 
+                    const href = releaseNote.articleUrl
                       ? releaseNote.articleUrl
                       : router.isReady && releaseNote.slug?.current
-                        ? generateHref(locale as string, `${siteConfig.pageURLs.releaseNotes}/${releaseNote.slug.current}`)
+                        ? generateHref(
+                            locale as string,
+                            `${siteConfig.pageURLs.releaseNotes}/${releaseNote.slug.current}`,
+                          )
                         : '#'
 
                     return (

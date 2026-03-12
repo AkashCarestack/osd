@@ -7,7 +7,7 @@ const config = {
         source: '/sitemap.xml',
         destination: '/api/sitemap',
       },
-      
+
       {
         source: `/article/:slug*`,
         destination: '/en/topic/:slug*',
@@ -78,8 +78,7 @@ const config = {
         destination: '/en/faq',
         locale: false,
       },
-
-    ];
+    ]
   },
   // i18n: {
   //   localeDetection:false,

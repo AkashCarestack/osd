@@ -75,7 +75,8 @@ export default defineType({
         : ''
       return {
         title: title || 'Untitled Event',
-        subtitle: `${eventType || ''} ${formattedDate ? `• ${formattedDate}` : ''}`.trim(),
+        subtitle:
+          `${eventType || ''} ${formattedDate ? `• ${formattedDate}` : ''}`.trim(),
       }
     },
   },

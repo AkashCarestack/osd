@@ -57,87 +57,89 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
   const [firstBlog, ...otherBlogs] = contents && contents
   const blogCount = contents.length
 
-  if(blogCount === 1) {
-
+  if (blogCount === 1) {
     return (
       <React.Fragment>
-      <Section className="justify-center !bg-white !text-black ">
-        <Wrapper
-          className={`md:flex-row md:pt-16 pt-8 flex-col ${reverse ? 'md:flex-row-reverse' : ''} gap-8 md:gap-12 xl:gap-36 !text-black`}
-        >
-          <div className="xl:w-6/12 w-full h-full flex-1 !text-black">
-            <Card
-              minHeight={350}
-              contentType={contentType}
-              baseUrl={baseUrl}
-              cardColor="bg-orange-700"
-              reverse={reverse}
-              cardType="top-image-card"
-              key={firstBlog?._id}
-              post={firstBlog}
-              alignCard= {blogCount ? true : false}
-            />
-          </div>
-        </Wrapper>
-      </Section>
-    </React.Fragment>
+        <Section className="justify-center !bg-white !text-black ">
+          <Wrapper
+            className={`md:flex-row md:pt-16 pt-8 flex-col ${reverse ? 'md:flex-row-reverse' : ''} gap-8 md:gap-12 xl:gap-36 !text-black`}
+          >
+            <div className="xl:w-6/12 w-full h-full flex-1 !text-black">
+              <Card
+                minHeight={350}
+                contentType={contentType}
+                baseUrl={baseUrl}
+                cardColor="bg-orange-700"
+                reverse={reverse}
+                cardType="top-image-card"
+                key={firstBlog?._id}
+                post={firstBlog}
+                alignCard={blogCount ? true : false}
+              />
+            </div>
+          </Wrapper>
+        </Section>
+      </React.Fragment>
     )
-  }else if(blogCount === 2) {
-
-    return(
+  } else if (blogCount === 2) {
+    return (
       <React.Fragment>
-      <Section className="justify-center md:pb-24 !bg-white !text-black ">
-        <Wrapper
-          className={`md:flex-row md:pt-16 pt-8 flex-col ${reverse ? 'md:flex-row-reverse' : ''} gap-2 md:gap-12 xl:gap-16 !text-black`}
-        >
-
-          <div className="xl:w-6/12 w-full h-full flex-1 !text-black">
-            <Card
-              minHeight={350}
-              contentType={contentType}
-              baseUrl={baseUrl}
-              cardColor="bg-orange-700"
-              reverse={reverse}
-              cardType="top-image-card"
-              key={firstBlog?._id}
-              post={otherBlogs[0]}
-            />
-          </div>
-          <div className="xl:w-6/12 w-full h-full flex-1 !text-black">
-            <Card
-              minHeight={350}
-              contentType={contentType}
-              baseUrl={baseUrl}
-              cardColor="bg-orange-700"
-              reverse={reverse}
-              cardType="top-image-card"
-              key={firstBlog?._id}
-              post={firstBlog}
-            />
-          </div>
-        </Wrapper>
-      </Section>
-    </React.Fragment>
+        <Section className="justify-center md:pb-24 !bg-white !text-black ">
+          <Wrapper
+            className={`md:flex-row md:pt-16 pt-8 flex-col ${reverse ? 'md:flex-row-reverse' : ''} gap-2 md:gap-12 xl:gap-16 !text-black`}
+          >
+            <div className="xl:w-6/12 w-full h-full flex-1 !text-black">
+              <Card
+                minHeight={350}
+                contentType={contentType}
+                baseUrl={baseUrl}
+                cardColor="bg-orange-700"
+                reverse={reverse}
+                cardType="top-image-card"
+                key={firstBlog?._id}
+                post={otherBlogs[0]}
+              />
+            </div>
+            <div className="xl:w-6/12 w-full h-full flex-1 !text-black">
+              <Card
+                minHeight={350}
+                contentType={contentType}
+                baseUrl={baseUrl}
+                cardColor="bg-orange-700"
+                reverse={reverse}
+                cardType="top-image-card"
+                key={firstBlog?._id}
+                post={firstBlog}
+              />
+            </div>
+          </Wrapper>
+        </Section>
+      </React.Fragment>
     )
-
-
   }
-  
 
   // Get the first blog's URL for "Read Now" link
   const getFirstBlogUrl = () => {
     if (!firstBlog?.slug?.current) return '#'
-    const contentSlug = firstBlog.slug.current.replace(/^\/+/, '').replace(/\/+$/, '')
+    const contentSlug = firstBlog.slug.current
+      .replace(/^\/+/, '')
+      .replace(/\/+$/, '')
     const categorySlug = firstBlog?.category?.slug?.current
     const topicBase = 'topic'
-    
+
     if (categorySlug) {
-      return router.isReady 
-        ? generateHref(locale as string, `/${topicBase}/${categorySlug}/${contentSlug}`)
+      return router.isReady
+        ? generateHref(
+            locale as string,
+            `/${topicBase}/${categorySlug}/${contentSlug}`,
+          )
         : '#'
     }
     return router.isReady && firstBlog.contentType
-      ? generateHref(locale as string, `/${firstBlog.contentType}/${contentSlug}`)
+      ? generateHref(
+          locale as string,
+          `/${firstBlog.contentType}/${contentSlug}`,
+        )
       : '#'
   }
 

@@ -19,8 +19,8 @@ const AuthorInfo = ({
   showNameOnly = false,
   isParentLink = false,
 }: AuthorProps) => {
-  const router = useRouter();
-  const { locale } = router.query; 
+  const router = useRouter()
+  const { locale } = router.query
   if (!author) {
     return null
   }
@@ -82,7 +82,7 @@ const AuthorInfo = ({
                       image={authors.picture}
                       height={48}
                       width={48}
-                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   )}
                 </div>

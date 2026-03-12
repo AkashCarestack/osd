@@ -1,4 +1,4 @@
-import { getCookie, setCookie } from "./cookie";
+import { getCookie, setCookie } from './cookie'
 // import supabase from "./client";
 
 /**
@@ -17,34 +17,34 @@ import { getCookie, setCookie } from "./cookie";
 // }
 
 export interface IUser {
-  browser: string;
-  location: string;
-  practice_name: string;
+  browser: string
+  location: string
+  practice_name: string
   meta: {
-    [key: string]: any;
-  };
-  [key: string]: any;
+    [key: string]: any
+  }
+  [key: string]: any
 }
 
 // Creates user with details of browser,location,practice
 export async function generateUserData(
-  browserData: any
+  browserData: any,
 ): Promise<Partial<IUser> | undefined> {
   try {
-    if (!getCookie("__cs_pv")) {
-      const browser = browserData.browser.name;
-      const location = await getLocationByIP();
-      const url = new URL(window.location.href);
-      const params = new URLSearchParams(url.href);
-      const practice_name = params.get("domain") ?? "";
+    if (!getCookie('__cs_pv')) {
+      const browser = browserData.browser.name
+      const location = await getLocationByIP()
+      const url = new URL(window.location.href)
+      const params = new URLSearchParams(url.href)
+      const practice_name = params.get('domain') ?? ''
       const body = {
         browser,
         location: location?.name,
         practice_name,
         ip_address: location?.data.ip,
         meta: { browserData, location, path: window.location.href },
-      };
-      return body;
+      }
+      return body
     }
   } catch (error) {
     // Error handled silently
@@ -52,18 +52,18 @@ export async function generateUserData(
 }
 
 export async function storeUser(id: string) {
-  setCookie("__cs_pv", id, 365 * 24 * 60 * 60 * 1000);
+  setCookie('__cs_pv', id, 365 * 24 * 60 * 60 * 1000)
 }
 
-export const getUser = () => getCookie("__cs_pv");
+export const getUser = () => getCookie('__cs_pv')
 
 export async function getLocationByIP() {
   try {
-    const response = await fetch("/api/geo");
-    const data = await response.json();
-    const location = `${data.city}, ${data.region}, ${data.country}`;
-    return { name: location, data };
+    const response = await fetch('/api/geo')
+    const data = await response.json()
+    const location = `${data.city}, ${data.region}, ${data.country}`
+    return { name: location, data }
   } catch (error) {
-    console.error("Error fetching location:", error);
+    console.error('Error fetching location:', error)
   }
 }
