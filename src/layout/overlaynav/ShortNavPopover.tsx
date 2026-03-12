@@ -34,6 +34,7 @@ export const ShortNavPopover = ({
   const navPopoverRef = useRef(null)
   const router = useRouter()
   const locale = (router.query.locale as string) || 'en'
+  const partnerSlug = router.query.partner as string | undefined
 
   useEffect(() => {
     const handleRouteChange = () => {
@@ -156,7 +157,7 @@ export const ShortNavPopover = ({
                     const contentSlug = firstContent?.slug?.current
 
                     // Build the URL: topic/{category-slug}/{content-slug} if content exists,
-                    // otherwise just link to the category page
+                    // otherwise just link to the category page. On partner pages use /partnerSlug/topic/...
                     let href = ''
                     if (contentSlug && categorySlug) {
                       href = `${siteConfig.categoryBaseUrls.base}/${categorySlug}/${contentSlug}`
@@ -165,12 +166,14 @@ export const ShortNavPopover = ({
                     } else {
                       href = siteConfig.categoryBaseUrls.base
                     }
-
                     const cleanHref = normalizePath(href)
+                    const fullHref = partnerSlug
+                      ? `/${partnerSlug}/${cleanHref}`
+                      : generateHref(locale, cleanHref)
                     return (
-                      <div className="break-inside-avoid p-2 " key={index}>
+                      <div className="break-inside-avoid p-2 " key={tag?.slug?.current ?? index}>
                         <Anchor
-                          href={generateHref(locale, cleanHref)}
+                          href={fullHref}
                           scroll={false}
                           className="text-zinc-500 font-medium text-sm hover:text-zinc-600 transition-colors inline-flex "
                         >
@@ -230,8 +233,8 @@ export const ShortNavPopover = ({
                   const categorySlug = tag?.slug?.current
                   const contentSlug = firstContent?.slug?.current
 
-                  // Build the URL: topic/{category-slug}/{content-slug} if content exists,
-                  // otherwise just link to the category page
+                  // Build the URL: topic/{category-slug}/{content-slug} if content exists.
+                  // On partner pages use /partnerSlug/topic/...
                   let href = ''
                   if (contentSlug && categorySlug) {
                     href = `${siteConfig.categoryBaseUrls.base}/${categorySlug}/${contentSlug}`
@@ -240,12 +243,14 @@ export const ShortNavPopover = ({
                   } else {
                     href = siteConfig.categoryBaseUrls.base
                   }
-
                   const cleanHref = normalizePath(href)
+                  const fullHref = partnerSlug
+                    ? `/${partnerSlug}/${cleanHref}`
+                    : generateHref(locale, cleanHref)
                   return (
-                    <div className="break-inside-avoid" key={index}>
+                    <div className="break-inside-avoid" key={tag?.slug?.current ?? index}>
                       <Anchor
-                        href={generateHref(locale, cleanHref)}
+                        href={fullHref}
                         scroll={false}
                         className="text-zinc-500 pb-[14px] font-medium text-sm flex hover:text-zinc-600 transition-colors"
                       >

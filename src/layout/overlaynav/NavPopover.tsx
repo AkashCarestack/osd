@@ -42,6 +42,7 @@ export const NavPopover = ({
   const buttonRef = useRef(null)
   const navPopoverRef = useRef(null)
   const router = useRouter()
+  const partnerSlug = router.query.partner as string | undefined
   const matchedRegion = regions.find((region) => {
     return (
       region.locale === router.locale ||
@@ -217,15 +218,19 @@ export const NavPopover = ({
                   <div className="lg:columns-3 gap-6">
                     {tagData &&
                       tagData.length > 0 &&
-                      tagData.map((tag, index) => {
+                      tagData.map((tag) => {
                         const basePath = `${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current || ''}`
+                        const cleanPath = normalizePath(basePath)
+                        const topicHref = partnerSlug
+                          ? `/${partnerSlug}/${cleanPath}`
+                          : generateHref(router.query.locale as string, cleanPath)
                         return (
                           <div
                             className="break-inside-avoid pb-[14px]"
                             key={tag?.slug?.current}
                           >
                             <Anchor
-                              href={generateHref(router.query.locale, basePath)}
+                              href={topicHref}
                               scroll={false}
                               className="text-zinc-500 font-medium text-sm hover:text-zinc-600 transition-colors inlin-flex underline underline-offset-2"
                             >
@@ -292,13 +297,16 @@ export const NavPopover = ({
             <div className="columns-1 gap-6">
               {tagData &&
                 tagData.length > 0 &&
-                tagData.map((tag, index) => {
+                tagData.map((tag) => {
                   const basePath = `${siteConfig.categoryBaseUrls.base}/${tag?.slug?.current || ''}`
                   const cleanHref = normalizePath(basePath)
+                  const topicHref = partnerSlug
+                    ? `/${partnerSlug}/${cleanHref}`
+                    : generateHref(router.query.locale as string, cleanHref)
                   return (
-                    <div className="break-inside-avoid" key={cleanHref}>
+                    <div className="break-inside-avoid" key={tag?.slug?.current ?? cleanHref}>
                       <Anchor
-                        href={generateHref(router.query.locale, cleanHref)}
+                        href={topicHref}
                         scroll={false}
                         className="text-zinc-500 pb-[14px] font-medium text-sm flex hover:text-zinc-600 transition-colors"
                       >

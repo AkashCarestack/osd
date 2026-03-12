@@ -125,11 +125,16 @@ const Header = () => {
 
   const buttonRef = React.createRef()
 
+  const partnerSlug = router.query.partner as string | undefined
   const homeUrl = router.isReady
-    ? generateHref(locale as string, siteConfig.pageURLs.home)
+    ? partnerSlug
+      ? `/${partnerSlug}`
+      : generateHref(locale as string, siteConfig.pageURLs.home)
     : '/'
   const topicsUrl = router.isReady
-    ? generateHref(locale as string, siteConfig.categoryBaseUrls.base)
+    ? partnerSlug
+      ? `/${partnerSlug}/${siteConfig.categoryBaseUrls.base}`
+      : generateHref(locale as string, siteConfig.categoryBaseUrls.base)
     : '#'
 
   const before =

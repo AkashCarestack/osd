@@ -16,7 +16,7 @@ import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
   getAllFAQs,
-  getCategories,
+  getCategoriesForPartner,
   getEbooks,
   getEventCards,
   getEvents,
@@ -101,7 +101,7 @@ export const getStaticProps: GetStaticProps<
       getWebinars(client, 0, undefined, region),
       getReleaseNotes(client, 0, 3, region),
       getEventCards(client),
-      getCategories(client),
+      getCategoriesForPartner(client, partnerSlug),
       getFooterData(client, region),
       getPodcasts(client, undefined, undefined, region),
       getAllFAQs(client),
