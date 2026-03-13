@@ -10,7 +10,7 @@ import Section from '~/components/Section'
 import Wrapper from './Wrapper'
 
 const Footer = ({ className }: any) => {
-  let { footerData } = useGlobalData()
+  let { footerData, homeSettings } = useGlobalData()
 
   const CopyrightYear = new Date().getFullYear()
 
@@ -32,18 +32,26 @@ const Footer = ({ className }: any) => {
         <div className="w-full ">
           <div className="md:flex-row flex-col items-center flex md:justify-between w-full pb-6">
             <div>
-              {/* Logo: 18px height, clickable link */}
+              {/* Logo: same size as header (h-8) */}
               <Link
                 href="/"
                 aria-label="OS Dental home"
                 id="footer-logo"
                 className="inline-flex items-center gap-1.5 opacity-90 hover:opacity-100 focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded transition-opacity"
               >
-                <OSDentalLogo
-                  width={101}
-                  height={18}
-                  className="h-[18px] w-auto block"
-                />
+                {homeSettings?.headerLogo ? (
+                  <img
+                    src={homeSettings.headerLogo}
+                    alt="OS Dental"
+                    className="h-8 w-auto object-contain object-left"
+                  />
+                ) : (
+                  <OSDentalLogo
+                    width={101}
+                    height={32}
+                    className="h-8 w-auto block"
+                  />
+                )}
               </Link>
             </div>
             {/* Social media   */}

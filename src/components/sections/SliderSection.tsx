@@ -205,7 +205,7 @@ const SliderSection: React.FC<BannerBlockProps> = ({ items, categories }) => {
                           {/* Category badge */}
                           <div className="bg-zinc-500 flex items-center justify-center px-2 py-1 rounded">
                             <span className="text-white text-xs font-medium leading-[1.5] uppercase tracking-[0.6px]">
-                              DEO Articles
+                              {partnerSlug ? `${partnerSlug.toUpperCase()} ARTICLES` : 'ARTICLES'}
                             </span>
                           </div>
 
