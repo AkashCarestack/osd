@@ -22,7 +22,7 @@ import { urlForImage } from '~/lib/sanity.image'
 import {
   getCategories,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getTagRelatedContents,
   getTags,
   getWebinar,
@@ -81,7 +81,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({
     region,
   )
   const tags = await getTags(client)
-  const homeSettings = await getHomeSettings(client, region, partnerSlug)
+  const homeSettings = await getLayoutHomeSettings(client, region, partnerSlug)
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
 

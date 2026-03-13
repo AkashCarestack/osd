@@ -211,6 +211,7 @@ export const NavPopover = ({
                     )
                   })}
                 </nav>
+                {data?.length > 0 && (
                 <div className="px-[10px] py-6 lg:p-6 lg:block hidden">
                   <div className="text-zinc-400 pb-6 font-medium text-sm uppercase">
                     Browse Topics
@@ -241,6 +242,7 @@ export const NavPopover = ({
                       })}
                   </div>
                 </div>
+                )}
 
                 {/* <div // Hided 
                 className="text-zinc-400 pt-3 font-medium text-sm uppercase lg:hidden flex items-center gap-1"
@@ -291,6 +293,7 @@ export const NavPopover = ({
           </div>
           {/* this duplicate is for mobile only */}
           {/* {showTags && ( */}
+          {data?.length > 0 && (
           <div
             className={`px-4 lg:px-[10px] flex flex-col gap-9  py-6 lg:p-6 lg:hidden block absolute top-[56px] h-full left-0 w-full overflow-auto transition-all duration-300 ease  ${showTags ? 'translate-x-0' : 'translate-x-full'}`}
           >
@@ -333,6 +336,7 @@ export const NavPopover = ({
               </span>
             </Anchor>
           </div>
+          )}
 
           {/* )} */}
           {/* ./ this is for mobile only */}

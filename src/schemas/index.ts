@@ -1,3 +1,4 @@
+import type { Template } from 'sanity'
 import { SchemaTypeDefinition } from 'sanity'
 
 import blockContent from './blockContent'
@@ -73,7 +74,44 @@ export const schemaTypes = [
   eventObject,
   upcomingEventsSection,
 ]
-export const schema: { types: SchemaTypeDefinition[] } = {
+/** Templates that pre-fill partner when creating glossary, faq, or event from a partner's Content Repo. */
+export const contentRepoTemplates: Template[] = [
+  {
+    id: 'glossary-with-partner',
+    title: 'Glossary',
+    schemaType: 'glossary',
+    parameters: [{ name: 'partnerRef', type: 'string', title: 'Partner' }],
+    value: (params: { partnerRef?: string }) =>
+      params?.partnerRef
+        ? { partner: { _type: 'reference', _ref: params.partnerRef } }
+        : {},
+  },
+  {
+    id: 'faq-with-partner',
+    title: 'FAQ',
+    schemaType: 'faq',
+    parameters: [{ name: 'partnerRef', type: 'string', title: 'Partner' }],
+    value: (params: { partnerRef?: string }) =>
+      params?.partnerRef
+        ? { partner: { _type: 'reference', _ref: params.partnerRef } }
+        : {},
+  },
+  {
+    id: 'event-with-partner',
+    title: 'Event',
+    schemaType: 'event',
+    parameters: [{ name: 'partnerRef', type: 'string', title: 'Partner' }],
+    value: (params: { partnerRef?: string }) =>
+      params?.partnerRef
+        ? { partner: { _type: 'reference', _ref: params.partnerRef } }
+        : {},
+  },
+]
+
+export const schema: {
+  types: SchemaTypeDefinition[]
+  templates?: (prev: Template[]) => Template[]
+} = {
   types: [
     post,
     iframe,
@@ -108,7 +146,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     faq,
     whyPracticeLoveSection,
     event,
-    eventObject,
-    upcomingEventsSection,
+  eventObject,
+  upcomingEventsSection,
   ],
+  templates: (prev) => [...prev, ...contentRepoTemplates],
 }

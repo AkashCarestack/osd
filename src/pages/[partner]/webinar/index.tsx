@@ -19,7 +19,7 @@ import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getTags,
   getWebinars,
   getWebinarsCount,
@@ -59,7 +59,7 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
     getWebinars(client, 0, 5, region),
     getWebinarsCount(client, region),
     getTags(client),
-    getHomeSettings(client, region, partnerSlug),
+    getLayoutHomeSettings(client, region, partnerSlug),
     getCategories(client),
     getFooterData(client, region),
   ])

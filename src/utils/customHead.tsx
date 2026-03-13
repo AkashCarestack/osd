@@ -22,31 +22,61 @@ const head = (data: any, i: string, id: string = '') => {
   )
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://osdental.io'
+const defaultSiteName = 'OS Dental'
 
-const siteLink = {
-  '@context': 'https://schema.org/',
-  '@type': 'WebSite',
-  name: 'OS Dental',
-  url: 'https://osdental.io',
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: 'https://osdental.io/?s={search_term_string}',
-    'query-input': 'required name=search_term_string',
-  },
+const getSiteLink = (options?: { baseUrl?: string; siteName?: string }) => {
+  const url = options?.baseUrl || baseUrl
+  const name = options?.siteName || defaultSiteName
+  return {
+    '@context': 'https://schema.org/',
+    '@type': 'WebSite',
+    name,
+    url,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${url}/?s={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  }
 }
 
-export const orgSchema = () => {
+export const orgSchema = (options?: { baseUrl?: string; siteName?: string }) => {
+  const schema = { ...organizationSchema }
+  const url = options?.baseUrl || baseUrl
+  const name = options?.siteName || defaultSiteName
+  if (schema['@graph'] && Array.isArray(schema['@graph'])) {
+    schema['@graph'] = (schema['@graph'] as any[]).map((node: any) => {
+      if (node['@type'] === 'Organization') {
+        return { ...node, name, url: url.replace(/\/$/, '') + '/' }
+      }
+      if (node['@type'] === 'WebSite') {
+        return {
+          ...node,
+          name,
+          url: url.replace(/\/$/, '') + '/',
+          potentialAction: {
+            ...node.potentialAction,
+            target: `${url.replace(/\/$/, '')}/?s={search_term_string}`,
+          },
+        }
+      }
+      return node
+    })
+  }
   return head(
-    organizationSchema,
+    schema,
     Math.log10(Math.random()).toString() + 'randomId',
     'organizationSchema',
   )
 }
 
-export const siteLinkSchema = () => {
+export const siteLinkSchema = (options?: {
+  baseUrl?: string
+  siteName?: string
+}) => {
   return head(
-    siteLink,
+    getSiteLink(options),
     Math.log10(Math.random()).toString() + 'randomId1',
     'siteLinkSchema',
   )
@@ -140,8 +170,8 @@ export const defaultMetaTag = (params: any, pageUrl?: string) => {
       )}
       <meta property="twitter:card" content="summary_large_image" />
       <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://osdental.io" />
-      <meta property="twitter:url" content="https://osdental.io" />
+      <meta property="og:url" content={pageUrl || baseUrl || 'https://osdental.io'} />
+      <meta property="twitter:url" content={pageUrl || baseUrl || 'https://osdental.io'} />
       <meta property="og:title" content={defaultTitle} />
       <meta property="twitter:title" content={defaultTitle} />
       <title>{slugToCapitalized(defaultTitle)}</title>

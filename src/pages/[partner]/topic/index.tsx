@@ -17,10 +17,10 @@ import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { getClient } from '~/lib/sanity.client'
 import {
   getArticlesCount,
-  getCategories,
+  getCategoriesForPartner,
   getEbooksCount,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getPodcastsCount,
   getPosts,
   getPostsByCategoryAndLimit,
@@ -67,7 +67,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     footerData,
   ] = await Promise.all([
     getTags(client),
-    getCategories(client),
+    getCategoriesForPartner(client, partnerSlug),
     getPostsByLimit(client, startLimit, cardsPerPage, region),
     getPosts(client, undefined, region),
     getSiteSettings(client),
@@ -75,7 +75,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getWebinarsCount(client, region),
     getArticlesCount(client, region),
     getEbooksCount(client, region),
-    getHomeSettings(client, region, partnerSlug),
+    getLayoutHomeSettings(client, region, partnerSlug),
     getFooterData(client, region),
   ])
 

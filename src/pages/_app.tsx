@@ -142,8 +142,14 @@ function App({ Component, pageProps }: AppProps<SharedPageProps>) {
               </>
             )}
           </Head>
-          {orgSchema()}
-          {siteLinkSchema()}
+          {orgSchema({
+            baseUrl: (pageProps as any).schemaBaseUrl,
+            siteName: (pageProps as any).schemaSiteName,
+          })}
+          {siteLinkSchema({
+            baseUrl: (pageProps as any).schemaBaseUrl,
+            siteName: (pageProps as any).schemaSiteName,
+          })}
           {draftMode ? (
             <PreviewProvider token={token}>
               <Component {...pageProps} />

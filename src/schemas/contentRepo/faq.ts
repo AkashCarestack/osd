@@ -6,6 +6,14 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'partner',
+      title: 'Partner',
+      type: 'reference',
+      to: [{ type: 'partner' }],
+      description:
+        'Optional. Select a partner to scope this FAQ to that partner. Leave empty for site-wide.',
+    }),
+    defineField({
       name: 'name',
       title: 'FAQ Name',
       type: 'string',
@@ -65,12 +73,15 @@ export default defineType({
       title: 'name',
       authorName: 'author.name',
       faqCount: 'faqs',
+      partnerName: 'partner.partnerName',
     },
     prepare(selection) {
-      const { title, authorName, faqCount } = selection
+      const { title, authorName, faqCount, partnerName } = selection
+      const parts = [authorName, `${faqCount?.length || 0} FAQs`].filter(Boolean)
+      if (partnerName) parts.push(partnerName)
       return {
         title: title || 'Untitled FAQ',
-        subtitle: `${authorName ? `${authorName} • ` : ''}${faqCount?.length || 0} FAQs`,
+        subtitle: parts.join(' • '),
       }
     },
   },
