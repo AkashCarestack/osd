@@ -13,7 +13,6 @@ export default defineType({
       type: 'string',
       description:
         'The main title of the site, used in SEO and browser title bars.',
-      validation: (Rule) => Rule.required().min(10).max(60),
     },
     {
       name: 'siteDescription',
@@ -21,7 +20,6 @@ export default defineType({
       type: 'text',
       description:
         'The description of your site, usually used in the meta description for SEO.',
-      validation: (Rule) => Rule.required().min(50).max(160),
     },
     {
       name: 'siteUrl',

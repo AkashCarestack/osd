@@ -158,14 +158,15 @@ export default defineConfig({
           S.view.component(Iframe).options(iframeOptions).title('Preview'),
         ])
       },
-      structure: (S) => {
-        // Ensure the DEO partner document has _id "partners.deo" (in Manage Partners) so new content defaults to DEO.
-
+      structure: async (S, context) => {
         // Build the same sub-panel for each partner: Resources, Page Settings, Home, Footer, Tags, Categories
         const buildPartnerPanel = (
           partnerSlug: string,
           partnerTitle: string,
-          options?: { listAllContentUnderPartner?: boolean },
+          options?: {
+            listAllContentUnderPartner?: boolean
+            partnerId?: string
+          },
         ) =>
           S.list()
             .title(partnerTitle)
@@ -183,7 +184,7 @@ export default defineConfig({
                         .icon(DocumentIcon)
                         .child(
                           options?.listAllContentUnderPartner
-                            ? // DEO: list ALL content (articles, etc.) – everything is under DEO
+                            ? // Default/first partner: list ALL content
                               S.documentList()
                                 .apiVersion(apiVersion)
                                 .title(`Content — ${partnerTitle}`)
@@ -206,11 +207,87 @@ export default defineConfig({
                           S.list()
                             .title('Content Repo')
                             .items([
-                              S.documentTypeListItem('glossary').title(
-                                'Glossary',
-                              ),
-                              S.documentTypeListItem('faq').title('FAQ'),
-                              S.documentTypeListItem('event').title('Events'),
+                              // Glossary: filtered by partner, new docs auto-bound to this partner
+                              S.listItem()
+                                .title('Glossary')
+                                .child(
+                                  S.documentList()
+                                    .apiVersion(apiVersion)
+                                    .title(`Glossary — ${partnerTitle}`)
+                                    .filter(
+                                      '_type == "glossary" && (!defined(partner) || partner._ref == $partnerId)',
+                                    )
+                                    .params({
+                                      partnerId: options?.partnerId ?? '',
+                                    })
+                                    .schemaType('glossary')
+                                    .initialValueTemplates(
+                                      options?.partnerId
+                                        ? [
+                                            S.initialValueTemplateItem(
+                                              'glossary-with-partner',
+                                              {
+                                                partnerRef: options.partnerId,
+                                              },
+                                            ),
+                                          ]
+                                        : [],
+                                    ),
+                                ),
+                              // FAQ: filtered by partner, new docs auto-bound to this partner
+                              S.listItem()
+                                .title('FAQ')
+                                .child(
+                                  S.documentList()
+                                    .apiVersion(apiVersion)
+                                    .title(`FAQ — ${partnerTitle}`)
+                                    .filter(
+                                      '_type == "faq" && (!defined(partner) || partner._ref == $partnerId)',
+                                    )
+                                    .params({
+                                      partnerId: options?.partnerId ?? '',
+                                    })
+                                    .schemaType('faq')
+                                    .initialValueTemplates(
+                                      options?.partnerId
+                                        ? [
+                                            S.initialValueTemplateItem(
+                                              'faq-with-partner',
+                                              {
+                                                partnerRef: options.partnerId,
+                                              },
+                                            ),
+                                          ]
+                                        : [],
+                                    ),
+                                ),
+                              // Events: filtered by partner, new docs auto-bound to this partner
+                              S.listItem()
+                                .title('Events')
+                                .child(
+                                  S.documentList()
+                                    .apiVersion(apiVersion)
+                                    .title(`Events — ${partnerTitle}`)
+                                    .filter(
+                                      '_type == "event" && (!defined(partner) || partner._ref == $partnerId)',
+                                    )
+                                    .params({
+                                      partnerId: options?.partnerId ?? '',
+                                    })
+                                    .schemaType('event')
+                                    .initialValueTemplates(
+                                      options?.partnerId
+                                        ? [
+                                            S.initialValueTemplateItem(
+                                              'event-with-partner',
+                                              {
+                                                partnerRef: options.partnerId,
+                                              },
+                                            ),
+                                          ]
+                                        : [],
+                                    ),
+                                ),
                             ]),
                         ),
                       S.documentTypeListItem('customContent')
@@ -267,28 +344,45 @@ export default defineConfig({
                 ),
             ])
 
+        // Fetch partners from dataset so structure is driven by Manage Partners
+        let partnerItems: ReturnType<typeof S.listItem>[] = []
+        try {
+          const client = context.getClient({ apiVersion })
+          const partners = await client.fetch<
+            { _id: string; partnerName: string | null; slug: string | null }[]
+          >(
+            `*[_type == "partner" && defined(slug.current)]{ _id, partnerName, "slug": slug.current } | order(partnerName asc)`,
+          )
+          const firstSlug = partners[0]?.slug ?? null
+          partnerItems = partners.map((p) => {
+            const slug = p.slug ?? p._id
+            const title = p.partnerName ?? slug
+            return S.listItem()
+              .title(title)
+              .id(slug)
+              .child(
+                buildPartnerPanel(slug, title, {
+                  listAllContentUnderPartner: slug === firstSlug,
+                  partnerId: p._id,
+                }),
+              )
+          })
+        } catch (err) {
+          console.error('Structure: failed to load partners', err)
+        }
+
         return S.list()
           .title('Base')
           .items([
-            // —— Partners (root): DEO & Fortune each have Resources, Page Settings, Home, Footer, Tags, Categories
+            // Partners: one panel per partner from Manage Partners (auto-created)
             S.listItem()
               .title('Partners')
               .icon(UsersIcon)
+              .id('partners')
               .child(
                 S.list()
                   .title('Partners')
-                  .items([
-                    S.listItem()
-                      .title('DEO')
-                      .child(
-                        buildPartnerPanel('deo', 'DEO', {
-                          listAllContentUnderPartner: true,
-                        }),
-                      ),
-                    S.listItem()
-                      .title('Fortune')
-                      .child(buildPartnerPanel('fortune', 'Fortune')),
-                  ]),
+                  .items(partnerItems),
               ),
             // Site Configuration (single doc, kept at root for quick access)
             S.listItem()
@@ -299,7 +393,7 @@ export default defineConfig({
                   .schemaType('siteSetting')
                   .documentId('siteSetting'),
               ),
-            // Manage partner documents (add/edit DEO, Fortune, etc.)
+            // Manage partner documents (add/edit partners here — structure above updates automatically)
             S.listItem()
               .title('Manage Partners')
               .icon(UsersIcon)

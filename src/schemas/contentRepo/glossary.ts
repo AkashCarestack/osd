@@ -6,6 +6,14 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'partner',
+      title: 'Partner',
+      type: 'reference',
+      to: [{ type: 'partner' }],
+      description:
+        'Optional. Select a partner to scope this glossary to that partner. Leave empty for site-wide.',
+    }),
+    defineField({
       name: 'mainHeading',
       title: 'Main Heading',
       type: 'string',
@@ -63,14 +71,16 @@ export default defineType({
       title: 'mainHeading',
       subheading: 'subheading',
       termCount: 'terms',
+      partnerName: 'partner.partnerName',
     },
     prepare(selection) {
-      const { title, subheading, termCount } = selection
+      const { title, subheading, termCount, partnerName } = selection
+      const termStr = `${termCount?.length || 0} terms`
+      const base = subheading ? `${subheading} • ${termStr}` : termStr
+      const subtitle = partnerName ? `${base} • ${partnerName}` : base
       return {
         title: title || 'Untitled Glossary',
-        subtitle: subheading
-          ? `${subheading} • ${termCount?.length || 0} terms`
-          : `${termCount?.length || 0} terms`,
+        subtitle,
       }
     },
   },

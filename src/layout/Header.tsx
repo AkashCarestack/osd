@@ -36,7 +36,8 @@ export const navigationLinks = [
 ]
 
 const Header = () => {
-  let { featuredTags, homeSettings, partners } = useGlobalData()
+  let { featuredTags, homeSettings, partners, data: categories } = useGlobalData()
+  const hasCategories = Array.isArray(categories) && categories.length > 0
   const router = useRouter()
   const { locale } = router.query
   const [showMenu, setShowMenu] = useState(false)
@@ -180,9 +181,17 @@ const Header = () => {
                 >
                   <Link
                     href={homeUrl}
-                    className="text-2xl font-extrabold bg-gradient-text bg-clip-text text-transparent font-monrope tracking-tighterText"
+                    className="text-2xl font-extrabold bg-gradient-text bg-clip-text text-transparent font-monrope tracking-tighterText flex items-center"
                   >
-                    <VoiceStackResources />
+                    {homeSettings?.headerLogo ? (
+                      <img
+                        src={homeSettings.headerLogo}
+                        alt="Site logo"
+                        className="h-8 w-auto object-contain object-left"
+                      />
+                    ) : (
+                      <VoiceStackResources />
+                    )}
                   </Link>
                   {isDefaultLanding && Array.isArray(partners) && partners.length > 0 ? (
                     <nav className="flex flex-wrap items-center justify-end gap-4 md:gap-8">
@@ -201,7 +210,7 @@ const Header = () => {
                   <div
                     className={`flex lg:gap-10   justify-between rounded-xl items-center`}
                   >
-                    {!isMobile && (
+                    {!isMobile && hasCategories && (
                       <div
                         className="group relative py-4"
                         onMouseEnter={() => setShowTopicsDropdown(true)}

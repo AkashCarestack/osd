@@ -15,13 +15,14 @@ import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
-  getAllFAQs,
   getCategoriesForPartner,
   getEbooks,
   getEventCards,
   getEvents,
+  getFAQsForPartner,
   getFooterData,
   getHomeSettings,
+  getPartnersWithHomeSettings,
   getPodcasts,
   getPosts,
   getReleaseNotes,
@@ -55,6 +56,8 @@ interface IndexPageProps {
   homeSettings: any
   faqCategories: any[]
   events: any[]
+  schemaBaseUrl?: string
+  schemaSiteName?: string
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -70,6 +73,8 @@ export const getStaticProps: GetStaticProps<
   const partnerSlug = params?.partner
   const client = getClient(draftMode ? { token: readToken } : undefined)
   if (!partnerSlug || typeof partnerSlug !== 'string') return { notFound: true }
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://osdental.io'
 
   try {
     const [
@@ -87,8 +92,9 @@ export const getStaticProps: GetStaticProps<
       categories,
       footerData,
       podcasts,
-      faqCategories,
       events,
+      partnerFAQs,
+      partnersWithHome,
     ] = await Promise.all([
       getPosts(client, 5, region),
       getPosts(client, undefined, region),
@@ -104,14 +110,49 @@ export const getStaticProps: GetStaticProps<
       getCategoriesForPartner(client, partnerSlug),
       getFooterData(client, region),
       getPodcasts(client, undefined, undefined, region),
-      getAllFAQs(client),
-      getEvents(client, region),
+      getEvents(client, region, partnerSlug),
+      getFAQsForPartner(client, partnerSlug),
+      getPartnersWithHomeSettings(client),
     ])
 
-    const categoriesWithFAQs = faqCategories.filter(
-      (category) =>
-        category.faq && category.faq.faqs && category.faq.faqs.length > 0,
+    // Knowledge Guides: only this partner’s categories (exclude site-wide)
+    const allCategories = categories || []
+    const partnerOnlyCategories = allCategories.filter(
+      (c: any) => c.partner?.slug === partnerSlug,
     )
+    const categoriesForPage =
+      partnerOnlyCategories.length > 0 ? partnerOnlyCategories : allCategories
+
+    // FAQ: show FAQs where the FAQ document is for this partner (or site-wide), from any category.
+    // If no category links to an FAQ, fall back to FAQ documents for this partner (content repo).
+    let faqCategories = allCategories.filter(
+      (category: any) =>
+        category.faq &&
+        category.faq.faqs &&
+        category.faq.faqs.length > 0 &&
+        (!category.faq.partnerSlug ||
+          category.faq.partnerSlug === partnerSlug),
+    )
+    if (faqCategories.length === 0 && partnerFAQs?.length > 0) {
+      faqCategories = partnerFAQs.map((faqDoc: any) => ({
+        _id: faqDoc._id,
+        categoryName: faqDoc.name,
+        slug: { current: 'faq' },
+        faq: faqDoc,
+      }))
+    }
+
+    // Only use home settings content (e.g. upcoming events) when the doc is for this partner
+    const homeSettingsForPage =
+      homeSettings && homeSettings.partner?.slug !== partnerSlug
+        ? { ...homeSettings, upcomingEventsSection: undefined }
+        : homeSettings
+
+    const partnerInfo = (partnersWithHome || []).find(
+      (p: { slug: string; partnerName?: string }) => p.slug === partnerSlug,
+    )
+    const schemaBaseUrl = `${baseUrl.replace(/\/$/, '')}/${partnerSlug}`
+    const schemaSiteName = partnerInfo?.partnerName || partnerSlug
 
     return {
       props: {
@@ -122,17 +163,19 @@ export const getStaticProps: GetStaticProps<
         tags,
         tagsByOrder,
         testimonials,
-        homeSettings,
+        homeSettings: homeSettingsForPage,
         siteSettings,
         ebooks,
         webinars,
         releaseNotes,
         allEventCards,
-        categories,
+        categories: categoriesForPage,
         footerData,
         podcasts,
-        faqCategories: categoriesWithFAQs,
+        faqCategories,
         events: events || [],
+        schemaBaseUrl,
+        schemaSiteName,
       },
     }
   } catch (error) {
@@ -176,7 +219,9 @@ export default function IndexPage(props: IndexPageProps) {
       footerData={props?.footerData}
     >
       <Layout>
-        {siteSettings?.map((e: any) => defaultMetaTag(e))}
+        {siteSettings?.map((e: any) =>
+          defaultMetaTag(e, canonicalUrl),
+        )}
         <Head>
           <link rel="canonical" href={canonicalUrl} key="canonical" />
         </Head>

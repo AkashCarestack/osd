@@ -18,7 +18,7 @@ import {
   getArticlesCount,
   getCategories,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getSiteSettings,
   getTags,
 } from '~/lib/sanity.queries'
@@ -70,7 +70,7 @@ export const getStaticProps: GetStaticProps<SharedPageProps & {}> = async (
       getArticles(client, skip, itemsPerPage, locale),
       getArticlesCount(client, locale),
       getTags(client),
-      getHomeSettings(client, locale, partnerSlug),
+      getLayoutHomeSettings(client, locale, partnerSlug),
       getSiteSettings(client),
       getCategories(client),
       getFooterData(client, locale),

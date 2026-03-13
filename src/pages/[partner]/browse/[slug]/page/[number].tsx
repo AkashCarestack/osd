@@ -17,7 +17,7 @@ import {
   getCategories,
   getEbooksCount,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getPodcastsCount,
   getPostsByTag,
   getPostsByTagAndLimit,
@@ -72,7 +72,7 @@ export const getStaticProps: GetStaticProps<
   const totalWebinars = await getWebinarsCount(client, region)
   const totalArticles = await getArticlesCount(client, region)
   const totalEbooks = await getEbooksCount(client, region)
-  const homeSettings = await getHomeSettings(client, region, partnerSlug)
+  const homeSettings = await getLayoutHomeSettings(client, region, partnerSlug)
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
 

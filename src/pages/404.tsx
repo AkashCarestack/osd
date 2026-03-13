@@ -11,7 +11,7 @@ import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getSiteSettings,
   getTags,
   getTagsByOrder,
@@ -44,7 +44,7 @@ export const getStaticProps: GetStaticProps<SharedPageProps> = async ({
     ] = await Promise.all([
       getTags(client),
       getTagsByOrder(client),
-      getHomeSettings(client),
+      getLayoutHomeSettings(client, 'en'),
       getSiteSettings(client),
       getCategories(client),
       getFooterData(client),

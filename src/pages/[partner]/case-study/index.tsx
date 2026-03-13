@@ -21,7 +21,7 @@ import {
   getCaseStudiesCount,
   getCategories,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getTags,
   getTestiMonials,
 } from '~/lib/sanity.queries'
@@ -51,7 +51,7 @@ export const getStaticProps: GetStaticProps<
   const totalPages = Math.ceil(totalCaseStudies / itemsPerPage)
   const testimonials = await getTestiMonials(client, 0, 6, region)
   const tags = await getTags(client)
-  const homeSettings = await getHomeSettings(client, region, partnerSlug)
+  const homeSettings = await getLayoutHomeSettings(client, region, partnerSlug)
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
 

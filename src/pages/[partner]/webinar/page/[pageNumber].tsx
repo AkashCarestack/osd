@@ -15,7 +15,7 @@ import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getTags,
   getWebinars,
   getWebinarsCount,
@@ -62,7 +62,7 @@ export const getStaticProps: GetStaticProps<
   const totalWebinars = await getWebinarsCount(client, region)
   const totalPages = Math.ceil(totalWebinars / itemsPerPage)
   const tags = await getTags(client)
-  const homeSettings = await getHomeSettings(client, region, partnerSlug)
+  const homeSettings = await getLayoutHomeSettings(client, region, partnerSlug)
   const categories = await getCategories(client)
 
   if (!webinars || webinars.length === 0) {

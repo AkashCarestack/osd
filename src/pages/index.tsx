@@ -1,9 +1,10 @@
 import type { GetStaticProps } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 
+import OSDentalLogo from '~/assets/reactiveAssets/OSDentalLogo'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
-import Layout from '~/components/Layout'
 import { Post } from '~/interfaces/post'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
@@ -165,31 +166,58 @@ export default function IndexPage(props: IndexPageProps) {
     homeSettings?.heroSection?.backgroundImage ||
     'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png'
 
+  const partnersList = props?.partners ?? []
+
   return (
     <GlobalDataProvider
       data={props?.categories}
       featuredTags={homeSettings?.featuredTags}
       homeSettings={homeSettings}
       footerData={props?.footerData}
-      partners={props?.partners ?? []}
+      partners={partnersList}
     >
-      <Layout>
-        {siteSettings?.map((e: any) => {
-          return defaultMetaTag(e)
-        })}
-        <Head>
-          <link rel="canonical" href={baseUrl} key="canonical" />
-          <link rel="alternate" href={defaultUrl} hrefLang="x-default" />
-          <link rel="alternate" href={baseUrl + '/en'} hrefLang="en-US" />
-          <link rel="alternate" href={baseUrl + '/en-GB'} hrefLang="en-GB" />
-          <link rel="alternate" href={baseUrl + '/en-AU'} hrefLang="en-AU" />
-        </Head>
-        {/* Default landing: hero bg only (partner links shown in Header when on /) */}
-        <div
-          className="min-h-screen w-full bg-[#18181b] bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroBg})` }}
-        />
-      </Layout>
+      {siteSettings?.map((e: any) =>
+        defaultMetaTag(e, defaultUrl || baseUrl),
+      )}
+      <Head>
+        <link rel="canonical" href={baseUrl} key="canonical" />
+        <link rel="alternate" href={defaultUrl} hrefLang="x-default" />
+        <link rel="alternate" href={baseUrl + '/en'} hrefLang="en-US" />
+        <link rel="alternate" href={baseUrl + '/en-GB'} hrefLang="en-GB" />
+        <link rel="alternate" href={baseUrl + '/en-AU'} hrefLang="en-AU" />
+      </Head>
+      {/* Home page: no header/footer, hero bg with centered logo + partner links */}
+      <div
+        className="min-h-screen w-full bg-[#18181b] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center relative"
+        style={{ backgroundImage: `url(${heroBg})` }}
+      >
+        <div className="flex flex-col items-center justify-center gap-10 md:gap-12 relative z-10">
+          <Link href="/" className="shrink-0" aria-label="OS Dental home">
+            <OSDentalLogo
+              width={220}
+              height={39}
+              className="w-[180px] md:w-[220px] h-auto text-white"
+            />
+          </Link>
+          {partnersList.length > 0 && (
+            <nav className="flex flex-wrap items-center justify-center gap-x-1 gap-y-3 md:gap-x-2 md:gap-y-4 px-4">
+              {partnersList.map((p, i) => (
+                <span key={p.slug} className="flex items-center gap-x-3 md:gap-x-4">
+                  {i > 0 && (
+                    <span className="text-white/60 font-light select-none" aria-hidden="true">|</span>
+                  )}
+                  <Link
+                    href={`/${p.slug}`}
+                    className="text-white/90 hover:text-white font-medium text-lg transition-colors duration-200 px-3 py-2 rounded hover:underline underline-offset-4"
+                  >
+                    {p.partnerName || p.slug}
+                  </Link>
+                </span>
+              ))}
+            </nav>
+          )}
+        </div>
+      </div>
     </GlobalDataProvider>
   )
 }
