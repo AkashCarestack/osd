@@ -127,6 +127,7 @@ export default function TagPagePaginated({
     <GlobalDataProvider
       data={categories}
       featuredTags={homeSettings?.featuredTags}
+      homeSettings={homeSettings}
       footerData={footerData}
     >
       <BaseUrlProvider baseUrl={baseUrl}>

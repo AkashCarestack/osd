@@ -291,6 +291,7 @@ export default function TagPage({
     <GlobalDataProvider
       data={categoriesWithPosts}
       featuredTags={homeSettings?.featuredTags}
+      homeSettings={homeSettings}
       footerData={footerData}
     >
       <BaseUrlProvider baseUrl={baseUrl}>
