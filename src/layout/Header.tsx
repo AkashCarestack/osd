@@ -195,15 +195,19 @@ const Header = () => {
                   </Link>
                   {isDefaultLanding && Array.isArray(partners) && partners.length > 0 ? (
                     <nav className="flex flex-wrap items-center justify-end gap-4 md:gap-8">
-                      {partners.map((p: { slug: string; partnerName?: string }) => (
+                      {partners.map((p: { slug: string; partnerName?: string }) => {
+                        const name = p.partnerName || p.slug
+                        const displayName = name.toLowerCase() === 'deo' ? 'DEO' : name
+                        return (
                         <Link
                           key={p.slug}
                           href={`/${p.slug}`}
                           className="text-zinc-400 hover:text-white font-medium transition-colors text-base"
                         >
-                          {p.partnerName || p.slug}
+                          {displayName}
                         </Link>
-                      ))}
+                        )
+                      })}
                     </nav>
                   ) : (
                     <>
