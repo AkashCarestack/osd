@@ -16,8 +16,9 @@ import { getClient } from '~/lib/sanity.client'
 import {
   getAllFAQs,
   getCategories,
+  getFAQsForPartner,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getSiteSettings,
 } from '~/lib/sanity.queries'
 import { defaultMetaTag } from '~/utils/customHead'
@@ -45,20 +46,33 @@ export const getStaticProps: GetStaticProps<FAQPageProps> = async ({
   const partnerSlug = params?.partner as string
   if (!partnerSlug) return { notFound: true }
 
-  const [faqCategories, categories, siteSettings, homeSettings, footerData] =
+  const [faqCategories, partnerFAQs, categories, siteSettings, homeSettings, footerData] =
     await Promise.all([
       getAllFAQs(client),
+      getFAQsForPartner(client, partnerSlug),
       getCategories(client),
       getSiteSettings(client),
-      getHomeSettings(client, region, partnerSlug),
+      getLayoutHomeSettings(client, region, partnerSlug),
       getFooterData(client, region),
     ])
 
-  // Filter categories that have FAQs
-  const categoriesWithFAQs = faqCategories.filter(
-    (category) =>
-      category.faq && category.faq.faqs && category.faq.faqs.length > 0,
+  // Filter categories that have FAQs, and scope to this partner (faq.partnerSlug empty or matches)
+  let categoriesWithFAQs = faqCategories.filter(
+    (category: any) =>
+      category.faq &&
+      category.faq.faqs &&
+      category.faq.faqs.length > 0 &&
+      (!category.faq.partnerSlug || category.faq.partnerSlug === partnerSlug),
   )
+  // Fallback: FAQ documents for this partner not linked to any category
+  if (categoriesWithFAQs.length === 0 && partnerFAQs?.length > 0) {
+    categoriesWithFAQs = partnerFAQs.map((faqDoc: any) => ({
+      _id: faqDoc._id,
+      categoryName: faqDoc.name,
+      slug: { current: 'faq' },
+      faq: faqDoc,
+    }))
+  }
 
   return {
     props: {

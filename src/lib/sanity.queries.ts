@@ -176,6 +176,7 @@ export const categoriesForPartnerQuery = groq`*[_type == "category" && (!defined
   categoryName,
   categoryDescription,
   slug,
+  "partner": partner-> { _id, "slug": slug.current, partnerName },
   "associatedContent": associatedContent[]-> {
     _id,
     title,
@@ -198,6 +199,7 @@ export const categoriesForPartnerQuery = groq`*[_type == "category" && (!defined
   "faq": faq-> {
     _id,
     name,
+    "partnerSlug": partner->slug.current,
     "author": author-> {
       _id,
       name,
@@ -613,6 +615,7 @@ export const homeSettingsByPartnerQuery = groq`
   *[_type == "homeSettings" && language == $region && (!defined(partner) || partner->slug.current == $partnerSlug)] | order((partner->slug.current == $partnerSlug) desc)[0] {
     _id,
     _createdAt,
+    "partner": partner-> { "slug": slug.current },
     "latestBlogs": *[_type == "post" && contentType == "article" && defined(slug.current)] | order(date desc) {
        id,
       "desc": postFields.excerpt,
@@ -1061,6 +1064,7 @@ export const allFAQsQuery = groq`
     "faq": faq-> {
       _id,
       name,
+      "partnerSlug": partner->slug.current,
       "author": author-> {
         _id,
         name,
@@ -1077,6 +1081,32 @@ export const allFAQsQuery = groq`
 
 export async function getAllFAQs(client: SanityClient): Promise<any[]> {
   return await client.fetch(allFAQsQuery)
+}
+
+/** FAQ documents for a partner (content repo). Use as fallback when no category links to an FAQ. */
+export const faqsForPartnerQuery = groq`
+  *[_type == "faq" && (!defined(partner) || partner->slug.current == $partnerSlug) && count(faqs) > 0] | order(name asc) {
+    _id,
+    name,
+    "partnerSlug": partner->slug.current,
+    "author": author-> {
+      _id,
+      name,
+      slug,
+      ${authorImageFragment},
+    },
+    faqs[] {
+      question,
+      answer
+    }
+  }
+`
+
+export async function getFAQsForPartner(
+  client: SanityClient,
+  partnerSlug: string,
+): Promise<any[]> {
+  return await client.fetch(faqsForPartnerQuery, { partnerSlug })
 }
 export async function getTagsByOrder(client: SanityClient): Promise<Tag[]> {
   return await client.fetch(tagsByOrderQuery)
@@ -1544,8 +1574,21 @@ export const authorRelatedContentQuery = groq`
   }
 `
 
-export const eventsQuery = groq`
+const eventsQueryAll = groq`
   *[_type == "event"] | order(date asc) {
+    _id,
+    title,
+    eventType,
+    location,
+    date,
+    description,
+    link
+  }
+`
+
+/** Events for a partner: only events that belong to this partner (exclude site-wide so partner page doesn’t show others). */
+const eventsForPartnerQuery = groq`
+  *[_type == "event" && defined(partner) && partner->slug.current == $partnerSlug] | order(date asc) {
     _id,
     title,
     eventType,
@@ -1559,8 +1602,53 @@ export const eventsQuery = groq`
 export async function getEvents(
   client: SanityClient,
   _region?: string,
+  partnerSlug?: string,
 ): Promise<any[]> {
-  return await client.fetch(eventsQuery)
+  if (partnerSlug) {
+    const result = await client.fetch(eventsForPartnerQuery, { partnerSlug })
+    return result ?? []
+  }
+  const result = await client.fetch(eventsQueryAll)
+  return result ?? []
+}
+
+/** Layout-only home settings: header logo, demo banner, featured tags. Use on non-home pages so each page uses its own content (footer, glossary, faq from content repo) and only layout from home. */
+const layoutHomeSettingsByPartnerQuery = groq`
+  *[_type == "homeSettings" && language == $region && (!defined(partner) || partner->slug.current == $partnerSlug)] | order((partner->slug.current == $partnerSlug) desc)[0] {
+    _id,
+    "headerLogo": headerLogo.asset->url,
+    demoBanner,
+    featuredTags[]->{
+      _id,
+      slug,
+      tagName
+    }
+  }
+`
+
+const layoutHomeSettingsDefaultQuery = groq`
+  *[_type == "homeSettings" && language == $region && !defined(partner)][0] {
+    _id,
+    "headerLogo": headerLogo.asset->url,
+    demoBanner,
+    featuredTags[]->{
+      _id,
+      slug,
+      tagName
+    }
+  }
+`
+
+export async function getLayoutHomeSettings(
+  client: SanityClient,
+  region: string = 'en',
+  partnerSlug?: string,
+): Promise<any> {
+  const query = partnerSlug
+    ? layoutHomeSettingsByPartnerQuery
+    : layoutHomeSettingsDefaultQuery
+  const result = await client.fetch(query, partnerSlug ? { region, partnerSlug } : { region })
+  return result || null
 }
 
 export async function getHomeSettings(

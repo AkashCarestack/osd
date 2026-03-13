@@ -214,7 +214,7 @@ const UpcomingEventsSection: React.FC<UpcomingEventsSectionProps> = ({
     ? cmsEvents.map(mapCmsEventToEvent)
     : hasSectionEvents
       ? data?.events ?? []
-      : defaultEvents
+      : []
 
   const sectionData: UpcomingEventsData = { title, events }
 

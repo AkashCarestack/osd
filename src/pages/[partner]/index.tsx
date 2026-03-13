@@ -15,11 +15,11 @@ import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
-  getAllFAQs,
   getCategoriesForPartner,
   getEbooks,
   getEventCards,
   getEvents,
+  getFAQsForPartner,
   getFooterData,
   getHomeSettings,
   getPodcasts,
@@ -87,8 +87,8 @@ export const getStaticProps: GetStaticProps<
       categories,
       footerData,
       podcasts,
-      faqCategories,
       events,
+      partnerFAQs,
     ] = await Promise.all([
       getPosts(client, 5, region),
       getPosts(client, undefined, region),
@@ -104,14 +104,42 @@ export const getStaticProps: GetStaticProps<
       getCategoriesForPartner(client, partnerSlug),
       getFooterData(client, region),
       getPodcasts(client, undefined, undefined, region),
-      getAllFAQs(client),
-      getEvents(client, region),
+      getEvents(client, region, partnerSlug),
+      getFAQsForPartner(client, partnerSlug),
     ])
 
-    const categoriesWithFAQs = faqCategories.filter(
-      (category) =>
-        category.faq && category.faq.faqs && category.faq.faqs.length > 0,
+    // Knowledge Guides: only this partner’s categories (exclude site-wide)
+    const allCategories = categories || []
+    const partnerOnlyCategories = allCategories.filter(
+      (c: any) => c.partner?.slug === partnerSlug,
     )
+    const categoriesForPage =
+      partnerOnlyCategories.length > 0 ? partnerOnlyCategories : allCategories
+
+    // FAQ: show FAQs where the FAQ document is for this partner (or site-wide), from any category.
+    // If no category links to an FAQ, fall back to FAQ documents for this partner (content repo).
+    let faqCategories = allCategories.filter(
+      (category: any) =>
+        category.faq &&
+        category.faq.faqs &&
+        category.faq.faqs.length > 0 &&
+        (!category.faq.partnerSlug ||
+          category.faq.partnerSlug === partnerSlug),
+    )
+    if (faqCategories.length === 0 && partnerFAQs?.length > 0) {
+      faqCategories = partnerFAQs.map((faqDoc: any) => ({
+        _id: faqDoc._id,
+        categoryName: faqDoc.name,
+        slug: { current: 'faq' },
+        faq: faqDoc,
+      }))
+    }
+
+    // Only use home settings content (e.g. upcoming events) when the doc is for this partner
+    const homeSettingsForPage =
+      homeSettings && homeSettings.partner?.slug !== partnerSlug
+        ? { ...homeSettings, upcomingEventsSection: undefined }
+        : homeSettings
 
     return {
       props: {
@@ -122,16 +150,16 @@ export const getStaticProps: GetStaticProps<
         tags,
         tagsByOrder,
         testimonials,
-        homeSettings,
+        homeSettings: homeSettingsForPage,
         siteSettings,
         ebooks,
         webinars,
         releaseNotes,
         allEventCards,
-        categories,
+        categories: categoriesForPage,
         footerData,
         podcasts,
-        faqCategories: categoriesWithFAQs,
+        faqCategories,
         events: events || [],
       },
     }

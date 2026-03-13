@@ -17,7 +17,7 @@ import {
   getCategories,
   getEbooksCount,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getPodcastsCount,
   getPostsByTag,
   getPostsByTagAndLimit,
@@ -84,7 +84,7 @@ export const getStaticProps: GetStaticProps<
       getArticlesCount(client, region),
       getEbooksCount(client, region),
       getSiteSettings(client),
-      getHomeSettings(client, region, partnerSlug),
+      getLayoutHomeSettings(client, region, partnerSlug),
       getCategories(client),
       getFooterData(client, region),
     ])

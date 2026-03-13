@@ -36,7 +36,8 @@ export const navigationLinks = [
 ]
 
 const Header = () => {
-  let { featuredTags, homeSettings, partners } = useGlobalData()
+  let { featuredTags, homeSettings, partners, data: categories } = useGlobalData()
+  const hasCategories = Array.isArray(categories) && categories.length > 0
   const router = useRouter()
   const { locale } = router.query
   const [showMenu, setShowMenu] = useState(false)
@@ -209,7 +210,7 @@ const Header = () => {
                   <div
                     className={`flex lg:gap-10   justify-between rounded-xl items-center`}
                   >
-                    {!isMobile && (
+                    {!isMobile && hasCategories && (
                       <div
                         className="group relative py-4"
                         onMouseEnter={() => setShowTopicsDropdown(true)}

@@ -22,7 +22,7 @@ import {
   getauthorRelatedContents,
   getCategories,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getTags,
 } from '~/lib/sanity.queries'
 import { SharedPageProps } from '~/pages/_app'
@@ -51,7 +51,7 @@ export const getStaticProps: GetStaticProps<
   if (!author) return { notFound: true }
   const authorId = author?._id
   const tags = await getTags(client)
-  const homeSettings = await getHomeSettings(client, region, partnerSlug)
+  const homeSettings = await getLayoutHomeSettings(client, region, partnerSlug)
   const relatedContents = await getauthorRelatedContents(
     client,
     authorId,

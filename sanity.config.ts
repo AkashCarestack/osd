@@ -163,7 +163,10 @@ export default defineConfig({
         const buildPartnerPanel = (
           partnerSlug: string,
           partnerTitle: string,
-          options?: { listAllContentUnderPartner?: boolean },
+          options?: {
+            listAllContentUnderPartner?: boolean
+            partnerId?: string
+          },
         ) =>
           S.list()
             .title(partnerTitle)
@@ -204,11 +207,87 @@ export default defineConfig({
                           S.list()
                             .title('Content Repo')
                             .items([
-                              S.documentTypeListItem('glossary').title(
-                                'Glossary',
-                              ),
-                              S.documentTypeListItem('faq').title('FAQ'),
-                              S.documentTypeListItem('event').title('Events'),
+                              // Glossary: filtered by partner, new docs auto-bound to this partner
+                              S.listItem()
+                                .title('Glossary')
+                                .child(
+                                  S.documentList()
+                                    .apiVersion(apiVersion)
+                                    .title(`Glossary — ${partnerTitle}`)
+                                    .filter(
+                                      '_type == "glossary" && (!defined(partner) || partner._ref == $partnerId)',
+                                    )
+                                    .params({
+                                      partnerId: options?.partnerId ?? '',
+                                    })
+                                    .schemaType('glossary')
+                                    .initialValueTemplates(
+                                      options?.partnerId
+                                        ? [
+                                            S.initialValueTemplateItem(
+                                              'glossary-with-partner',
+                                              {
+                                                partnerRef: options.partnerId,
+                                              },
+                                            ),
+                                          ]
+                                        : [],
+                                    ),
+                                ),
+                              // FAQ: filtered by partner, new docs auto-bound to this partner
+                              S.listItem()
+                                .title('FAQ')
+                                .child(
+                                  S.documentList()
+                                    .apiVersion(apiVersion)
+                                    .title(`FAQ — ${partnerTitle}`)
+                                    .filter(
+                                      '_type == "faq" && (!defined(partner) || partner._ref == $partnerId)',
+                                    )
+                                    .params({
+                                      partnerId: options?.partnerId ?? '',
+                                    })
+                                    .schemaType('faq')
+                                    .initialValueTemplates(
+                                      options?.partnerId
+                                        ? [
+                                            S.initialValueTemplateItem(
+                                              'faq-with-partner',
+                                              {
+                                                partnerRef: options.partnerId,
+                                              },
+                                            ),
+                                          ]
+                                        : [],
+                                    ),
+                                ),
+                              // Events: filtered by partner, new docs auto-bound to this partner
+                              S.listItem()
+                                .title('Events')
+                                .child(
+                                  S.documentList()
+                                    .apiVersion(apiVersion)
+                                    .title(`Events — ${partnerTitle}`)
+                                    .filter(
+                                      '_type == "event" && (!defined(partner) || partner._ref == $partnerId)',
+                                    )
+                                    .params({
+                                      partnerId: options?.partnerId ?? '',
+                                    })
+                                    .schemaType('event')
+                                    .initialValueTemplates(
+                                      options?.partnerId
+                                        ? [
+                                            S.initialValueTemplateItem(
+                                              'event-with-partner',
+                                              {
+                                                partnerRef: options.partnerId,
+                                              },
+                                            ),
+                                          ]
+                                        : [],
+                                    ),
+                                ),
                             ]),
                         ),
                       S.documentTypeListItem('customContent')
@@ -284,6 +363,7 @@ export default defineConfig({
               .child(
                 buildPartnerPanel(slug, title, {
                   listAllContentUnderPartner: slug === firstSlug,
+                  partnerId: p._id,
                 }),
               )
           })

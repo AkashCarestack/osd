@@ -17,7 +17,7 @@ import {
   getCategory,
   getEbooksCount,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getPodcastsCount,
   getPostsByCategoryAndLimit,
   getPostsByTag,
@@ -41,7 +41,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const categoryPromise = getCategory(client, slug, partnerSlug)
   const siteSettingsPromise = getSiteSettings(client)
-  const homeSettingsPromise = getHomeSettings(client, region, partnerSlug)
+  const homeSettingsPromise = getLayoutHomeSettings(client, region, partnerSlug)
 
   const [category, siteSettings, homeSettings] = await Promise.all([
     categoryPromise,

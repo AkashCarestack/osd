@@ -18,7 +18,7 @@ import {
   getEbooks,
   getEbooksCount,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getTags,
 } from '~/lib/sanity.queries'
 import { SharedPageProps } from '~/pages/_app'
@@ -60,7 +60,7 @@ export const getStaticProps: GetStaticProps<
   const totalEbooks = await getEbooksCount(client, region)
   const totalPages = Math.ceil(totalEbooks / itemsPerPage)
   const tags = await getTags(client)
-  const homeSettings = await getHomeSettings(client, region, partnerSlug)
+  const homeSettings = await getLayoutHomeSettings(client, region, partnerSlug)
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
 

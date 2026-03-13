@@ -17,7 +17,7 @@ import {
   getCategoriesForPartner,
   getEbooksCount,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getPodcastsCount,
   getPosts,
   getPostsByLimit,
@@ -55,7 +55,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getWebinarsCount(client, region),
     getArticlesCount(client, region),
     getEbooksCount(client, region),
-    getHomeSettings(client, region, partnerSlug),
+    getLayoutHomeSettings(client, region, partnerSlug),
     getCategoriesForPartner(client, partnerSlug),
     getFooterData(client, region),
   ])

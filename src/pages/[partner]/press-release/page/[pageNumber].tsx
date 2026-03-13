@@ -16,7 +16,7 @@ import { getClient } from '~/lib/sanity.client'
 import {
   getCategories,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getPressReleases,
   getPressReleasesCount,
   getTags,
@@ -69,7 +69,7 @@ export const getStaticProps: GetStaticProps<
   const totalPressReleases = await getPressReleasesCount(client, region)
   const totalPages = Math.ceil(totalPressReleases / itemsPerPage)
   const tags = await getTags(client)
-  const homeSettings = await getHomeSettings(client, region, partnerSlug)
+  const homeSettings = await getLayoutHomeSettings(client, region, partnerSlug)
   const categories = await getCategories(client)
   const footerData = await getFooterData(client, region)
 

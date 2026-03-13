@@ -27,7 +27,7 @@ import {
   getCategoriesForPartner,
   getCategory,
   getFooterData,
-  getHomeSettings,
+  getLayoutHomeSettings,
   getPostBySlugAndRegion,
   getPostsByCategoryAndLimit,
   getTagRelatedContents,
@@ -160,7 +160,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const [categories, tags, homeSettings, footerData] = await Promise.all([
     getCategories(client),
     getTags(client),
-    getHomeSettings(client, region, params?.partner as string),
+    getLayoutHomeSettings(client, region, params?.partner as string),
     getFooterData(client, region),
   ])
 

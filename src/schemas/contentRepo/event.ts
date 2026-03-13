@@ -6,6 +6,14 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'partner',
+      title: 'Partner',
+      type: 'reference',
+      to: [{ type: 'partner' }],
+      description:
+        'Optional. Select a partner to scope this event to that partner. Leave empty for site-wide.',
+    }),
+    defineField({
       name: 'title',
       title: 'Event Title',
       type: 'string',
@@ -63,9 +71,15 @@ export default defineType({
       title: 'title',
       eventType: 'eventType',
       date: 'date',
+      partnerName: 'partner.partnerName',
     },
-    prepare(selection: { title: string; eventType: string; date: string }) {
-      const { title, eventType, date } = selection
+    prepare(selection: {
+      title: string
+      eventType: string
+      date: string
+      partnerName?: string
+    }) {
+      const { title, eventType, date, partnerName } = selection
       const formattedDate = date
         ? new Date(date).toLocaleDateString('en-US', {
             month: 'short',
@@ -73,10 +87,16 @@ export default defineType({
             year: 'numeric',
           })
         : ''
+      const subtitle = [
+        eventType,
+        formattedDate,
+        partnerName,
+      ]
+        .filter(Boolean)
+        .join(' • ')
       return {
         title: title || 'Untitled Event',
-        subtitle:
-          `${eventType || ''} ${formattedDate ? `• ${formattedDate}` : ''}`.trim(),
+        subtitle: subtitle || '—',
       }
     },
   },

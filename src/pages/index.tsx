@@ -206,27 +206,9 @@ export default function IndexPage(props: IndexPageProps) {
                   )}
                   <Link
                     href={`/${p.slug}`}
-                    className="group inline-flex items-center gap-1.5 text-white/90 hover:text-white font-medium text-lg md:text-xl transition-all duration-200 px-2 py-1 -mx-2 rounded hover:bg-white/10"
+                    className="text-white/90 hover:text-white font-medium text-lg md:text-xl transition-colors duration-200 px-2 py-1 -mx-2 rounded hover:underline underline-offset-4"
                   >
-                    <span className="inline-block group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200">
-                      {p.partnerName || p.slug}
-                    </span>
-                    <svg
-                      width={14}
-                      height={14}
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      className="shrink-0 opacity-80 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200"
-                      aria-hidden
-                    >
-                      <path
-                        d="M6 4h4v4M10 4l-6 6"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    {p.partnerName || p.slug}
                   </Link>
                 </span>
               ))}
