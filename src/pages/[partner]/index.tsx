@@ -22,6 +22,7 @@ import {
   getFAQsForPartner,
   getFooterData,
   getHomeSettings,
+  getPartnersWithHomeSettings,
   getPodcasts,
   getPosts,
   getReleaseNotes,
@@ -55,6 +56,8 @@ interface IndexPageProps {
   homeSettings: any
   faqCategories: any[]
   events: any[]
+  schemaBaseUrl?: string
+  schemaSiteName?: string
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -70,6 +73,8 @@ export const getStaticProps: GetStaticProps<
   const partnerSlug = params?.partner
   const client = getClient(draftMode ? { token: readToken } : undefined)
   if (!partnerSlug || typeof partnerSlug !== 'string') return { notFound: true }
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://osdental.io'
 
   try {
     const [
@@ -89,6 +94,7 @@ export const getStaticProps: GetStaticProps<
       podcasts,
       events,
       partnerFAQs,
+      partnersWithHome,
     ] = await Promise.all([
       getPosts(client, 5, region),
       getPosts(client, undefined, region),
@@ -106,6 +112,7 @@ export const getStaticProps: GetStaticProps<
       getPodcasts(client, undefined, undefined, region),
       getEvents(client, region, partnerSlug),
       getFAQsForPartner(client, partnerSlug),
+      getPartnersWithHomeSettings(client),
     ])
 
     // Knowledge Guides: only this partner’s categories (exclude site-wide)
@@ -141,6 +148,12 @@ export const getStaticProps: GetStaticProps<
         ? { ...homeSettings, upcomingEventsSection: undefined }
         : homeSettings
 
+    const partnerInfo = (partnersWithHome || []).find(
+      (p: { slug: string; partnerName?: string }) => p.slug === partnerSlug,
+    )
+    const schemaBaseUrl = `${baseUrl.replace(/\/$/, '')}/${partnerSlug}`
+    const schemaSiteName = partnerInfo?.partnerName || partnerSlug
+
     return {
       props: {
         draftMode,
@@ -161,6 +174,8 @@ export const getStaticProps: GetStaticProps<
         podcasts,
         faqCategories,
         events: events || [],
+        schemaBaseUrl,
+        schemaSiteName,
       },
     }
   } catch (error) {
@@ -204,7 +219,9 @@ export default function IndexPage(props: IndexPageProps) {
       footerData={props?.footerData}
     >
       <Layout>
-        {siteSettings?.map((e: any) => defaultMetaTag(e))}
+        {siteSettings?.map((e: any) =>
+          defaultMetaTag(e, canonicalUrl),
+        )}
         <Head>
           <link rel="canonical" href={canonicalUrl} key="canonical" />
         </Head>

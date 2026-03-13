@@ -63,74 +63,50 @@ const FeatureCard: React.FC<{ feature: Feature }> = ({ feature }) => {
   )
 }
 
+const FALLBACK_DATA: WhyPracticeLoveData = {
+  title: 'Why Practices Love Clinical Dashboards',
+  description:
+    'Clinical Dashboards give your practice a powerful, visual snapshot of key clinical performance metrics and insights all in one easy-to-use view. No spreadsheets. No guesswork. Just clear insights that help you move faster and improve performance.',
+  features: [
+    { title: 'See performance at a glance', description: 'Instant visibility into trends across providers, procedures, and locations.' },
+    { title: 'Spot growth opportunities faster', description: 'Quickly identify gaps, inconsistencies, and areas for clinical improvement.' },
+    { title: 'Align clinical excellence with business success', description: 'Connect performance metrics to practice goals without compromising patient care.' },
+    { title: 'Make confident, data-driven decisions', description: 'Simple, intuitive visuals make it easy for your team to understand and take action.' },
+  ],
+  ctaTitle: 'Ready to see it in action?',
+  ctaDescription: "Book a demo with a member of our OS Dental team to learn how Clinical Dashboards can support your practice's growth.",
+  ctaButtonText: 'Book a Clinical Demo',
+  ctaButtonLink: '#',
+  ctaBackgroundImage: 'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',
+}
+
 const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({
   data,
   heroPrimaryButtonLink,
 }) => {
-  // Default data
-  const defaultData: WhyPracticeLoveData = {
-    title: 'Why Practices Love Clinical Dashboards',
-    description:
-      'Clinical Dashboards give your practice a powerful, visual snapshot of key clinical performance metrics and insights all in one easy-to-use view. No spreadsheets. No guesswork. Just clear insights that help you move faster and improve performance.',
-    features: [
-      {
-        title: 'See performance at a glance',
-        description:
-          'Instant visibility into trends across providers, procedures, and locations.',
-      },
-      {
-        title: 'Spot growth opportunities faster',
-        description:
-          'Quickly identify gaps, inconsistencies, and areas for clinical improvement.',
-      },
-      {
-        title: 'Align clinical excellence with business success',
-        description:
-          'Connect performance metrics to practice goals without compromising patient care.',
-      },
-      {
-        title: 'Make confident, data-driven decisions',
-        description:
-          'Simple, intuitive visuals make it easy for your team to understand and take action.',
-      },
-    ],
-    ctaTitle: 'Ready to see it in action?',
-    ctaDescription:
-      "Book a demo with a member of our OS Dental team to learn how Clinical Dashboards can support your practice's growth.",
-    ctaButtonText: 'Book a Clinical Demo',
-    ctaButtonLink: '#',
-    ctaBackgroundImage:
-      'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',
+  const resolveLink = (v: string | { href?: string } | undefined): string => {
+    if (typeof v === 'string') return v
+    if (v && typeof v === 'object' && typeof (v as { href?: string }).href === 'string') return (v as { href: string }).href
+    return FALLBACK_DATA.ctaButtonLink
   }
 
-  // Same background image as HeroSection
+  // Render from CMS first; fallback only when CMS has no data or empty fields
+  const sectionData: WhyPracticeLoveData = !data
+    ? FALLBACK_DATA
+    : {
+        title: data.title?.trim() || FALLBACK_DATA.title,
+        description: data.description?.trim() || FALLBACK_DATA.description,
+        features: data.features?.length ? data.features : FALLBACK_DATA.features,
+        ctaTitle: data.ctaTitle?.trim() || FALLBACK_DATA.ctaTitle,
+        ctaDescription: data.ctaDescription?.trim() || FALLBACK_DATA.ctaDescription,
+        ctaButtonText: data.ctaButtonText?.trim() || FALLBACK_DATA.ctaButtonText,
+        ctaButtonLink: resolveLink(data.ctaButtonLink),
+        ctaBackgroundImage: data.ctaBackgroundImage || FALLBACK_DATA.ctaBackgroundImage,
+      }
+
   const heroBackgroundImage =
+    sectionData.ctaBackgroundImage ||
     'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png'
-
-  // Transform Sanity data to match component interface
-  const transformData = (sanityData: any): WhyPracticeLoveData | null => {
-    if (!sanityData) {
-      return null
-    }
-
-    return {
-      title: sanityData.title || defaultData.title,
-      description: sanityData.description || defaultData.description,
-      features:
-        sanityData.features && sanityData.features.length > 0
-          ? sanityData.features
-          : defaultData.features,
-      ctaTitle: sanityData.ctaTitle || defaultData.ctaTitle,
-      ctaDescription: sanityData.ctaDescription || defaultData.ctaDescription,
-      ctaButtonText: sanityData.ctaButtonText || defaultData.ctaButtonText,
-      ctaButtonLink: sanityData.ctaButtonLink || defaultData.ctaButtonLink,
-      ctaBackgroundImage:
-        sanityData.ctaBackgroundImage || defaultData.ctaBackgroundImage,
-    }
-  }
-
-  const transformedData = data ? transformData(data) : null
-  const sectionData = transformedData || defaultData
 
   return (
     <Section className="bg-zinc-100 justify-center md:!pt-24 md:pb-16 !py-12">
@@ -162,7 +138,7 @@ const WhyPracticeLoveSection: React.FC<WhyPracticeLoveSectionProps> = ({
             <div
               className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden"
               style={{
-                backgroundImage: `url(${sectionData.ctaBackgroundImage || heroBackgroundImage})`,
+                backgroundImage: `url(${heroBackgroundImage})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'right center',
                 backgroundRepeat: 'no-repeat',

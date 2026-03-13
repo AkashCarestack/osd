@@ -176,7 +176,9 @@ export default function IndexPage(props: IndexPageProps) {
       footerData={props?.footerData}
       partners={partnersList}
     >
-      {siteSettings?.map((e: any) => defaultMetaTag(e))}
+      {siteSettings?.map((e: any) =>
+        defaultMetaTag(e, defaultUrl || baseUrl),
+      )}
       <Head>
         <link rel="canonical" href={baseUrl} key="canonical" />
         <link rel="alternate" href={defaultUrl} hrefLang="x-default" />
@@ -189,7 +191,7 @@ export default function IndexPage(props: IndexPageProps) {
         className="min-h-screen w-full bg-[#18181b] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center relative"
         style={{ backgroundImage: `url(${heroBg})` }}
       >
-        <div className="flex flex-col items-center justify-center gap-8 md:gap-10 relative z-10">
+        <div className="flex flex-col items-center justify-center gap-10 md:gap-12 relative z-10">
           <Link href="/" className="shrink-0" aria-label="OS Dental home">
             <OSDentalLogo
               width={220}
@@ -198,15 +200,15 @@ export default function IndexPage(props: IndexPageProps) {
             />
           </Link>
           {partnersList.length > 0 && (
-            <nav className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
+            <nav className="flex flex-wrap items-center justify-center gap-x-1 gap-y-3 md:gap-x-2 md:gap-y-4 px-4">
               {partnersList.map((p, i) => (
-                <span key={p.slug} className="flex items-center gap-2 md:gap-3">
+                <span key={p.slug} className="flex items-center gap-x-3 md:gap-x-4">
                   {i > 0 && (
-                    <span className="text-white/60 font-light">|</span>
+                    <span className="text-white/60 font-light select-none" aria-hidden="true">|</span>
                   )}
                   <Link
                     href={`/${p.slug}`}
-                    className="text-white/90 hover:text-white font-medium text-lg md:text-xl transition-colors duration-200 px-2 py-1 -mx-2 rounded hover:underline underline-offset-4"
+                    className="text-white/90 hover:text-white font-medium text-lg transition-colors duration-200 px-3 py-2 rounded hover:underline underline-offset-4"
                   >
                     {p.partnerName || p.slug}
                   </Link>
