@@ -171,6 +171,7 @@ export default function ProjectSlugRoute(
       <GlobalDataProvider
         data={categoriesWithPosts}
         featuredTags={homeSettings?.featuredTags}
+        homeSettings={homeSettings}
         footerData={props?.footerData}
       >
         <BaseUrlProvider baseUrl={baseUrl}>

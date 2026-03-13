@@ -353,6 +353,7 @@ export default function TopicContentPage({
     <GlobalDataProvider
       data={categoriesWithPosts}
       featuredTags={homeSettings?.featuredTags}
+      homeSettings={homeSettings}
       footerData={footerData}
     >
       <BaseUrlProvider baseUrl={baseUrl}>

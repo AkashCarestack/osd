@@ -205,6 +205,7 @@ export default function IndexPage(props: IndexPageProps) {
                 <span key={p.slug} className="flex items-center gap-x-3 md:gap-x-4">
                   {i > 0 && (
                     <span className="text-white/60 font-light select-none" aria-hidden="true">|</span>
+                    
                   )}
                   <Link
                     href={`/${p.slug}`}
