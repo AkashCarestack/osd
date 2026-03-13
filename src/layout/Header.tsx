@@ -187,7 +187,7 @@ const Header = () => {
                       <img
                         src={homeSettings.headerLogo}
                         alt="Site logo"
-                        className="h-8 w-auto object-contain object-left"
+                        className="h-[56px] w-auto object-contain object-left"
                       />
                     ) : (
                       <VoiceStackResources />
