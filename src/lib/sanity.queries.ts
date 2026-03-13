@@ -580,6 +580,7 @@ export const homeSettingsQuery = groq`
       "videoThumbnail": videoThumbnail.asset->url,
       videoLink
     },
+    "headerLogo": headerLogo.asset->url,
     "whyPracticeLoveSection": whyPracticeLoveSection {
       title,
       description,
@@ -932,6 +933,7 @@ export const homeSettingsByPartnerQuery = groq`
       "videoThumbnail": videoThumbnail.asset->url,
       videoLink
     },
+    "headerLogo": headerLogo.asset->url,
     "whyPracticeLoveSection": whyPracticeLoveSection {
       title,
       description,

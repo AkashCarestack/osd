@@ -10,6 +10,14 @@ export default {
   type: 'document',
   groups: [
     {
+      name: 'hero',
+      title: 'Hero Section',
+    },
+    {
+      name: 'headerAndFooter',
+      title: 'Header and Footer',
+    },
+    {
       name: 'popularBlogs',
       title: 'Popular Blogs',
     },
@@ -28,10 +36,6 @@ export default {
     {
       name: 'faq',
       title: 'FAQ Section',
-    },
-    {
-      name: 'hero',
-      title: 'Hero Section',
     },
     {
       name: 'whyPracticeLove',
@@ -254,6 +258,16 @@ export default {
         'Configure the Hero section with title, description, and buttons',
       type: 'heroSection',
       group: 'hero',
+    },
+    {
+      name: 'headerLogo',
+      title: 'Header Logo',
+      type: 'image',
+      description: 'Logo image displayed in the header on partner pages.',
+      group: 'headerAndFooter',
+      options: {
+        hotspot: true,
+      },
     },
     {
       name: 'whyPracticeLoveSection',

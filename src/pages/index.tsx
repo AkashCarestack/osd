@@ -1,9 +1,10 @@
 import type { GetStaticProps } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 
+import OSDentalLogo from '~/assets/reactiveAssets/OSDentalLogo'
 import { GlobalDataProvider } from '~/components/Context/GlobalDataContext'
-import Layout from '~/components/Layout'
 import { Post } from '~/interfaces/post'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
@@ -165,31 +166,74 @@ export default function IndexPage(props: IndexPageProps) {
     homeSettings?.heroSection?.backgroundImage ||
     'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png'
 
+  const partnersList = props?.partners ?? []
+
   return (
     <GlobalDataProvider
       data={props?.categories}
       featuredTags={homeSettings?.featuredTags}
       homeSettings={homeSettings}
       footerData={props?.footerData}
-      partners={props?.partners ?? []}
+      partners={partnersList}
     >
-      <Layout>
-        {siteSettings?.map((e: any) => {
-          return defaultMetaTag(e)
-        })}
-        <Head>
-          <link rel="canonical" href={baseUrl} key="canonical" />
-          <link rel="alternate" href={defaultUrl} hrefLang="x-default" />
-          <link rel="alternate" href={baseUrl + '/en'} hrefLang="en-US" />
-          <link rel="alternate" href={baseUrl + '/en-GB'} hrefLang="en-GB" />
-          <link rel="alternate" href={baseUrl + '/en-AU'} hrefLang="en-AU" />
-        </Head>
-        {/* Default landing: hero bg only (partner links shown in Header when on /) */}
-        <div
-          className="min-h-screen w-full bg-[#18181b] bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroBg})` }}
-        />
-      </Layout>
+      {siteSettings?.map((e: any) => defaultMetaTag(e))}
+      <Head>
+        <link rel="canonical" href={baseUrl} key="canonical" />
+        <link rel="alternate" href={defaultUrl} hrefLang="x-default" />
+        <link rel="alternate" href={baseUrl + '/en'} hrefLang="en-US" />
+        <link rel="alternate" href={baseUrl + '/en-GB'} hrefLang="en-GB" />
+        <link rel="alternate" href={baseUrl + '/en-AU'} hrefLang="en-AU" />
+      </Head>
+      {/* Home page: no header/footer, hero bg with centered logo + partner links */}
+      <div
+        className="min-h-screen w-full bg-[#18181b] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center relative"
+        style={{ backgroundImage: `url(${heroBg})` }}
+      >
+        <div className="flex flex-col items-center justify-center gap-8 md:gap-10 relative z-10">
+          <Link href="/" className="shrink-0" aria-label="OS Dental home">
+            <OSDentalLogo
+              width={220}
+              height={39}
+              className="w-[180px] md:w-[220px] h-auto text-white"
+            />
+          </Link>
+          {partnersList.length > 0 && (
+            <nav className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
+              {partnersList.map((p, i) => (
+                <span key={p.slug} className="flex items-center gap-2 md:gap-3">
+                  {i > 0 && (
+                    <span className="text-white/60 font-light">|</span>
+                  )}
+                  <Link
+                    href={`/${p.slug}`}
+                    className="group inline-flex items-center gap-1.5 text-white/90 hover:text-white font-medium text-lg md:text-xl transition-all duration-200 px-2 py-1 -mx-2 rounded hover:bg-white/10"
+                  >
+                    <span className="inline-block group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200">
+                      {p.partnerName || p.slug}
+                    </span>
+                    <svg
+                      width={14}
+                      height={14}
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      className="shrink-0 opacity-80 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200"
+                      aria-hidden
+                    >
+                      <path
+                        d="M6 4h4v4M10 4l-6 6"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </Link>
+                </span>
+              ))}
+            </nav>
+          )}
+        </div>
+      </div>
     </GlobalDataProvider>
   )
 }

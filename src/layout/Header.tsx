@@ -180,9 +180,17 @@ const Header = () => {
                 >
                   <Link
                     href={homeUrl}
-                    className="text-2xl font-extrabold bg-gradient-text bg-clip-text text-transparent font-monrope tracking-tighterText"
+                    className="text-2xl font-extrabold bg-gradient-text bg-clip-text text-transparent font-monrope tracking-tighterText flex items-center"
                   >
-                    <VoiceStackResources />
+                    {homeSettings?.headerLogo ? (
+                      <img
+                        src={homeSettings.headerLogo}
+                        alt="Site logo"
+                        className="h-8 w-auto object-contain object-left"
+                      />
+                    ) : (
+                      <VoiceStackResources />
+                    )}
                   </Link>
                   {isDefaultLanding && Array.isArray(partners) && partners.length > 0 ? (
                     <nav className="flex flex-wrap items-center justify-end gap-4 md:gap-8">

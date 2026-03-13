@@ -14,7 +14,7 @@ import { getDefaultLocale, getPartnerPaths } from '~/lib/partnerPaths'
 import { getClient } from '~/lib/sanity.client'
 import {
   getArticlesCount,
-  getCategories,
+  getCategoriesForPartner,
   getEbooksCount,
   getFooterData,
   getHomeSettings,
@@ -56,7 +56,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     getArticlesCount(client, region),
     getEbooksCount(client, region),
     getHomeSettings(client, region, partnerSlug),
-    getCategories(client),
+    getCategoriesForPartner(client, partnerSlug),
     getFooterData(client, region),
   ])
 
