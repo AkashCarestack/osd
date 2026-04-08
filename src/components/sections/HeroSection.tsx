@@ -19,7 +19,8 @@ interface HeroData {
 }
 
 interface HeroSectionProps {
-  heroData?: HeroData | null
+  /** Sanity shape or pre-merged defaults; partial fields are filled in `transformHeroData`. */
+  heroData?: HeroData | Record<string, unknown> | null
 }
 
 // Function to extract video platform and ID from URL
@@ -258,11 +259,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                   }
                 }}
               >
-                {/* Placeholder Image Background */}
+                {/* Video thumbnail when set (e.g. Vidyard auto-thumb); else placeholder */}
                 <div
                   className="absolute inset-0 w-full h-full transition-transform duration-300 group-hover:scale-105"
                   style={{
-                    backgroundImage: `url(${placeholderImage})`,
+                    backgroundImage: `url(${
+                      typeof data.videoThumbnail === 'string' &&
+                      data.videoThumbnail
+                        ? data.videoThumbnail
+                        : placeholderImage
+                    })`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',

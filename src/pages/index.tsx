@@ -200,15 +200,14 @@ export default function IndexPage(props: IndexPageProps) {
             />
           </Link>
           {partnersList.length > 0 && (
-            <nav className="flex flex-wrap items-center justify-center gap-x-1 gap-y-3 md:gap-x-2 md:gap-y-4 px-4">
+            <nav className="flex md:flex-row flex-col items-center justify-center gap-x-1 gap-y-3 md:gap-x-2 md:gap-y-4 px-4">
               {partnersList.map((p, i) => {
                 const name = p.partnerName || p.slug
                 const displayName = name.toLowerCase() === 'deo' ? 'DEO' : name
                 return (
                 <span key={p.slug} className="flex items-center gap-x-3 md:gap-x-4">
                   {i > 0 && (
-                    <span className="text-white/60 font-light select-none" aria-hidden="true">|</span>
-                    
+                    <span className="hidden md:inline text-white/60 font-light select-none" aria-hidden="true">|</span>
                   )}
                   <Link
                     href={`/${p.slug}`}

@@ -58,6 +58,7 @@ interface IndexPageProps {
   events: any[]
   schemaBaseUrl?: string
   schemaSiteName?: string
+  partnerSlug?: string
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -176,6 +177,7 @@ export const getStaticProps: GetStaticProps<
         events: events || [],
         schemaBaseUrl,
         schemaSiteName,
+        partnerSlug,
       },
     }
   } catch (error) {
@@ -196,6 +198,7 @@ export const getStaticProps: GetStaticProps<
         categories: [],
         faqCategories: [],
         events: [],
+        partnerSlug,
         error: true,
       },
     }
@@ -208,7 +211,7 @@ export default function IndexPage(props: IndexPageProps) {
   const eventCards = props?.allEventCards
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://osdental.io'
   const router = useRouter()
-  const partner = router.query.partner as string
+  const partner = (props?.partnerSlug || router.query.partner) as string
   const canonicalUrl = partner ? `${baseUrl}/${partner}` : baseUrl
 
   return (
@@ -226,6 +229,7 @@ export default function IndexPage(props: IndexPageProps) {
           <link rel="canonical" href={canonicalUrl} key="canonical" />
         </Head>
         <DynamicPages
+          partnerSlug={partner}
           posts={props.posts}
           tags={props.tags}
           testimonials={props.testimonials}

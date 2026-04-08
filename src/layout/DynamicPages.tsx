@@ -8,6 +8,7 @@ import FAQSection from '~/components/sections/FAQSection'
 import FeaturedAndPopularBlogs from '~/components/sections/FeaturedAndPopularBlogsSection'
 import HeroSection from '~/components/sections/HeroSection'
 import LatestBlogs from '~/components/sections/LatestBlogSection'
+import PartnerProductTwoColumnSection from '~/components/sections/PartnerProductTwoColumnSection'
 import ReleaseNotesHeroSection from '~/components/sections/ReleaseNotesHeroSection'
 import ShortBannerSection from '~/components/sections/ShortBannerSection'
 import SliderSection from '~/components/sections/SliderSection'
@@ -16,6 +17,13 @@ import UpcomingEventsSection from '~/components/sections/UpcomingEventsSection'
 import WhyPracticeLoveSection from '~/components/sections/WhyPracticeLoveSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Tag } from '~/interfaces/post'
+import {
+  FORTUNE_HERO_DEFAULTS,
+  FORTUNE_PRODUCT_DEFAULTS,
+  isSimpleLandingPartner,
+  mergePartnerHeroDefaults,
+  mergePartnerProductDefaults,
+} from '~/lib/partnerSimpleLanding'
 import { getUniqueData, getUniqueReorderedCarouselItems } from '~/utils/common'
 
 interface DynamicProps {
@@ -35,6 +43,7 @@ interface DynamicProps {
   categories?: any[]
   faqCategories?: any[]
   events?: any[]
+  partnerSlug?: string
 }
 
 const DynamicPages = ({
@@ -51,6 +60,7 @@ const DynamicPages = ({
   categories,
   faqCategories,
   events,
+  partnerSlug,
 }: DynamicProps) => {
   const featuredBlog = homeSettings?.FeaturedBlog || posts[0]
   const customBrowseContent = homeSettings?.customBrowseContent
@@ -77,6 +87,20 @@ const DynamicPages = ({
 
   const baseUrl = `/${siteConfig.pageURLs.home}`
 
+  const simpleLanding = isSimpleLandingPartner(partnerSlug)
+  const fortuneHeroData = simpleLanding
+    ? mergePartnerHeroDefaults(
+        FORTUNE_HERO_DEFAULTS,
+        homeSettings?.heroSection,
+      )
+    : null
+  const fortuneProductData = simpleLanding
+    ? mergePartnerProductDefaults(
+        FORTUNE_PRODUCT_DEFAULTS,
+        homeSettings?.whyPracticeLoveSection,
+      )
+    : null
+
   // Use podcasts prop if available, otherwise filter from posts
   const podcastPosts =
     Array.isArray(podcasts) && podcasts.length > 0
@@ -89,6 +113,19 @@ const DynamicPages = ({
             return isPodcast
           })
         : []
+
+  if (simpleLanding && fortuneHeroData && fortuneProductData) {
+    return (
+      <>
+        <BaseUrlProvider baseUrl={baseUrl}>
+          <div id="topics-section">
+            <HeroSection heroData={fortuneHeroData} />
+          </div>
+          <PartnerProductTwoColumnSection {...fortuneProductData} />
+        </BaseUrlProvider>
+      </>
+    )
+  }
 
   return (
     <>
