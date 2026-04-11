@@ -584,6 +584,7 @@ export const homeSettingsQuery = groq`
     },
     "headerLogo": headerLogo.asset->url,
     "whyPracticeLoveSection": whyPracticeLoveSection {
+      eyebrow,
       title,
       description,
       features[] {
@@ -595,6 +596,44 @@ export const homeSettingsQuery = groq`
       ctaButtonText,
       ctaButtonLink,
       "ctaBackgroundImage": ctaBackgroundImage.asset->url
+    },
+    "verticalTestimonialSection": verticalTestimonialSection {
+      eyebrow,
+      heading,
+      description,
+      ctaText,
+      ctaLink,
+      "items": testimonials[]-> {
+        _id,
+        name,
+        "slug": slug.current,
+        testimonialOrder,
+        designation,
+        practiceName,
+        region,
+        locationNumber,
+        keyStatement,
+        mainStatement,
+        subStatement,
+        keyFeatures,
+        rating,
+        listItems[] {
+          heading,
+          statement
+        },
+        "logoColored": logoColored.asset->url,
+        "logoWhite": logoWhite.asset->url,
+        "cardBackgroundImage": cardBackgroundImage.asset->url,
+        "cardBackgroundImageHover": cardBackgroundImageHover.asset->url,
+        videoThumbnailUrl,
+        "verticalVideoUrl": verticalVideoFile.asset->url,
+        "horizontalVideos": horizontalVideos[]-> {
+          _id,
+          title,
+          platform,
+          videoId
+        }
+      }
     },
     "upcomingEventsSection": upcomingEventsSection {
       title,
@@ -938,6 +977,7 @@ export const homeSettingsByPartnerQuery = groq`
     },
     "headerLogo": headerLogo.asset->url,
     "whyPracticeLoveSection": whyPracticeLoveSection {
+      eyebrow,
       title,
       description,
       features[] {
@@ -949,6 +989,44 @@ export const homeSettingsByPartnerQuery = groq`
       ctaButtonText,
       ctaButtonLink,
       "ctaBackgroundImage": ctaBackgroundImage.asset->url
+    },
+    "verticalTestimonialSection": verticalTestimonialSection {
+      eyebrow,
+      heading,
+      description,
+      ctaText,
+      ctaLink,
+      "items": testimonials[]-> {
+        _id,
+        name,
+        "slug": slug.current,
+        testimonialOrder,
+        designation,
+        practiceName,
+        region,
+        locationNumber,
+        keyStatement,
+        mainStatement,
+        subStatement,
+        keyFeatures,
+        rating,
+        listItems[] {
+          heading,
+          statement
+        },
+        "logoColored": logoColored.asset->url,
+        "logoWhite": logoWhite.asset->url,
+        "cardBackgroundImage": cardBackgroundImage.asset->url,
+        "cardBackgroundImageHover": cardBackgroundImageHover.asset->url,
+        videoThumbnailUrl,
+        "verticalVideoUrl": verticalVideoFile.asset->url,
+        "horizontalVideos": horizontalVideos[]-> {
+          _id,
+          title,
+          platform,
+          videoId
+        }
+      }
     },
     "upcomingEventsSection": upcomingEventsSection {
       title,

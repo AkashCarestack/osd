@@ -56,18 +56,25 @@ const FeatureCard: React.FC<{ feature: PartnerProductFeature }> = ({
 const PartnerProductTwoColumnSection: React.FC<
   PartnerProductTwoColumnSectionProps
 > = ({ eyebrow, headline, features }) => {
+  const gridCols =
+    features.length >= 3
+      ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+      : 'grid-cols-1 md:grid-cols-2'
+
   return (
     <Section className="bg-zinc-100 justify-center md:!pt-20 md:!pb-24 !py-12">
       <Wrapper className="flex flex-col gap-10 md:gap-12">
         <div className="flex flex-col gap-3 items-start w-full max-w-[720px]">
-          <p className="text-xs md:text-sm font-semibold tracking-[0.12em] text-zinc-500 uppercase">
-            {eyebrow}
-          </p>
+          {eyebrow?.trim() && (
+            <p className="text-xs md:text-sm font-semibold tracking-[0.12em] text-zinc-500 uppercase">
+              {eyebrow.trim()}
+            </p>
+          )}
           <h2 className="w-full text-[28px] md:text-[40px] lg:text-[48px] text-[#18181B] font-manrope font-extrabold not-italic md:leading-[110%] leading-[1.08] tracking-[-0.96px]">
             {headline}
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full">
+        <div className={`grid ${gridCols} gap-6 md:gap-8 w-full`}>
           {features.map((feature, index) => (
             <FeatureCard key={index} feature={feature} />
           ))}

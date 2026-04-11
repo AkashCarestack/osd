@@ -14,12 +14,12 @@ import ShortBannerSection from '~/components/sections/ShortBannerSection'
 import SliderSection from '~/components/sections/SliderSection'
 import TestimonialSection from '~/components/sections/TestimonialSection'
 import UpcomingEventsSection from '~/components/sections/UpcomingEventsSection'
+import VerticalTestimonialsSection from '~/components/sections/VerticalTestimonialsSection'
 import WhyPracticeLoveSection from '~/components/sections/WhyPracticeLoveSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Tag } from '~/interfaces/post'
 import {
-  FORTUNE_HERO_DEFAULTS,
-  FORTUNE_PRODUCT_DEFAULTS,
+  getSimpleLandingDefaults,
   isSimpleLandingPartner,
   mergePartnerHeroDefaults,
   mergePartnerProductDefaults,
@@ -88,18 +88,21 @@ const DynamicPages = ({
   const baseUrl = `/${siteConfig.pageURLs.home}`
 
   const simpleLanding = isSimpleLandingPartner(partnerSlug)
-  const fortuneHeroData = simpleLanding
-    ? mergePartnerHeroDefaults(
-        FORTUNE_HERO_DEFAULTS,
-        homeSettings?.heroSection,
-      )
-    : null
-  const fortuneProductData = simpleLanding
-    ? mergePartnerProductDefaults(
-        FORTUNE_PRODUCT_DEFAULTS,
-        homeSettings?.whyPracticeLoveSection,
-      )
-    : null
+  const landingDefaults = getSimpleLandingDefaults(partnerSlug)
+  const simpleHeroData =
+    simpleLanding && landingDefaults
+      ? mergePartnerHeroDefaults(
+          landingDefaults.hero as Record<string, string>,
+          homeSettings?.heroSection,
+        )
+      : null
+  const simpleProductData =
+    simpleLanding && landingDefaults
+      ? mergePartnerProductDefaults(
+          landingDefaults.product,
+          homeSettings?.whyPracticeLoveSection,
+        )
+      : null
 
   // Use podcasts prop if available, otherwise filter from posts
   const podcastPosts =
@@ -114,14 +117,17 @@ const DynamicPages = ({
           })
         : []
 
-  if (simpleLanding && fortuneHeroData && fortuneProductData) {
+  if (simpleLanding && simpleHeroData && simpleProductData) {
     return (
       <>
         <BaseUrlProvider baseUrl={baseUrl}>
           <div id="topics-section">
-            <HeroSection heroData={fortuneHeroData} />
+            <HeroSection heroData={simpleHeroData} />
           </div>
-          <PartnerProductTwoColumnSection {...fortuneProductData} />
+          <PartnerProductTwoColumnSection {...simpleProductData} />
+          <VerticalTestimonialsSection
+            data={homeSettings?.verticalTestimonialSection}
+          />
         </BaseUrlProvider>
       </>
     )

@@ -288,6 +288,34 @@ export default defineConfig({
                                         : [],
                                     ),
                                 ),
+                              // Vertical testimonials (portrait cards + video) for partner landings
+                              S.listItem()
+                                .title('Vertical testimonials')
+                                .icon(UserIcon)
+                                .child(
+                                  S.documentList()
+                                    .apiVersion(apiVersion)
+                                    .title(`Vertical testimonials — ${partnerTitle}`)
+                                    .filter(
+                                      '_type == "verticalTestimonial" && (!defined(partner) || partner._ref == $partnerId)',
+                                    )
+                                    .params({
+                                      partnerId: options?.partnerId ?? '',
+                                    })
+                                    .schemaType('verticalTestimonial')
+                                    .initialValueTemplates(
+                                      options?.partnerId
+                                        ? [
+                                            S.initialValueTemplateItem(
+                                              'verticalTestimonial-with-partner',
+                                              {
+                                                partnerRef: options.partnerId,
+                                              },
+                                            ),
+                                          ]
+                                        : [],
+                                    ),
+                                ),
                             ]),
                         ),
                       S.documentTypeListItem('customContent')

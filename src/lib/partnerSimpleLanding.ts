@@ -1,6 +1,6 @@
 /**
- * Default copy for simplified partner landings (Fortune, etc.).
- * Sanity `homeSettings.heroSection` still overrides any non-empty field.
+ * Default copy for simplified partner landings (Fortune, Curve, etc.).
+ * Sanity `homeSettings.heroSection` / `whyPracticeLoveSection` override any non-empty field.
  */
 
 export const FORTUNE_HERO_DEFAULTS = {
@@ -35,18 +35,74 @@ export const FORTUNE_PRODUCT_DEFAULTS = {
   ],
 }
 
+export const CURVE_HERO_DEFAULTS = {
+  title: 'Stop Flying Blind on Practice Performance.',
+  titleHighlight: '',
+  description:
+    'OS Dental connects directly to Curve to surface the financial and operational data your team already collects - but has never been able to act on. Unified dashboards give dental groups and DSOs a real-time view of production, collections, scheduling efficiency, and more, without manual exports or spreadsheet gymnastics.',
+  primaryButtonText: 'Schedule a Demo',
+  primaryButtonLink: '#',
+  secondaryButtonText: 'Watch overview',
+  secondaryButtonLink: '',
+  backgroundImage:
+    'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',
+  videoLink: '',
+}
+
+export const CURVE_PRODUCT_DEFAULTS = {
+  eyebrow: 'OS DENTAL FOR CURVE USERS',
+  headline: 'Smarter decisions start with cleaner and centralized data.',
+  features: [
+    {
+      title: 'Your Curve data, fully unlocked',
+      description:
+        'OS Dental pulls directly from Curve - no manual exports, no data lag. See production, collections, AR, and many other metrics in one place.',
+    },
+    {
+      title: 'Built for groups and DSOs',
+      description:
+        "Whether you're running 2 locations or 20, OS Dental normalizes data across your entire portfolio so you can compare performance, spot outliers, and hold locations and providers accountable - all from a single dashboard.",
+    },
+    {
+      title: 'See how clinical decisions drive your financials',
+      description:
+        'OS Dental connects provider activity to financial outcomes - so you can see hygiene and doctor profitability by provider, track treatment acceptance rates against production goals, and understand exactly where revenue is being left on the table. When you know which providers and which locations are performing, you can coach with data instead of gut feel.',
+    },
+  ],
+}
+
 interface ProductFeature {
   title: string
   description: string
 }
 
-/**
- * Partner slugs that use the minimal Fortune hero + product layout
- * (no carousel, FAQs, etc.). Include CMS slug(s): e.g. `fortune-management`.
- */
+export interface SimpleLandingDefaults {
+  hero: Record<string, string>
+  product: {
+    eyebrow: string
+    headline: string
+    features: ProductFeature[]
+  }
+}
+
+const FORTUNE_PAIR: SimpleLandingDefaults = {
+  hero: FORTUNE_HERO_DEFAULTS,
+  product: FORTUNE_PRODUCT_DEFAULTS,
+}
+
+const DEFAULTS_BY_SLUG: Record<string, SimpleLandingDefaults> = {
+  fortune: FORTUNE_PAIR,
+  'fortune-management': FORTUNE_PAIR,
+  curve: {
+    hero: CURVE_HERO_DEFAULTS,
+    product: CURVE_PRODUCT_DEFAULTS,
+  },
+}
+
 export const SIMPLE_LANDING_PARTNER_SLUGS = [
   'fortune',
   'fortune-management',
+  'curve',
 ] as const
 
 export type SimpleLandingPartnerSlug =
@@ -57,6 +113,13 @@ export function isSimpleLandingPartner(
 ): slug is SimpleLandingPartnerSlug {
   if (!slug) return false
   return (SIMPLE_LANDING_PARTNER_SLUGS as readonly string[]).includes(slug)
+}
+
+export function getSimpleLandingDefaults(
+  slug: string | undefined,
+): SimpleLandingDefaults | null {
+  if (!slug) return null
+  return DEFAULTS_BY_SLUG[slug] ?? null
 }
 
 /**
@@ -76,7 +139,6 @@ export function mergePartnerHeroDefaults(
     if (typeof v === 'string' && v.trim() === '') continue
     out[key] = v
   }
-  // Allow CMS-only fields (e.g. custom video thumbnail image object)
   for (const key of Object.keys(cms)) {
     if (!(key in defaults) && cms[key] != null && cms[key] !== '') {
       out[key] = cms[key as keyof typeof cms]
@@ -87,7 +149,6 @@ export function mergePartnerHeroDefaults(
 
 /**
  * Overlay CMS "whyPracticeLoveSection" data onto product section defaults.
- * Uses CMS title/features when present so partner editors can control copy.
  */
 export function mergePartnerProductDefaults(
   defaults: {
@@ -102,6 +163,11 @@ export function mergePartnerProductDefaults(
   features: ProductFeature[]
 } {
   if (!cms || typeof cms !== 'object') return defaults
+
+  const cmsEyebrow =
+    typeof cms.eyebrow === 'string' && cms.eyebrow.trim().length > 0
+      ? cms.eyebrow.trim()
+      : defaults.eyebrow
 
   const cmsHeadline =
     typeof cms.title === 'string' && cms.title.trim().length > 0
@@ -126,7 +192,7 @@ export function mergePartnerProductDefaults(
     .filter(Boolean) as ProductFeature[]
 
   return {
-    eyebrow: defaults.eyebrow,
+    eyebrow: cmsEyebrow,
     headline: cmsHeadline,
     features: cmsFeatures.length > 0 ? cmsFeatures : defaults.features,
   }

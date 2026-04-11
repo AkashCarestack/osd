@@ -4,6 +4,12 @@ export default {
   type: 'object',
   fields: [
     {
+      name: 'eyebrow',
+      title: 'Eyebrow label',
+      type: 'string',
+      description: 'Small caps line above the headline (e.g. OS DENTAL FOR CURVE USERS).',
+    },
+    {
       name: 'title',
       title: 'Section Title',
       type: 'string',

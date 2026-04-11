@@ -8,6 +8,8 @@ import eventObject from './contentRepo/eventObject'
 import faq from './contentRepo/faq'
 import glossary from './contentRepo/glossary'
 import upcomingEventsSection from './contentRepo/upcomingEventsSection'
+import verticalTestimonial from './contentRepo/verticalTestimonial'
+import verticalTestimonialSection from './contentRepo/verticalTestimonialSection'
 import whyPracticeLoveSection from './contentRepo/whyPracticeLoveSection'
 import customContent from './customContent'
 import dynamicComponent from './dynamicComponent'
@@ -70,6 +72,8 @@ export const schemaTypes = [
   glossary,
   faq,
   whyPracticeLoveSection,
+  verticalTestimonial,
+  verticalTestimonialSection,
   event,
   eventObject,
   upcomingEventsSection,
@@ -100,6 +104,16 @@ export const contentRepoTemplates: Template[] = [
     id: 'event-with-partner',
     title: 'Event',
     schemaType: 'event',
+    parameters: [{ name: 'partnerRef', type: 'string', title: 'Partner' }],
+    value: (params: { partnerRef?: string }) =>
+      params?.partnerRef
+        ? { partner: { _type: 'reference', _ref: params.partnerRef } }
+        : {},
+  },
+  {
+    id: 'verticalTestimonial-with-partner',
+    title: 'Vertical testimonial',
+    schemaType: 'verticalTestimonial',
     parameters: [{ name: 'partnerRef', type: 'string', title: 'Partner' }],
     value: (params: { partnerRef?: string }) =>
       params?.partnerRef
@@ -145,6 +159,8 @@ export const schema: {
     glossary,
     faq,
     whyPracticeLoveSection,
+    verticalTestimonial,
+    verticalTestimonialSection,
     event,
   eventObject,
   upcomingEventsSection,
