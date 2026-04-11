@@ -540,7 +540,7 @@ const TestimonialSlider = ({
 
   return (
     <div
-      className={`vertical-testimonial-slider relative min-h-[520px] w-full bg-white ${
+      className={`vertical-testimonial-slider relative mx-auto min-h-[520px] w-full max-w-[960px] bg-white [&_.slick-slide>div]:flex [&_.slick-slide>div]:justify-center ${
         isSliding ? 'vertical-testimonial-slider--animating' : ''
       }`}
     >
@@ -814,7 +814,9 @@ const TestimonialSlider = ({
 
 const VerticalTestimonialsSection: React.FC<{
   data?: VerticalTestimonialSectionData | null
-}> = ({ data }) => {
+  /** Pearl-style LP: centered title block (Curve). */
+  headerLayout?: 'split' | 'centered'
+}> = ({ data, headerLayout = 'split' }) => {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [slidesToShow, setSlidesToShow] = useState(3)
   const [showArrows, setShowArrows] = useState(true)
@@ -901,26 +903,54 @@ const VerticalTestimonialsSection: React.FC<{
     ],
   }
 
+  const isHeaderCentered = headerLayout === 'centered'
+
   return (
     <>
-      <Section className="bg-white justify-center md:!pt-20 md:!pb-24 !py-14">
+      <Section
+        className={`justify-center md:!pt-20 md:!pb-24 !py-14 ${
+          isHeaderCentered ? 'bg-zinc-50' : 'bg-white'
+        }`}
+      >
         <Wrapper className="mx-auto flex w-full flex-col gap-10 md:gap-12">
-          <div className="flex w-full flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <div className="flex w-full max-w-[720px] flex-col items-start gap-4">
-              <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase font-inter">
+          <div
+            className={
+              isHeaderCentered
+                ? 'flex w-full flex-col items-center gap-8 text-center'
+                : 'flex w-full flex-col gap-8 lg:flex-row lg:items-end lg:justify-between'
+            }
+          >
+            <div
+              className={
+                isHeaderCentered
+                  ? 'flex w-full max-w-[800px] flex-col items-center gap-4 mx-auto'
+                  : 'flex w-full max-w-[720px] flex-col items-start gap-4'
+              }
+            >
+              <p
+                className={`text-xs md:text-sm font-semibold tracking-[0.12em] uppercase font-inter ${
+                  isHeaderCentered ? 'text-zinc-500' : 'text-indigo-600'
+                }`}
+              >
                 {eyebrow}
               </p>
               <h2 className="text-[28px] md:text-[40px] lg:text-[48px] text-zinc-900 font-manrope font-extrabold leading-[1.08] tracking-[-0.02em]">
                 {heading}
               </h2>
-              <p className="text-zinc-600 font-inter text-base md:text-lg leading-[1.6] max-w-[640px]">
+              <p
+                className={`text-zinc-600 font-inter text-base md:text-lg leading-[1.6] ${
+                  isHeaderCentered ? 'max-w-[640px] mx-auto' : 'max-w-[640px]'
+                }`}
+              >
                 {description}
               </p>
             </div>
             {data.ctaText?.trim() && data.ctaLink?.trim() && (
               <Anchor
                 href={data.ctaLink}
-                className="inline-flex items-center gap-2 rounded-full bg-indigo-600 text-white px-6 py-3 font-inter font-medium text-sm md:text-base hover:bg-indigo-700 transition-colors shrink-0"
+                className={`inline-flex items-center gap-2 rounded-full bg-indigo-600 text-white px-6 py-3 font-inter font-medium text-sm md:text-base hover:bg-indigo-700 transition-colors shrink-0 ${
+                  isHeaderCentered ? 'mx-auto' : ''
+                }`}
               >
                 {data.ctaText.trim()}
                 <ArrowUpRight />

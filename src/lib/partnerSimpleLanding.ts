@@ -36,16 +36,19 @@ export const FORTUNE_PRODUCT_DEFAULTS = {
 }
 
 export const CURVE_HERO_DEFAULTS = {
+  eyebrow: 'OS DENTAL FOR CURVE',
   title: 'Stop Flying Blind on Practice Performance.',
   titleHighlight: '',
   description:
     'OS Dental connects directly to Curve to surface the financial and operational data your team already collects - but has never been able to act on. Unified dashboards give dental groups and DSOs a real-time view of production, collections, scheduling efficiency, and more, without manual exports or spreadsheet gymnastics.',
   primaryButtonText: 'Schedule a Demo',
   primaryButtonLink: '#',
-  secondaryButtonText: 'Watch overview',
+  secondaryButtonText: 'Clinical Dashboards Overview',
   secondaryButtonLink: '',
   backgroundImage:
     'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',
+  videoThumbnail:
+    'https://cdn.sanity.io/images/rcbknqsy/production/3e10a80054ff751b2c3ad43b7e2f53b276ca5887-990x800.png',
   videoLink: '',
 }
 

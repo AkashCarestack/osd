@@ -118,15 +118,23 @@ const DynamicPages = ({
         : []
 
   if (simpleLanding && simpleHeroData && simpleProductData) {
+    const isCurvePearlLayout = partnerSlug === 'curve'
     return (
       <>
         <BaseUrlProvider baseUrl={baseUrl}>
           <div id="topics-section">
-            <HeroSection heroData={simpleHeroData} />
+            <HeroSection
+              heroData={simpleHeroData}
+              layout={isCurvePearlLayout ? 'curvePearl' : 'default'}
+            />
           </div>
-          <PartnerProductTwoColumnSection {...simpleProductData} />
+          <PartnerProductTwoColumnSection
+            {...simpleProductData}
+            variant={isCurvePearlLayout ? 'showcase' : 'default'}
+          />
           <VerticalTestimonialsSection
             data={homeSettings?.verticalTestimonialSection}
+            headerLayout={isCurvePearlLayout ? 'centered' : 'split'}
           />
         </BaseUrlProvider>
       </>
