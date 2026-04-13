@@ -78,6 +78,8 @@ export const CURVE_PRODUCT_DEFAULTS = {
 interface ProductFeature {
   title: string
   description: string
+  /** Resolved image URL from Sanity `whyPracticeLoveSection.features[].image` */
+  image?: string
 }
 
 export interface SimpleLandingDefaults {
@@ -191,7 +193,12 @@ export function mergePartnerProductDefaults(
           ? (f as { description: string }).description.trim()
           : ''
       if (!title || !description) return null
-      return { title, description }
+      const imageRaw = (f as { image?: unknown }).image
+      const image =
+        typeof imageRaw === 'string' && imageRaw.trim().length > 0
+          ? imageRaw.trim()
+          : undefined
+      return { title, description, ...(image ? { image } : {}) }
     })
     .filter(Boolean) as ProductFeature[]
 

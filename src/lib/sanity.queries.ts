@@ -589,7 +589,8 @@ export const homeSettingsQuery = groq`
       description,
       features[] {
         title,
-        description
+        description,
+        "image": image.asset->url
       },
       ctaTitle,
       ctaDescription,
@@ -982,7 +983,8 @@ export const homeSettingsByPartnerQuery = groq`
       description,
       features[] {
         title,
-        description
+        description,
+        "image": image.asset->url
       },
       ctaTitle,
       ctaDescription,

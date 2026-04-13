@@ -6,6 +6,8 @@ import Wrapper from '~/layout/Wrapper'
 export interface PartnerProductFeature {
   title: string
   description: string
+  /** Optional CMS image (whyPracticeLoveSection feature image). */
+  image?: string
 }
 
 const CheckIcon = () => (
@@ -35,8 +37,17 @@ const FeatureCard: React.FC<{ feature: PartnerProductFeature }> = ({
   feature,
 }) => (
   <div className="bg-white flex flex-col gap-6 items-start p-6 rounded-[10px] flex-1 min-w-0">
-    <div className="flex items-center py-[2.4px]">
-      <CheckIcon />
+    <div className="flex w-full items-center justify-start py-[2.4px]">
+      {feature.image ? (
+        <img
+          src={feature.image}
+          alt=""
+          className="h-14 w-auto max-w-full object-contain"
+          decoding="async"
+        />
+      ) : (
+        <CheckIcon />
+      )}
     </div>
     <div className="flex flex-col gap-2 items-start w-full">
       <h3 className="font-manrope font-bold text-base leading-[1.2] text-gray-900 w-full">
@@ -53,10 +64,20 @@ const ShowcaseFeatureCard: React.FC<{ feature: PartnerProductFeature }> = ({
   feature,
 }) => (
   <article
-    className="flex h-full min-h-0 flex-col rounded-2xl border border-indigo-200/60 p-6 shadow-sm md:p-7"
+    className="flex h-full min-h-0 flex-col rounded-2xl border border-indigo-200/60 p-6 shadow-sm md:p-8"
     style={{ backgroundColor: SHOWCASE_CARD_BG }}
   >
     <div className="flex min-h-0 flex-1 flex-col gap-0 text-left">
+      {feature.image ? (
+        <div className="mb-5 w-full overflow-hidden rounded-xl border border-indigo-100/80 bg-white/60">
+          <img
+            src={feature.image}
+            alt=""
+            className="aspect-[16/10] w-full object-cover"
+            decoding="async"
+          />
+        </div>
+      ) : null}
       <h3 className="mb-[20px] font-manrope text-[24px] font-bold leading-snug text-[#18181B]">
         {feature.title}
       </h3>

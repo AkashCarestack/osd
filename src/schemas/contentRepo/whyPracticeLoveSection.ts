@@ -49,11 +49,22 @@ export default {
               type: 'text',
               validation: (Rule: any) => Rule.required(),
             },
+            {
+              name: 'image',
+              title: 'Feature image',
+              type: 'image',
+              description:
+                'Optional illustration or icon (shown above the title on partner product cards).',
+              options: {
+                hotspot: true,
+              },
+            },
           ],
           preview: {
             select: {
               title: 'title',
               subtitle: 'description',
+              media: 'image',
             },
           },
         },
