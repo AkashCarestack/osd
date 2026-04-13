@@ -11,7 +11,7 @@ export const FORTUNE_HERO_DEFAULTS = {
     'Fortune Management helps practices reach their full potential. OS Dental gives them the data to get there. As a Fortune member, you get exclusive access to OS Dental\'s financial and clinical analytics platform - built specifically for the dental groups and practices that are serious about growth.',
   primaryButtonText: 'Get Started as a Fortune Member',
   primaryButtonLink: '#',
-  secondaryButtonText: 'Watch overview',
+  secondaryButtonText: 'Overview video',
   secondaryButtonLink: '',
   backgroundImage:
     'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',
@@ -44,7 +44,7 @@ export const CURVE_HERO_DEFAULTS = {
     'OS Dental connects directly to Curve to surface the financial and operational data your team already collects - but has never been able to act on. Unified dashboards give dental groups and DSOs a real-time view of production, collections, scheduling efficiency, and more, without manual exports or spreadsheet gymnastics.',
   primaryButtonText: 'Schedule a Demo',
   primaryButtonLink: '#',
-  secondaryButtonText: 'Clinical Dashboards Overview',
+  secondaryButtonText: 'Overview video',
   secondaryButtonLink: '',
   backgroundImage:
     'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',

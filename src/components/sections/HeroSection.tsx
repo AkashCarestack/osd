@@ -200,7 +200,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       'Your data should do more than sit in reports, it should drive smarter decisions and measurable growth.',
     primaryButtonText: 'Book a Clinical Demo',
     primaryButtonLink: '#',
-    secondaryButtonText: 'Clinical Dashboards Overview',
+    secondaryButtonText: 'Overview video',
     secondaryButtonLink: '#',
     backgroundImage:
       'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',
@@ -407,7 +407,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                     >
                       <PlayIcon />
                       <span className="truncate">
-                        {data.secondaryButtonText || 'Watch overview'}
+                        {data.secondaryButtonText || 'Overview video'}
                       </span>
                     </button>
                   </div>
@@ -466,7 +466,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                     <div className="absolute bottom-4 right-4 backdrop-blur-xl bg-black/30 border border-white/30 flex gap-2 items-center overflow-hidden pl-3.5 pr-4 py-2 rounded-full group-hover:bg-black/40 transition-colors pointer-events-none">
                       <PlayIcon />
                       <span className="font-inter font-medium leading-[1.5] text-[15px] text-white whitespace-nowrap">
-                        {data.secondaryButtonText || 'Clinical Dashboards Overview'}
+                        {data.secondaryButtonText || 'Overview video'}
                       </span>
                     </div>
                   ) : null}

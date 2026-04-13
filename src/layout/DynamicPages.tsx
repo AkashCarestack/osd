@@ -148,6 +148,9 @@ const DynamicPages = ({
             data={homeSettings?.verticalTestimonialSection}
             headerLayout={isCurvePearlLayout ? 'centered' : 'split'}
           />
+          <div id="faqs-section">
+            <FAQSection faqCategories={faqCategories} />
+          </div>
         </BaseUrlProvider>
       </>
     )
