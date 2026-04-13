@@ -40,16 +40,10 @@ export default function DeoContactUsSection() {
       <Wrapper className="w-full justify-center px-0 sm:px-2">
         <div className="mx-auto w-full max-w-3xl text-center">
           <h2 className="mx-auto max-w-3xl text-center font-manrope text-3xl font-bold !leading-[107.143%] text-gray-950 md:text-center md:text-5xl xl:text-[56px]">
-            Contact Us
+            Get Support
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-zinc-700">
             For any support requests, please contact us via email.
-          </p>
-          <p className="mx-auto mt-6 max-w-xl text-center text-[14px] leading-relaxed text-gray-500">
-            <span className="font-semibold text-zinc-800">Note:</span>{' '}
-            Include the customer practice name and a short description of the
-            issue in the subject line. Provide detailed information in the body
-            of the email.
           </p>
           <div className="mt-8 flex justify-center">
             <a
@@ -60,6 +54,11 @@ export default function DeoContactUsSection() {
               <span className="truncate">{email}</span>
             </a>
           </div>
+          <p className="mx-auto mt-6 max-w-xl text-center text-[14px] leading-relaxed text-gray-400">
+            Please include the practice name and a short description of the
+            issue in the subject line. Provide detailed information in the body
+            of the email.
+          </p>
         </div>
       </Wrapper>
     </Section>
