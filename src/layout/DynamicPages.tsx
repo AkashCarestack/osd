@@ -16,6 +16,7 @@ import SliderSection from '~/components/sections/SliderSection'
 import TestimonialSection from '~/components/sections/TestimonialSection'
 import UpcomingEventsSection from '~/components/sections/UpcomingEventsSection'
 import VerticalTestimonialsSection from '~/components/sections/VerticalTestimonialsSection'
+import DeoContactUsSection from '~/components/sections/DeoContactUsSection'
 import WhyPracticeLoveSection from '~/components/sections/WhyPracticeLoveSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Tag } from '~/interfaces/post'
@@ -205,6 +206,7 @@ const DynamicPages = ({
         <div id="events-updates-section">
           <EventCarousel bgColor={'white'} allEventCards={uniqueEventCards} />
         </div>
+        {partnerSlug === 'deo' ? <DeoContactUsSection /> : null}
         {/* <BannerSubscribeSection hideBanner={true} /> */}
       </BaseUrlProvider>
     </>
