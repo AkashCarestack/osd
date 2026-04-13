@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
 import Anchor from '~/components/commonSections/Anchor'
+import { DEFAULT_HERO_BACKGROUND_IMAGE } from '~/lib/defaultHeroBackground'
 import { VideoModal } from '~/components/commonSections/VideoModal'
 import CurveHeroHubspotForm, {
   type PartnerHeroHubspotKey,
@@ -202,8 +203,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
     primaryButtonLink: '#',
     secondaryButtonText: 'Overview video',
     secondaryButtonLink: '#',
-    backgroundImage:
-      'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',
+    backgroundImage: DEFAULT_HERO_BACKGROUND_IMAGE,
     videoThumbnail:
       'https://cdn.sanity.io/images/rcbknqsy/production/3e10a80054ff751b2c3ad43b7e2f53b276ca5887-990x800.png',
     videoLink: '#',
