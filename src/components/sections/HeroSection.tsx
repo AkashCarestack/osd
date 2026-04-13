@@ -2,6 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import Anchor from '~/components/commonSections/Anchor'
 import { VideoModal } from '~/components/commonSections/VideoModal'
+import CurveHeroHubspotForm, {
+  type PartnerHeroHubspotKey,
+} from '~/components/sections/CurveHeroHubspotForm'
 import Section from '~/components/Section'
 import Wrapper from '~/layout/Wrapper'
 
@@ -22,8 +25,10 @@ interface HeroData {
 interface HeroSectionProps {
   /** Sanity shape or pre-merged defaults; partial fields are filled in `transformHeroData`. */
   heroData?: HeroData | Record<string, unknown> | null
-  /** Pearl-style LP layout (Curve partner page). */
-  layout?: 'default' | 'curvePearl'
+  /** Split hero: copy (+ optional video) left, HubSpot form right (Curve / Fortune). */
+  layout?: 'default' | 'splitForm'
+  /** When `layout` is `splitForm`: `curve` (dark) or `fortune` (light + video). */
+  splitFormPartner?: PartnerHeroHubspotKey
 }
 
 /** Resolve hero media from GROQ string, legacy object shapes, or empty values. */
@@ -182,6 +187,7 @@ const PlayIcon = () => (
 const HeroSection: React.FC<HeroSectionProps> = ({
   heroData,
   layout = 'default',
+  splitFormPartner,
 }) => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
 
@@ -248,16 +254,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 
   const transformedData = heroData ? transformHeroData(heroData) : null
   const data = transformedData || defaultHeroData
-  const isPearlHero = layout === 'curvePearl'
+  const isSplitForm = layout === 'splitForm'
+  const partner: PartnerHeroHubspotKey = splitFormPartner
+  const isFortuneSplit = isSplitForm && partner === 'fortune'
 
   // Extract video info for embedding
   const videoInfo = data.videoLink
     ? extractVideoInfo(data.videoLink)
     : { platform: null, videoId: null }
   const canEmbedVideo = Boolean(videoInfo.platform && videoInfo.videoId)
-  /** Thumbnail art often already includes a play chip; avoid duplicating our overlay. */
-  const showPlayChipOverlay = canEmbedVideo || !isPearlHero
-
+  /** Default hero image: always show chip. Curve split (no thumb): N/A. Fortune split: show when embed or external link. */
+  const showPlayChipOverlay = canEmbedVideo || !isSplitForm
   // Placeholder image URL
   const placeholderImage =
     'https://cdn.sanity.io/images/rcbknqsy/production/4c9eae156681fce630a561f64177da5bb8703bc1-990x800.png'
@@ -271,13 +278,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       }
     : null
 
+  const fortunePrimaryHref = (data.primaryButtonLink || '').trim()
+  const fortunePrimaryScrollToForm =
+    !fortunePrimaryHref || fortunePrimaryHref === '#'
+
   return (
     <div
       className={`w-full flex gap-1 items-center bg-[#18181b] relative overflow-hidden pt-headerSpacerMob md:pt-headerSpacer ${
-        isPearlHero ? 'border-b border-white/[0.06]' : ''
+        isSplitForm ? 'border-b border-white/[0.06]' : ''
       }`}
     >
-      {/* Full-bleed background (img so load errors can fall back; avoids broken url() from non-string CMS) */}
+      {/* Full-bleed hero background (same dark treatment for Curve + Fortune) */}
       {data.backgroundImage ? (
         <HeroCoverImg
           src={data.backgroundImage}
@@ -285,7 +296,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           className="absolute inset-0 h-full w-full object-cover object-center pointer-events-none"
         />
       ) : null}
-      {isPearlHero ? (
+      {isSplitForm ? (
         <div
           className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#0b0b0f]/95 from-[22%] via-[#18181b]/40 via-[52%] to-[#18181b]/10"
           aria-hidden
@@ -296,38 +307,35 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         <Wrapper className="flex h-auto flex-col">
           <div
             className={`flex flex-col items-start justify-center relative shrink-0 w-full ${
-              isPearlHero
-                ? 'py-14 md:py-24 lg:py-[120px]'
+              isSplitForm
+                ? 'py-12 md:py-20 lg:py-24'
                 : 'py-12 md:py-[130px]'
             }`}
           >
             <div
-              className={`flex w-full ${
-                isPearlHero
-                  ? 'flex-col-reverse lg:flex-row-reverse gap-10 lg:gap-16 xl:gap-24 items-center'
-                  : 'flex-col lg:flex-row gap-8 lg:gap-[96px] items-start lg:items-center'
+              className={`w-full ${
+                isSplitForm
+                  ? 'grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-start lg:gap-12 xl:gap-16'
+                  : 'flex flex-col lg:flex-row gap-8 lg:gap-[96px] items-start lg:items-center'
               }`}
             >
-              {/* Copy column (Pearl: image leads on mobile via flex-row-reverse) */}
+              {/* Left: copy (+ Fortune CTAs; dashboard video card removed) */}
               <div
-                className={`flex flex-col gap-8 lg:gap-10 items-start justify-end flex-1 w-full ${
-                  isPearlHero ? 'lg:max-w-[560px]' : ''
+                className={`flex w-full min-w-0 flex-col items-start justify-end gap-8 lg:gap-10 ${
+                  isSplitForm ? '' : 'flex-1'
                 }`}
               >
                 <div
-                  className={`flex flex-col gap-4 lg:gap-5 items-start w-full text-white ${
-                    isPearlHero ? 'text-left' : ''
-                  }`}
+                  className={`flex flex-col gap-4 lg:gap-5 items-start w-full text-left text-white`}
                 >
                   {data.eyebrow?.trim() ? (
-                    <p className="w-full text-xs md:text-sm font-semibold tracking-[0.14em] text-indigo-400 uppercase font-inter">
+                    <p className="w-full text-xs font-semibold uppercase tracking-[0.14em] text-indigo-400 md:text-sm font-inter">
                       {data.eyebrow.trim()}
                     </p>
                   ) : null}
-                  {/* Main heading */}
                   <h1
-                    className={`w-full text-white font-manrope font-bold not-italic md:leading-[110%] leading-[1.08] tracking-[-1.12px] ${
-                      isPearlHero
+                    className={`w-full font-manrope font-bold not-italic leading-[1.08] tracking-[-1.12px] text-white md:leading-[110%] ${
+                      isSplitForm
                         ? 'text-[34px] md:text-[44px] lg:text-[52px]'
                         : 'text-[36px] md:text-[40px] lg:text-[56px]'
                     }`}
@@ -336,74 +344,134 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                     {data.titleHighlight && (
                       <>
                         <br aria-hidden="true" />
-                        <span className="text-white/50">
-                          {data.titleHighlight}
-                        </span>
+                        <span className="text-white/50">{data.titleHighlight}</span>
                       </>
                     )}
                   </h1>
 
-                  {/* Description text */}
                   <p
-                    className={`w-full text-white font-inter not-italic font-medium leading-[160%] opacity-80 ${
-                      isPearlHero ? 'text-base md:text-lg max-w-[540px]' : 'text-lg'
+                    className={`w-full font-inter not-italic font-medium leading-[160%] text-white ${
+                      isSplitForm
+                        ? 'max-w-[540px] text-base opacity-80 md:text-lg'
+                        : 'text-lg opacity-80'
                     }`}
                   >
                     {data.description}
                   </p>
                 </div>
 
-                {/* Primary Button */}
-                <Anchor
-                  href={data.primaryButtonLink || '#'}
-                  className={`bg-white flex items-center overflow-hidden px-6 py-3 relative rounded-[5px] shrink-0 hover:bg-zinc-100 transition-colors ${
-                    isPearlHero ? 'shadow-lg shadow-black/25 md:px-8 md:py-3.5' : ''
-                  }`}
-                >
-                  <span className="font-inter font-medium leading-[1.6] text-[#18181b] text-base text-center whitespace-nowrap">
-                    {data.primaryButtonText || 'Book a Clinical Demo'}
-                  </span>
-                </Anchor>
-              </div>
-
-              {/* Right Content - Clickable Placeholder Image */}
-              <div
-                className={`w-full shrink-0 overflow-hidden relative cursor-pointer group ${
-                  isPearlHero
-                    ? 'bg-[#dae7ff] lg:flex-1 lg:max-w-[560px] rounded-[28px] ring-1 ring-white/10 shadow-2xl shadow-black/50'
-                    : 'bg-zinc-900 lg:w-[495px] rounded-[18px]'
-                }`}
-                style={{ aspectRatio: '990/800' }}
-                onClick={() => {
-                  if (canEmbedVideo) {
-                    setIsVideoModalOpen(true)
-                  } else if (data.videoLink && data.videoLink !== '#') {
-                    window.open(data.videoLink, '_blank')
-                  }
-                }}
-              >
-                <HeroCoverImg
-                  src={
-                    typeof data.videoThumbnail === 'string' &&
-                    data.videoThumbnail.trim()
-                      ? data.videoThumbnail.trim()
-                      : undefined
-                  }
-                  fallback={placeholderImage}
-                  className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                />
-
-                <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/25 to-transparent" />
-
-                {showPlayChipOverlay ? (
-                  <div className="absolute bottom-4 right-4 backdrop-blur-xl bg-black/30 border border-white/30 flex gap-2 items-center overflow-hidden pl-3.5 pr-4 py-2 rounded-full group-hover:bg-black/40 transition-colors pointer-events-none">
-                    <PlayIcon />
-                    <span className="font-inter font-medium leading-[1.5] text-[15px] text-white whitespace-nowrap">
-                      {data.secondaryButtonText || 'Clinical Dashboards Overview'}
-                    </span>
+                {isFortuneSplit ? (
+                  <div className="flex w-full min-w-0 flex-row flex-nowrap items-center gap-2 sm:gap-3">
+                    {fortunePrimaryScrollToForm ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          document
+                            .getElementById('fortune-hero-lead-form')
+                            ?.scrollIntoView({
+                              behavior: 'smooth',
+                              block: 'start',
+                            })
+                        }
+                        className="relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[5px] bg-white px-6 py-3 transition-colors hover:bg-zinc-100"
+                      >
+                        <span className="text-center font-inter text-base font-medium leading-[1.6] text-[#18181b] whitespace-nowrap">
+                          {data.primaryButtonText ||
+                            'Get Started as a Fortune Member'}
+                        </span>
+                      </button>
+                    ) : (
+                      <Anchor
+                        href={fortunePrimaryHref}
+                        className="relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[5px] bg-white px-6 py-3 transition-colors hover:bg-zinc-100"
+                      >
+                        <span className="text-center font-inter text-base font-medium leading-[1.6] text-[#18181b] whitespace-nowrap">
+                          {data.primaryButtonText ||
+                            'Get Started as a Fortune Member'}
+                        </span>
+                      </Anchor>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (canEmbedVideo) {
+                          setIsVideoModalOpen(true)
+                        } else if (
+                          data.videoLink &&
+                          data.videoLink !== '#'
+                        ) {
+                          window.open(data.videoLink, '_blank')
+                        }
+                      }}
+                      className="inline-flex min-w-0 max-w-[min(100%,18rem)] shrink items-center gap-2 rounded-full border border-white/35 bg-white/10 px-4 py-2.5 font-inter text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/15 sm:max-w-none sm:px-5 sm:text-[15px]"
+                    >
+                      <PlayIcon />
+                      <span className="truncate">
+                        {data.secondaryButtonText || 'Watch overview'}
+                      </span>
+                    </button>
                   </div>
                 ) : null}
+
+                {!isSplitForm ? (
+                  <Anchor
+                    href={data.primaryButtonLink || '#'}
+                    className="relative shrink-0 flex items-center overflow-hidden rounded-[5px] bg-white px-6 py-3 transition-colors hover:bg-zinc-100"
+                  >
+                    <span className="text-center font-inter text-base font-medium leading-[1.6] text-[#18181b] whitespace-nowrap">
+                      {data.primaryButtonText || 'Book a Clinical Demo'}
+                    </span>
+                  </Anchor>
+                ) : null}
               </div>
+
+              {isSplitForm ? (
+                <div
+                  id={
+                    partner === 'fortune'
+                      ? 'fortune-hero-lead-form'
+                      : 'curve-hero-lead-form'
+                  }
+                  className="flex min-h-0 w-full min-w-0 flex-col overflow-x-hidden overflow-y-visible py-1 scroll-mt-24"
+                  aria-label="Request a demo"
+                >
+                  <CurveHeroHubspotForm key={partner} partner={partner} />
+                </div>
+              ) : (
+                <div
+                  className="w-full shrink-0 overflow-hidden relative cursor-pointer group bg-zinc-900 lg:w-[495px] rounded-[18px]"
+                  style={{ aspectRatio: '990/800' }}
+                  onClick={() => {
+                    if (canEmbedVideo) {
+                      setIsVideoModalOpen(true)
+                    } else if (data.videoLink && data.videoLink !== '#') {
+                      window.open(data.videoLink, '_blank')
+                    }
+                  }}
+                >
+                  <HeroCoverImg
+                    src={
+                      typeof data.videoThumbnail === 'string' &&
+                      data.videoThumbnail.trim()
+                        ? data.videoThumbnail.trim()
+                        : undefined
+                    }
+                    fallback={placeholderImage}
+                    className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                  />
+
+                  <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/25 to-transparent" />
+
+                  {showPlayChipOverlay ? (
+                    <div className="absolute bottom-4 right-4 backdrop-blur-xl bg-black/30 border border-white/30 flex gap-2 items-center overflow-hidden pl-3.5 pr-4 py-2 rounded-full group-hover:bg-black/40 transition-colors pointer-events-none">
+                      <PlayIcon />
+                      <span className="font-inter font-medium leading-[1.5] text-[15px] text-white whitespace-nowrap">
+                        {data.secondaryButtonText || 'Clinical Dashboards Overview'}
+                      </span>
+                    </div>
+                  ) : null}
+                </div>
+              )}
             </div>
           </div>
         </Wrapper>

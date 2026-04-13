@@ -7,6 +7,7 @@ import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection
 import FAQSection from '~/components/sections/FAQSection'
 import FeaturedAndPopularBlogs from '~/components/sections/FeaturedAndPopularBlogsSection'
 import HeroSection from '~/components/sections/HeroSection'
+import type { PartnerHeroHubspotKey } from '~/components/sections/CurveHeroHubspotForm'
 import LatestBlogs from '~/components/sections/LatestBlogSection'
 import PartnerProductTwoColumnSection from '~/components/sections/PartnerProductTwoColumnSection'
 import ReleaseNotesHeroSection from '~/components/sections/ReleaseNotesHeroSection'
@@ -119,19 +120,30 @@ const DynamicPages = ({
 
   if (simpleLanding && simpleHeroData && simpleProductData) {
     const isCurvePearlLayout = partnerSlug === 'curve'
+    const useSplitHero =
+      partnerSlug === 'curve' ||
+      partnerSlug === 'fortune' ||
+      partnerSlug === 'fortune-management'
+    const splitFormPartner: PartnerHeroHubspotKey | undefined = useSplitHero
+      ? partnerSlug === 'curve'
+        ? 'curve'
+        : 'fortune'
+      : undefined
     return (
       <>
         <BaseUrlProvider baseUrl={baseUrl}>
           <div id="topics-section">
             <HeroSection
               heroData={simpleHeroData}
-              layout={isCurvePearlLayout ? 'curvePearl' : 'default'}
+              layout={useSplitHero ? 'splitForm' : 'default'}
+              splitFormPartner={splitFormPartner}
             />
           </div>
           <PartnerProductTwoColumnSection
             {...simpleProductData}
             variant={isCurvePearlLayout ? 'showcase' : 'default'}
           />
+          <SliderSection items={reorderedCarouselItems} categories={categories} />
           <VerticalTestimonialsSection
             data={homeSettings?.verticalTestimonialSection}
             headerLayout={isCurvePearlLayout ? 'centered' : 'split'}

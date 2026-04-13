@@ -312,12 +312,12 @@ function youtubeInlinePlaySrc(videoId: string) {
 
 const youtubeIframeCoverStyle: React.CSSProperties = {
   position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  top: 0,
+  left: 0,
+  width: '100%',
   height: '100%',
-  width: 'calc(100% * 256 / 81)',
-  maxWidth: 'none',
+  transform: 'scale(1.25)',
+  transformOrigin: 'center center',
   border: 'none',
   backgroundColor: 'transparent',
 }
@@ -483,15 +483,7 @@ const TestimonialSlider = ({
     const video = videoRefs.current[index]
     if (video) {
       video.currentTime = 0
-      video.play().catch(() => {})
-    }
-  }
-
-  const handleVideoPause = (index: number) => {
-    const video = videoRefs.current[index]
-    if (video) {
-      video.pause()
-      video.currentTime = 0
+      void video.play().catch(() => {})
     }
   }
 
@@ -531,6 +523,13 @@ const TestimonialSlider = ({
       ...rest,
       beforeChange: (...args: unknown[]) => {
         setInlineYoutubeSlideIndex(null)
+        setActiveVideoIndex(null)
+        videoRefs.current.forEach((v) => {
+          if (v) {
+            v.pause()
+            v.currentTime = 0
+          }
+        })
         beforeChange?.(...args)
       },
     }
@@ -580,38 +579,51 @@ const TestimonialSlider = ({
           )
 
           return (
-            <div key={logo._id} className="min-h-[500px] px-1">
-              <div
-                className={`relative flex aspect-[9/16] min-h-[500px] w-full max-w-[400px] flex-col justify-center overflow-hidden rounded-2xl shadow-md ${
-                  hasClickVideo ? 'group cursor-pointer' : 'cursor-default'
-                }`}
-                onMouseEnter={() => {
-                  if (inlineYoutubeSlideIndex === i) return
-                  if (!hasHoverVideo || isSliding) return
-                  if (hasMp4HoverPreview) {
-                    setActiveVideoIndex(i)
-                    handleVideoPlay(i)
-                    return
+            <div
+              key={logo._id}
+              className={`min-h-[500px] px-1 ${
+                hasClickVideo ? 'group cursor-pointer' : 'cursor-default'
+              }`}
+              onMouseEnter={() => {
+                setInlineYoutubeSlideIndex((cur) =>
+                  cur != null && cur !== i ? null : cur,
+                )
+                if (inlineYoutubeSlideIndex === i) return
+                if (!hasHoverVideo || isSliding) return
+                if (hasMp4HoverPreview) {
+                  videoRefs.current.forEach((v, idx) => {
+                    if (idx !== i && v) {
+                      v.pause()
+                      v.currentTime = 0
+                    }
+                  })
+                  setActiveVideoIndex(i)
+                  const video = videoRefs.current[i]
+                  if (video) {
+                    const sameSlideStillActive = activeVideoIndex === i
+                    const keepTimeline =
+                      sameSlideStillActive ||
+                      (!video.paused && video.currentTime > 0)
+                    if (keepTimeline) {
+                      void video.play().catch(() => {})
+                    } else {
+                      video.currentTime = 0
+                      void video.play().catch(() => {})
+                    }
                   }
-                  if (youtubeId) setActiveVideoIndex(i)
-                }}
-                onMouseLeave={() => {
-                  setInlineYoutubeSlideIndex((cur) =>
-                    cur === i ? null : cur,
-                  )
-                  if (!hasHoverVideo || isSliding) return
-                  if (hasMp4HoverPreview) {
-                    handleVideoPause(i)
-                    setActiveVideoIndex(null)
-                    return
-                  }
-                  if (youtubeId) setActiveVideoIndex(null)
-                }}
-                onClick={() => {
-                  if (!hasClickVideo || isSliding) return
-                  handleCardClick(i, logo)
-                }}
-              >
+                  return
+                }
+                if (youtubeId) {
+                  // Do not pause sibling MP4s — brief hover on a YouTube card was killing the neighbor clip.
+                  setActiveVideoIndex(i)
+                }
+              }}
+              onClick={() => {
+                if (!hasClickVideo || isSliding) return
+                handleCardClick(i, logo)
+              }}
+            >
+              <div className="relative flex aspect-[9/16] min-h-[500px] w-full max-w-[400px] flex-col justify-center overflow-hidden rounded-2xl shadow-md">
                 <div className="relative h-full w-full bg-zinc-900">
                   {inlineYoutubeSlideIndex === i && youtubeId ? (
                     <div className="absolute inset-0 z-[20] overflow-hidden rounded-2xl bg-black">

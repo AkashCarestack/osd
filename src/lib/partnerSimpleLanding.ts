@@ -4,13 +4,14 @@
  */
 
 export const FORTUNE_HERO_DEFAULTS = {
+  eyebrow: 'OS DENTAL FOR FORTUNE MANAGEMENT',
   title: 'The Data Behind a High-Performing Practice.',
   titleHighlight: '',
   description:
     'Fortune Management helps practices reach their full potential. OS Dental gives them the data to get there. As a Fortune member, you get exclusive access to OS Dental\'s financial and clinical analytics platform - built specifically for the dental groups and practices that are serious about growth.',
   primaryButtonText: 'Get Started as a Fortune Member',
   primaryButtonLink: '#',
-  secondaryButtonText: 'Watch platform demo',
+  secondaryButtonText: 'Watch overview',
   secondaryButtonLink: '',
   backgroundImage:
     'https://cdn.sanity.io/images/rcbknqsy/production/c57bdee986c4836572b6747a44da0a80dfb21674-3058x1020.png',

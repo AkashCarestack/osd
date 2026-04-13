@@ -57,7 +57,7 @@ const ShowcaseFeatureCard: React.FC<{ feature: PartnerProductFeature }> = ({
     style={{ backgroundColor: SHOWCASE_CARD_BG }}
   >
     <div className="flex min-h-0 flex-1 flex-col gap-0 text-left">
-      <h3 className="mb-[20px] font-manrope text-lg font-bold leading-snug text-[#18181B] md:text-xl">
+      <h3 className="mb-[20px] font-manrope text-[24px] font-bold leading-snug text-[#18181B]">
         {feature.title}
       </h3>
       <p className="font-inter text-base font-normal leading-[1.65] text-zinc-700">
