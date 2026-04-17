@@ -41,6 +41,10 @@ export default {
       name: 'whyPracticeLove',
       title: 'Why Practices Love Section',
     },
+    {
+      name: 'verticalTestimonials',
+      title: 'Vertical testimonials',
+    },
   ],
   fields: [
     defineField({
@@ -277,6 +281,14 @@ export default {
       type: 'whyPracticeLoveSection',
       group: 'whyPracticeLove',
     },
+    defineField({
+      name: 'verticalTestimonialSection',
+      title: 'Vertical testimonial section',
+      description:
+        'Partner landing: headline, CTA, and portrait testimonial cards (with optional video).',
+      type: 'verticalTestimonialSection',
+      group: 'verticalTestimonials',
+    }),
     {
       name: 'upcomingEventsSection',
       title: 'Upcoming Events Section',

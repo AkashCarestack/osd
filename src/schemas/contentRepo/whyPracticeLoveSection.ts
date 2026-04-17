@@ -4,6 +4,12 @@ export default {
   type: 'object',
   fields: [
     {
+      name: 'eyebrow',
+      title: 'Eyebrow label',
+      type: 'string',
+      description: 'Small caps line above the headline (e.g. OS DENTAL FOR CURVE USERS).',
+    },
+    {
       name: 'title',
       title: 'Section Title',
       type: 'string',
@@ -43,11 +49,22 @@ export default {
               type: 'text',
               validation: (Rule: any) => Rule.required(),
             },
+            {
+              name: 'image',
+              title: 'Feature image',
+              type: 'image',
+              description:
+                'Optional illustration or icon (shown above the title on partner product cards).',
+              options: {
+                hotspot: true,
+              },
+            },
           ],
           preview: {
             select: {
               title: 'title',
               subtitle: 'description',
+              media: 'image',
             },
           },
         },

@@ -43,25 +43,17 @@ const HubSpotForm = ({
 
   useEffect(() => {
     const window2 = window
-    const loadHubSpotScript = async () => {
-      // Ensure script is only fetched once
-      if (
-        !document.querySelector(`script[src="//js.hsforms.net/forms/v2.js"]`)
-      ) {
-        const scriptEl = document.createElement('script')
-        scriptEl.setAttribute('charset', 'utf-8')
-        scriptEl.setAttribute('type', 'text/javascript')
-        scriptEl.src = '//js.hsforms.net/forms/v2.js'
+    const hsFormsV2Present = () =>
+      Array.from(document.scripts).some((s) =>
+        s.src.includes('js.hsforms.net/forms/v2.js'),
+      )
 
-        // Append the script to the document body
-        document.body.appendChild(scriptEl)
-
-        // Wait for the script to load
-        scriptEl.onload = () => {
-          setIsScriptLoaded(true)
-          if (window?.hbspt) {
-            // Create the form
-            window.hbspt.forms.create({
+    let formInjected = false
+    const mountHsForm = (): boolean => {
+      if (formInjected || !window?.hbspt?.forms?.create) return false
+      formInjected = true
+      setIsScriptLoaded(true)
+      window.hbspt.forms.create({
               portalId: '4832409',
               region: 'na1',
               formId: id || '6b2d6906-028e-4d65-9cd1-34d528e0d5c0',
@@ -209,19 +201,38 @@ const HubSpotForm = ({
                 }, 3000)
               },
             } as any)
-          }
+      return true
+    }
+
+    const loadHubSpotScript = async () => {
+      if (!hsFormsV2Present()) {
+        const scriptEl = document.createElement('script')
+        scriptEl.setAttribute('charset', 'utf-8')
+        scriptEl.setAttribute('type', 'text/javascript')
+        scriptEl.src = '//js.hsforms.net/forms/v2.js'
+        document.body.appendChild(scriptEl)
+        scriptEl.onload = () => {
+          mountHsForm()
         }
+        return
       }
+      if (mountHsForm()) return
+      const poll = window.setInterval(() => {
+        if (mountHsForm()) window.clearInterval(poll)
+      }, 50)
+      window.setTimeout(() => window.clearInterval(poll), 12000)
     }
 
     loadHubSpotScript()
 
-    // Cleanup the script if necessary
     return () => {
-      const hubspotScript = document.querySelector(
-        `script[src="//js.hsforms.net/forms/v2.js"]`,
-      )
-      if (hubspotScript) hubspotScript.remove()
+      document
+        .querySelectorAll('script[src*="js.hsforms.net/forms/v2.js"]')
+        .forEach((node) => {
+          if (node.getAttribute('data-hs-forms-v2') !== 'preload') {
+            node.remove()
+          }
+        })
     }
   }, [
     id,

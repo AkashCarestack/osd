@@ -7,6 +7,7 @@ import Wrapper from '~/layout/Wrapper'
 interface Feature {
   title: string
   description: string
+  image?: string
 }
 
 interface WhyPracticeLoveData {
@@ -48,8 +49,17 @@ const CheckIcon = () => (
 const FeatureCard: React.FC<{ feature: Feature }> = ({ feature }) => {
   return (
     <div className="bg-white flex flex-col gap-6 items-start p-6 rounded-[10px] flex-1 min-w-[220px]">
-      <div className="flex items-center py-[2.4px]">
-        <CheckIcon />
+      <div className="flex w-full items-center justify-start py-[2.4px]">
+        {feature.image ? (
+          <img
+            src={feature.image}
+            alt=""
+            className="h-14 w-auto max-w-full object-contain"
+            decoding="async"
+          />
+        ) : (
+          <CheckIcon />
+        )}
       </div>
       <div className="flex flex-col gap-2 items-start w-full">
         <h3 className="font-manrope font-bold text-base leading-[1.2] text-gray-900 w-full">

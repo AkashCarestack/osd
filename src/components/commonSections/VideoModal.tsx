@@ -12,6 +12,8 @@ export interface VideoItem {
   videoPlatform: VideoPlatform
   videoId: string
   title?: string
+  /** When true (e.g. modal opened by user), ask the provider to start playback. */
+  autoplay?: boolean
   // Backward compatibility
   platform?: VideoPlatform
 }
@@ -30,14 +32,25 @@ interface VideoProps {
 const getIframeUrl = (
   videoPlatform: VideoPlatform,
   videoId: string,
+  autoplay?: boolean,
 ): string => {
   switch (videoPlatform) {
-    case 'vimeo':
-      return `https://player.vimeo.com/video/${videoId}?transparent=1&background=0`
-    case 'vidyard':
-      return `https://play.vidyard.com/${videoId}?transparent=1`
-    case 'youtube':
-      return `https://www.youtube.com/embed/${videoId}?modestbranding=1&rel=0`
+    case 'vimeo': {
+      const base = `https://player.vimeo.com/video/${videoId}?transparent=1&background=0`
+      return autoplay ? `${base}&autoplay=1` : base
+    }
+    case 'vidyard': {
+      const base = `https://play.vidyard.com/${videoId}?transparent=1`
+      return autoplay ? `${base}&autoplay=1` : base
+    }
+    case 'youtube': {
+      const base = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(
+        videoId,
+      )}?modestbranding=1&rel=0`
+      return autoplay
+        ? `${base}&autoplay=1&playsinline=1`
+        : base
+    }
     default:
       throw new Error(`Unsupported platform: ${videoPlatform}`)
   }
@@ -49,6 +62,7 @@ const VideoIframe: React.FC<VideoItem> = ({
   platform,
   videoId,
   title = '',
+  autoplay,
 }) => {
   // Support both videoPlatform (new) and platform (old) for backward compatibility
   const platformToUse = videoPlatform || platform
@@ -58,10 +72,11 @@ const VideoIframe: React.FC<VideoItem> = ({
 
   return (
     <iframe
-      src={getIframeUrl(platformToUse, videoId)}
+      src={getIframeUrl(platformToUse, videoId, autoplay)}
       title={title}
       frameBorder="0"
       allowFullScreen
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
       className="w-full h-full inset-0 absolute"
       style={{ backgroundColor: 'transparent' }}
     />

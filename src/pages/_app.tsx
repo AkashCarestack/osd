@@ -6,7 +6,7 @@ import Head from 'next/head'
 import { usePathname } from 'next/navigation'
 import Router from 'next/router'
 import Script from 'next/script'
-import { lazy, useEffect } from 'react'
+import { lazy, useEffect, useLayoutEffect } from 'react'
 
 import BookDemoContextProvider from '~/components/Context/BookDemoProvider'
 import { getClient } from '~/lib/sanity.client'
@@ -40,6 +40,23 @@ function App({ Component, pageProps }: AppProps<SharedPageProps>) {
   const currentWindow = (pathname && pathname?.split('/')) || []
   const index = pathname?.split('/').length - 1 || 0
   const result = slugToCapitalized(currentWindow[index])
+
+  // Start HubSpot forms v2.js as early as possible (before paint) so hero/embed forms mount faster.
+  useLayoutEffect(() => {
+    if (typeof document === 'undefined') return
+    if (
+      Array.from(document.scripts).some((s) =>
+        s.src.includes('js.hsforms.net/forms/v2.js'),
+      )
+    ) {
+      return
+    }
+    const el = document.createElement('script')
+    el.src = 'https://js.hsforms.net/forms/v2.js'
+    el.async = true
+    el.setAttribute('data-hs-forms-v2', 'preload')
+    document.head.appendChild(el)
+  }, [])
 
   // Initialize dataLayer and track route changes for GTM
   useEffect(() => {
