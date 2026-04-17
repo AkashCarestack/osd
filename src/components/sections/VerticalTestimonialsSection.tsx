@@ -515,6 +515,7 @@ const TestimonialSlider = ({
     if (video) {
       video.currentTime = 0
       video.play().catch(() => {})
+      
     }
   }
 
