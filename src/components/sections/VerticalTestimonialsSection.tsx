@@ -734,7 +734,16 @@ const TestimonialSlider = ({
                     </video>
                   ) : null}
 
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-10 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.1)_100%),linear-gradient(180deg,rgba(0,0,0,0)_0%,#000_100%)]">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-0 bottom-0 z-[4] h-[55%] rounded-b-2xl"
+                    style={{
+                      backgroundImage:
+                        'linear-gradient(180deg, hsla(0, 0%, 100%, 0), hsla(0, 0%, 100%, 0.1)), linear-gradient(180deg, transparent, #000)',
+                    }}
+                  />
+
+                  <div className="absolute bottom-0 left-0 right-0 z-10 p-6 text-white">
                     <div className="w-full">
                       <div
                         className={`flex flex-col gap-3 group-hover:opacity-0 group-hover:pointer-events-none ${
