@@ -17,7 +17,7 @@ function scriptAlreadyPresent(): boolean {
 }
 
 const HERO_FORM_SHELL_CLASS =
-  'hero-hubspot-form-shell relative w-full min-w-0 scroll-m-14 scroll-mt-28 sticky top-20 max-w-[537px] rounded-[12px] bg-white p-8 shadow-sm md:rounded-[24px]'
+  'hero-hubspot-form-shell relative w-full min-w-0 scroll-m-14 scroll-mt-28 md:sticky md:top-20 max-w-[537px] rounded-[12px] bg-white p-4 shadow-sm sm:p-6 md:rounded-[24px] md:p-8'
 
 const DEFAULT_HEADING = 'Schedule a Demo'
 
@@ -132,7 +132,7 @@ const CmsHeroHubspotForm: React.FC<CmsHeroHubspotFormProps> = ({
 
   return (
     <div className={HERO_FORM_SHELL_CLASS}>
-      <h3 className="mb-8 font-inter text-2xl font-semibold text-[#030712] md:text-3xl">
+      <h3 className="mb-5 font-inter text-xl font-semibold text-[#030712] sm:text-2xl md:mb-8 md:text-3xl">
         {title}
       </h3>
       {loading ? (

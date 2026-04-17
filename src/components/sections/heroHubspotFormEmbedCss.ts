@@ -134,4 +134,27 @@ export const heroHubspotFormEmbedGlobalCss = `
   flex: 1 1 100% !important;
   max-width: 100% !important;
 }
+/* Mobile: stack HubSpot two-column rows so fields stay full-width and labels don’t crush */
+@media (max-width: 767.98px) {
+  .hero-hubspot-form-shell fieldset.form-columns-2 {
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    row-gap: 0 !important;
+    column-gap: 0 !important;
+  }
+  .hero-hubspot-form-shell fieldset.form-columns-2 > .hs-form-field {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  .hero-hubspot-form-shell .hs-form-field {
+    margin-bottom: 18px;
+  }
+  .hero-hubspot-form-shell .hs-form-field label {
+    white-space: normal !important;
+    word-break: normal;
+    overflow-wrap: anywhere;
+  }
+}
 `
