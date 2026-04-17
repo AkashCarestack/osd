@@ -580,7 +580,8 @@ export const homeSettingsQuery = groq`
       secondaryButtonLink,
       "backgroundImage": backgroundImage.asset->url,
       "videoThumbnail": videoThumbnail.asset->url,
-      videoLink
+      videoLink,
+      hubspotFormId
     },
     "headerLogo": headerLogo.asset->url,
     "whyPracticeLoveSection": whyPracticeLoveSection {
@@ -974,7 +975,8 @@ export const homeSettingsByPartnerQuery = groq`
       secondaryButtonLink,
       "backgroundImage": backgroundImage.asset->url,
       "videoThumbnail": videoThumbnail.asset->url,
-      videoLink
+      videoLink,
+      hubspotFormId
     },
     "headerLogo": headerLogo.asset->url,
     "whyPracticeLoveSection": whyPracticeLoveSection {

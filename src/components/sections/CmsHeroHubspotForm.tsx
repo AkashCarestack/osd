@@ -2,30 +2,10 @@ import React, { useLayoutEffect, useRef, useState } from 'react'
 
 const HS_SCRIPT_SRC = 'https://js.hsforms.net/forms/v2.js'
 
-const DEFAULT_FORM_ID = '6b2d6906-028e-4d65-9cd1-34d528e0d5c0'
+const MOUNT_ID = 'hero-cms-hubspot-form'
 
 const portalId =
   process.env.NEXT_PUBLIC_HUBSPOT_PORTAL_ID?.trim() || '4832409'
-
-export type PartnerHeroHubspotKey = 'curve' | 'fortune'
-
-const MOUNT_IDS: Record<PartnerHeroHubspotKey, string> = {
-  curve: 'curve-hero-hubspot-form',
-  fortune: 'fortune-hero-hubspot-form',
-}
-
-function resolveFormId(partner: PartnerHeroHubspotKey): string {
-  if (partner === 'curve') {
-    return (
-      process.env.NEXT_PUBLIC_HUBSPOT_CURVE_HERO_FORM_ID?.trim() ||
-      DEFAULT_FORM_ID
-    )
-  }
-  return (
-    process.env.NEXT_PUBLIC_HUBSPOT_FORTUNE_HERO_FORM_ID?.trim() ||
-    DEFAULT_FORM_ID
-  )
-}
 
 function scriptAlreadyPresent(): boolean {
   return Array.from(document.scripts).some((s) =>
@@ -33,36 +13,27 @@ function scriptAlreadyPresent(): boolean {
   )
 }
 
-interface CurveHeroHubspotFormProps {
-  /** Which hero embed: separate mount node + optional form ID from env. */
-  partner: PartnerHeroHubspotKey
-  /** When set (Sanity `heroSection.hubspotFormId`), overrides env-based form ID. */
-  cmsFormId?: string
+export interface CmsHeroHubspotFormProps {
+  /** HubSpot form GUID from Sanity `heroSection.hubspotFormId`. */
+  formId: string
 }
 
 /**
- * Inline HubSpot form for partner split heroes (Curve / Fortune).
- * Env: `NEXT_PUBLIC_HUBSPOT_CURVE_HERO_FORM_ID`,
- * `NEXT_PUBLIC_HUBSPOT_FORTUNE_HERO_FORM_ID`, `NEXT_PUBLIC_HUBSPOT_PORTAL_ID`.
+ * HubSpot embed for default hero when CMS provides a form ID.
+ * Loads `forms/v2.js` once (shared with other HubSpot embeds on the page).
  */
-const CurveHeroHubspotForm: React.FC<CurveHeroHubspotFormProps> = ({
-  partner,
-  cmsFormId,
-}) => {
-  const mountId = MOUNT_IDS[partner]
-  const resolvedFormId =
-    cmsFormId && cmsFormId.trim().length > 0
-      ? cmsFormId.trim()
-      : resolveFormId(partner)
+const CmsHeroHubspotForm: React.FC<CmsHeroHubspotFormProps> = ({ formId }) => {
   const createdRef = useRef(false)
   const [loading, setLoading] = useState(true)
+  const formIdTrim = formId.trim()
 
   useLayoutEffect(() => {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined' || !formIdTrim) return
 
+    const mountId = MOUNT_ID
     createdRef.current = false
-    const clearMount = document.getElementById(mountId)
-    if (clearMount) clearMount.innerHTML = ''
+    const targetEl = document.getElementById(mountId)
+    if (targetEl) targetEl.innerHTML = ''
 
     const mountForm = () => {
       const hbspt = (
@@ -71,9 +42,9 @@ const CurveHeroHubspotForm: React.FC<CurveHeroHubspotFormProps> = ({
         }
       ).hbspt
       if (!hbspt?.forms?.create || createdRef.current) return
-      const targetEl = document.getElementById(mountId)
-      if (!targetEl || targetEl.querySelector('form')) {
-        if (targetEl?.querySelector('form')) {
+      const el = document.getElementById(mountId)
+      if (!el || el.querySelector('form')) {
+        if (el?.querySelector('form')) {
           createdRef.current = true
           setLoading(false)
         }
@@ -83,7 +54,7 @@ const CurveHeroHubspotForm: React.FC<CurveHeroHubspotFormProps> = ({
       hbspt.forms.create({
         region: 'na1',
         portalId,
-        formId: resolvedFormId,
+        formId: formIdTrim,
         target: `#${mountId}`,
         onFormReady: () => setLoading(false),
       })
@@ -107,12 +78,12 @@ const CurveHeroHubspotForm: React.FC<CurveHeroHubspotFormProps> = ({
         }
         return
       }
-      const el = document.createElement('script')
-      el.src = HS_SCRIPT_SRC
-      el.async = true
-      el.onload = () => mountForm()
-      el.onerror = () => setLoading(false)
-      document.body.appendChild(el)
+      const scriptEl = document.createElement('script')
+      scriptEl.src = HS_SCRIPT_SRC
+      scriptEl.async = true
+      scriptEl.onload = () => mountForm()
+      scriptEl.onerror = () => setLoading(false)
+      document.body.appendChild(scriptEl)
     }
 
     ensureScript()
@@ -123,7 +94,9 @@ const CurveHeroHubspotForm: React.FC<CurveHeroHubspotFormProps> = ({
       if (el) el.innerHTML = ''
       createdRef.current = false
     }
-  }, [mountId, resolvedFormId])
+  }, [formIdTrim])
+
+  if (!formIdTrim) return null
 
   return (
     <div className="partner-hubspot-embed-root relative w-full min-w-0 rounded-xl border border-zinc-200/90 bg-white px-5 py-6 shadow-md md:px-6 md:py-7">
@@ -136,7 +109,7 @@ const CurveHeroHubspotForm: React.FC<CurveHeroHubspotFormProps> = ({
           Loading…
         </div>
       ) : null}
-      <div id={mountId} className="w-full min-w-0 bg-white text-left" />
+      <div id={MOUNT_ID} className="w-full min-w-0 bg-white text-left" />
       <style jsx global>{`
         .partner-hubspot-embed-root .hs-form fieldset {
           max-width: 100% !important;
@@ -201,4 +174,4 @@ const CurveHeroHubspotForm: React.FC<CurveHeroHubspotFormProps> = ({
   )
 }
 
-export default CurveHeroHubspotForm
+export default CmsHeroHubspotForm

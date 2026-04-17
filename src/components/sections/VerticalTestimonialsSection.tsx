@@ -1,8 +1,9 @@
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
+
 import Image from 'next/image'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Slider from 'react-slick'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
 
 import Anchor from '~/components/commonSections/Anchor'
 import ImageLoader from '~/components/commonSections/ImageLoader'
@@ -939,11 +940,7 @@ const VerticalTestimonialsSection: React.FC<{
                   : 'flex w-full max-w-[720px] flex-col items-start gap-4'
               }
             >
-              <p
-                className={`text-xs md:text-sm font-semibold tracking-[0.12em] uppercase font-inter ${
-                  isHeaderCentered ? 'text-zinc-500' : 'text-indigo-600'
-                }`}
-              >
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-indigo-600 font-inter md:text-sm">
                 {eyebrow}
               </p>
               <h2 className="text-[28px] md:text-[40px] lg:text-[48px] text-zinc-900 font-manrope font-extrabold leading-[1.08] tracking-[-0.02em]">

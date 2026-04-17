@@ -64,21 +64,27 @@ const ShowcaseFeatureCard: React.FC<{ feature: PartnerProductFeature }> = ({
   feature,
 }) => (
   <article
-    className="flex h-full min-h-0 flex-col rounded-2xl border border-indigo-200/60 p-6 shadow-sm md:p-8"
+    className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-indigo-200/60 shadow-sm"
     style={{ backgroundColor: SHOWCASE_CARD_BG }}
   >
-    <div className="flex min-h-0 flex-1 flex-col gap-0 text-left">
-      {feature.image ? (
-        <div className="mb-5 w-full overflow-hidden rounded-xl border border-indigo-100/80 bg-white/60">
-          <img
-            src={feature.image}
-            alt=""
-            className="aspect-[16/10] w-full object-cover"
-            decoding="async"
-          />
-        </div>
-      ) : null}
-      <h3 className="mb-[20px] font-manrope text-[24px] font-bold leading-snug text-[#18181B]">
+    {feature.image ? (
+      <div className="w-full shrink-0 overflow-hidden bg-white/50">
+        <img
+          src={feature.image}
+          alt=""
+          className="aspect-[16/10] h-auto w-full object-cover"
+          decoding="async"
+        />
+      </div>
+    ) : null}
+    <div
+      className={`flex min-h-0 flex-1 flex-col gap-0 text-left ${
+        feature.image
+          ? 'px-6 pb-6 pt-5 md:px-8 md:pb-8 md:pt-6'
+          : 'p-6 md:p-8'
+      }`}
+    >
+      <h3 className="mb-5 font-manrope text-[24px] font-bold leading-snug text-[#18181B]">
         {feature.title}
       </h3>
       <p className="font-inter text-base font-normal leading-[1.65] text-zinc-700">
