@@ -24,6 +24,8 @@ interface HeroData {
   videoLink?: string
   /** HubSpot form GUID from Sanity `heroSection.hubspotFormId`. */
   hubspotFormId?: string
+  /** Optional title above hero HubSpot form (`heroSection.hubspotFormHeading`). */
+  hubspotFormHeading?: string
 }
 
 interface HeroSectionProps {
@@ -211,6 +213,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       'https://cdn.sanity.io/images/rcbknqsy/production/3e10a80054ff751b2c3ad43b7e2f53b276ca5887-990x800.png',
     videoLink: '#',
     hubspotFormId: '',
+    hubspotFormHeading: '',
   }
 
   // Transform Sanity data to match component interface
@@ -234,6 +237,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({
     const hubspotRaw = sanityData.hubspotFormId
     const hubspotFormId =
       typeof hubspotRaw === 'string' ? hubspotRaw.trim() : ''
+    const hubHeadingRaw = sanityData.hubspotFormHeading
+    const hubspotFormHeading =
+      typeof hubHeadingRaw === 'string' ? hubHeadingRaw.trim() : ''
 
     return {
       eyebrow:
@@ -257,6 +263,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       videoThumbnail,
       videoLink: videoLinkRaw || defaultHeroData.videoLink,
       hubspotFormId: hubspotFormId || defaultHeroData.hubspotFormId,
+      hubspotFormHeading:
+        hubspotFormHeading || defaultHeroData.hubspotFormHeading,
     }
   }
 
@@ -286,12 +294,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       }
     : null
 
-  /** Split heroes (Curve + Fortune): primary + optional video; scroll-to-form when link empty/#. */
-  const splitPrimaryHref = (data.primaryButtonLink || '').trim()
-  const splitPrimaryScrollToForm =
-    !splitPrimaryHref || splitPrimaryHref === '#'
-  const splitFormLeadFormId =
-    partner === 'fortune' ? 'fortune-hero-lead-form' : 'curve-hero-lead-form'
+  /** Split heroes (Curve + Fortune): video CTA only (form lives in the right column). */
   const showSplitHeroCtas =
     isSplitForm && (partner === 'fortune' || partner === 'curve')
 
@@ -328,14 +331,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             <div
               className={`w-full ${
                 isSplitForm
-                  ? 'grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-start lg:gap-12 xl:gap-16'
+                  ? 'flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-12 xl:gap-16'
                   : 'flex flex-col lg:flex-row gap-8 lg:gap-[96px] items-start lg:items-center'
               }`}
             >
               {/* Left: copy + primary / video CTAs on split heroes (Curve + Fortune) */}
               <div
                 className={`flex w-full min-w-0 flex-col items-start justify-end gap-8 lg:gap-10 ${
-                  isSplitForm ? '' : 'flex-1'
+                  isSplitForm
+                    ? 'lg:w-auto lg:max-w-[min(100%,36rem)] lg:shrink'
+                    : 'flex-1'
                 }`}
               >
                 <div
@@ -375,39 +380,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 
                 {showSplitHeroCtas ? (
                   <div className="flex w-full min-w-0 flex-row flex-nowrap items-center gap-2 sm:gap-3">
-                    {splitPrimaryScrollToForm ? (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          document
-                            .getElementById(splitFormLeadFormId)
-                            ?.scrollIntoView({
-                              behavior: 'smooth',
-                              block: 'start',
-                            })
-                        }
-                        className="relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[5px] bg-white px-6 py-3 transition-colors hover:bg-zinc-100"
-                      >
-                        <span className="text-center font-inter text-base font-medium leading-[1.6] text-[#18181b] whitespace-nowrap">
-                          {data.primaryButtonText ||
-                            (partner === 'fortune'
-                              ? 'Get Started as a Fortune Member'
-                              : 'Schedule a Demo')}
-                        </span>
-                      </button>
-                    ) : (
-                      <Anchor
-                        href={splitPrimaryHref}
-                        className="relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[5px] bg-white px-6 py-3 transition-colors hover:bg-zinc-100"
-                      >
-                        <span className="text-center font-inter text-base font-medium leading-[1.6] text-[#18181b] whitespace-nowrap">
-                          {data.primaryButtonText ||
-                            (partner === 'fortune'
-                              ? 'Get Started as a Fortune Member'
-                              : 'Schedule a Demo')}
-                        </span>
-                      </Anchor>
-                    )}
                     <button
                       type="button"
                       onClick={() => {
@@ -449,18 +421,22 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                       ? 'fortune-hero-lead-form'
                       : 'curve-hero-lead-form'
                   }
-                  className="flex min-h-0 w-full min-w-0 flex-col overflow-x-hidden overflow-y-visible py-1 scroll-mt-24"
+                  className="flex min-h-0 w-full min-w-0 shrink-0 flex-col overflow-x-hidden overflow-y-visible py-1 scroll-mt-24 lg:w-auto lg:max-w-[470px]"
                   aria-label="Request a demo"
                 >
                   <CurveHeroHubspotForm
                     key={`${partner}-${cmsHubspotFormId || 'env'}`}
                     partner={partner}
                     cmsFormId={cmsHubspotFormId || undefined}
+                    heading={data.hubspotFormHeading || undefined}
                   />
                 </div>
               ) : cmsHubspotFormId ? (
                 <div className="flex w-full max-w-full shrink-0 flex-col overflow-x-hidden lg:w-[495px]">
-                  <CmsHeroHubspotForm formId={cmsHubspotFormId} />
+                  <CmsHeroHubspotForm
+                    formId={cmsHubspotFormId}
+                    heading={data.hubspotFormHeading || undefined}
+                  />
                 </div>
               ) : (
                 <div

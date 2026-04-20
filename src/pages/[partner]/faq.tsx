@@ -263,6 +263,7 @@ export default function FAQPage({
     (cat) => cat._id === activeCategory,
   )
   const activeQuestions = activeCategoryData?.faq?.faqs || []
+  const hasMultipleCategories = faqCategories.length > 1
 
   // Initialize first question as open when category changes
   useEffect(() => {
@@ -381,68 +382,78 @@ export default function FAQPage({
             </div>
 
             {/* Main Content */}
-            <div className="flex lg:flex-row flex-col md:justify-between gap-8">
-              {/* Mobile Dropdown */}
-              <div className="lg:hidden w-full">
-                <div
-                  className="relative dropdown-container"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                >
-                  <button className="w-full flex items-center justify-between bg-white border border-gray-200 rounded-[12px] px-4 py-3 text-left font-medium leading-[155%] md:text-lg text-sm text-gray-950">
-                    <span>
-                      {activeCategoryData?.categoryName || 'Select Category'}
-                    </span>
-                    <motion.div
-                      animate={{ rotate: isDropdownOpen ? 180 : 0 }}
-                      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                    >
-                      <ChevronDownIcon className="w-5 h-5 text-gray-600" />
-                    </motion.div>
-                  </button>
-                  <AnimatePresence>
-                    {isDropdownOpen && (
+            <div
+              className={`flex flex-col gap-8 ${
+                hasMultipleCategories
+                  ? 'lg:flex-row md:justify-between'
+                  : 'w-full'
+              }`}
+            >
+              {/* Mobile Dropdown — only when switching between categories */}
+              {hasMultipleCategories && (
+                <div className="lg:hidden w-full">
+                  <div
+                    className="relative dropdown-container"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  >
+                    <button className="w-full flex items-center justify-between bg-white border border-gray-200 rounded-[12px] px-4 py-3 text-left font-medium leading-[155%] md:text-lg text-sm text-gray-950">
+                      <span>
+                        {activeCategoryData?.categoryName || 'Select Category'}
+                      </span>
                       <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-                        className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-[12px] shadow-lg z-10 max-h-60 overflow-y-auto"
+                        animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                       >
-                        {faqCategories.map((category: any) => (
-                          <motion.button
-                            key={category._id}
-                            onClick={() => {
-                              showActiveCategory(category._id)
-                              setIsDropdownOpen(false)
-                            }}
-                            whileHover={{ backgroundColor: '#F9FAFB' }}
-                            whileTap={{ scale: 0.98 }}
-                            className={`w-full text-left px-3 py-2 font-medium leading-[155%] md:text-lg text-sm first:rounded-t-[12px] last:rounded-b-[12px] ${
-                              activeCategory === category._id
-                                ? 'bg-gray-100 text-gray-950'
-                                : 'text-gray-500'
-                            }`}
-                          >
-                            {category.categoryName}
-                          </motion.button>
-                        ))}
+                        <ChevronDownIcon className="w-5 h-5 text-gray-600" />
                       </motion.div>
-                    )}
-                  </AnimatePresence>
+                    </button>
+                    <AnimatePresence>
+                      {isDropdownOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                          className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-[12px] shadow-lg z-10 max-h-60 overflow-y-auto"
+                        >
+                          {faqCategories.map((category: any) => (
+                            <motion.button
+                              key={category._id}
+                              onClick={() => {
+                                showActiveCategory(category._id)
+                                setIsDropdownOpen(false)
+                              }}
+                              whileHover={{ backgroundColor: '#F9FAFB' }}
+                              whileTap={{ scale: 0.98 }}
+                              className={`w-full text-left px-3 py-2 font-medium leading-[155%] md:text-lg text-sm first:rounded-t-[12px] last:rounded-b-[12px] ${
+                                activeCategory === category._id
+                                  ? 'bg-gray-100 text-gray-950'
+                                  : 'text-gray-500'
+                              }`}
+                            >
+                              {category.categoryName}
+                            </motion.button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Desktop Categories Sidebar */}
-              <div className="hidden lg:flex flex-col sticky top-[100px] self-start gap-1.5 flex-1 max-w-[369px]">
-                {faqCategories.map((category: any) => (
-                  <CategoryButton
-                    key={category._id}
-                    category={category}
-                    isActive={activeCategory === category._id}
-                    onClick={() => showActiveCategory(category._id)}
-                  />
-                ))}
-              </div>
+              {hasMultipleCategories && (
+                <div className="hidden lg:flex flex-col sticky top-[100px] self-start gap-1.5 flex-1 max-w-[369px]">
+                  {faqCategories.map((category: any) => (
+                    <CategoryButton
+                      key={category._id}
+                      category={category}
+                      isActive={activeCategory === category._id}
+                      onClick={() => showActiveCategory(category._id)}
+                    />
+                  ))}
+                </div>
+              )}
 
               {/* Questions and Answers */}
               <AnimatePresence mode="wait">
@@ -453,7 +464,9 @@ export default function FAQPage({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                    className="gap-3 flex flex-col flex-1 lg:max-w-[712px]"
+                    className={`gap-3 flex flex-col flex-1 w-full ${
+                      hasMultipleCategories ? 'lg:max-w-[712px]' : ''
+                    }`}
                   >
                     {activeQuestions.map((faqItem: any, index: number) => {
                       const questionId = `${activeCategory}-${index}`

@@ -581,7 +581,8 @@ export const homeSettingsQuery = groq`
       "backgroundImage": backgroundImage.asset->url,
       "videoThumbnail": videoThumbnail.asset->url,
       videoLink,
-      hubspotFormId
+      hubspotFormId,
+      hubspotFormHeading
     },
     "headerLogo": headerLogo.asset->url,
     "whyPracticeLoveSection": whyPracticeLoveSection {
@@ -976,7 +977,8 @@ export const homeSettingsByPartnerQuery = groq`
       "backgroundImage": backgroundImage.asset->url,
       "videoThumbnail": videoThumbnail.asset->url,
       videoLink,
-      hubspotFormId
+      hubspotFormId,
+      hubspotFormHeading
     },
     "headerLogo": headerLogo.asset->url,
     "whyPracticeLoveSection": whyPracticeLoveSection {
