@@ -7,6 +7,7 @@ import Button from './Button'
 
 type VideoPlatform = 'vimeo' | 'vidyard' | 'youtube'
 
+
 export interface VideoItem {
   _id?: string
   videoPlatform: VideoPlatform
