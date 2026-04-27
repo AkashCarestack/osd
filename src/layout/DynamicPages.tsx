@@ -140,7 +140,6 @@ const DynamicPages = ({
               heroData={simpleHeroData}
               layout={useSplitHero ? 'splitForm' : 'default'}
               splitFormPartner={splitFormPartner}
-              hideOverviewVideo={partnerSlug === 'fortune-management'}
             />
           </div>
           <PartnerProductTwoColumnSection

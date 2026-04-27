@@ -294,6 +294,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         videoPlatform: videoInfo.platform!,
         videoId: videoInfo.videoId!,
         title: data.secondaryButtonText || 'Video Player',
+        autoplay: true,
       }
     : null
 
