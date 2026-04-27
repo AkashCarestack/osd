@@ -41,6 +41,24 @@ export default defineType({
         {
           type: 'reference',
           to: [{ type: 'verticalTestimonial' }],
+          options: {
+            // In partner Home Settings, show only testimonials tagged to that partner.
+            filter: ({ document }: { document?: { partner?: { _ref?: string } } }) => {
+              const partnerRef = document?.partner?._ref
+
+              if (!partnerRef) {
+                return {
+                  filter: '_type == "verticalTestimonial"',
+                }
+              }
+
+              return {
+                filter:
+                  '_type == "verticalTestimonial" && partner._ref == $partnerRef',
+                params: { partnerRef },
+              }
+            },
+          },
         },
       ],
       validation: (Rule) => Rule.max(6),

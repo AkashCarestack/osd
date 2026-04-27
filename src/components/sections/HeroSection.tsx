@@ -35,6 +35,8 @@ interface HeroSectionProps {
   layout?: 'default' | 'splitForm'
   /** When `layout` is `splitForm`: `curve` (dark) or `fortune` (light + video). */
   splitFormPartner?: PartnerHeroHubspotKey
+  /** Split Fortune layout: hide overview-video pill (e.g. fortune-management landing). */
+  hideOverviewVideo?: boolean
 }
 
 /** Resolve hero media from GROQ string, legacy object shapes, or empty values. */
@@ -194,6 +196,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   heroData,
   layout = 'default',
   splitFormPartner,
+  hideOverviewVideo = false,
 }) => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
 
@@ -294,9 +297,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       }
     : null
 
-  /** Split heroes (Curve + Fortune): video CTA only (form lives in the right column). */
+  /** Split hero: Fortune keeps the overview-video chip; Curve is form-only (no video CTA). */
   const showSplitHeroCtas =
-    isSplitForm && (partner === 'fortune' || partner === 'curve')
+    isSplitForm && partner === 'fortune' && !hideOverviewVideo
 
   return (
     <div

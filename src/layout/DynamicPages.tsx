@@ -121,6 +121,8 @@ const DynamicPages = ({
 
   if (simpleLanding && simpleHeroData && simpleProductData) {
     const isCurvePearlLayout = partnerSlug === 'curve'
+    const useCenteredVerticalHeader =
+      isCurvePearlLayout || partnerSlug === 'fortune-management'
     const useSplitHero =
       partnerSlug === 'curve' ||
       partnerSlug === 'fortune' ||
@@ -138,20 +140,30 @@ const DynamicPages = ({
               heroData={simpleHeroData}
               layout={useSplitHero ? 'splitForm' : 'default'}
               splitFormPartner={splitFormPartner}
+              hideOverviewVideo={partnerSlug === 'fortune-management'}
             />
           </div>
           <PartnerProductTwoColumnSection
             {...simpleProductData}
             variant={isCurvePearlLayout ? 'showcase' : 'default'}
           />
-          <SliderSection items={reorderedCarouselItems} categories={categories} />
+          {/* fortune-management: Knowledge Guides (carousel) hidden */}
+          {partnerSlug !== 'fortune-management' ? (
+            <SliderSection
+              items={reorderedCarouselItems}
+              categories={categories}
+            />
+          ) : null}
           <VerticalTestimonialsSection
             data={homeSettings?.verticalTestimonialSection}
-            headerLayout={isCurvePearlLayout ? 'centered' : 'split'}
+            headerLayout={useCenteredVerticalHeader ? 'centered' : 'split'}
           />
-          <div id="faqs-section">
-            <FAQSection faqCategories={faqCategories} />
-          </div>
+          {/* Curve / fortune-management: FAQ hidden for minimal partner landing */}
+          {partnerSlug !== 'curve' && partnerSlug !== 'fortune-management' ? (
+            <div id="faqs-section">
+              <FAQSection faqCategories={faqCategories} />
+            </div>
+          ) : null}
         </BaseUrlProvider>
       </>
     )

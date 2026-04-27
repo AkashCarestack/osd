@@ -127,6 +127,9 @@ const Header = () => {
   const buttonRef = React.createRef()
 
   const partnerSlug = router.query.partner as string | undefined
+  /** Curve / fortune-management simple landing: logo only (no Topics / in-page nav / mobile overlay). */
+  const isPartnerMinimalHeader =
+    partnerSlug === 'curve' || partnerSlug === 'fortune-management'
   const homeUrl = router.isReady
     ? partnerSlug
       ? `/${partnerSlug}`
@@ -210,7 +213,7 @@ const Header = () => {
                         )
                       })}
                     </nav>
-                  ) : (
+                  ) : isPartnerMinimalHeader ? null : (
                     <>
                   <div
                     className={`flex lg:gap-10   justify-between rounded-xl items-center`}
