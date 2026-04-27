@@ -77,6 +77,22 @@ export default {
       type: 'url',
       description: 'URL for the video (YouTube, Vimeo, etc.)',
     },
+    {
+      name: 'hubspotFormId',
+      title: 'HubSpot form ID',
+      type: 'string',
+      description:
+        'Optional HubSpot form GUID (e.g. from HubSpot form embed). When set, the hero shows this form on the right (default layout) or uses it instead of the env default on split (Curve/Fortune) heroes.',
+      placeholder: 'e.g. 6b2d6906-028e-4d65-9cd1-34d528e0d5c0',
+    },
+    {
+      name: 'hubspotFormHeading',
+      title: 'HubSpot form heading',
+      type: 'string',
+      description:
+        'Optional title shown above the hero HubSpot form. Defaults to “Schedule a Demo”.',
+      initialValue: 'Schedule a Demo',
+    },
   ],
   preview: {
     select: {

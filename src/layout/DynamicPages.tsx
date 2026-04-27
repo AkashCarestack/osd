@@ -4,18 +4,28 @@ import { BaseUrlProvider } from '~/components/Context/UrlContext'
 import EventCarousel from '~/components/eventCarousel'
 import AllcontentSection from '~/components/sections/AllcontentSection'
 import BannerSubscribeSection from '~/components/sections/BannerSubscribeSection'
+import type { PartnerHeroHubspotKey } from '~/components/sections/CurveHeroHubspotForm'
+import DeoContactUsSection from '~/components/sections/DeoContactUsSection'
 import FAQSection from '~/components/sections/FAQSection'
 import FeaturedAndPopularBlogs from '~/components/sections/FeaturedAndPopularBlogsSection'
 import HeroSection from '~/components/sections/HeroSection'
 import LatestBlogs from '~/components/sections/LatestBlogSection'
+import PartnerProductTwoColumnSection from '~/components/sections/PartnerProductTwoColumnSection'
 import ReleaseNotesHeroSection from '~/components/sections/ReleaseNotesHeroSection'
 import ShortBannerSection from '~/components/sections/ShortBannerSection'
 import SliderSection from '~/components/sections/SliderSection'
 import TestimonialSection from '~/components/sections/TestimonialSection'
 import UpcomingEventsSection from '~/components/sections/UpcomingEventsSection'
+import VerticalTestimonialsSection from '~/components/sections/VerticalTestimonialsSection'
 import WhyPracticeLoveSection from '~/components/sections/WhyPracticeLoveSection'
 import TagSelect from '~/contentUtils/TagSelector'
 import { Tag } from '~/interfaces/post'
+import {
+  getSimpleLandingDefaults,
+  isSimpleLandingPartner,
+  mergePartnerHeroDefaults,
+  mergePartnerProductDefaults,
+} from '~/lib/partnerSimpleLanding'
 import { getUniqueData, getUniqueReorderedCarouselItems } from '~/utils/common'
 
 interface DynamicProps {
@@ -35,6 +45,7 @@ interface DynamicProps {
   categories?: any[]
   faqCategories?: any[]
   events?: any[]
+  partnerSlug?: string
 }
 
 const DynamicPages = ({
@@ -51,6 +62,7 @@ const DynamicPages = ({
   categories,
   faqCategories,
   events,
+  partnerSlug,
 }: DynamicProps) => {
   const featuredBlog = homeSettings?.FeaturedBlog || posts[0]
   const customBrowseContent = homeSettings?.customBrowseContent
@@ -77,6 +89,23 @@ const DynamicPages = ({
 
   const baseUrl = `/${siteConfig.pageURLs.home}`
 
+  const simpleLanding = isSimpleLandingPartner(partnerSlug)
+  const landingDefaults = getSimpleLandingDefaults(partnerSlug)
+  const simpleHeroData =
+    simpleLanding && landingDefaults
+      ? mergePartnerHeroDefaults(
+          landingDefaults.hero as Record<string, string>,
+          homeSettings?.heroSection,
+        )
+      : null
+  const simpleProductData =
+    simpleLanding && landingDefaults
+      ? mergePartnerProductDefaults(
+          landingDefaults.product,
+          homeSettings?.whyPracticeLoveSection,
+        )
+      : null
+
   // Use podcasts prop if available, otherwise filter from posts
   const podcastPosts =
     Array.isArray(podcasts) && podcasts.length > 0
@@ -89,6 +118,55 @@ const DynamicPages = ({
             return isPodcast
           })
         : []
+
+  if (simpleLanding && simpleHeroData && simpleProductData) {
+    const isCurvePearlLayout = partnerSlug === 'curve'
+    const useCenteredVerticalHeader =
+      isCurvePearlLayout || partnerSlug === 'fortune-management'
+    const useSplitHero =
+      partnerSlug === 'curve' ||
+      partnerSlug === 'fortune' ||
+      partnerSlug === 'fortune-management'
+    const splitFormPartner: PartnerHeroHubspotKey | undefined = useSplitHero
+      ? partnerSlug === 'curve'
+        ? 'curve'
+        : 'fortune'
+      : undefined
+    return (
+      <>
+        <BaseUrlProvider baseUrl={baseUrl}>
+          <div id="topics-section">
+            <HeroSection
+              heroData={simpleHeroData}
+              layout={useSplitHero ? 'splitForm' : 'default'}
+              splitFormPartner={splitFormPartner}
+            />
+          </div>
+          <PartnerProductTwoColumnSection
+            {...simpleProductData}
+            variant={isCurvePearlLayout ? 'showcase' : 'default'}
+          />
+          {/* fortune-management: Knowledge Guides (carousel) hidden */}
+          {partnerSlug !== 'fortune-management' ? (
+            <SliderSection
+              items={reorderedCarouselItems}
+              categories={categories}
+            />
+          ) : null}
+          <VerticalTestimonialsSection
+            data={homeSettings?.verticalTestimonialSection}
+            headerLayout={useCenteredVerticalHeader ? 'centered' : 'split'}
+          />
+          {/* Curve / fortune-management: FAQ hidden for minimal partner landing */}
+          {partnerSlug !== 'curve' && partnerSlug !== 'fortune-management' ? (
+            <div id="faqs-section">
+              <FAQSection faqCategories={faqCategories} />
+            </div>
+          ) : null}
+        </BaseUrlProvider>
+      </>
+    )
+  }
 
   return (
     <>
@@ -139,6 +217,7 @@ const DynamicPages = ({
         <div id="events-updates-section">
           <EventCarousel bgColor={'white'} allEventCards={uniqueEventCards} />
         </div>
+        {partnerSlug === 'deo' ? <DeoContactUsSection /> : null}
         {/* <BannerSubscribeSection hideBanner={true} /> */}
       </BaseUrlProvider>
     </>

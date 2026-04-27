@@ -32,7 +32,7 @@ const Footer = ({ className }: any) => {
         <div className="w-full ">
           <div className="md:flex-row flex-col items-center flex md:justify-between w-full pb-6">
             <div>
-              {/* Logo: same size as header (h-8) */}
+              {/* Logo: same size as header (56px) */}
               <Link
                 href="/"
                 aria-label="OS Dental home"
@@ -43,13 +43,13 @@ const Footer = ({ className }: any) => {
                   <img
                     src={homeSettings.headerLogo}
                     alt="OS Dental"
-                    className="h-8 w-auto object-contain object-left"
+                    className="h-[56px] w-auto object-contain object-left"
                   />
                 ) : (
                   <OSDentalLogo
-                    width={101}
-                    height={32}
-                    className="h-8 w-auto block"
+                    width={177}
+                    height={56}
+                    className="h-[56px] w-auto block"
                   />
                 )}
               </Link>

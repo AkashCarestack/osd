@@ -127,6 +127,9 @@ const Header = () => {
   const buttonRef = React.createRef()
 
   const partnerSlug = router.query.partner as string | undefined
+  /** Curve / fortune-management simple landing: logo only (no Topics / in-page nav / mobile overlay). */
+  const isPartnerMinimalHeader =
+    partnerSlug === 'curve' || partnerSlug === 'fortune-management'
   const homeUrl = router.isReady
     ? partnerSlug
       ? `/${partnerSlug}`
@@ -166,6 +169,7 @@ const Header = () => {
                     <ArrowRightIcon className="w-5 h-5 text-zinc-800 group-hover:translate-x-[4px] transition-transform duration-300 ease-in-out" />
                   </div>
                 </div>
+                
               </Anchor>
             </div>
           )}
@@ -187,7 +191,7 @@ const Header = () => {
                       <img
                         src={homeSettings.headerLogo}
                         alt="Site logo"
-                        className="h-8 w-auto object-contain object-left"
+                        className="h-[56px] w-auto object-contain object-left"
                       />
                     ) : (
                       <VoiceStackResources />
@@ -195,17 +199,21 @@ const Header = () => {
                   </Link>
                   {isDefaultLanding && Array.isArray(partners) && partners.length > 0 ? (
                     <nav className="flex flex-wrap items-center justify-end gap-4 md:gap-8">
-                      {partners.map((p: { slug: string; partnerName?: string }) => (
+                      {partners.map((p: { slug: string; partnerName?: string }) => {
+                        const name = p.partnerName || p.slug
+                        const displayName = name.toLowerCase() === 'deo' ? 'DEO' : name
+                        return (
                         <Link
                           key={p.slug}
                           href={`/${p.slug}`}
                           className="text-zinc-400 hover:text-white font-medium transition-colors text-base"
                         >
-                          {p.partnerName || p.slug}
+                          {displayName}
                         </Link>
-                      ))}
+                        )
+                      })}
                     </nav>
-                  ) : (
+                  ) : isPartnerMinimalHeader ? null : (
                     <>
                   <div
                     className={`flex lg:gap-10   justify-between rounded-xl items-center`}
