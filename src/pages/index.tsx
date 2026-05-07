@@ -1,6 +1,5 @@
 import type { GetStaticProps } from 'next'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import OSDentalLogo from '~/assets/reactiveAssets/OSDentalLogo'
@@ -186,39 +185,19 @@ export default function IndexPage(props: IndexPageProps) {
         <link rel="alternate" href={baseUrl + '/en-GB'} hrefLang="en-GB" />
         <link rel="alternate" href={baseUrl + '/en-AU'} hrefLang="en-AU" />
       </Head>
-      {/* Home page: no header/footer, hero bg with centered logo + partner links */}
+      {/* Home page: no header/footer, hero bg with centered logo only */}
       <div
         className="min-h-screen w-full bg-[#18181b] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center relative"
         style={{ backgroundImage: `url(${heroBg})` }}
       >
-        <div className="flex flex-col items-center justify-center gap-10 md:gap-12 relative z-10">
-          <Link href="/" className="shrink-0" aria-label="OS Dental home">
-            <OSDentalLogo
-              width={220}
-              height={39}
-              className="w-[180px] md:w-[220px] h-auto text-white"
-            />
-          </Link>
-          {partnersList.length > 0 && (
-            <nav className="flex md:flex-row flex-col items-center justify-center gap-x-1 gap-y-3 md:gap-x-2 md:gap-y-4 px-4">
-              {partnersList.map((p, i) => {
-                const name = p.partnerName || p.slug
-                const displayName = name.toLowerCase() === 'deo' ? 'DEO' : name
-                return (
-                <span key={p.slug} className="flex items-center gap-x-3 md:gap-x-4">
-                  {i > 0 && (
-                    <span className="hidden md:inline text-white/60 font-light select-none" aria-hidden="true">|</span>
-                  )}
-                  <Link
-                    href={`/${p.slug}`}
-                    className="text-white/90 hover:text-white font-medium text-lg transition-colors duration-200 px-3 py-2 rounded hover:underline underline-offset-4"
-                  >
-                    {displayName}
-                  </Link>
-                </span>
-              )})}
-            </nav>
-          )}
+        <div className="relative z-10 shrink-0">
+          <OSDentalLogo
+            width={220}
+            height={39}
+            className="w-[180px] md:w-[220px] h-auto text-white"
+            aria-label="OS Dental"
+            role="img"
+          />
         </div>
       </div>
     </GlobalDataProvider>
